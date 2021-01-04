@@ -1,0 +1,73 @@
+"""
+@generated
+cargo-raze crate build file.
+
+DO NOT EDIT! Replaced on runs of cargo-raze
+"""
+
+# buildifier: disable=load
+load(
+    "@io_bazel_rules_rust//rust:rust.bzl",
+    "rust_binary",
+    "rust_library",
+    "rust_test",
+)
+
+# buildifier: disable=load
+load("@bazel_skylib//lib:selects.bzl", "selects")
+
+package(default_visibility = [
+    # Public for visibility by "@raze__crate__version//" targets.
+    #
+    # Prefer access through "//rules/rust", which limits external
+    # visibility to explicit Cargo.toml dependencies.
+    "//visibility:public",
+])
+
+licenses([
+    "notice",  # MIT from expression "MIT OR Apache-2.0"
+])
+
+# Generated Targets
+
+# Unsupported target "global_resolver" with type "example" omitted
+
+# Unsupported target "multithreaded_runtime" with type "example" omitted
+
+rust_library(
+    name = "trust_dns_resolver",
+    srcs = glob(["**/*.rs"]),
+    crate_features = [
+        "ipconfig",
+        "resolv-conf",
+        "system-config",
+        "tokio",
+        "tokio-runtime",
+    ],
+    crate_root = "src/lib.rs",
+    crate_type = "lib",
+    data = [],
+    edition = "2018",
+    rustc_flags = [
+        "--cap-lints=allow",
+    ],
+    tags = [
+        "cargo-raze",
+        "manual",
+    ],
+    version = "0.19.6",
+    # buildifier: leave-alone
+    deps = [
+        "@raze__backtrace__0_3_55//:backtrace",
+        "@raze__cfg_if__0_1_10//:cfg_if",
+        "@raze__futures__0_3_8//:futures",
+        "@raze__lazy_static__1_4_0//:lazy_static",
+        "@raze__log__0_4_11//:log",
+        "@raze__lru_cache__0_1_2//:lru_cache",
+        "@raze__resolv_conf__0_7_0//:resolv_conf",
+        "@raze__smallvec__1_5_1//:smallvec",
+        "@raze__thiserror__1_0_22//:thiserror",
+        "@raze__tokio__0_2_24//:tokio",
+        "@raze__trust_dns_proto__0_19_6//:trust_dns_proto",
+    ],
+)

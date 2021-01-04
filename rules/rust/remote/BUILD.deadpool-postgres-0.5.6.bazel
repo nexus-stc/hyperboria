@@ -1,0 +1,72 @@
+"""
+@generated
+cargo-raze crate build file.
+
+DO NOT EDIT! Replaced on runs of cargo-raze
+"""
+
+# buildifier: disable=load
+load(
+    "@io_bazel_rules_rust//rust:rust.bzl",
+    "rust_binary",
+    "rust_library",
+    "rust_test",
+)
+
+# buildifier: disable=load
+load("@bazel_skylib//lib:selects.bzl", "selects")
+
+package(default_visibility = [
+    # Public for visibility by "@raze__crate__version//" targets.
+    #
+    # Prefer access through "//rules/rust", which limits external
+    # visibility to explicit Cargo.toml dependencies.
+    "//visibility:public",
+])
+
+licenses([
+    "notice",  # MIT from expression "MIT OR Apache-2.0"
+])
+
+# Generated Targets
+
+rust_library(
+    name = "deadpool_postgres",
+    srcs = glob(["**/*.rs"]),
+    aliases = {
+        "@raze__config__0_10_1//:config": "config_crate",
+    },
+    crate_features = [
+        "config",
+        "config-crate",
+        "default",
+        "serde",
+    ],
+    crate_root = "src/lib.rs",
+    crate_type = "lib",
+    data = [],
+    edition = "2018",
+    proc_macro_deps = [
+        "@raze__async_trait__0_1_42//:async_trait",
+    ],
+    rustc_flags = [
+        "--cap-lints=allow",
+    ],
+    tags = [
+        "cargo-raze",
+        "manual",
+    ],
+    version = "0.5.6",
+    # buildifier: leave-alone
+    deps = [
+        "@raze__config__0_10_1//:config",
+        "@raze__deadpool__0_5_2//:deadpool",
+        "@raze__futures__0_3_8//:futures",
+        "@raze__log__0_4_11//:log",
+        "@raze__serde__1_0_118//:serde",
+        "@raze__tokio__0_2_24//:tokio",
+        "@raze__tokio_postgres__0_5_5//:tokio_postgres",
+    ],
+)
+
+# Unsupported target "postgres" with type "test" omitted

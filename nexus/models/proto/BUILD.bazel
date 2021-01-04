@@ -1,0 +1,24 @@
+load("@com_github_grpc_grpc//bazel:python_rules.bzl", "py_proto_library")
+load("@io_bazel_rules_rust//proto:proto.bzl", "rust_proto_library")
+load("@rules_proto//proto:defs.bzl", "proto_library")
+
+proto_library(
+    name = "models_proto",
+    srcs = glob([
+        "*.proto",
+    ]),
+    visibility = ["//visibility:public"],
+)
+
+py_proto_library(
+    name = "models_proto_py",
+    visibility = ["//visibility:public"],
+    deps = [":models_proto"],
+)
+
+rust_proto_library(
+    name = "models_proto_rust",
+    rust_deps = ["//rules/rust/cargo:protobuf"],
+    visibility = ["//visibility:public"],
+    deps = [":models_proto"],
+)

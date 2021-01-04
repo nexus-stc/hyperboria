@@ -1,0 +1,26 @@
+load("@pip_modules_external//:requirements.bzl", "requirement")
+load("@rules_python//python:defs.bzl", "py_library")
+
+py_library(
+    name = "actions",
+    srcs = glob(
+        ["**/*.py"],
+        exclude = ["tests/**"],
+    ),
+    imports = ["."],
+    srcs_version = "PY3",
+    visibility = ["//visibility:public"],
+    deps = [
+        requirement("beautifulsoup4"),
+        requirement("lxml"),
+        requirement("pypika"),
+        requirement("numpy"),
+        requirement("aiocrossref"),
+        requirement("aiolibgen"),
+        "//library/aiopostgres",
+        "//nexus/models/proto:models_proto_py",
+        "//nexus/nlptools",
+        "//nexus/summa/schema",
+        requirement("aiosumma"),
+    ],
+)

@@ -1,0 +1,6 @@
+exports_files([
+    "postinst.jinja2",
+    "postrm.jinja2",
+    "preinst.jinja2",
+    "prerm.jinja2",
+])

@@ -1,0 +1,19 @@
+load("@pip_modules_external//:requirements.bzl", "requirement")
+load("@rules_python//python:defs.bzl", "py_binary")
+
+py_binary(
+    name = "installer",
+    srcs = glob([
+        "**/*.py",
+    ]),
+    imports = ["."],
+    main = "main.py",
+    srcs_version = "PY3",
+    visibility = ["//visibility:public"],
+    deps = [
+        requirement("psycopg2-binary"),
+        requirement("fire"),
+        requirement("tantipy"),
+        requirement("izihawa_utils"),
+    ],
+)

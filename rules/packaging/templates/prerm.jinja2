@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+
+set -e
+
+
+case "$1" in
+    upgrade|deconfigure)
+    {% for line in services %}
+        service {{ line }} stop || true
+    {%- endfor %}
+    ;;
+    remove)
+    {% for line in services %}
+        service {{ line }} stop || true
+        systemctl disable {{ line }} || true
+    {%- endfor %}
+    ;;
+
+    failed-upgrade)
+    ;;
+
+    *)
+        echo "prerm called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac
+
+
+exit 0

@@ -1,0 +1,88 @@
+"""
+@generated
+cargo-raze crate build file.
+
+DO NOT EDIT! Replaced on runs of cargo-raze
+"""
+
+# buildifier: disable=load
+load(
+    "@io_bazel_rules_rust//rust:rust.bzl",
+    "rust_binary",
+    "rust_library",
+    "rust_test",
+)
+
+# buildifier: disable=load
+load("@bazel_skylib//lib:selects.bzl", "selects")
+
+package(default_visibility = [
+    # Public for visibility by "@raze__crate__version//" targets.
+    #
+    # Prefer access through "//rules/rust", which limits external
+    # visibility to explicit Cargo.toml dependencies.
+    "//visibility:public",
+])
+
+licenses([
+    "notice",  # MIT from expression "MIT OR Apache-2.0"
+])
+
+# Generated Targets
+
+# Unsupported target "config-defaults" with type "example" omitted
+
+# Unsupported target "dateparser_v1" with type "example" omitted
+
+# Unsupported target "dateparser_v2" with type "example" omitted
+
+# Unsupported target "fib" with type "example" omitted
+
+# Unsupported target "tutorial-simplify-play" with type "example" omitted
+
+# Unsupported target "tutorial-strategy-play" with type "example" omitted
+
+rust_library(
+    name = "proptest",
+    srcs = glob(["**/*.rs"]),
+    crate_features = [
+        "bit-set",
+        "break-dead-code",
+        "default",
+        "fork",
+        "lazy_static",
+        "quick-error",
+        "regex-syntax",
+        "rusty-fork",
+        "std",
+        "tempfile",
+        "timeout",
+    ],
+    crate_root = "src/lib.rs",
+    crate_type = "lib",
+    data = [],
+    edition = "2018",
+    rustc_flags = [
+        "--cap-lints=allow",
+    ],
+    tags = [
+        "cargo-raze",
+        "manual",
+    ],
+    version = "0.10.1",
+    # buildifier: leave-alone
+    deps = [
+        "@raze__bit_set__0_5_2//:bit_set",
+        "@raze__bitflags__1_2_1//:bitflags",
+        "@raze__byteorder__1_3_4//:byteorder",
+        "@raze__lazy_static__1_4_0//:lazy_static",
+        "@raze__num_traits__0_2_14//:num_traits",
+        "@raze__quick_error__1_2_3//:quick_error",
+        "@raze__rand__0_7_3//:rand",
+        "@raze__rand_chacha__0_2_2//:rand_chacha",
+        "@raze__rand_xorshift__0_2_0//:rand_xorshift",
+        "@raze__regex_syntax__0_6_21//:regex_syntax",
+        "@raze__rusty_fork__0_3_0//:rusty_fork",
+        "@raze__tempfile__3_1_0//:tempfile",
+    ],
+)

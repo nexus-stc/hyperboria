@@ -1,0 +1,43 @@
+load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary")
+
+exports_files([
+    "nuxt.server.js",
+    "package.json",
+    "webpack.dynamic.server.js",
+    "webpack.server.js",
+    "yarn.lock",
+    ".babelrc",
+])
+
+nodejs_binary(
+    name = "webpack-binary",
+    data = [
+        "@npm//copy-webpack-plugin",
+        "@npm//html-webpack-plugin",
+        "@npm//mini-css-extract-plugin",
+        "@npm//vue-loader",
+        "@npm//webpack",
+        "@npm//webpack-cli",
+    ],
+    entry_point = "@npm//:node_modules/webpack-cli/bin/cli.js",
+    visibility = ["//visibility:public"],
+)
+
+nodejs_binary(
+    name = "webpack-dev-server-binary",
+    data = [
+        "@npm//webpack-cli",
+        "@npm//webpack-dev-server",
+    ],
+    entry_point = "@npm//:node_modules/webpack-dev-server/bin/webpack-dev-server.js",
+    visibility = ["//visibility:public"],
+)
+
+nodejs_binary(
+    name = "nuxt-binary",
+    data = [
+        "@npm//nuxt",
+    ],
+    entry_point = "@npm//:node_modules/nuxt/bin/nuxt.js",
+    visibility = ["//visibility:public"],
+)
