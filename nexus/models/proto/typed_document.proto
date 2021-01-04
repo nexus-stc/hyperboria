@@ -1,0 +1,12 @@
+syntax = "proto3";
+package nexus.models.proto;
+
+import "nexus/models/proto/scimag.proto";
+import "nexus/models/proto/scitech.proto";
+
+message TypedDocument {
+  oneof document {
+    Scimag scimag = 1;
+    Scitech scitech = 2;
+  }
+}

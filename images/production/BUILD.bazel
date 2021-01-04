@@ -1,0 +1,39 @@
+load("@io_bazel_rules_docker//container:container.bzl", "container_image", "container_push")
+load("@io_bazel_rules_docker//docker/package_managers:download_pkgs.bzl", "download_pkgs")
+load("@io_bazel_rules_docker//docker/package_managers:install_pkgs.bzl", "install_pkgs")
+
+package(default_visibility = ["//visibility:public"])
+
+download_pkgs(
+    name = "download-base-python-image",
+    image_tar = "//images:base-image.tar",
+    packages = [
+        "bash",
+        "libev4",
+        "libgomp1",
+        "libprotobuf17",
+        "libssl1.1",
+        "python3.9",
+    ],
+)
+
+install_pkgs(
+    name = "install-base-python-image",
+    image_tar = "//images:base-image.tar",
+    installables_tar = ":download-base-python-image.tar",
+    installation_cleanup_commands = "rm -rf /var/lib/apt/lists/*",
+    output_image_name = "installed-base-python-image",
+)
+
+container_image(
+    name = "base-python-image",
+    base = ":install-base-python-image",
+    entrypoint = ["/usr/bin/python3.9"],
+    env = {"LANG": "C.UTF-8"},
+    symlinks = {
+        "/usr/bin/python": "/usr/bin/python3.9",
+        "/usr/bin/python3": "/usr/bin/python3.9",
+    },
+    visibility = ["//visibility:public"],
+)
+

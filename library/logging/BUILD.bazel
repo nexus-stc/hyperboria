@@ -1,0 +1,15 @@
+load("@pip_modules_external//:requirements.bzl", "requirement")
+load("@rules_python//python:defs.bzl", "py_library")
+
+py_library(
+    name = "logging",
+    srcs = glob(["**/*.py"]),
+    srcs_version = "PY3ONLY",
+    visibility = ["//visibility:public"],
+    deps = [
+        requirement("orjson"),
+        requirement("prometheus_client"),
+        requirement("izihawa_types"),
+        requirement("izihawa_utils"),
+    ],
+)

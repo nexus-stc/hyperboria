@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+set -e
+
+
+case "$1" in
+    configure)
+    {% if add_user -%}
+        id -u {{ add_user }} &>/dev/null || adduser --disabled-password --gecos "" {{ add_user }}
+        {% for group in user_groups %}
+        usermod -a -G {{ group }} {{ add_user }}
+        {%- endfor %}
+    {%- endif -%}
+    {% for line in extra_postinst %}
+        {{ line }}
+    {%- endfor %}
+    {% for line in services %}
+        systemctl enable {{ line }}
+        systemctl daemon-reload
+        service {{ line }} start
+    {%- endfor %}
+    {% if restart_nginx -%}
+        service nginx reload || service nginx restart
+    {%- endif %}
+    ;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+    ;;
+
+    *)
+        echo "postinst called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac
+
+exit 0

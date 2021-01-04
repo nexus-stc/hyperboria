@@ -1,0 +1,20 @@
+load("@pip_modules_external//:requirements.bzl", "requirement")
+load("@rules_python//python:defs.bzl", "py_library")
+
+py_library(
+    name = "nlptools",
+    srcs = glob(
+        ["**/*.py"],
+        exclude = ["tests/**"],
+    ),
+    srcs_version = "PY3",
+    visibility = ["//visibility:public"],
+    deps = [
+        requirement("DAWG"),
+        requirement("emoji"),
+        requirement("lemminflect"),
+        requirement("pycld3"),
+        requirement("pymorphy2"),
+        requirement("spacy"),
+    ],
+)

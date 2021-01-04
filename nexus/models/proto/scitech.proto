@@ -1,0 +1,36 @@
+syntax = "proto3";
+package nexus.models.proto;
+
+message Scitech {
+  int64 id = 1;
+  repeated string authors = 2;
+  string cu = 3;
+  string cu_suf = 4;
+  string description = 5;
+  string doi = 6;
+  uint32 downloads_count = 28;
+  string edition = 7;
+  string extension = 8;
+  int64 fiction_id = 9;
+  uint64 filesize = 10;
+  repeated string ipfs_multihashes = 30;
+  bool is_deleted = 11;
+  repeated string isbns = 12;
+  bool has_duplicates = 31;
+  oneof optional_issued_at {
+      int64 issued_at = 25;
+  }
+  string language = 13;
+  int64 libgen_id = 14;
+  string meta_language = 15;
+  string md5 = 16;
+  int64 original_id = 23;
+  uint32 pages = 17;
+  string series = 18;
+  repeated string tags = 19;
+  string telegram_file_id = 20;
+  string title = 21;
+  int32 updated_at = 22;
+  string volume = 24;
+  string year = 29;
+}

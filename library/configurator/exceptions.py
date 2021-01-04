@@ -1,0 +1,2 @@
+class UnknownConfigFormatError(Exception):
+    pass

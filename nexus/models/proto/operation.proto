@@ -1,0 +1,26 @@
+syntax = "proto3";
+package nexus.models.proto;
+
+import "nexus/models/proto/typed_document.proto";
+
+
+message CrossReferenceOperation {
+  string source = 1;
+  string target = 2;
+  uint32 last_retry_unixtime = 3;
+  uint32 retry_count = 4;
+}
+
+message DocumentOperation {
+  oneof operation {
+    UpdateDocument update_document = 3;
+  };
+}
+
+message UpdateDocument {
+  repeated string fields = 1;
+  bool should_fill_from_external_source = 2;
+  bool commit = 3;
+  bool reindex = 4;
+  TypedDocument typed_document = 5;
+}

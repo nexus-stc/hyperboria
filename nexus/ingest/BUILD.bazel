@@ -1,0 +1,34 @@
+load("@io_bazel_rules_docker//python3:image.bzl", "py3_image")
+
+load("@pip_modules_external//:requirements.bzl", "requirement")
+
+alias(
+    name = "binary",
+    actual = ":image.binary",
+)
+
+py3_image(
+    name = "image",
+    srcs = glob(["**/*.py"]),
+    base = "//images/production:base-python-image",
+    data = [
+        "configs/base.yaml",
+        "configs/logging.yaml",
+    ],
+    main = "main.py",
+    srcs_version = "PY3ONLY",
+    visibility = ["//visibility:public"],
+    deps = [
+        requirement("aiokafka"),
+        requirement("aiopg"),
+        requirement("fire"),
+        requirement("aiocrossref"),
+        requirement("aiokit"),
+        requirement("aiolibgen"),
+        "//library/aiopostgres",
+        "//library/configurator",
+        "//library/logging",
+        "//nexus/actions",
+    ],
+)
+

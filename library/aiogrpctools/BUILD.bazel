@@ -1,0 +1,19 @@
+load("@pip_modules_external//:requirements.bzl", "requirement")
+load("@rules_python//python:defs.bzl", "py_library")
+
+py_library(
+    name = "aiogrpctools",
+    srcs = glob(
+        ["**/*.py"],
+        exclude = ["tests/**"],
+    ),
+    srcs_version = "PY3ONLY",
+    visibility = ["//visibility:public"],
+    deps = [
+        requirement("grpcio"),
+        requirement("aiokit"),
+        "//library/configurator",
+        "//library/logging",
+        requirement("izihawa_utils"),
+    ],
+)

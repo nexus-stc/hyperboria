@@ -1,0 +1,37 @@
+load("@io_bazel_rules_k8s//k8s:objects.bzl", "k8s_objects")
+
+# System-wide settings
+config_setting(
+    name = "osx",
+    constraint_values = ["@bazel_tools//platforms:osx"],
+)
+
+config_setting(
+    name = "linux",
+    constraint_values = ["@bazel_tools//platforms:linux"],
+)
+
+platform(
+    name = "linux_x86",
+    constraint_values = [
+        "@io_bazel_rules_rust//rust/platform:linux",
+        "@bazel_tools//platforms:linux",
+        "@bazel_tools//platforms:x86_64",
+    ],
+)
+
+
+load("@io_bazel_rules_rust//proto:toolchain.bzl", "rust_proto_toolchain")
+
+rust_proto_toolchain(
+    name = "proto-toolchain-impl",
+    grpc_plugin = "//rules/rust/cargo:cargo_bin_protoc_gen_rust_grpc",
+    proto_plugin = "//rules/rust/cargo:cargo_bin_protoc_gen_rust",
+    protoc = "@com_google_protobuf//:protoc",
+)
+
+toolchain(
+    name = "proto-toolchain",
+    toolchain = ":proto-toolchain-impl",
+    toolchain_type = "@io_bazel_rules_rust//proto:toolchain",
+)

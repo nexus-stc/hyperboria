@@ -1,0 +1,199 @@
+[package]
+edition = "2018"
+name = "hyperboria"
+version = "0.0.0"
+
+# Mandatory (or Cargo tooling is unhappy)
+[lib]
+path = "src/main.rs"
+
+[dependencies]
+actix = "0.10.0"
+actix-http = { version = "2", default-features = false }
+actix-rt = "1"
+actix-service = "1"
+actix-threadpool = "0.3"
+async-trait = "0.1.37"
+actix-web = { version = "3", default-features = false }
+actix-utils = "1"
+atomicwrites = { version = "0.2.5", optional = true }
+autocfg = "1.0.0"
+base64 = "0.12.3"
+bb8 = "0.4.2"
+bb8-postgres = "0.4.0"
+bincode = { version = "1.3.1", features = ["i128"] }
+bitpacking = { version = "0.8", default-features = false, features = ["bitpacker4x"] }
+brotli = "3.3.0"
+byteorder = "1.3.4"
+bytes = "0.5.6"
+census = "0.4.0"
+chrono = { version = "0.4.13", features = ["serde"] }
+clap = "2.33.3"
+colored = "2"
+combine = { version = "4", default-features = false, features = [] }
+config = "0.10.1"
+crc32fast = "1.2.0"
+crossbeam = "0.7.3"
+deadpool = "0.5.2"
+deadpool-postgres = "0.5.6"
+derive_more = "0.99.9"
+dotenv = "0.15.0"
+downcast-rs = { version="1.2.0" }
+erased-serde = "0.3.12"
+fail = "0.4.0"
+failure = "0.1.8"
+fancy-regex = "0.3.5"
+fnv = "1.0.7"
+fs2 = { version="0.4.3", optional = true }
+fst = "0.4"
+futures = { version = "0.3.5",  features = ["thread-pool"] }
+grpc = "0.8.2"
+grpc-compiler = "0.8.2"
+htmlescape = "0.3.1"
+integer-encoding = "2.0.0"
+itertools = "0.9.0"
+lazy_static = "1.4.0"
+levenshtein_automata = { version="0.1", features = ["fst_automaton"] }
+lexical-core = "0.7.4"
+libc = "0.2.74"
+log = { version = "0.4.11", features = ["std"] }
+log4rs = { version = "0.10.0", features = ["file", "json_encoder"] }
+lru = "0.6.0"
+lz4 = "1.23.2"
+lz4-sys = "1.9.2"
+maplit = "1.0.2"
+matches = "0.1.8"
+memmap = { version = "0.7.0", optional=true }
+murmurhash32 = "0.2.0"
+notify = { version = "4", optional=true }
+num-bigint = { version = "0.2", features = ["i128"] }
+num_cpus = "1.13.0"
+num-traits = { version = "0.2.12", features = ["i128"] }
+once_cell = "1.4.0"
+owned-read = "0.4.1"
+owning_ref = "0.4.1"
+pin-project = "0.4.23"
+postgres = { version = "0.17.5" }
+postgres-types = { version = "0.1.2", features = ["with-serde_json-1", "derive"] }
+proptest = "0.10.1"
+protobuf = { version = "2.18.1", features = ["with-bytes"] }
+protobuf-codegen = "2.18.1"
+r2d2 = "0.8.9"
+r2d2_postgres = "0.16.0"
+rand = "0.7.3"
+rayon = "1.3.1"
+regex = { version = "1.3.9", default-features = false, features = ["std"] }
+reopen = { version = "1.0.1", features = ["signals"] }
+rust-stemmers = "1.2.0"
+rustc-serialize = "0.3.24"
+serde = { version = "1.0.117", features = ["derive"] }
+serde_derive = "1.0.115"
+serde_json = "1.0.57"
+serde_qs = "0.7"
+serde_yaml = "0.8.13"
+signal-hook = "0.1.16"
+slog = { version = "2.5.2", features = ["nested-values"] }
+slog-async = "2.5.0"
+slog_derive = "0.2.0"
+slog-json = "2.3.0"
+slog-stdlog = "4.0.0"
+slog-term = "2.6.0"
+smallvec = "1.4.2"
+snap = "1.0.1"
+stable_deref_trait = "1.2.0"
+strum = "0.19.2"
+strum_macros = "0.19.2"
+tantivy-fst = "0.3.0"
+tar = "0.4.30"
+tempdir = "0.3.7"
+tempfile = "3.1.0"
+textwrap = "0.12"
+thiserror = "1"
+time = { version = "0.2", features = ["std"] }
+tls-api = "0.4.0"
+tls-api-stub = "0.4.0"
+tokio = { version = "0.2", features = ["full", "time"] }
+tokio-pg-mapper = "0.1.8"
+tokio-pg-mapper-derive = "0.1.5"
+tokio-postgres = "0.6.0"
+typenum = { version = "1.12.0", features = ["force_unix_path_separator"] }
+urlparse = "0.7.3"
+uuid = { version = "0.8.1", features = ["v4", "serde"] }
+
+[features]
+default = ["mmap"]
+mmap = ["atomicwrites", "fs2", "memmap", "notify"]
+failpoints = ["fail/failpoints"]
+unstable = [] # useful for benches.
+wasm-bindgen = ["uuid/wasm-bindgen"]
+
+[workspace.metadata.raze]
+default_gen_buildrs = true
+genmode = "Remote"
+package_aliases_dir = "cargo"
+rust_rules_workspace_name = "io_bazel_rules_rust"
+targets = [
+    "x86_64-apple-darwin",
+    "x86_64-unknown-linux-gnu",
+]
+workspace_path = "//rules/rust"
+
+
+[raze.crates.indexmap.'1.6.0']
+additional_flags = [
+    "--cfg=has_std",
+]
+
+[raze.crates.grpc-compiler.'0.8.2']
+extra_aliased_targets = ["cargo_bin_protoc_gen_rust_grpc"]
+
+[raze.crates.libc.'0.2.74']
+additional_flags = [
+    "--cfg=libc_priv_mod_use",
+    "--cfg=libc_union",
+    "--cfg=libc_const_size_of",
+    "--cfg=libc_core_cvoid",
+    "--cfg=libc_align",
+    "--cfg=libc_packedN",
+]
+
+[raze.crates.lexical-core.'0.4.6']
+additional_flags = [
+    "--cfg=limb_width_32",
+    "--cfg=has_i128",
+]
+
+[raze.crates.lexical-core.'0.7.4']
+additional_flags = [
+    "--cfg=limb_width_32",
+    "--cfg=has_i128",
+]
+
+[raze.crates.log.'0.4.11']
+additional_flags = [
+    "--cfg=atomic_cas"
+]
+
+[raze.crates.num-traits.'0.2.12']
+additional_flags = [
+    "--cfg=has_i128",
+]
+
+[raze.crates.proc-macro2.'1.0.24']
+additional_flags = [
+    "--cfg=use_proc_macro",
+    "--cfg=wrap_proc_macro",
+]
+
+[raze.crates.protobuf-codegen.'2.18.1']
+extra_aliased_targets = ["cargo_bin_protoc_gen_rust"]
+
+[raze.crates.serde.'1.0.117']
+additional_flags = [
+    "--cfg=integer128",
+]
+
+[raze.crates.time.'0.2.22']
+additional_flags = [
+    "--cfg=std",
+]
