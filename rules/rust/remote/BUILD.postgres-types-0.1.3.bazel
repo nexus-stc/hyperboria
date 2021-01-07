@@ -35,7 +35,7 @@ rust_library(
     srcs = glob(["**/*.rs"]),
     aliases = {
         "@raze__serde__1_0_118//:serde": "serde_1",
-        "@raze__serde_json__1_0_60//:serde_json": "serde_json_1",
+        "@raze__serde_json__1_0_61//:serde_json": "serde_json_1",
     },
     crate_features = [
         "derive",
@@ -65,6 +65,6 @@ rust_library(
         "@raze__fallible_iterator__0_2_0//:fallible_iterator",
         "@raze__postgres_protocol__0_5_3//:postgres_protocol",
         "@raze__serde__1_0_118//:serde",
-        "@raze__serde_json__1_0_60//:serde_json",
+        "@raze__serde_json__1_0_61//:serde_json",
     ],
 )

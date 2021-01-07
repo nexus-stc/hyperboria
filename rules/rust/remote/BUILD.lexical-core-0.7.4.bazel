@@ -83,6 +83,8 @@ rust_library(
     edition = "2018",
     rustc_flags = [
         "--cap-lints=allow",
+        "--cfg=limb_width_32",
+        "--cfg=has_i128",
     ],
     tags = [
         "cargo-raze",

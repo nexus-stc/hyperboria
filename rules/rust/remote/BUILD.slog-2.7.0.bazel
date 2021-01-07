@@ -92,6 +92,6 @@ rust_library(
     # buildifier: leave-alone
     deps = [
         ":slog_build_script",
-        "@raze__erased_serde__0_3_12//:erased_serde",
+        "@raze__erased_serde__0_3_13//:erased_serde",
     ],
 )

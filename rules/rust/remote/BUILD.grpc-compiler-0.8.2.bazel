@@ -52,8 +52,8 @@ rust_binary(
     deps = [
         # Binaries get an implicit dependency on their crate's lib
         ":grpc_compiler",
-        "@raze__protobuf__2_18_1//:protobuf",
-        "@raze__protobuf_codegen__2_18_1//:protobuf_codegen",
+        "@raze__protobuf__2_20_0//:protobuf",
+        "@raze__protobuf_codegen__2_20_0//:protobuf_codegen",
     ],
 )
 
@@ -76,7 +76,7 @@ rust_library(
     version = "0.8.2",
     # buildifier: leave-alone
     deps = [
-        "@raze__protobuf__2_18_1//:protobuf",
-        "@raze__protobuf_codegen__2_18_1//:protobuf_codegen",
+        "@raze__protobuf__2_20_0//:protobuf",
+        "@raze__protobuf_codegen__2_20_0//:protobuf_codegen",
     ],
 )

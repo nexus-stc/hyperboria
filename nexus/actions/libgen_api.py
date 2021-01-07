@@ -13,7 +13,7 @@ LANGUAGE_TRANSLATION = {
     'Italian': 'it',
     'Spanish': 'es',
     'Portuguese': 'pt',
-    'Chinese': 'cn',
+    'Chinese': 'zh',
     'Polish': 'pl',
     'english': 'en',
     'Russian-Ukrainian': 'ru,uk',
@@ -32,6 +32,7 @@ LANGUAGE_TRANSLATION = {
     'Hungarian': 'hu',
     'Latin': 'la',
     'Serbian': 'sr',
+    'Spanish;Castilian': 'es',
     'Spanish,Castilian': 'es',
     'German-Russian': 'de,ru',
     'Croatian': 'hr',
@@ -43,7 +44,7 @@ LANGUAGE_TRANSLATION = {
     'Swedish': 'sv',
     'Indonesian': 'id',
     'Greek(Modern)': 'el',
-    'Chinese(PRC)': 'cn',
+    'Chinese(PRC)': 'zh',
     'Belorussian': 'by',
     'Deutsch': 'de',
     'German-English': 'de,en',
@@ -58,7 +59,9 @@ LANGUAGE_TRANSLATION = {
     'Bengali': 'bn',
     'English-French': 'en,fr',
     'English-German': 'de,en',
-    'Chinese-English': 'cn,en',
+    'Chinese-English': 'en,zh',
+    'chinese': 'zh',
+    'Korean': 'ko',
 }
 
 

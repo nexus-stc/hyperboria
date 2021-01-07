@@ -10,5 +10,5 @@ search_engine:
   data_path: /summa
   default_page_size: 5
   timeout_secs: 5
-  writer_memory_mb: 4096
+  writer_memory_mb: 1024
   writer_threads: 4

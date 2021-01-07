@@ -73,7 +73,7 @@ rust_library(
         "@raze__once_cell__1_5_2//:once_cell",
         "@raze__parking_lot__0_11_1//:parking_lot",
         "@raze__pin_project__0_4_27//:pin_project",
-        "@raze__smallvec__1_5_1//:smallvec",
+        "@raze__smallvec__1_6_0//:smallvec",
         "@raze__tokio__0_2_24//:tokio",
         "@raze__tokio_util__0_3_1//:tokio_util",
         "@raze__trust_dns_proto__0_19_6//:trust_dns_proto",

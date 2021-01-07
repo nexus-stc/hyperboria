@@ -18,6 +18,7 @@ actix-web = { version = "3", default-features = false }
 actix-utils = "1"
 atomicwrites = { version = "0.2.5", optional = true }
 autocfg = "1.0.0"
+backtrace = "0.3.55"
 base64 = "0.12.3"
 bb8 = "0.4.2"
 bb8-postgres = "0.4.0"
@@ -46,7 +47,7 @@ fancy-regex = "0.3.5"
 fnv = "1.0.7"
 fs2 = { version="0.4.3", optional = true }
 fst = "0.4"
-futures = { version = "0.3.5",  features = ["thread-pool"] }
+futures = { version = "0.3.5", features = ["thread-pool"] }
 grpc = "0.8.2"
 grpc-compiler = "0.8.2"
 htmlescape = "0.3.1"
@@ -65,10 +66,9 @@ maplit = "1.0.2"
 matches = "0.1.8"
 memmap = { version = "0.7.0", optional=true }
 murmurhash32 = "0.2.0"
-notify = { version = "4", optional=true }
-num-bigint = { version = "0.2", features = ["i128"] }
+num-bigint = "0.3.1"
 num_cpus = "1.13.0"
-num-traits = { version = "0.2.12", features = ["i128"] }
+num-traits = "0.2.14"
 once_cell = "1.4.0"
 owned-read = "0.4.1"
 owning_ref = "0.4.1"
@@ -82,47 +82,47 @@ r2d2 = "0.8.9"
 r2d2_postgres = "0.16.0"
 rand = "0.7.3"
 rayon = "1.3.1"
-regex = { version = "1.3.9", default-features = false, features = ["std"] }
+regex = { version = "1.4.2", default-features = false, features = ["std"] }
 reopen = { version = "1.0.1", features = ["signals"] }
 rust-stemmers = "1.2.0"
 rustc-serialize = "0.3.24"
-serde = { version = "1.0.117", features = ["derive"] }
-serde_derive = "1.0.115"
-serde_json = "1.0.57"
-serde_qs = "0.7"
-serde_yaml = "0.8.13"
-signal-hook = "0.1.16"
-slog = { version = "2.5.2", features = ["nested-values"] }
+serde = { version = "1.0.118", features = ["derive"] }
+serde_derive = "1.0.118"
+serde_json = "1.0.61"
+serde_qs = "0.8.2"
+serde_yaml = "0.8.15"
+signal-hook = "0.3.2"
+slog = { version = "2.7.0", features = ["nested-values"] }
 slog-async = "2.5.0"
 slog_derive = "0.2.0"
 slog-json = "2.3.0"
-slog-stdlog = "4.0.0"
+slog-stdlog = "4.1.0"
 slog-term = "2.6.0"
-smallvec = "1.4.2"
-snap = "1.0.1"
+smallvec = "1.6.0"
+snap = "1.0.3"
 stable_deref_trait = "1.2.0"
-strum = "0.19.2"
-strum_macros = "0.19.2"
+strum = "0.20.0"
+strum_macros = "0.20.1"
 tantivy-fst = "0.3.0"
 tar = "0.4.30"
 tempdir = "0.3.7"
 tempfile = "3.1.0"
-textwrap = "0.12"
-thiserror = "1"
+textwrap = "0.13.2"
+thiserror = "1.0.23"
 time = { version = "0.2", features = ["std"] }
 tls-api = "0.4.0"
 tls-api-stub = "0.4.0"
 tokio = { version = "0.2", features = ["full", "time"] }
-tokio-pg-mapper = "0.1.8"
-tokio-pg-mapper-derive = "0.1.5"
-tokio-postgres = "0.6.0"
+tokio-pg-mapper = "0.2.0"
+tokio-pg-mapper-derive = "0.2.0"
+tokio-postgres = "0.7.0"
 typenum = { version = "1.12.0", features = ["force_unix_path_separator"] }
 urlparse = "0.7.3"
 uuid = { version = "0.8.1", features = ["v4", "serde"] }
 
 [features]
 default = ["mmap"]
-mmap = ["atomicwrites", "fs2", "memmap", "notify"]
+mmap = ["atomicwrites", "fs2", "memmap"]
 failpoints = ["fail/failpoints"]
 unstable = [] # useful for benches.
 wasm-bindgen = ["uuid/wasm-bindgen"]
@@ -139,15 +139,15 @@ targets = [
 workspace_path = "//rules/rust"
 
 
-[raze.crates.indexmap.'1.6.0']
+[package.metadata.raze.crates.indexmap.'*']
 additional_flags = [
     "--cfg=has_std",
 ]
 
-[raze.crates.grpc-compiler.'0.8.2']
+[package.metadata.raze.crates.grpc-compiler.'*']
 extra_aliased_targets = ["cargo_bin_protoc_gen_rust_grpc"]
 
-[raze.crates.libc.'0.2.74']
+[package.metadata.raze.crates.libc.'*']
 additional_flags = [
     "--cfg=libc_priv_mod_use",
     "--cfg=libc_union",
@@ -157,43 +157,32 @@ additional_flags = [
     "--cfg=libc_packedN",
 ]
 
-[raze.crates.lexical-core.'0.4.6']
+[package.metadata.raze.crates.lexical-core.'*']
 additional_flags = [
     "--cfg=limb_width_32",
     "--cfg=has_i128",
 ]
 
-[raze.crates.lexical-core.'0.7.4']
-additional_flags = [
-    "--cfg=limb_width_32",
-    "--cfg=has_i128",
-]
-
-[raze.crates.log.'0.4.11']
+[package.metadata.raze.crates.log.'*']
 additional_flags = [
     "--cfg=atomic_cas"
 ]
 
-[raze.crates.num-traits.'0.2.12']
-additional_flags = [
-    "--cfg=has_i128",
-]
-
-[raze.crates.proc-macro2.'1.0.24']
+[package.metadata.raze.crates.proc-macro2.'*']
 additional_flags = [
     "--cfg=use_proc_macro",
     "--cfg=wrap_proc_macro",
 ]
 
-[raze.crates.protobuf-codegen.'2.18.1']
+[package.metadata.raze.crates.protobuf-codegen.'*']
 extra_aliased_targets = ["cargo_bin_protoc_gen_rust"]
 
-[raze.crates.serde.'1.0.117']
+[package.metadata.raze.crates.serde.'*']
 additional_flags = [
     "--cfg=integer128",
 ]
 
-[raze.crates.time.'0.2.22']
+[package.metadata.raze.crates.time.'*']
 additional_flags = [
     "--cfg=std",
 ]

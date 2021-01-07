@@ -74,6 +74,7 @@ rust_library(
     edition = "2018",
     rustc_flags = [
         "--cap-lints=allow",
+        "--cfg=has_std",
     ],
     tags = [
         "cargo-raze",

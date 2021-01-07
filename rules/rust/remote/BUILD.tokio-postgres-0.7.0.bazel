@@ -1,0 +1,76 @@
+"""
+@generated
+cargo-raze crate build file.
+
+DO NOT EDIT! Replaced on runs of cargo-raze
+"""
+
+# buildifier: disable=load
+load(
+    "@io_bazel_rules_rust//rust:rust.bzl",
+    "rust_binary",
+    "rust_library",
+    "rust_test",
+)
+
+# buildifier: disable=load
+load("@bazel_skylib//lib:selects.bzl", "selects")
+
+package(default_visibility = [
+    # Public for visibility by "@raze__crate__version//" targets.
+    #
+    # Prefer access through "//rules/rust", which limits external
+    # visibility to explicit Cargo.toml dependencies.
+    "//visibility:public",
+])
+
+licenses([
+    "notice",  # MIT from expression "MIT OR Apache-2.0"
+])
+
+# Generated Targets
+
+# Unsupported target "bench" with type "bench" omitted
+
+rust_library(
+    name = "tokio_postgres",
+    srcs = glob(["**/*.rs"]),
+    crate_features = [
+        "default",
+        "runtime",
+    ],
+    crate_root = "src/lib.rs",
+    crate_type = "lib",
+    data = [],
+    edition = "2018",
+    proc_macro_deps = [
+        "@raze__async_trait__0_1_42//:async_trait",
+    ],
+    rustc_flags = [
+        "--cap-lints=allow",
+    ],
+    tags = [
+        "cargo-raze",
+        "manual",
+    ],
+    version = "0.7.0",
+    # buildifier: leave-alone
+    deps = [
+        "@raze__byteorder__1_3_4//:byteorder",
+        "@raze__bytes__1_0_0//:bytes",
+        "@raze__fallible_iterator__0_2_0//:fallible_iterator",
+        "@raze__futures__0_3_8//:futures",
+        "@raze__log__0_4_11//:log",
+        "@raze__parking_lot__0_11_1//:parking_lot",
+        "@raze__percent_encoding__2_1_0//:percent_encoding",
+        "@raze__phf__0_8_0//:phf",
+        "@raze__pin_project_lite__0_2_1//:pin_project_lite",
+        "@raze__postgres_protocol__0_6_0//:postgres_protocol",
+        "@raze__postgres_types__0_2_0//:postgres_types",
+        "@raze__socket2__0_3_19//:socket2",
+        "@raze__tokio__1_0_1//:tokio",
+        "@raze__tokio_util__0_6_0//:tokio_util",
+    ],
+)
+
+# Unsupported target "test" with type "test" omitted

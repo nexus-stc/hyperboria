@@ -115,7 +115,7 @@ scipy==1.5.4
 sip==5.5.0
 six==1.15.0
 spacy==2.3.5
-tantipy==0.1.2
+tantipy==0.14.0-dev0
 telethon==1.18.2
 tenacity==6.3.1
 timezonefinder==4.5.0

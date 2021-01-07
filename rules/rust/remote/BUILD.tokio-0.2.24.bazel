@@ -107,7 +107,7 @@ rust_library(
         ): [
             "@raze__libc__0_2_81//:libc",
             "@raze__mio_uds__0_6_8//:mio_uds",
-            "@raze__signal_hook_registry__1_2_2//:signal_hook_registry",
+            "@raze__signal_hook_registry__1_3_0//:signal_hook_registry",
         ],
         "//conditions:default": [],
     }),
