@@ -13,6 +13,6 @@
 - ✅ [`pipe`](pipe) - processing pipeline based on Kafka
 - 🛑 `pylon` - smart proxy for downloading files from the Internet/IPFS
 - ✅ [`summa`](summa) - scripts for setting Summa
-- 🛑 `translations` - text translations used in `bot` and `hub`
+- ✅ [`translations`](translations) - text translations used in `bot` and `hub`
 - 🛑 `views` - shared views for [`models`](models)
 - 🛑 `web` - web frontend for Summa
