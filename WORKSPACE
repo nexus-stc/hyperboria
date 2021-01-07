@@ -142,7 +142,7 @@ maven_fetch_remote_artifacts()
 
 load("@io_bazel_rules_rust//rust:repositories.bzl", "rust_repository_set")
 
-rust_version = "1.48.0"
+rust_version = "1.49.0"
 
 rustfmt_version = "1.4.20"
 

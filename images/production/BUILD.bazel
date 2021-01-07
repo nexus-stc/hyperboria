@@ -11,6 +11,7 @@ download_pkgs(
         "bash",
         "libev4",
         "libgomp1",
+        "libgoogle-perftools-dev",
         "libprotobuf17",
         "libssl1.1",
         "python3.9",

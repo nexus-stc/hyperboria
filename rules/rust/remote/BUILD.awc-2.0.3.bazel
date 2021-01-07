@@ -65,7 +65,7 @@ rust_library(
         "@raze__percent_encoding__2_1_0//:percent_encoding",
         "@raze__rand__0_7_3//:rand",
         "@raze__serde__1_0_118//:serde",
-        "@raze__serde_json__1_0_60//:serde_json",
+        "@raze__serde_json__1_0_61//:serde_json",
         "@raze__serde_urlencoded__0_7_0//:serde_urlencoded",
     ],
 )

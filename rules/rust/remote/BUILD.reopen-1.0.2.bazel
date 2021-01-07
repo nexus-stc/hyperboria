@@ -88,7 +88,7 @@ rust_library(
     deps = [
         ":reopen_build_script",
         "@raze__libc__0_2_81//:libc",
-        "@raze__signal_hook__0_2_2//:signal_hook",
+        "@raze__signal_hook__0_2_3//:signal_hook",
     ],
 )
 

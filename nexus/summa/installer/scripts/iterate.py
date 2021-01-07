@@ -25,7 +25,7 @@ def _do_work(coder, filepath, chunk_size, limit, member):
         tr = TantivyReader(data, coder=coder)
         for chunk_num, documents in enumerate(ichunks(tr.documents(), chunk_size)):
             for doc_num, document in enumerate(documents):
-                if chunk_num * chunk_size + doc_num > limit:
+                if limit and chunk_num * chunk_size + doc_num > limit:
                     print(f'Segment {member.name} early terminated due to limits')
                     return
                 work(document)

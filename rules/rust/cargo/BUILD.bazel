@@ -103,6 +103,15 @@ alias(
 )
 
 alias(
+    name = "backtrace",
+    actual = "@raze__backtrace__0_3_55//:backtrace",
+    tags = [
+        "cargo-raze",
+        "manual",
+    ],
+)
+
+alias(
     name = "base64",
     actual = "@raze__base64__0_12_3//:base64",
     tags = [
@@ -212,7 +221,7 @@ alias(
 
 alias(
     name = "combine",
-    actual = "@raze__combine__4_5_0//:combine",
+    actual = "@raze__combine__4_5_2//:combine",
     tags = [
         "cargo-raze",
         "manual",
@@ -293,7 +302,7 @@ alias(
 
 alias(
     name = "erased_serde",
-    actual = "@raze__erased_serde__0_3_12//:erased_serde",
+    actual = "@raze__erased_serde__0_3_13//:erased_serde",
     tags = [
         "cargo-raze",
         "manual",
@@ -382,6 +391,8 @@ alias(
 )
 
 alias(
+    # Extra aliased target, from raze configuration
+    # N.B.: The exact form of this is subject to change.
     name = "cargo_bin_protoc_gen_rust_grpc",
     actual = "@raze__grpc_compiler__0_8_2//:cargo_bin_protoc_gen_rust_grpc",
     tags = [
@@ -535,17 +546,8 @@ alias(
 )
 
 alias(
-    name = "notify",
-    actual = "@raze__notify__4_0_15//:notify",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
     name = "num_bigint",
-    actual = "@raze__num_bigint__0_2_6//:num_bigint",
+    actual = "@raze__num_bigint__0_3_1//:num_bigint",
     tags = [
         "cargo-raze",
         "manual",
@@ -635,7 +637,7 @@ alias(
 
 alias(
     name = "protobuf",
-    actual = "@raze__protobuf__2_18_1//:protobuf",
+    actual = "@raze__protobuf__2_20_0//:protobuf",
     tags = [
         "cargo-raze",
         "manual",
@@ -644,7 +646,7 @@ alias(
 
 alias(
     name = "protobuf_codegen",
-    actual = "@raze__protobuf_codegen__2_18_1//:protobuf_codegen",
+    actual = "@raze__protobuf_codegen__2_20_0//:protobuf_codegen",
     tags = [
         "cargo-raze",
         "manual",
@@ -652,8 +654,10 @@ alias(
 )
 
 alias(
+    # Extra aliased target, from raze configuration
+    # N.B.: The exact form of this is subject to change.
     name = "cargo_bin_protoc_gen_rust",
-    actual = "@raze__protobuf_codegen__2_18_1//:cargo_bin_protoc_gen_rust",
+    actual = "@raze__protobuf_codegen__2_20_0//:cargo_bin_protoc_gen_rust",
     tags = [
         "cargo-raze",
         "manual",
@@ -752,7 +756,7 @@ alias(
 
 alias(
     name = "serde_json",
-    actual = "@raze__serde_json__1_0_60//:serde_json",
+    actual = "@raze__serde_json__1_0_61//:serde_json",
     tags = [
         "cargo-raze",
         "manual",
@@ -761,7 +765,7 @@ alias(
 
 alias(
     name = "serde_qs",
-    actual = "@raze__serde_qs__0_7_2//:serde_qs",
+    actual = "@raze__serde_qs__0_8_2//:serde_qs",
     tags = [
         "cargo-raze",
         "manual",
@@ -770,7 +774,7 @@ alias(
 
 alias(
     name = "serde_yaml",
-    actual = "@raze__serde_yaml__0_8_14//:serde_yaml",
+    actual = "@raze__serde_yaml__0_8_15//:serde_yaml",
     tags = [
         "cargo-raze",
         "manual",
@@ -779,7 +783,7 @@ alias(
 
 alias(
     name = "signal_hook",
-    actual = "@raze__signal_hook__0_1_16//:signal_hook",
+    actual = "@raze__signal_hook__0_3_2//:signal_hook",
     tags = [
         "cargo-raze",
         "manual",
@@ -842,7 +846,7 @@ alias(
 
 alias(
     name = "smallvec",
-    actual = "@raze__smallvec__1_5_1//:smallvec",
+    actual = "@raze__smallvec__1_6_0//:smallvec",
     tags = [
         "cargo-raze",
         "manual",
@@ -869,7 +873,7 @@ alias(
 
 alias(
     name = "strum",
-    actual = "@raze__strum__0_19_5//:strum",
+    actual = "@raze__strum__0_20_0//:strum",
     tags = [
         "cargo-raze",
         "manual",
@@ -878,7 +882,7 @@ alias(
 
 alias(
     name = "strum_macros",
-    actual = "@raze__strum_macros__0_19_4//:strum_macros",
+    actual = "@raze__strum_macros__0_20_1//:strum_macros",
     tags = [
         "cargo-raze",
         "manual",
@@ -923,7 +927,7 @@ alias(
 
 alias(
     name = "textwrap",
-    actual = "@raze__textwrap__0_12_1//:textwrap",
+    actual = "@raze__textwrap__0_13_2//:textwrap",
     tags = [
         "cargo-raze",
         "manual",
@@ -932,7 +936,7 @@ alias(
 
 alias(
     name = "thiserror",
-    actual = "@raze__thiserror__1_0_22//:thiserror",
+    actual = "@raze__thiserror__1_0_23//:thiserror",
     tags = [
         "cargo-raze",
         "manual",
@@ -977,7 +981,7 @@ alias(
 
 alias(
     name = "tokio_pg_mapper",
-    actual = "@raze__tokio_pg_mapper__0_1_8//:tokio_pg_mapper",
+    actual = "@raze__tokio_pg_mapper__0_2_0//:tokio_pg_mapper",
     tags = [
         "cargo-raze",
         "manual",
@@ -986,7 +990,7 @@ alias(
 
 alias(
     name = "tokio_pg_mapper_derive",
-    actual = "@raze__tokio_pg_mapper_derive__0_1_5//:tokio_pg_mapper_derive",
+    actual = "@raze__tokio_pg_mapper_derive__0_2_0//:tokio_pg_mapper_derive",
     tags = [
         "cargo-raze",
         "manual",
@@ -995,7 +999,7 @@ alias(
 
 alias(
     name = "tokio_postgres",
-    actual = "@raze__tokio_postgres__0_6_0//:tokio_postgres",
+    actual = "@raze__tokio_postgres__0_7_0//:tokio_postgres",
     tags = [
         "cargo-raze",
         "manual",

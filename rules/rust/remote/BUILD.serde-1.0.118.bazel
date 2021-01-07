@@ -80,6 +80,7 @@ rust_library(
     ],
     rustc_flags = [
         "--cap-lints=allow",
+        "--cfg=integer128",
     ],
     tags = [
         "cargo-raze",

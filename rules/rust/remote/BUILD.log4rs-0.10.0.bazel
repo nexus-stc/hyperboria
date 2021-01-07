@@ -99,9 +99,9 @@ rust_library(
         "@raze__log__0_4_11//:log",
         "@raze__log_mdc__0_1_0//:log_mdc",
         "@raze__serde__1_0_118//:serde",
-        "@raze__serde_json__1_0_60//:serde_json",
+        "@raze__serde_json__1_0_61//:serde_json",
         "@raze__serde_value__0_6_0//:serde_value",
-        "@raze__serde_yaml__0_8_14//:serde_yaml",
+        "@raze__serde_yaml__0_8_15//:serde_yaml",
         "@raze__thread_id__3_3_0//:thread_id",
         "@raze__typemap__0_3_3//:typemap",
     ] + selects.with_or({

@@ -50,7 +50,7 @@ rust_library(
     # buildifier: leave-alone
     deps = [
         "@raze__form_urlencoded__1_0_0//:form_urlencoded",
-        "@raze__itoa__0_4_6//:itoa",
+        "@raze__itoa__0_4_7//:itoa",
         "@raze__ryu__1_0_5//:ryu",
         "@raze__serde__1_0_118//:serde",
     ],
