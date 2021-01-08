@@ -17,7 +17,7 @@ schema:
     options:
       indexing:
         record: position
-        tokenizer: default
+        tokenizer: summa
       stored: true
   - name: cu
     type: text
@@ -34,7 +34,7 @@ schema:
     options:
       indexing:
         record: position
-        tokenizer: default
+        tokenizer: summa
       stored: true
   - name: doi
     type: text
@@ -120,21 +120,21 @@ schema:
     options:
       indexing:
         record: position
-        tokenizer: default
+        tokenizer: summa
       stored: true
   - name: tags
     type: text
     options:
       indexing:
         record: position
-        tokenizer: default
+        tokenizer: summa
       stored: true
   - name: title
     type: text
     options:
       indexing:
         record: position
-        tokenizer: default
+        tokenizer: summa
       stored: true
   - name: updated_at
     type: i64

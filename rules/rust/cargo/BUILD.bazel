@@ -247,6 +247,15 @@ alias(
 )
 
 alias(
+    name = "criterion",
+    actual = "@raze__criterion__0_3_3//:criterion",
+    tags = [
+        "cargo-raze",
+        "manual",
+    ],
+)
+
+alias(
     name = "crossbeam",
     actual = "@raze__crossbeam__0_7_3//:crossbeam",
     tags = [
@@ -999,7 +1008,7 @@ alias(
 
 alias(
     name = "tokio_postgres",
-    actual = "@raze__tokio_postgres__0_7_0//:tokio_postgres",
+    actual = "@raze__tokio_postgres__0_5_5//:tokio_postgres",
     tags = [
         "cargo-raze",
         "manual",
