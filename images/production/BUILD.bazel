@@ -9,6 +9,7 @@ download_pkgs(
     image_tar = "//images:base-image.tar",
     packages = [
         "bash",
+        "ca-certificates",
         "libev4",
         "libgomp1",
         "libgoogle-perftools-dev",

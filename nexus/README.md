@@ -11,7 +11,7 @@
 - ✅ [`models`](models) - shared Protobuf models
 - ✅ [`nlptools`](nlptools) - text routines
 - ✅ [`pipe`](pipe) - processing pipeline based on Kafka
-- 🛑 `pylon` - smart proxy for downloading files from the Internet/IPFS
+- ✅ [`pylon`](pylon) - smart client for downloading files from the Internet/IPFS
 - ✅ [`summa`](summa) - scripts for setting Summa
 - ✅ [`translations`](translations) - text translations used in `bot` and `hub`
 - 🛑 `views` - shared views for [`models`](models)

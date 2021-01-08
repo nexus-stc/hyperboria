@@ -34,6 +34,7 @@ colored = "2"
 combine = { version = "4", default-features = false, features = [] }
 config = "0.10.1"
 crc32fast = "1.2.0"
+criterion = "0.3.3"
 crossbeam = "0.7.3"
 deadpool = "0.5.2"
 deadpool-postgres = "0.5.6"
@@ -115,7 +116,7 @@ tls-api-stub = "0.4.0"
 tokio = { version = "0.2", features = ["full", "time"] }
 tokio-pg-mapper = "0.2.0"
 tokio-pg-mapper-derive = "0.2.0"
-tokio-postgres = "0.7.0"
+tokio-postgres = "0.5"
 typenum = { version = "1.12.0", features = ["force_unix_path_separator"] }
 urlparse = "0.7.3"
 uuid = { version = "0.8.1", features = ["v4", "serde"] }

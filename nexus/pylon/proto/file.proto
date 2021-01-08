@@ -1,0 +1,18 @@
+syntax = "proto3";
+package nexus.pylon.proto;
+
+message Chunk {
+  bytes content = 1;
+}
+
+message FileResponse {
+  enum Status {
+    RESOLVING = 0;
+    BEGIN_TRANSMISSION = 1;
+  }
+  oneof response {
+    Chunk chunk = 1;
+    Status status = 2;
+  }
+  string source = 3;
+}
