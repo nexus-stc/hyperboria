@@ -305,8 +305,8 @@ ru:
   UPLOADED_TO_TELEGRAM: загружено в Телеграм...
   VIEWS_CANNOT_BE_SHARED: Выполните поиск сами, команду нельзя передавать другому пользователю.
   YEAR: Год
-en:
-  ABSTRACT: Resúmen
+es:
+  ABSTRACT: Resumen
   ALREADY_DOWNLOADING: |
     Encontré este libro en Internet.
     Por favor, ten paciencia, te lo enviaré cuando esté listo.
@@ -413,55 +413,55 @@ en:
 
     ¿Qué vas a leer hoy?
   INVALID_QUERY_ERROR: |
-    ```Oops, I do not know what to do with this URL:(
-    Try to send me DOI, MD5 or just the name of what you are looking for!```[‌]({too_difficult_picture_url})
+    ```Oops, No sé qué hacer con esta URL :(
+    ¡Intenta enviarme DOI, MD5 o simplemente el nombre de lo que estás buscando!```[‌]({too_difficult_picture_url})
   INVALID_SYNTAX_ERROR: |
-    ```Oops, something wrong with your query. Probably it is too clever for me.
-    Tip: use brackets, add more AND/OR or remove them all.```[‌]({too_difficult_picture_url})
-  JOURNAL: Journal
-  LEGACY: We've updated and old widgets stopped working:( Please, do search again.
-  LOOKING_AT: 'looking at {source}...'
+    ```Oops, algo anda mal con tu consulta. Probablemente sea demasiado inteligente para mí.
+    Tip: use corchetes, agrega más AND/OR o quítalos todos.```[‌]({too_difficult_picture_url})
+  JOURNAL: Revista
+  LEGACY: Hemos actualizado y los widgets antiguos dejaron de funcionar :( Por favor, vuelva a buscar.
+  LOOKING_AT: 'buscando en {source}...'
   MAINTENANCE: |
-    ```Oops! Something goes wrong and we are trying hard to revive.
-    Please, try a little bit later.```[‌]({maintenance_picture_url})
-  MAINTENANCE_WO_PIC: Oops! Please, try a little bit later.
-  NAMELESS: Without name
+    ```¡Oops! Algo salió mal y estamos esforzándonos por revivir.
+    Por favor, inténtelo más tarde.```[‌]({maintenance_picture_url})
+  MAINTENANCE_WO_PIC: ¡Oops! Por favor, intenta más tarde.
+  NAMELESS: Sin nombre
   NEXUS_DISCOVERY_DESCRIPTION: |
-    **Nexus Discovery** is a recommendation service. It also notifies you about newly arrived publications you were looking for before. Your personal digest will be sent at every Sunday.
+    **Nexus Discovery** es un servicio de recomendaciones. También te notifica sobre publicaciones recién llegadas que estabas buscando antes. Tu resumen personal se enviará todos los domingos.
   PROMO: |
-    **Nexus Search - Update and News**
+    **Nexus Search - Actualizaciones y Noticias**
     {related_channel}
-  READ_ONLY_MODE: ⚠️ Reduced service until midnight (UTC). /settings is not working, search in slow mode.
-  REFERENCED_BY: Referenced by
-  REPLY_MESSAGE_HAS_BEEN_DELETED: Search message has been (re-)moved. Do search again.
-  SEARCHING: searching...
-  SEND_YOUR_LOCATION: Send your location (through the left attach button)
+  READ_ONLY_MODE: ⚠️ Servicio reducido hasta la medianoche (UTC). /settings no funciona, busque en modo lento.
+  REFERENCED_BY: Referenciado por
+  REPLY_MESSAGE_HAS_BEEN_DELETED: El mensaje de búsqueda ha sido (re)movido. Vuelve a buscar.
+  SEARCHING: buscando...
+  SEND_YOUR_LOCATION: Envía tu ubicación (a través del botón de adjuntar de la izquierda)
   SETTINGS_ROUTER_HELP: >
-    Settings could be set up automatically or manually.
-    Automatic mode will requests location to set timezone, language and georanking.
+    Los ajustes se pueden configurar de forma automática o manual.
+    El modo automático solicitará la ubicación para establecer la zona horaria, el idioma y la clasificación geográfica.
   SETTINGS_TEMPLATE: |
-    **Bot Version:** {bot_version}
-    **Nexus Version:** {nexus_version}
-    **Language:** {language}
-    **Timezone:** {tzinfo}
-  SETUP_AUTOMATICALLY: Setup automatically
-  SETUP_MANUALLY: Setup manually
-  SHORT_PROMO: ⤴️ Stay tuned with us at {related_channel}
-  SOURCES_UNAVAILABLE: '`{document}` is unavailable right now. Please, try later.'
-  SUBSCRIBE_TO_CHANNEL: Subscribe to {related_channel} to continue using this bot.
-  SYSTEM_MESSAGING_OPTION: Bot Update Notifications
+    **Versión del bot:** {bot_version}
+    **Versión de Nexus:** {nexus_version}
+    **Idioma:** {language}
+    **Zona horaria:** {tzinfo}
+  SETUP_AUTOMATICALLY: Configurar automáticamente
+  SETUP_MANUALLY: Configurar manualmente
+  SHORT_PROMO: ⤴️ Mantente en contacto con nosotros en {related_channel}
+  SOURCES_UNAVAILABLE: '`{document}` no está disponible en este momento. Por favor intenta más tarde.'
+  SUBSCRIBE_TO_CHANNEL: Suscríbete a {related_channel} para seguir usando este bot.
+  SYSTEM_MESSAGING_OPTION: Notificaciones de actualización de bot
   TAGS: Tags
   TANKS_BRUH: Tank ya bruuuh!
-  THANK_YOU_FOR_CONTACT: Thank you! If you have a question, it is better to ask at {related_channel} user conference.
+  THANK_YOU_FOR_CONTACT: ¡Gracias! Si tienes alguna pregunta, es mejor que la hagas en el grupo de usuarios de {related_channel}.
   TOO_LONG_QUERY_FOR_SHORTLINK: |
-    Your query is too long (limit is about 35-40 characters).
+    Su consulta es demasiado larga (el límite es de 35 a 40 caracteres).
 
-    Try to use NID-encoded query. Find an item you want to share, copy NID from a view page and
-    then create a shortlink for query `NID: <NID>`.
-  TOO_MANY_DOWNLOADS: Too many active downloads. Please, wait them to complete.
-  TRANSMITTED_FROM: 'transmitted from {source}'
+    Intente utilizar una consulta codificada con NID. Busque un elemento que desee compartir, copie el NID de una página de visualización y 
+    luego cree un enlace corto para la consulta `NID: <NID>`.
+  TOO_MANY_DOWNLOADS: Demasiadas descargas activas. Por favor, espera a que finalicen.
+  TRANSMITTED_FROM: 'transmitido desde {source}'
   UPGRADE_MAINTENANCE: |
-    ```Major update is going on, come back to us tomorrow```[‌]({upgrade_maintenance_picture_url})
-  UPLOADED_TO_TELEGRAM: uploaded to Telegram...
-  VIEWS_CANNOT_BE_SHARED: Do your own search, commands cannot be shared.
-  YEAR: Year
+    ```Se está llevando a cabo una actualización importante, vuelve con nosotros mañana```[‌]({upgrade_maintenance_picture_url})
+  UPLOADED_TO_TELEGRAM: subido a Telegram...
+  VIEWS_CANNOT_BE_SHARED: Haga su propia búsqueda, los comandos no se pueden compartir.
+  YEAR: Año
