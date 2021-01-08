@@ -312,7 +312,7 @@ es:
     Por favor, ten paciencia, te lo enviaré cuando esté listo.
   AUTHORS: Autores
   BANNED: |
-    Has sido baneado hasta las **{datetime} UTC**.
+    Has sido baneado hasta la(s) **{datetime} UTC**.
     Razón: **{reason}**
   BANNED_FOR_SECONDS: |
     Has sido baneado por **{seconds} segundo(s)**
@@ -330,9 +330,9 @@ es:
   COPYRIGHT_DESCRIPTION: |
     Si deseas presentar una queja por infracción de derechos de autor:
 
-    - Comience su mensaje con /copyright, luego agregue la nueva línea
-    - Pega los enlaces a los ítems sobre los que está reclamando. Un enlace a un ítem 
-    es aquel sobre el que está haciendo clic en el resultado de la página de búsqueda, es decir, `/vb_FH5fWn2o_3512868_1675254_2`
+    - Comienza tu mensaje con /copyright, luego agregua la nueva línea
+    - Pega los enlaces a los ítems sobre los que estás reclamando. Un enlace a un ítem 
+    es aquel sobre el que estás haciendo clic en el resultado de la página de búsqueda, es decir, `/vb_FH5fWn2o_3512868_1675254_2`
     - Agrega como un solo archivo (*.zip) todos los documentos que confirman que eres el propietario legal de los derechos de autor o un agente autorizado para actuar en nombre del propietario.
 
     Tu reclamo será considerado durante 24 horas.
@@ -341,13 +341,13 @@ es:
     Se ha aceptado su reclamo por infracción de derechos de autor.
   COULD_NOT_FIND_ANYTHING: No pude encontrar nada :(
   DESCRIPTION: Descripción
-  DISABLE_DISCOVERY: Si no deseas obtener un feed personalizado, puedes inhabilitar Nexus Discovery en /settings
+  DISABLE_DISCOVERY: Si no deseas obtener un feed personalizado, puedes deshabilitar Nexus Discovery en /settings
   DISCOVERY_OPTION: Nexus Discovery
   DISCOVERY_PROMPT: 🦘 **Mira lo que encontré para ti:** 🦘
   DONATE: |
-    Gracias por visitar /donate. Agradezco incluso su intención de abrir este mensaje.
+    Gracias por visitar /donate. Agradezco incluso tu intención de abrir este mensaje.
 
-    Toda buena enseñanza debe fluir de abundantes fuentes de conocimiento. La fuentes poco profundas no pueden emitir un resultado fluido y abundante.
+    Toda buena enseñanza debe fluir de abundantes fuentes de conocimiento. Las fuentes poco profundas no pueden emitir un resultado fluido y abundante.
     Al donarnos a nosotros, estás donando a todas las personas que no tienen acceso al conocimiento humano debido a restricciones de pago o un precio excesivamente alto.
 
     Todas las donaciones se gastarán en:
@@ -355,7 +355,6 @@ es:
     - Mantenimiento de servidores. Crear y entregar el índice y usar el aprendizaje automático es una tarea computacional pesada que requiere una gran cantidad de GPU, CPU y discos.
 
     Cada centavo se utilizará para el proyecto.
-    You can /contact us or subscribe at {related_channel}, if you want to know exactly how donations will be spent.
     Puedes contactarnos con /contact o suscribirte en {related_channel}, si deseas saber exactamente cómo se gastarán las donaciones.
 
     **Detalles sobre donaciones**
@@ -397,7 +396,7 @@ es:
     ¡Hola! ¡Soy el bot **Nexus** para grupos!
     Puedo buscar libros o artículos científicos por títulos, autores o DOI.
 
-    Simplemente escribe tu solicitud en palabras sencillas precedido **de /search**.
+    Simplemente escribe tu solicitud en palabras sencillas precedido de **/search**.
 
     Ejemplo: `Cien Años de Soledad` o `https://doi.org/10.1023/A:1026654312961`
 
@@ -417,13 +416,13 @@ es:
     ¡Intenta enviarme DOI, MD5 o simplemente el nombre de lo que estás buscando!```[‌]({too_difficult_picture_url})
   INVALID_SYNTAX_ERROR: |
     ```Oops, algo anda mal con tu consulta. Probablemente sea demasiado inteligente para mí.
-    Tip: use corchetes, agrega más AND/OR o quítalos todos.```[‌]({too_difficult_picture_url})
+    Tip: usa corchetes, agrega más AND/OR o quítalos todos.```[‌]({too_difficult_picture_url})
   JOURNAL: Revista
   LEGACY: Hemos actualizado y los widgets antiguos dejaron de funcionar :( Por favor, vuelva a buscar.
   LOOKING_AT: 'buscando en {source}...'
   MAINTENANCE: |
     ```¡Oops! Algo salió mal y estamos esforzándonos por revivir.
-    Por favor, inténtelo más tarde.```[‌]({maintenance_picture_url})
+    Por favor, inténtalo más tarde.```[‌]({maintenance_picture_url})
   MAINTENANCE_WO_PIC: ¡Oops! Por favor, intenta más tarde.
   NAMELESS: Sin nombre
   NEXUS_DISCOVERY_DESCRIPTION: |
