@@ -177,15 +177,19 @@ es:
   CONTACT: |
     **Actualizaciones y noticias**: {related_channel}
     **Detalles sobre donaciones**: /donate
+
     **LiberaPay**: {libera_pay_url}
     **Dirección BTC:** {btc_donate_address}
+
     Puedes enviarnos sus comentarios directamente por /contact <tu mensaje aquí>
   COPYRIGHT_DESCRIPTION: |
     Si deseas presentar una queja por infracción de derechos de autor:
+
     - Comienza tu mensaje con /copyright, luego agregua la nueva línea
     - Pega los enlaces a los ítems sobre los que estás reclamando. Un enlace a un ítem
     es aquel sobre el que estás haciendo clic en el resultado de la página de búsqueda, es decir, `/vb_FH5fWn2o_3512868_1675254_2`
     - Agrega como un solo archivo (*.zip) todos los documentos que confirman que eres el propietario legal de los derechos de autor o un agente autorizado para actuar en nombre del propietario.
+
     Tu reclamo será considerado durante 24 horas.
     La decisión de satisfacer el reclamo impedirá que se descargue el ítem, pero aún se podrá buscar.
   COPYRIGHT_INFRINGEMENT_ACCEPTED: |
@@ -197,14 +201,19 @@ es:
   DISCOVERY_PROMPT: 🦘 **Mira lo que encontré para ti:** 🦘
   DONATE: |
     Gracias por visitar /donate. Agradezco incluso tu intención de abrir este mensaje.
+
     Toda buena enseñanza debe fluir de abundantes fuentes de conocimiento. Las fuentes poco profundas no pueden emitir un resultado fluido y abundante.
     Al donarnos a nosotros, estás donando a todas las personas que no tienen acceso al conocimiento humano debido a restricciones de pago o un precio excesivamente alto.
+
     Todas las donaciones se gastarán en:
     - Desarrollo del Nexus Index y hacer que todo el mundo pueda buscar tanto conocimiento como sea posible.
     - Mantenimiento de servidores. Crear y entregar el índice y usar el aprendizaje automático es una tarea computacional pesada que requiere una gran cantidad de GPU, CPU y discos.
+
     Cada centavo se utilizará para el proyecto.
     Puedes contactarnos con /contact o suscribirte en {related_channel}, si deseas saber exactamente cómo se gastarán las donaciones.
+
     **Detalles sobre donaciones**
+
     **LiberaPay**: {libera_pay_url}
     **Dirección BTC:** {btc_donate_address}
     [‌]({btc_donate_qr_url})
@@ -221,31 +230,41 @@ es:
     ¡Hola! ¡Soy el bot **Nexus**!
     Puedo buscar libros o artículos científicos por títulos, autores o DOI.
     Además, puedo enviar recomendaciones basadas en lo que estabas buscando antes.
+
     **Simplemente escriba su solicitud en palabras sencillas.**
+
     Ejemplo: `Cien Años de Soledad` o `https://doi.org/10.1023/A:1026654312961`
+
     Restringir la búsqueda para el año 2019: `hemoglobina AND year:2019`
     Encuentre solo a partir del año 2019: `hemoglobina AND year:[2019 TO *]
     Búsqueda por autor: `authors:Jack authors:London`
     Coincidencia exacta: `"Hemoglobina Fetal"`
+
     /copyright - hacer un reclamo por infracción de derechos de autor
     /donate - explica cómo apoyarnos
     /help - muestra esta ayuda
     /roll - obtener un libro al azar
     /settings - cambia la configuración de idioma, notificaciones y feeds personalizados
+
     ¿Qué vas a leer hoy?
   HELP_FOR_GROUPS: |
     ¡Hola! ¡Soy el bot **Nexus** para grupos!
     Puedo buscar libros o artículos científicos por títulos, autores o DOI.
+
     Simplemente escribe tu solicitud en palabras sencillas precedido de **/search**.
+
     Ejemplo: `Cien Años de Soledad` o `https://doi.org/10.1023/A:1026654312961`
+
     Restringir la búsqueda para el año 2019: `hemoglobina AND year:2019`
     Encuentre solo a partir del año 2019: `hemoglobina AND year:[2019 TO *]
     Búsqueda por autor: `authors:Jack authors:London`
     Coincidencia exacta: `"Hemoglobina Fetal"`
+
     /donate - explica cómo apoyarnos
     /help - muestra esta ayuda
     /roll - obtener un libro al azar
     /settings - cambia la configuración de idioma, notificaciones y feeds personalizados
+
     ¿Qué vas a leer hoy?
   INVALID_QUERY_ERROR: |
     ```Oops, No sé qué hacer con esta URL :(
@@ -290,6 +309,7 @@ es:
   THANK_YOU_FOR_CONTACT: ¡Gracias! Si tienes alguna pregunta, es mejor que la hagas en el grupo de usuarios de {related_channel}.
   TOO_LONG_QUERY_FOR_SHORTLINK: |
     Su consulta es demasiado larga (el límite es de 35 a 40 caracteres).
+
     Intente utilizar una consulta codificada con NID. Busque un elemento que desee compartir, copie el NID de una página de visualización y
     luego cree un enlace corto para la consulta `NID: <NID>`.
   TOO_MANY_DOWNLOADS: Demasiadas descargas activas. Por favor, espera a que finalicen.
