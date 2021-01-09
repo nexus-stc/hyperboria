@@ -464,6 +464,165 @@ ru:
   UPLOADED_TO_TELEGRAM: загружено в Телеграм...
   VIEWS_CANNOT_BE_SHARED: Выполните поиск сами, команду нельзя передавать другому пользователю.
   YEAR: Год
+it:
+  ABSTRACT: Sintesi
+  ALREADY_DOWNLOADING: |
+    Ho trovato questo libro su Internet.
+    Sii paziente, lo invierò non appena sarà pronto.
+  AUTHORS: Autori
+  BANNED: |
+    Sei bannato fino a **{datetime} UTC**.
+    Reason: **{reason}**
+  BANNED_FOR_SECONDS: |
+    Sei bannato per **{seconds} secondi(s)**
+    Motivo: **{reason}**
+  BAN_MESSAGE_TOO_MANY_REQUESTS: Troppe richieste
+  CLOSE: Chiudi
+  CONTACT: |
+    **Aggiornamenti e novità**: {related_channel}
+    **Info per donazioni**: /donate
+
+    **LiberaPay**: {libera_pay_url}
+    **Indirizzo BTC:** {btc_donate_address}
+
+    Puoi inviarci un feedback direttamente con /contact <il tuo messaggio qui>
+  COPYRIGHT_DESCRIPTION: |
+    Se vuoi fare un reclamo per violazione di copyright:
+
+    - Inizia il tuo messaggio con /copyright, poi aggiungi una nuova linea
+    - Incolla i link di visualizzazione di tali contenuti. Un link di visualizzazione è un elemento
+    che puoi cliccare sulla pagina dei risultati di ricerca, es. `/v_ip6qnAOB_893608_1749642_3`
+    - Allega come singolo file (*.zip) tutti i documenti che certificano che detieni i diritti di copyright oppure agisci in modo autorizzato per conto del proprietario.
+
+    La tua segnalazione verrà esaminata entro 24 ore.
+    Se accettata, il contenuto non sarà più scaricabile, ma rimarrà comunque cercabile.
+  COPYRIGHT_INFRINGEMENT_ACCEPTED: |
+    La tua segnalazione di violazione di copyright è stata accettata
+  COULD_NOT_FIND_ANYTHING: Non ho trovato niente :(
+  DESCRIPTION: Descrizione
+  DISABLE_DISCOVERY: Se non vuoi ricevere un feed personalizzato, puoi disabilitare Nexus Discovery in /settings
+  DISCOVERY_OPTION: Nexus Discovery
+  DISCOVERY_PROMPT: 🦘 **Guarda cosa ho trovato per te:** 🦘
+  DONATE: |
+    Grazie per aver visitato /donate. Mi fa piacere anche solo la tua intenzione di aprire questo messaggio.
+
+    Il buon insegnamento deve provenire da numerosi fonti di conoscenza. Una sorgente poco profonda non può generare un flusso vigoroso.
+    Donando a noi, stai donando a tutte le persone che non hanno accesso alla conoscenza umana a causa di restrizioni per accesso a pagamento o costi troppo alti.
+
+    Tutte le donazioni verranno spese per:
+    - Sviluppare l'Indice Nexus e rendere ricercabile quanta più conoscenza possibile, per tutti.
+    - Mantenere i server. Costruire ed esporre l'indice e sfruttare il machine learning sono compiti molto costosi computazionalmente, che richiedono molta GPU, CPU e memoria.
+
+    Ogni centesimo verrà speso per il progetto.
+    Puoi contattarci (/contact) o iscriverti a {related_channel}, se vuoi sapere esattamente come le donazioni verranno spese.
+
+    **Dettagli per le donazioni**
+
+    **LiberaPay**: {libera_pay_url}
+    **Indirizzo BTC:** {btc_donate_address}
+    [‌]({btc_donate_qr_url})
+  DOWNLOAD: Scarica
+  DOWNLOADED: scaricato
+  DOWNLOADING: scaricamento in corso...
+  DOWNLOAD_AND_SEARCH_MORE: Scarica e cerca qualcos'altro
+  DOWNLOAD_CANCELED: |
+    Stiamo riavviando la nostra infrastruttura.
+    Per favore, prova a scaricare `{document}` tra un minuto.
+  EDITION: Edizione
+  FILE: File
+  HELP: |
+    Ciao! Sono il bot **Nexus**!
+    Posso cercare libri o articoli scientifici per titolo, autore o DOI.
+    Inoltre, posso fornire suggerimenti in base a quello che hai cercato precedentemente.
+
+    **Scrivi qui la tua richiesta a parole.**
+
+    Esempio: `Divina Commedia Dante` oppure `https://doi.org/10.1159/000477855`
+
+    Restringi la ricerca all'anno 2019: `emoglobina AND year:2019`
+    Find only starting from 2019 year: `emoglobina AND year:[2019 TO *]
+    Ricerca per autore: `authors:Jack authors:London`
+    Risultato esatto: `"Emoglobina fetale"`
+
+    /copyright - segnala una violazione di copyright
+    /donate - info su come sostenerci
+    /help - mostra questo aiuto
+    /roll - ottieni un libro a caso
+    /settings - modifica la lingua, le impostazioni delle notifiche e il feed personalizzato.
+
+    Cosa vuoi leggere oggi?
+  HELP_FOR_GROUPS: |
+    Hi! I'm **Nexus** bot for groups!
+    I can search books or science articles by titles, authors or DOIs.
+
+    Just type your request in plain words prepending **with /search**.
+
+    Example: `/search Divine Comedy Dante` or `/search https://doi.org/10.1159/000477855`
+
+    Restrict search by 2019 year: `/search hemoglobin AND year:2019`
+    Find only starting from 2019 year: `/search hemoglobin AND year:[2019 TO *]
+    Search by author: `/search authors:Jack authors:London`
+    Exact match: `/search "Fetal Hemoglobin"`
+
+    /donate - tells how to support us
+    /help - shows this help
+    /roll - get random book
+    /settings - changes language
+
+    What are we going to read today?
+  INVALID_QUERY_ERROR: |
+    ```Oops, non so cosa fare con questo URL:(
+    Prova a mandarmi il DOI, MD5 o semplicemente il nome di quello che cerchi!```[‌]({too_difficult_picture_url})
+  INVALID_SYNTAX_ERROR: |
+    ```Oops, c'è qualcosa di sbagliato nella tua richiesta. Probabilmente è troppo avanzata per me.
+    Suggerimento: usa le parentesi, aggiungi più AND/OR o toglili.```[‌]({too_difficult_picture_url})
+  JOURNAL: Rivista
+  LEGACY: Abbiamo fatto un aggiornamento e i vecchi widget hanno smesso di funzionare :( Per favore, ripeti la ricerca.
+  LOOKING_AT: 'cercando {source}...'
+  MAINTENANCE: |
+    ```Oops! Qualcosa è andato storto e stiamo facendo del nostro meglio per tornare operativi.
+    Per favore, prova un po' più tardi.```[‌]({maintenance_picture_url})
+  MAINTENANCE_WO_PIC: Oops! Per favore, prova un po' più tardi.
+  NAMELESS: Senza nome
+  NEXUS_DISCOVERY_DESCRIPTION: |
+    **Nexus Discovery** è un servizio di raccomandazione. Ti segnala anche le pubblicazioni appena arrivate che hai provato a cercare precedentemente. Il tuo digest personalizzato viene inviato ogni Domenica.
+  PROMO: |
+    **Nexus Search - Aggiornamenti e novità**
+    {related_channel}
+  READ_ONLY_MODE: ⚠️ Il servizio è limitato fino a mezzanotte (UTC). /settings non è disponibile, la ricerca è più lenta.
+  REFERENCED_BY: Riferito da
+  REPLY_MESSAGE_HAS_BEEN_DELETED: Il messaggio di ricerca è stato (ri-)mosso. Ripeti la ricerca.
+  SEARCHING: ricerca in corso...
+  SEND_YOUR_LOCATION: Invia la tua posizione (tramite il pulsante allegato a sinistra)
+  SETTINGS_ROUTER_HELP: >
+    Le impostazioni possono essere configurate automaticamente o manualmente.
+    La modalità automatica richiederà la tua posizione per impostare il fuso orario, la lingua e il ranking geografico.
+  SETTINGS_TEMPLATE: |
+    **Versione del Bot:** {bot_version}
+    **Versione del Nexus:** {nexus_version}
+    **Lingua:** {language}
+    **Fuso orario:** {tzinfo}
+  SETUP_AUTOMATICALLY: Configura automaticamente
+  SETUP_MANUALLY: Configura manualmente
+  SHORT_PROMO: ⤴️ Resta aggiornato con noi su {related_channel}
+  SOURCES_UNAVAILABLE: '`{document}` non è disponibile adesso. Per favore, prova più tardi.'
+  SUBSCRIBE_TO_CHANNEL: Iscriviti a {related_channel} per continuare ad usare questo bot.
+  SYSTEM_MESSAGING_OPTION: Notifiche Aggiornamento Bot
+  TAGS: Tag
+  TANKS_BRUH: Grazie bro!
+  THANK_YOU_FOR_CONTACT: Grazie! Se hai una domanda, ti conviene chiedere agli utenti in {related_channel}.
+  TOO_LONG_QUERY_FOR_SHORTLINK: |
+    La tua richiesta è troppo lunga (il limite è circa 35-40 caratteri).
+
+    Prova a fare una richiesta codificata NID. Trova l'elemento che vuoi condividere, copia il NID da una pagina
+    di visualizzazione e genera un link breve per la richiesta `NID: <NID>`.
+  TOO_MANY_DOWNLOADS: Troppi download in corso. Per favore, attendi il completamento.
+  TRANSMITTED_FROM: 'inviato da {source}'
+  UPGRADE_MAINTENANCE: |
+    ```Un grosso aggiornamento è in corso, riprova domani```[‌]({upgrade_maintenance_picture_url})
+  UPLOADED_TO_TELEGRAM: caricato su Telegram...
+  VIEWS_CANNOT_BE_SHARED: Effettua la tua ricerca, i comandi non possono essere condivisi.
+  YEAR: Anno
 es:
   ABSTRACT: Resumen
   ALREADY_DOWNLOADING: |
