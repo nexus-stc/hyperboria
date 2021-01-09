@@ -52,7 +52,7 @@ rust_library(
     version = "0.4.2",
     # buildifier: leave-alone
     deps = [
-        "@raze__futures__0_3_8//:futures",
+        "@raze__futures__0_3_9//:futures",
         "@raze__tokio__0_2_24//:tokio",
     ],
 )

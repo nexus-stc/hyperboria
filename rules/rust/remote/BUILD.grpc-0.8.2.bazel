@@ -51,7 +51,7 @@ rust_library(
     deps = [
         "@raze__base64__0_9_3//:base64",
         "@raze__bytes__0_5_6//:bytes",
-        "@raze__futures__0_3_8//:futures",
+        "@raze__futures__0_3_9//:futures",
         "@raze__httpbis__0_9_1//:httpbis",
         "@raze__log__0_4_11//:log",
         "@raze__log_ndc__0_2_0//:log_ndc",

@@ -25,16 +25,15 @@ package(default_visibility = [
 ])
 
 licenses([
-    "notice",  # MIT from expression "MIT OR Apache-2.0"
+    "notice",  # Apache-2.0 from expression "Apache-2.0 OR (Apache-2.0 OR MIT)"
 ])
 
 # Generated Targets
 
 rust_library(
-    name = "futures_sink",
+    name = "wasi",
     srcs = glob(["**/*.rs"]),
     crate_features = [
-        "alloc",
         "default",
         "std",
     ],
@@ -49,7 +48,7 @@ rust_library(
         "cargo-raze",
         "manual",
     ],
-    version = "0.3.8",
+    version = "0.10.1+wasi-snapshot-preview1",
     # buildifier: leave-alone
     deps = [
     ],

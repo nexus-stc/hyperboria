@@ -30,12 +30,13 @@ licenses([
 
 # Generated Targets
 
-# Unsupported target "bench" with type "bench" omitted
-
 rust_library(
-    name = "smallvec",
+    name = "futures_sink",
     srcs = glob(["**/*.rs"]),
     crate_features = [
+        "alloc",
+        "default",
+        "std",
     ],
     crate_root = "src/lib.rs",
     crate_type = "lib",
@@ -48,10 +49,8 @@ rust_library(
         "cargo-raze",
         "manual",
     ],
-    version = "1.6.0",
+    version = "0.3.9",
     # buildifier: leave-alone
     deps = [
     ],
 )
-
-# Unsupported target "macro" with type "test" omitted

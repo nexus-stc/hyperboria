@@ -167,7 +167,7 @@ alias(
 
 alias(
     name = "byteorder",
-    actual = "@raze__byteorder__1_3_4//:byteorder",
+    actual = "@raze__byteorder__1_4_2//:byteorder",
     tags = [
         "cargo-raze",
         "manual",
@@ -310,6 +310,15 @@ alias(
 )
 
 alias(
+    name = "env_logger",
+    actual = "@raze__env_logger__0_8_2//:env_logger",
+    tags = [
+        "cargo-raze",
+        "manual",
+    ],
+)
+
+alias(
     name = "erased_serde",
     actual = "@raze__erased_serde__0_3_13//:erased_serde",
     tags = [
@@ -374,7 +383,7 @@ alias(
 
 alias(
     name = "futures",
-    actual = "@raze__futures__0_3_8//:futures",
+    actual = "@raze__futures__0_3_9//:futures",
     tags = [
         "cargo-raze",
         "manual",
@@ -466,7 +475,7 @@ alias(
 
 alias(
     name = "libc",
-    actual = "@raze__libc__0_2_81//:libc",
+    actual = "@raze__libc__0_2_82//:libc",
     tags = [
         "cargo-raze",
         "manual",
@@ -711,7 +720,7 @@ alias(
 
 alias(
     name = "regex",
-    actual = "@raze__regex__1_4_2//:regex",
+    actual = "@raze__regex__1_4_3//:regex",
     tags = [
         "cargo-raze",
         "manual",
@@ -855,7 +864,7 @@ alias(
 
 alias(
     name = "smallvec",
-    actual = "@raze__smallvec__1_6_0//:smallvec",
+    actual = "@raze__smallvec__1_6_1//:smallvec",
     tags = [
         "cargo-raze",
         "manual",
@@ -954,7 +963,7 @@ alias(
 
 alias(
     name = "time",
-    actual = "@raze__time__0_2_23//:time",
+    actual = "@raze__time__0_2_24//:time",
     tags = [
         "cargo-raze",
         "manual",

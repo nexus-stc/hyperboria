@@ -53,7 +53,7 @@ rust_library(
     version = "0.9.3",
     # buildifier: leave-alone
     deps = [
-        "@raze__byteorder__1_3_4//:byteorder",
+        "@raze__byteorder__1_4_2//:byteorder",
         "@raze__safemem__0_3_3//:safemem",
     ],
 )

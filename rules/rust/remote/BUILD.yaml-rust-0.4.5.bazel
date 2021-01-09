@@ -51,7 +51,7 @@ rust_library(
     version = "0.4.5",
     # buildifier: leave-alone
     deps = [
-        "@raze__linked_hash_map__0_5_3//:linked_hash_map",
+        "@raze__linked_hash_map__0_5_4//:linked_hash_map",
     ],
 )
 

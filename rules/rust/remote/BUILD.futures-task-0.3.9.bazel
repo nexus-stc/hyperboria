@@ -25,17 +25,18 @@ package(default_visibility = [
 ])
 
 licenses([
-    "notice",  # Apache-2.0 from expression "Apache-2.0 OR MIT"
+    "notice",  # MIT from expression "MIT OR Apache-2.0"
 ])
 
 # Generated Targets
 
 rust_library(
-    name = "parking_lot_core",
+    name = "futures_task",
     srcs = glob(["**/*.rs"]),
-    aliases = {
-    },
     crate_features = [
+        "alloc",
+        "once_cell",
+        "std",
     ],
     crate_root = "src/lib.rs",
     crate_type = "lib",
@@ -48,20 +49,9 @@ rust_library(
         "cargo-raze",
         "manual",
     ],
-    version = "0.8.2",
+    version = "0.3.9",
     # buildifier: leave-alone
     deps = [
-        "@raze__cfg_if__1_0_0//:cfg_if",
-        "@raze__instant__0_1_9//:instant",
-        "@raze__smallvec__1_6_1//:smallvec",
-    ] + selects.with_or({
-        # cfg(unix)
-        (
-            "@io_bazel_rules_rust//rust/platform:x86_64-apple-darwin",
-            "@io_bazel_rules_rust//rust/platform:x86_64-unknown-linux-gnu",
-        ): [
-            "@raze__libc__0_2_82//:libc",
-        ],
-        "//conditions:default": [],
-    }),
+        "@raze__once_cell__1_5_2//:once_cell",
+    ],
 )
