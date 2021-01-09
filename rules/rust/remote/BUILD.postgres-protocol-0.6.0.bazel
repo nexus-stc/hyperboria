@@ -50,7 +50,7 @@ rust_library(
     # buildifier: leave-alone
     deps = [
         "@raze__base64__0_13_0//:base64",
-        "@raze__byteorder__1_3_4//:byteorder",
+        "@raze__byteorder__1_4_2//:byteorder",
         "@raze__bytes__1_0_0//:bytes",
         "@raze__fallible_iterator__0_2_0//:fallible_iterator",
         "@raze__hmac__0_10_1//:hmac",

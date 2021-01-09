@@ -30,16 +30,12 @@ licenses([
 
 # Generated Targets
 
-# Unsupported target "header_map" with type "bench" omitted
+# Unsupported target "datetime_format" with type "bench" omitted
 
-# Unsupported target "header_name" with type "bench" omitted
-
-# Unsupported target "header_value" with type "bench" omitted
-
-# Unsupported target "uri" with type "bench" omitted
+# Unsupported target "datetime_parse" with type "bench" omitted
 
 rust_library(
-    name = "http",
+    name = "humantime",
     srcs = glob(["**/*.rs"]),
     crate_features = [
     ],
@@ -54,17 +50,8 @@ rust_library(
         "cargo-raze",
         "manual",
     ],
-    version = "0.2.2",
+    version = "2.0.1",
     # buildifier: leave-alone
     deps = [
-        "@raze__bytes__0_5_6//:bytes",
-        "@raze__fnv__1_0_7//:fnv",
-        "@raze__itoa__0_4_7//:itoa",
     ],
 )
-
-# Unsupported target "header_map" with type "test" omitted
-
-# Unsupported target "header_map_fuzz" with type "test" omitted
-
-# Unsupported target "status_code" with type "test" omitted

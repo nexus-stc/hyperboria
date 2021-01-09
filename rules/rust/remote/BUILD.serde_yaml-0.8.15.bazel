@@ -50,7 +50,7 @@ rust_library(
     # buildifier: leave-alone
     deps = [
         "@raze__dtoa__0_4_7//:dtoa",
-        "@raze__linked_hash_map__0_5_3//:linked_hash_map",
+        "@raze__linked_hash_map__0_5_4//:linked_hash_map",
         "@raze__serde__1_0_118//:serde",
         "@raze__yaml_rust__0_4_5//:yaml_rust",
     ],

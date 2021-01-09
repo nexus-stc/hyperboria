@@ -56,10 +56,10 @@ rust_library(
     version = "0.5.5",
     # buildifier: leave-alone
     deps = [
-        "@raze__byteorder__1_3_4//:byteorder",
+        "@raze__byteorder__1_4_2//:byteorder",
         "@raze__bytes__0_5_6//:bytes",
         "@raze__fallible_iterator__0_2_0//:fallible_iterator",
-        "@raze__futures__0_3_8//:futures",
+        "@raze__futures__0_3_9//:futures",
         "@raze__log__0_4_11//:log",
         "@raze__parking_lot__0_11_1//:parking_lot",
         "@raze__percent_encoding__2_1_0//:percent_encoding",

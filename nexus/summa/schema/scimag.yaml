@@ -17,14 +17,14 @@ schema:
     options:
       indexing:
         record: position
-        tokenizer: default
+        tokenizer: summa
       stored: true
   - name: authors
     type: text
     options:
       indexing:
         record: position
-        tokenizer: default
+        tokenizer: summa
       stored: true
   - name: doi
     type: text
@@ -43,7 +43,7 @@ schema:
     options:
       indexing:
         record: position
-        tokenizer: default
+        tokenizer: summa
       stored: true
   - name: issns
     type: text
@@ -94,14 +94,14 @@ schema:
     options:
       indexing:
         record: position
-        tokenizer: default
+        tokenizer: summa
       stored: true
   - name: title
     type: text
     options:
       indexing:
         record: position
-        tokenizer: default
+        tokenizer: summa
       stored: true
   - name: updated_at
     type: i64

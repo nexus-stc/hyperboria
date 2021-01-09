@@ -55,7 +55,7 @@ rust_library(
         "@raze__lazy_static__1_4_0//:lazy_static",
         "@raze__linked_hash_map__0_3_0//:linked_hash_map",
         "@raze__num_traits__0_1_43//:num_traits",
-        "@raze__regex__1_4_2//:regex",
+        "@raze__regex__1_4_3//:regex",
         "@raze__serde__0_8_23//:serde",
     ],
 )
