@@ -11,7 +11,7 @@ Follow the [root guide](../../README.md) to install Docker, IPFS and Bazel (opti
 ```shell script
 export COLLECTION=bafykbzacebzohi352bddfunaub5rgqv5b324nejk5v6fltjh45be5ykw5jsjg
 export COLLECTION_PATH=$(realpath $COLLECTION)
-ipfs get $COLLECTION
+ipfs get $COLLECTION && ipfs pin add $COLLECTION
 ```
 
 #### 2. Launch Nexus Cognitron
