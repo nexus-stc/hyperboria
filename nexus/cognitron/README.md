@@ -1,5 +1,9 @@
 # Nexus Cognitron
 
+## Prerequisite
+
+Follow the [root guide](../../README.md) to install Docker, IPFS and Bazel (optionally)
+
 ## Guide
 
 #### 1. Download data dumps
@@ -12,8 +16,8 @@ ipfs get $COLLECTION
 
 #### 2. Launch Nexus Cognitron
 
+Create [`docker-compose.yml`](docker-compose.yml) file to set up Nexus Cognitron and then launch it:
 ```shell script
-cd nexus/cognitron
 docker-compose up
 ```
 
@@ -27,6 +31,6 @@ By default this script is just printing documents.
 
 ```shell script
 bazel run -c opt installer -- iterate \
-  --store-filepath scitech.store.tar \
+  --data-filepath $COLLECTION_PATH/index/scitech \
   --schema-filepath schema/scitech.yaml
 ```

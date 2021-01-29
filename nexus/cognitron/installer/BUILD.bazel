@@ -13,6 +13,7 @@ py_binary(
     deps = [
         requirement("aioipfs"),
         requirement("fire"),
+        requirement("pyyaml"),
         requirement("tantipy"),
         requirement("izihawa_utils"),
     ],
