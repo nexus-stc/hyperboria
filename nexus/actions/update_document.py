@@ -1,7 +1,7 @@
 from aiosumma import SummaHttpClient
+from nexus.cognitron.schema import coders
 from nexus.models.proto.operation_pb2 import \
     DocumentOperation as DocumentOperationPb
-from nexus.summa.schema import coders
 
 from .base import BaseAction
 

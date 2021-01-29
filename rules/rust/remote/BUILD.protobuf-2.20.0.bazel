@@ -86,6 +86,6 @@ rust_library(
     # buildifier: leave-alone
     deps = [
         ":protobuf_build_script",
-        "@raze__bytes__1_0_0//:bytes",
+        "@raze__bytes__1_0_1//:bytes",
     ],
 )

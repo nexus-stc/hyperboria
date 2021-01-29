@@ -127,7 +127,7 @@ rust_library(
         "@raze__csv_core__0_1_10//:csv_core",
         "@raze__itoa__0_4_7//:itoa",
         "@raze__ryu__1_0_5//:ryu",
-        "@raze__serde__1_0_118//:serde",
+        "@raze__serde__1_0_119//:serde",
     ],
 )
 

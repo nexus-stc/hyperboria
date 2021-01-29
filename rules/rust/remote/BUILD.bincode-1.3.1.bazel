@@ -51,7 +51,7 @@ rust_library(
     # buildifier: leave-alone
     deps = [
         "@raze__byteorder__1_4_2//:byteorder",
-        "@raze__serde__1_0_118//:serde",
+        "@raze__serde__1_0_119//:serde",
     ],
 )
 

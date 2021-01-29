@@ -76,6 +76,6 @@ rust_library(
         "@raze__lazy_static__1_4_0//:lazy_static",
         "@raze__memchr__2_3_4//:memchr",
         "@raze__regex_automata__0_1_9//:regex_automata",
-        "@raze__serde__1_0_118//:serde",
+        "@raze__serde__1_0_119//:serde",
     ],
 )

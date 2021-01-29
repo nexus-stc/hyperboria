@@ -459,6 +459,160 @@ it:
   UPLOADED_TO_TELEGRAM: caricato su Telegram...
   VIEWS_CANNOT_BE_SHARED: Effettua la tua ricerca, i comandi non possono essere condivisi.
   YEAR: Anno
+pb:
+  ABSTRACT: Resumo
+  ALREADY_DOWNLOADING: |
+    Eu encontrei esse livro na Internet.
+    Por favor, seja paciente, eu enviarei assim que estiver pronto.
+  AUTHORS: Autores
+  BANNED: |
+    Você está banido até **{datetime} UTC**.
+    Motivo: **{reason}**
+  BANNED_FOR_SECONDS: |
+    Você está banido por **{seconds} segundo(s)**
+    Motivo: **{reason}**
+  BAN_MESSAGE_TOO_MANY_REQUESTS: Muitas solicitações
+  CLOSE: Fechar
+  CONTACT: |
+    **Atualizações e notícias**: {related_channel}
+    **Detalhes para doação**: /donate
+    **LiberaPay**: {libera_pay_url}
+    **Endereço BTC:** {btc_donate_address}
+    Você pode nos enviar feedback diretamente por /contact <sua mensagem aqui>
+  COPYRIGHT_DESCRIPTION: |
+    Se você deseja fazer uma reclamação de violação de direitos autorais:
+
+    - Comece sua mensagem com /copyright, então adicionei uma nova linha
+    - Cole os links de visualização dos itens sobre os quais você está reivindicando. O link de visualização é um item em que você clica no resultado da página de pesquisa, ou seja, `/v_ip6qnAOB_893608_1749642_3`
+    - Adicione como um único arquivo (*.zip) todos os documentos que confirmam que você é o proprietário legal dos direitos autorais ou um agente autorizado a agir em nome do proprietário.
+
+    Sua reivindicação será considerada em 24 horas.
+
+    A decisão de atender à reivindicação impossibilitará o download do item, mas ainda será pesquisável.
+  COPYRIGHT_INFRINGEMENT_ACCEPTED: |
+    Sua reivindicação por violação de direitos autorais foi aceita.
+  COULD_NOT_FIND_ANYTHING: Não foi possível encontrar nada :(
+  DESCRIPTION: Descrição
+  DISABLE_DISCOVERY: Se você não deseja obter um feed personalizado, pode desativar o Nexus Discovery em /settings
+  DISCOVERY_OPTION: Nexus Discovery
+  DISCOVERY_PROMPT: 🦘 **Veja o que encontrei para você:** 🦘
+  DONATE: |
+    Obrigado por visitar /donate. Agradeço até mesmo sua intenção de apenas abrir esta mensagem.
+
+    Todo bom ensino deve fluir de fontes abundantes de conhecimento. A fonte rasa não pode emitir um fluxo vigoroso.
+    Doando para nós, você está doando para todas as pessoas que não têm acesso ao conhecimento humano devido a restrições de acesso pago ou a um preço excessivamente alto.
+
+    Todas as doações serão gastas em:
+    - Desenvolvimento do Nexus Index e tornando o máximo de conhecimento pesquisável possível para todos.
+    - Manutenção de servidores. Criar e disponibilizar o índice e usar o aprendizado de máquina é uma tarefa computacional pesada que requer muitas GPUs, CPUs e discos.
+
+    Cada centavo será usado para o projeto.
+    Você pode entrar em contato conosco em /contact ou se inscrever em {related_channel} se quiser saber exatamente como as doações serão gastas.
+
+    **Detalhes de doação**
+    **LiberaPay**: {libera_pay_url}
+    **Endereço BTC:** {btc_donate_address}
+    [‌]({btc_donate_qr_url})
+  DOWNLOAD: Baixar
+  DOWNLOADED: Baixado
+  DOWNLOADING: baixando...
+  DOWNLOAD_AND_SEARCH_MORE: Baixar e pesquisar mais
+  DOWNLOAD_CANCELED: |
+    Estamos recarregando nossos backends.
+    Por favor, tente baixar o `{document}` em um minuto.
+  EDITION: Edição
+  FILE: Arquivo
+  HELP: |
+    Olá! Eu sou o bot **Nexus**!
+    Eu posso procurar livros ou artigos científicos por títulos, autores ou DOIs.
+    Além disso, eu posso enviar recomendações baseadas no que você esteve procurando.
+
+    **Basta digitar seu pedido em palavras simples.**
+
+    Exemplo: `Divina Comédia Dante` ou `https://doi.org/10.1159/000477855`
+
+    Restringir a busca pelo ano 2019: `hemoglobina AND year:2019`
+    Encontre apenas a partir do ano 2019: `hemoglobina AND year:[2019 TO *]
+    Buscar pelo autor: `authors:Jack authors:London`
+    Combinação exata: `"Hemoglobina fetal"`
+
+    /copyright - fazer uma reivindicação de violação de direitos autorais
+    /donate - diz como nos apoiar
+    /help - mostra esta ajuda
+    /roll - obtenha um livro aleatório
+    /settings - altera as configurações de idioma, notificação e feed personalizado
+
+    O que você vai ler hoje?
+  HELP_FOR_GROUPS: |
+    Oi! Sou o bot **Nexus** para grupos!
+    Eu posso procurar livros ou artigos científicos por títulos, autores ou DOIs.
+
+    Basta digitar sua solicitação em palavras simples começando **com /search**.
+
+    Exemplo: `/search Divina Comédia Dante` ou `https://doi.org/10.1159/000477855`
+
+    Restringir a busca pelo ano 2019: `/search hemoglobina AND year:2019`
+    Encontre apenas a partir do ano 2019: `/search hemoglobina AND year:[2019 TO *]
+    Buscar pelo autor: `/search authors:Jack authors:London`
+    Combinação exata: `/search "Hemoglobina fetal"`
+
+    /donate - diz como nos apoiar
+    /help - mostra esta ajuda
+    /roll - obtenha um livro aleatório
+    /settings - altera as configurações de idioma, notificação e feed personalizado
+
+    O que você vai ler hoje?
+  INVALID_QUERY_ERROR: |
+    ```Eita, Não sei o que fazer com esta URL :(
+    Tente me enviar DOI, MD5 ou apenas o nome do que você procura!```[‌]({too_difficult_picture_url})
+  INVALID_SYNTAX_ERROR: |
+    ```Eita, algo errado com sua consulta. Provavelmente é muito inteligente para mim.
+    Dica: use colchetes, adicione mais AND/OR ou remova todos eles.```[‌]({too_difficult_picture_url})
+  JOURNAL: Revista
+  LEGACY: Atualizamos e os widgets antigos pararam de funcionar :( Por favor, pesquise novamente.
+  LOOKING_AT: 'Buscando em {source}...'
+  MAINTENANCE: |
+    ```Eita! Algo está errado e estamos nos esforçando para reviver.
+    Por favor, tente um pouco mais tarde.```[‌]({maintenance_picture_url})
+  MAINTENANCE_WO_PIC: Eita! Por favor, tente um pouco mais tarde.
+  NAMELESS: Sem nome
+  NEXUS_DISCOVERY_DESCRIPTION: |
+    **Nexus Discovery** é um serviço de recomendação. Também o notifica sobre publicações recém-chegadas que você estava procurando. Seu resumo pessoal será enviado todos os domingos.
+  PROMO: |
+    **Nexus Search - Atualizações e Notícias**
+    {related_channel}
+  READ_ONLY_MODE: ⚠️ Serviço reduzido até meia-noite (UTC). /settings não está funcionando, pesquisa está no modo lento.
+  REFERENCED_BY: Referenciado por
+  REPLY_MESSAGE_HAS_BEEN_DELETED: A mensagem de pesquisa foi (re)movida. Pesquise novamente.
+  SEARCHING: procurando...
+  SEND_YOUR_LOCATION: Envie sua localização (através do botão esquerdo anexar)
+  SETTINGS_ROUTER_HELP: >
+    As configurações podem ser configuradas automática ou manualmente.
+    O modo automático solicitará um local para definir o fuso horário, o idioma e a classificação geográfica.
+  SETTINGS_TEMPLATE: |
+    **Versão do bot:** {bot_version}
+    **Versão do Nexus:** {nexus_version}
+    **Idioma:** {language}
+    **Fuso horário:** {tzinfo}
+  SETUP_AUTOMATICALLY: Configurar automaticamente
+  SETUP_MANUALLY: Configurar manualmente
+  SHORT_PROMO: ⤴️ Fique ligado conosco em {related_channel}
+  SOURCES_UNAVAILABLE: '`{document}` está indisponível nesse momento. Por favor, tente mais tarde.'
+  SUBSCRIBE_TO_CHANNEL: Inscreva-se em {related_channel} para continuar usando este bot.
+  SYSTEM_MESSAGING_OPTION: Notificações de Atualização do Bot
+  TAGS: Marcadores
+  TANKS_BRUH: Valeuzaum manooo!
+  THANK_YOU_FOR_CONTACT: Obrigado! Se você tiver alguma dúvida, é melhor perguntar no grupo de usuários {related_channel}.
+  TOO_LONG_QUERY_FOR_SHORTLINK: |
+    Sua consulta é muito longa (o limite é de cerca de 35-40 caracteres).
+    Tente usar uma consulta codificada por NID. Encontre um item que deseja compartilhar, copie o NID de uma página de visualização e crie um link curto para a consulta `NID: <NID>`.
+  TOO_MANY_DOWNLOADS: Muitos downloads ativos. Por favor, espere que eles terminem.
+  TRANSMITTED_FROM: 'transmitido de {source}'
+  UPGRADE_MAINTENANCE: |
+    ```Uma grande atualização está acontecendo, volte aqui amanhã```[‌]({upgrade_maintenance_picture_url})
+  UPLOADED_TO_TELEGRAM: carregado para o Telegram...
+  VIEWS_CANNOT_BE_SHARED: Faça sua própria pesquisa, os comandos não podem ser compartilhados.
+  YEAR: Ano
 ru:
   ABSTRACT: Аннотация
   ALREADY_DOWNLOADING: |

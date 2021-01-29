@@ -62,7 +62,7 @@ rust_library(
         "@raze__lazy_static__1_4_0//:lazy_static",
         "@raze__nom__5_1_2//:nom",
         "@raze__rust_ini__0_13_0//:rust_ini",
-        "@raze__serde__1_0_118//:serde",
+        "@raze__serde__1_0_119//:serde",
         "@raze__serde_hjson__0_9_1//:serde_hjson",
         "@raze__serde_json__1_0_61//:serde_json",
         "@raze__toml__0_5_8//:toml",

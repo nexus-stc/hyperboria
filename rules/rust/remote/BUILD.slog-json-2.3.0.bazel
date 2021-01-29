@@ -53,7 +53,7 @@ rust_library(
     # buildifier: leave-alone
     deps = [
         "@raze__chrono__0_4_19//:chrono",
-        "@raze__serde__1_0_118//:serde",
+        "@raze__serde__1_0_119//:serde",
         "@raze__serde_json__1_0_61//:serde_json",
         "@raze__slog__2_7_0//:slog",
     ],

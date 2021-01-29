@@ -39,3 +39,32 @@ container_image(
     visibility = ["//visibility:public"],
 )
 
+download_pkgs(
+    name = "download-base-nodejs-image",
+    image_tar = "//images:base-image.tar",
+    packages = [
+        "bash",
+        "ca-certificates",
+        "libgoogle-perftools-dev",
+        "libprotobuf17",
+        "libssl1.1",
+        "nodejs",
+    ],
+)
+
+install_pkgs(
+    name = "install-base-nodejs-image",
+    image_tar = "//images:base-image.tar",
+    installables_tar = ":download-base-nodejs-image.tar",
+    installation_cleanup_commands = "rm -rf /var/lib/apt/lists/*",
+    output_image_name = "installed-base-nodejs-image",
+)
+
+container_image(
+    name = "base-nodejs-image",
+    base = ":install-base-nodejs-image",
+    entrypoint = ["/usr/bin/nodejs"],
+    env = {"LANG": "C.UTF-8"},
+    visibility = ["//visibility:public"],
+)
+

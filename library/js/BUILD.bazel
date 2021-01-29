@@ -1,0 +1,20 @@
+load("//rules/nodejs:common.bzl", "js_library")
+
+js_library(
+    name = "base-client",
+    srcs = ["base-client.js"],
+    data = [
+        "//library/js:utils",
+        "@npm//axios",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+js_library(
+    name = "utils",
+    srcs = ["utils.js"],
+    data = [
+        "@npm//lodash",
+    ],
+    visibility = ["//visibility:public"],
+)

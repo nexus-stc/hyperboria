@@ -8,6 +8,7 @@ version = "0.0.0"
 path = "src/main.rs"
 
 [dependencies]
+actix-cors = "0.5.4"
 actix = "0.10.0"
 actix-http = { version = "2", default-features = false }
 actix-rt = "1"

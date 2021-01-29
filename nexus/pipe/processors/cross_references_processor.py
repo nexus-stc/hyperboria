@@ -86,8 +86,8 @@ class CrossReferencesProcessor(Processor):
                 )
                 continue
 
-            source = canonize_doi(message.source)
-            target = canonize_doi(message.target)
+            source = canonize_doi(message.source.strip())
+            target = canonize_doi(message.target.strip())
             target_row = await self.pool_holder.execute(
                 PostgreSQLQuery
                 .from_('scimag')

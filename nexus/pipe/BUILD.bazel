@@ -1,6 +1,6 @@
 load("@io_bazel_rules_docker//python3:image.bzl", "py3_image")
 
-load("@pip_modules_external//:requirements.bzl", "requirement")
+load("@pip_modules//:requirements.bzl", "requirement")
 
 alias(
     name = "binary",
@@ -28,8 +28,8 @@ py3_image(
         "//library/configurator",
         "//library/logging",
         "//nexus/actions",
+        "//nexus/cognitron/schema",
         "//nexus/models/proto:models_proto_py",
-        "//nexus/summa/schema",
         requirement("aiosumma"),
         requirement("izihawa_utils"),
     ],

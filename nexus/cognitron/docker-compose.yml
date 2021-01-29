@@ -1,0 +1,22 @@
+---
+
+services:
+  nexus-cognitron-web:
+    depends_on:
+      - summa
+    environment:
+      ENV_TYPE: production
+      NEXUS_COGNITRON_WEB_IPFS_GATEWAY: https://cloudflare-ipfs.com
+      NEXUS_COGNITRON_WEB_SEARCH_API: http://localhost:50000
+    image: thesuperpirate/cognitron-web:latest
+    ports:
+      - "3000:80"
+  summa:
+    environment:
+      ENV_TYPE: production
+    image: izihawa/summa:latest
+    ports:
+      - "50000:80"
+    volumes:
+      - '${COLLECTION_PATH}:/summa'
+version: "3.9"

@@ -43,7 +43,7 @@ rust_library(
     data = [],
     edition = "2018",
     proc_macro_deps = [
-        "@raze__serde_derive__1_0_118//:serde_derive",
+        "@raze__serde_derive__1_0_119//:serde_derive",
     ],
     rustc_flags = [
         "--cap-lints=allow",
@@ -67,7 +67,7 @@ rust_library(
         "@raze__plotters__0_2_15//:plotters",
         "@raze__rayon__1_5_0//:rayon",
         "@raze__regex__1_4_3//:regex",
-        "@raze__serde__1_0_118//:serde",
+        "@raze__serde__1_0_119//:serde",
         "@raze__serde_cbor__0_11_1//:serde_cbor",
         "@raze__serde_json__1_0_61//:serde_json",
         "@raze__tinytemplate__1_2_0//:tinytemplate",
