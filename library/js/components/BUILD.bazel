@@ -1,0 +1,7 @@
+load("//rules/nodejs:common.bzl", "js_library")
+
+js_library(
+    name = "components",
+    srcs = glob(["**/*.vue"]),
+    visibility = ["//visibility:public"],
+)

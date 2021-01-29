@@ -53,7 +53,7 @@ rust_library(
     deps = [
         "@raze__fnv__1_0_7//:fnv",
         "@raze__quick_error__1_2_3//:quick_error",
-        "@raze__tempfile__3_1_0//:tempfile",
+        "@raze__tempfile__3_2_0//:tempfile",
         "@raze__wait_timeout__0_2_0//:wait_timeout",
     ],
 )

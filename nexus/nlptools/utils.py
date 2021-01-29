@@ -3,11 +3,11 @@ import struct
 import unicodedata
 
 from .regex import (
-    ALNUMWHITESPACE_REGEX,
     EMAIL_REGEX,
     EMOJI_REGEX,
     HASHTAG_REGEX,
     MULTIWHITESPACE_REGEX,
+    NON_ALNUMWHITESPACE_REGEX,
     TELEGRAM_LINK_REGEX,
     URL_REGEX,
 )
@@ -23,7 +23,7 @@ def add_surrogate(text):
 
 
 def cast_string_to_single_string(s):
-    processed = MULTIWHITESPACE_REGEX.sub(' ', ALNUMWHITESPACE_REGEX.sub(' ', s))
+    processed = MULTIWHITESPACE_REGEX.sub(' ', NON_ALNUMWHITESPACE_REGEX.sub(' ', s))
     processed = processed.strip().replace(' ', '-')
     return processed
 

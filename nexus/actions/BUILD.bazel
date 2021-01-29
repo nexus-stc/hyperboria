@@ -1,4 +1,4 @@
-load("@pip_modules_external//:requirements.bzl", "requirement")
+load("@pip_modules//:requirements.bzl", "requirement")
 load("@rules_python//python:defs.bzl", "py_library")
 
 py_library(
@@ -18,9 +18,9 @@ py_library(
         requirement("aiocrossref"),
         requirement("aiolibgen"),
         "//library/aiopostgres",
+        "//nexus/cognitron/schema",
         "//nexus/models/proto:models_proto_py",
         "//nexus/nlptools",
-        "//nexus/summa/schema",
         requirement("aiosumma"),
     ],
 )

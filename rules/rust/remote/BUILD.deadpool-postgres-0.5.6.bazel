@@ -61,9 +61,9 @@ rust_library(
     deps = [
         "@raze__config__0_10_1//:config",
         "@raze__deadpool__0_5_2//:deadpool",
-        "@raze__futures__0_3_9//:futures",
-        "@raze__log__0_4_11//:log",
-        "@raze__serde__1_0_118//:serde",
+        "@raze__futures__0_3_10//:futures",
+        "@raze__log__0_4_13//:log",
+        "@raze__serde__1_0_119//:serde",
         "@raze__tokio__0_2_24//:tokio",
         "@raze__tokio_postgres__0_5_5//:tokio_postgres",
     ],

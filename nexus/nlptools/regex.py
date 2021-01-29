@@ -2,7 +2,7 @@ import re
 
 from emoji import get_emoji_regexp
 
-ALNUMWHITESPACE_REGEX = re.compile(r'([^\s\w])+')
+NON_ALNUMWHITESPACE_REGEX = re.compile(r'([^\s\w])+')
 EMAIL_REGEX = re.compile(r'([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})')
 EMOJI_REGEX = get_emoji_regexp()
 HASHTAG_REGEX = re.compile(r'([#@]+)([A-Za-z0-9_]+)')

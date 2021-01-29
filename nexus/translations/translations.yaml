@@ -489,6 +489,7 @@ pb:
     - Adicione como um único arquivo (*.zip) todos os documentos que confirmam que você é o proprietário legal dos direitos autorais ou um agente autorizado a agir em nome do proprietário.
 
     Sua reivindicação será considerada em 24 horas.
+
     A decisão de atender à reivindicação impossibilitará o download do item, mas ainda será pesquisável.
   COPYRIGHT_INFRINGEMENT_ACCEPTED: |
     Sua reivindicação por violação de direitos autorais foi aceita.
@@ -503,7 +504,6 @@ pb:
     Todo bom ensino deve fluir de fontes abundantes de conhecimento. A fonte rasa não pode emitir um fluxo vigoroso.
     Doando para nós, você está doando para todas as pessoas que não têm acesso ao conhecimento humano devido a restrições de acesso pago ou a um preço excessivamente alto.
 
-    
     Todas as doações serão gastas em:
     - Desenvolvimento do Nexus Index e tornando o máximo de conhecimento pesquisável possível para todos.
     - Manutenção de servidores. Criar e disponibilizar o índice e usar o aprendizado de máquina é uma tarefa computacional pesada que requer muitas GPUs, CPUs e discos.
@@ -554,7 +554,7 @@ pb:
 
     Exemplo: `/search Divina Comédia Dante` ou `https://doi.org/10.1159/000477855`
 
-    RRestringir a busca pelo ano 2019: `/search hemoglobina AND year:2019`
+    Restringir a busca pelo ano 2019: `/search hemoglobina AND year:2019`
     Encontre apenas a partir do ano 2019: `/search hemoglobina AND year:[2019 TO *]
     Buscar pelo autor: `/search authors:Jack authors:London`
     Combinação exata: `/search "Hemoglobina fetal"`

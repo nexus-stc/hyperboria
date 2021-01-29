@@ -16,10 +16,8 @@ http_archive(
 
 http_archive(
     name = "build_bazel_rules_nodejs",
-    sha256 = "6a67a8a1bf6fddc9113f73471029b819eef4575c3a936a4a01d57e411894d692",
-    urls = [
-        "https://github.com/bazelbuild/rules_nodejs/releases/download/2.0.2/rules_nodejs-2.0.2.tar.gz",
-    ],
+    sha256 = "6142e9586162b179fdd570a55e50d1332e7d9c030efd853453438d607569721d",
+    urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/3.0.0/rules_nodejs-3.0.0.tar.gz"],
 )
 
 http_archive(
@@ -33,19 +31,19 @@ http_archive(
 
 http_archive(
     name = "com_google_protobuf",
-    sha256 = "7d663c8dc81d282dc92e884b38e9c179671e31ccacce311154420e65f7d142c6",
-    strip_prefix = "protobuf-3.13.0.1",
+    sha256 = "d0f5f605d0d656007ce6c8b5a82df3037e1d8fe8b121ed42e536f569dec16113",
+    strip_prefix = "protobuf-3.14.0",
     urls = [
-        "https://github.com/protocolbuffers/protobuf/archive/v3.13.0.1.tar.gz",
+        "https://github.com/protocolbuffers/protobuf/archive/v3.14.0.tar.gz",
     ],
 )
 
 http_archive(
     name = "io_bazel_rules_docker",
-    sha256 = "ba415feb61f7dd08051c7096df9feeb2109bc918878ef924ad9262fe0fcdf6f9",
-    strip_prefix = "rules_docker-9bfcd7dbf0294ed9d11a99da6363fc28df904502",
+    sha256 = "df3ef4a4b53b0145c9751c1e2a840f900e322e7798612a46257abe285d046dc5",
+    strip_prefix = "rules_docker-7da0de3d094aae5601c45ae0855b64fb2771cd72",
     urls = [
-        "https://github.com/bazelbuild/rules_docker/archive/9bfcd7dbf0294ed9d11a99da6363fc28df904502.zip",
+        "https://github.com/bazelbuild/rules_docker/archive/7da0de3d094aae5601c45ae0855b64fb2771cd72.zip",
     ],
 )
 
@@ -97,19 +95,10 @@ http_archive(
 
 http_archive(
     name = "rules_python",
-    sha256 = "ae3c1380c3c19d47fb474f201862dde7c14601130be2befa73bb02211267e960",
-    strip_prefix = "rules_python-e3df8bcf0f675d20aaf752c8ba32a0259dd79996",
+    sha256 = "b228318a786d99b665bc83bd6cdb81512cae5f8eb15e8cd19f9956604b8939f5",
+    strip_prefix = "rules_python-a4a1ccffc666db5376342789ad021a943fb84256",
     urls = [
-        "https://github.com/bazelbuild/rules_python/archive/e3df8bcf0f675d20aaf752c8ba32a0259dd79996.tar.gz",
-    ],
-)
-
-http_archive(
-    name = "rules_python_external",
-    sha256 = "30987e33c0b00ef75d11dec756db6a5d57ccd4085525f8888d5237ef798f8d16",
-    strip_prefix = "rules_python_external-2c78da5b5beb78c4a96b8b4d84e9c34de8178efb",
-    urls = [
-        "https://github.com/dillon-giacoppo/rules_python_external/archive/2c78da5b5beb78c4a96b8b4d84e9c34de8178efb.zip",
+        "https://github.com/bazelbuild/rules_python/archive/a4a1ccffc666db5376342789ad021a943fb84256.tar.gz",
     ],
 )
 
@@ -175,7 +164,18 @@ raze_fetch_remote_crates()
 register_toolchains("//:proto-toolchain")
 
 # NodeJS
-load("@build_bazel_rules_nodejs//:index.bzl", "yarn_install")
+load("@build_bazel_rules_nodejs//:index.bzl", "node_repositories", "yarn_install")
+
+node_repositories(
+    node_repositories = {
+        "15.5.1-darwin_amd64": ("node-v15.5.1-darwin-x64.tar.gz", "node-v15.5.1-darwin-x64", "4507dab0481b0b5374b5758b1eba7d105c8cbcb173548119b04d9ef7d9f1d40f"),
+        "15.5.1-linux_amd64": ("node-v15.5.1-linux-x64.tar.xz", "node-v15.5.1-linux-x64", "dbc41a611d99aedf2cfd3d0acc50759a6b9084c7447862e990f51958d4a7aa41"),
+    },
+    node_version = "15.5.1",
+    package_json = ["//rules/nodejs:package.json"],
+    preserve_symlinks = True,
+    yarn_version = "1.22.4",
+)
 
 yarn_install(
     name = "npm",
@@ -193,16 +193,6 @@ rules_pkg_dependencies()
 
 # Docker Setup
 
-load(
-    "@io_bazel_rules_docker//toolchains/docker:toolchain.bzl",
-    docker_toolchain_configure = "toolchain_configure",
-)
-
-docker_toolchain_configure(
-    name = "docker_config",
-    client_config = "/docker",
-)
-
 load("@io_bazel_rules_docker//repositories:repositories.bzl", container_repositories = "repositories")
 
 container_repositories()
@@ -211,9 +201,9 @@ load("@io_bazel_rules_docker//repositories:deps.bzl", container_deps = "deps")
 
 container_deps()
 
-load("@io_bazel_rules_docker//repositories:pip_repositories.bzl", "pip_deps")
+load("@io_bazel_rules_docker//repositories:py_repositories.bzl", "py_deps")
 
-pip_deps()
+py_deps()
 
 load("@io_bazel_rules_docker//java:image.bzl", java_image_repos = "repositories")
 load("@io_bazel_rules_docker//python3:image.bzl", py3_image_repos = "repositories")
@@ -231,16 +221,12 @@ rust_image_repos()
 # Python
 register_toolchains("//rules/python:py_toolchain")
 
-load("@rules_python_external//:defs.bzl", "pip_install")
+load("@rules_python//python:pip.bzl", "pip_install")
 
 pip_install(
-    name = "pip_modules_external",
+    name = "pip_modules",
     requirements = "//rules/python:requirements.txt",
 )
-
-load("@rules_python_external//:repositories.bzl", "rules_python_external_dependencies")
-
-rules_python_external_dependencies()
 
 # K8s
 

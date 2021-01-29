@@ -49,4 +49,4 @@ class LibraryLolSource(LibgenNewSource):
     base_url = 'http://library.lol'
     resolve_timeout = 10
     ssl = False
-    timeout = 20
+    timeout = 30

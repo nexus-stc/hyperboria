@@ -50,7 +50,7 @@ rust_library(
     # buildifier: leave-alone
     deps = [
         "@raze__lazy_static__1_4_0//:lazy_static",
-        "@raze__log__0_4_11//:log",
+        "@raze__log__0_4_13//:log",
         "@raze__rand__0_7_3//:rand",
     ],
 )

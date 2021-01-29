@@ -55,7 +55,7 @@ rust_library(
     # buildifier: leave-alone
     deps = [
         "@raze__percent_encoding__2_1_0//:percent_encoding",
-        "@raze__serde__1_0_118//:serde",
+        "@raze__serde__1_0_119//:serde",
         "@raze__thiserror__1_0_23//:thiserror",
     ],
 )

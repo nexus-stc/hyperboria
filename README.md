@@ -4,7 +4,7 @@
 
 Hyperboria repository is a pack of tools for dealing with SciMag and SciTech collections.
 
-It consists of configurable [`search engine`](nexus/summa), [`pipeline`](nexus/pipe) for [`ingesting`](nexus/ingest) data
+It consists of configurable [`search engine`](nexus/cognitron), [`pipeline`](nexus/pipe) for [`ingesting`](nexus/ingest) data
 from upstream sources. So-called [`actions`](nexus/actions) aimed to converting data from external APIs
 into [`internal Protobuf format`](nexus/models) and to landing converted data into databases and/or search engines.
 

@@ -1,0 +1,24 @@
+load("@pip_modules//:requirements.bzl", "requirement")
+load("@rules_python//python:defs.bzl", "py_library")
+
+exports_files([
+    "scimag.yaml",
+    "scitech.yaml",
+])
+
+py_library(
+    name = "schema",
+    srcs = glob([
+        "**/*.py",
+    ]),
+    data = [
+        "scimag.yaml",
+        "scitech.yaml",
+    ],
+    srcs_version = "PY3",
+    visibility = ["//visibility:public"],
+    deps = [
+        requirement("tantipy"),
+        requirement("pyyaml"),
+    ],
+)

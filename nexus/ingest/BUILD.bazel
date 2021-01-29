@@ -1,6 +1,6 @@
 load("@io_bazel_rules_docker//python3:image.bzl", "py3_image")
 
-load("@pip_modules_external//:requirements.bzl", "requirement")
+load("@pip_modules//:requirements.bzl", "requirement")
 
 alias(
     name = "binary",
