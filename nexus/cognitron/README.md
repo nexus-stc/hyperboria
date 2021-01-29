@@ -20,6 +20,7 @@ Create [`docker-compose.yml`](docker-compose.yml) file to set up Nexus Cognitron
 ```shell script
 docker-compose up
 ```
+then go to [http://localhost:3000](http://localhost:3000)
 
 #### 3. (Optional) Deploy data dumps into your database
 
