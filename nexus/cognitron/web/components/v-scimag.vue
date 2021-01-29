@@ -78,7 +78,7 @@ export default {
     },
     ipfsUrl: function () {
       if (!this.ipfsMultihash) return null
-      return `${this.$config.ipfsGateway}/ipfs/${this.ipfsMultihash}?filename=${this.filename}`
+      return `${this.$config.ipfsGateway}/ipfs/${this.ipfsMultihash}?filename=${this.filename}&download=true`
     },
     ipfsMultihash: function () {
       if (this.document.ipfsMultihashes) {

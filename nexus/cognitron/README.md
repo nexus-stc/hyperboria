@@ -18,7 +18,7 @@ ipfs get $COLLECTION
 
 Create [`docker-compose.yml`](docker-compose.yml) file to set up Nexus Cognitron and then launch it:
 ```shell script
-docker-compose up
+docker-compose pull && docker-compose up
 ```
 then go to [http://localhost:3000](http://localhost:3000)
 
