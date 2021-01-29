@@ -30,6 +30,9 @@ echo "deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8" |
 sudo apt update && sudo apt install bazel
 ```
 
+#### IPFS
+[Installation Guide](https://docs.ipfs.io/install/)
+
 ### MacOS
 
 #### Docker
@@ -45,6 +48,9 @@ brew install llvm protobuf python3.9
 ```shell script
 brew install bazel
 ```
+
+#### IPFS
+[Installation Guide](https://docs.ipfs.io/install/)
 
 ## Content
 

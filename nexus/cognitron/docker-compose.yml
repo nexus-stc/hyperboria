@@ -19,4 +19,4 @@ services:
       - "50000:80"
     volumes:
       - '${COLLECTION_PATH}:/summa'
-version: "3.9"
+version: "3"
