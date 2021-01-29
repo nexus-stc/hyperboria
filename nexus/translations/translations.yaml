@@ -476,8 +476,10 @@ pb:
   CONTACT: |
     **Atualizações e notícias**: {related_channel}
     **Detalhes para doação**: /donate
+
     **LiberaPay**: {libera_pay_url}
     **Endereço BTC:** {btc_donate_address}
+
     Você pode nos enviar feedback diretamente por /contact <sua mensagem aqui>
   COPYRIGHT_DESCRIPTION: |
     Se você deseja fazer uma reclamação de violação de direitos autorais:
@@ -510,6 +512,7 @@ pb:
     Você pode entrar em contato conosco em /contact ou se inscrever em {related_channel} se quiser saber exatamente como as doações serão gastas.
 
     **Detalhes de doação**
+
     **LiberaPay**: {libera_pay_url}
     **Endereço BTC:** {btc_donate_address}
     [‌]({btc_donate_qr_url})
@@ -605,6 +608,7 @@ pb:
   THANK_YOU_FOR_CONTACT: Obrigado! Se você tiver alguma dúvida, é melhor perguntar no grupo de usuários {related_channel}.
   TOO_LONG_QUERY_FOR_SHORTLINK: |
     Sua consulta é muito longa (o limite é de cerca de 35-40 caracteres).
+
     Tente usar uma consulta codificada por NID. Encontre um item que deseja compartilhar, copie o NID de uma página de visualização e crie um link curto para a consulta `NID: <NID>`.
   TOO_MANY_DOWNLOADS: Muitos downloads ativos. Por favor, espere que eles terminem.
   TRANSMITTED_FROM: 'transmitido de {source}'
