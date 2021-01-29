@@ -11,14 +11,14 @@ Follow the [root guide](../../README.md) to install Docker, IPFS and Bazel (opti
 ```shell script
 export COLLECTION=bafykbzacebzohi352bddfunaub5rgqv5b324nejk5v6fltjh45be5ykw5jsjg
 export COLLECTION_PATH=$(realpath $COLLECTION)
-ipfs get $COLLECTION
+ipfs get $COLLECTION && ipfs pin add $COLLECTION
 ```
 
 #### 2. Launch Nexus Cognitron
 
 Create [`docker-compose.yml`](docker-compose.yml) file to set up Nexus Cognitron and then launch it:
 ```shell script
-docker-compose up
+docker-compose pull && docker-compose up
 ```
 then go to [http://localhost:3000](http://localhost:3000)
 
