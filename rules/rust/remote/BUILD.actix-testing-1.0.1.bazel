@@ -55,7 +55,7 @@ rust_library(
         "@raze__actix_rt__1_1_1//:actix_rt",
         "@raze__actix_server__1_0_4//:actix_server",
         "@raze__actix_service__1_0_6//:actix_service",
-        "@raze__log__0_4_13//:log",
+        "@raze__log__0_4_14//:log",
         "@raze__socket2__0_3_19//:socket2",
     ],
 )

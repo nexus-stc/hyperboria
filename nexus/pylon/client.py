@@ -23,8 +23,8 @@ from nexus.pylon.sources import (
     LibgenDoiSource,
     LibgenMd5Source,
     LibraryLolSource,
+    SciHubDoSource,
     SciHubSeSource,
-    SciHubTwSource,
 )
 from nexus.pylon.sources.specific import get_specific_sources_for_doi
 from python_socks import ProxyTimeoutError
@@ -44,8 +44,8 @@ class PylonClient(AioThing):
         sources = []
         sources.extend(get_specific_sources_for_doi(doi, proxy=self.proxy, resolve_proxy=self.resolve_proxy))
         sources.extend([
+            SciHubDoSource(doi=doi, md5=md5, proxy=self.proxy, resolve_proxy=self.resolve_proxy),
             SciHubSeSource(doi=doi, md5=md5, proxy=self.proxy, resolve_proxy=self.resolve_proxy),
-            SciHubTwSource(doi=doi, md5=md5, proxy=self.proxy, resolve_proxy=self.resolve_proxy),
             LibgenDoiSource(doi=doi, md5=md5, proxy=self.proxy, resolve_proxy=self.resolve_proxy),
         ])
         sources = filter(lambda x: x.is_enabled, sources)

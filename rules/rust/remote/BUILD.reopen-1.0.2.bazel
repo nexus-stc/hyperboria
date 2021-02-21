@@ -87,7 +87,7 @@ rust_library(
     # buildifier: leave-alone
     deps = [
         ":reopen_build_script",
-        "@raze__libc__0_2_82//:libc",
+        "@raze__libc__0_2_85//:libc",
         "@raze__signal_hook__0_2_3//:signal_hook",
     ],
 )

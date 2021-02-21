@@ -56,7 +56,7 @@ rust_library(
     version = "0.13.2",
     # buildifier: leave-alone
     deps = [
-        "@raze__smawk__0_3_0//:smawk",
+        "@raze__smawk__0_3_1//:smawk",
         "@raze__unicode_width__0_1_8//:unicode_width",
     ] + selects.with_or({
         # cfg(unix)

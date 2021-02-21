@@ -113,7 +113,7 @@ alias(
 
 alias(
     name = "backtrace",
-    actual = "@raze__backtrace__0_3_55//:backtrace",
+    actual = "@raze__backtrace__0_3_56//:backtrace",
     tags = [
         "cargo-raze",
         "manual",
@@ -257,7 +257,7 @@ alias(
 
 alias(
     name = "criterion",
-    actual = "@raze__criterion__0_3_3//:criterion",
+    actual = "@raze__criterion__0_3_4//:criterion",
     tags = [
         "cargo-raze",
         "manual",
@@ -267,6 +267,15 @@ alias(
 alias(
     name = "crossbeam",
     actual = "@raze__crossbeam__0_7_3//:crossbeam",
+    tags = [
+        "cargo-raze",
+        "manual",
+    ],
+)
+
+alias(
+    name = "crossbeam_channel",
+    actual = "@raze__crossbeam_channel__0_5_0//:crossbeam_channel",
     tags = [
         "cargo-raze",
         "manual",
@@ -392,7 +401,7 @@ alias(
 
 alias(
     name = "futures",
-    actual = "@raze__futures__0_3_10//:futures",
+    actual = "@raze__futures__0_3_12//:futures",
     tags = [
         "cargo-raze",
         "manual",
@@ -484,7 +493,7 @@ alias(
 
 alias(
     name = "libc",
-    actual = "@raze__libc__0_2_82//:libc",
+    actual = "@raze__libc__0_2_85//:libc",
     tags = [
         "cargo-raze",
         "manual",
@@ -493,7 +502,7 @@ alias(
 
 alias(
     name = "log",
-    actual = "@raze__log__0_4_13//:log",
+    actual = "@raze__log__0_4_14//:log",
     tags = [
         "cargo-raze",
         "manual",
@@ -511,7 +520,7 @@ alias(
 
 alias(
     name = "lru",
-    actual = "@raze__lru__0_6_3//:lru",
+    actual = "@raze__lru__0_6_4//:lru",
     tags = [
         "cargo-raze",
         "manual",
@@ -765,7 +774,7 @@ alias(
 
 alias(
     name = "serde",
-    actual = "@raze__serde__1_0_119//:serde",
+    actual = "@raze__serde__1_0_123//:serde",
     tags = [
         "cargo-raze",
         "manual",
@@ -774,7 +783,7 @@ alias(
 
 alias(
     name = "serde_derive",
-    actual = "@raze__serde_derive__1_0_119//:serde_derive",
+    actual = "@raze__serde_derive__1_0_123//:serde_derive",
     tags = [
         "cargo-raze",
         "manual",
@@ -801,7 +810,7 @@ alias(
 
 alias(
     name = "serde_yaml",
-    actual = "@raze__serde_yaml__0_8_15//:serde_yaml",
+    actual = "@raze__serde_yaml__0_8_16//:serde_yaml",
     tags = [
         "cargo-raze",
         "manual",
@@ -810,7 +819,7 @@ alias(
 
 alias(
     name = "signal_hook",
-    actual = "@raze__signal_hook__0_3_3//:signal_hook",
+    actual = "@raze__signal_hook__0_3_4//:signal_hook",
     tags = [
         "cargo-raze",
         "manual",
@@ -927,7 +936,7 @@ alias(
 
 alias(
     name = "tar",
-    actual = "@raze__tar__0_4_30//:tar",
+    actual = "@raze__tar__0_4_32//:tar",
     tags = [
         "cargo-raze",
         "manual",
@@ -972,7 +981,7 @@ alias(
 
 alias(
     name = "time",
-    actual = "@raze__time__0_2_24//:time",
+    actual = "@raze__time__0_2_25//:time",
     tags = [
         "cargo-raze",
         "manual",
@@ -999,7 +1008,7 @@ alias(
 
 alias(
     name = "tokio",
-    actual = "@raze__tokio__0_2_24//:tokio",
+    actual = "@raze__tokio__0_2_25//:tokio",
     tags = [
         "cargo-raze",
         "manual",

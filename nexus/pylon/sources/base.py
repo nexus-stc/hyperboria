@@ -76,20 +76,26 @@ class Md5Validator(BaseValidator):
 
     def validate(self):
         digest = self.v.hexdigest()
-        if self.md5.lower() != self.v.hexdigest().lower():
+        if self.md5.lower() != digest.lower():
             raise IncorrectMD5Error(requested_md5=self.md5, downloaded_md5=digest)
 
 
 class DoiValidator(BaseValidator):
-    def __init__(self, doi: str):
+    def __init__(self, doi: str, md5: Optional[str] = None):
         self.doi = doi
+        self.md5 = md5
         self.file = bytes()
+        self.v = hashlib.md5()
 
     def update(self, chunk):
         self.file += chunk
+        self.v.update(chunk)
 
     def validate(self):
-        return is_pdf(self.file)
+        if self.md5 and self.md5.lower() == self.v.hexdigest().lower():
+            return
+        elif not is_pdf(self.file):
+            raise BadResponseError(doi=self.doi, file=str(self.file[:1000]))
 
 
 class BaseSource(AioThing):
@@ -197,6 +203,4 @@ class DoiSource(BaseSource):
         self.md5 = md5
 
     def get_validator(self):
-        if self.md5:
-            return Md5Validator(self.md5)
-        return DoiValidator(self.doi)
+        return DoiValidator(self.doi, md5=self.md5)

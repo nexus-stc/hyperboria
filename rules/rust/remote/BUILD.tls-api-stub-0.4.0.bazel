@@ -50,7 +50,7 @@ rust_library(
     # buildifier: leave-alone
     deps = [
         "@raze__tls_api__0_4_0//:tls_api",
-        "@raze__tokio__0_2_24//:tokio",
+        "@raze__tokio__0_2_25//:tokio",
         "@raze__void__1_0_2//:void",
     ],
 )

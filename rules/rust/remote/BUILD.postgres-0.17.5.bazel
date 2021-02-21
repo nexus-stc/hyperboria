@@ -53,9 +53,9 @@ rust_library(
     deps = [
         "@raze__bytes__0_5_6//:bytes",
         "@raze__fallible_iterator__0_2_0//:fallible_iterator",
-        "@raze__futures__0_3_10//:futures",
-        "@raze__log__0_4_13//:log",
-        "@raze__tokio__0_2_24//:tokio",
+        "@raze__futures__0_3_12//:futures",
+        "@raze__log__0_4_14//:log",
+        "@raze__tokio__0_2_25//:tokio",
         "@raze__tokio_postgres__0_5_5//:tokio_postgres",
     ],
 )

@@ -52,7 +52,7 @@ rust_binary(
     deps = [
         # Binaries get an implicit dependency on their crate's lib
         ":lz4",
-        "@raze__libc__0_2_82//:libc",
+        "@raze__libc__0_2_85//:libc",
         "@raze__lz4_sys__1_9_2//:lz4_sys",
     ],
 )
@@ -76,7 +76,7 @@ rust_library(
     version = "1.23.2",
     # buildifier: leave-alone
     deps = [
-        "@raze__libc__0_2_82//:libc",
+        "@raze__libc__0_2_85//:libc",
         "@raze__lz4_sys__1_9_2//:lz4_sys",
     ],
 )

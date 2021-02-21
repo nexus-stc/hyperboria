@@ -34,7 +34,7 @@ rust_library(
     name = "postgres_types",
     srcs = glob(["**/*.rs"]),
     aliases = {
-        "@raze__serde__1_0_119//:serde": "serde_1",
+        "@raze__serde__1_0_123//:serde": "serde_1",
         "@raze__serde_json__1_0_61//:serde_json": "serde_json_1",
     },
     crate_features = [
@@ -64,7 +64,7 @@ rust_library(
         "@raze__bytes__0_5_6//:bytes",
         "@raze__fallible_iterator__0_2_0//:fallible_iterator",
         "@raze__postgres_protocol__0_5_3//:postgres_protocol",
-        "@raze__serde__1_0_119//:serde",
+        "@raze__serde__1_0_123//:serde",
         "@raze__serde_json__1_0_61//:serde_json",
     ],
 )

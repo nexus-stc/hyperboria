@@ -84,6 +84,6 @@ rust_library(
     deps = [
         ":cookie_build_script",
         "@raze__percent_encoding__2_1_0//:percent_encoding",
-        "@raze__time__0_2_24//:time",
+        "@raze__time__0_2_25//:time",
     ],
 )

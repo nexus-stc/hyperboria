@@ -61,8 +61,8 @@ rust_library(
     # buildifier: leave-alone
     deps = [
         "@raze__bb8__0_4_2//:bb8",
-        "@raze__futures__0_3_10//:futures",
-        "@raze__tokio__0_2_24//:tokio",
+        "@raze__futures__0_3_12//:futures",
+        "@raze__tokio__0_2_25//:tokio",
         "@raze__tokio_postgres__0_5_5//:tokio_postgres",
     ],
 )
