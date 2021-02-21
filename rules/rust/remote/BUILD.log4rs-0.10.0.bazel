@@ -78,7 +78,7 @@ rust_library(
     data = [],
     edition = "2018",
     proc_macro_deps = [
-        "@raze__serde_derive__1_0_119//:serde_derive",
+        "@raze__serde_derive__1_0_123//:serde_derive",
     ],
     rustc_flags = [
         "--cap-lints=allow",
@@ -93,15 +93,15 @@ rust_library(
         "@raze__antidote__1_0_0//:antidote",
         "@raze__arc_swap__0_4_8//:arc_swap",
         "@raze__chrono__0_4_19//:chrono",
-        "@raze__flate2__1_0_19//:flate2",
+        "@raze__flate2__1_0_20//:flate2",
         "@raze__fnv__1_0_7//:fnv",
         "@raze__humantime__1_3_0//:humantime",
-        "@raze__log__0_4_13//:log",
+        "@raze__log__0_4_14//:log",
         "@raze__log_mdc__0_1_0//:log_mdc",
-        "@raze__serde__1_0_119//:serde",
+        "@raze__serde__1_0_123//:serde",
         "@raze__serde_json__1_0_61//:serde_json",
         "@raze__serde_value__0_6_0//:serde_value",
-        "@raze__serde_yaml__0_8_15//:serde_yaml",
+        "@raze__serde_yaml__0_8_16//:serde_yaml",
         "@raze__thread_id__3_3_0//:thread_id",
         "@raze__typemap__0_3_3//:typemap",
     ] + selects.with_or({
@@ -110,7 +110,7 @@ rust_library(
             "@io_bazel_rules_rust//rust/platform:x86_64-apple-darwin",
             "@io_bazel_rules_rust//rust/platform:x86_64-unknown-linux-gnu",
         ): [
-            "@raze__libc__0_2_82//:libc",
+            "@raze__libc__0_2_85//:libc",
         ],
         "//conditions:default": [],
     }),

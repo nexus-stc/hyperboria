@@ -53,8 +53,8 @@ rust_library(
     deps = [
         "@raze__bytestring__1_0_0//:bytestring",
         "@raze__http__0_2_3//:http",
-        "@raze__log__0_4_13//:log",
+        "@raze__log__0_4_14//:log",
         "@raze__regex__1_4_3//:regex",
-        "@raze__serde__1_0_119//:serde",
+        "@raze__serde__1_0_123//:serde",
     ],
 )

@@ -51,10 +51,10 @@ rust_library(
     deps = [
         "@raze__bitflags__1_2_1//:bitflags",
         "@raze__bytes__0_5_6//:bytes",
-        "@raze__futures_core__0_3_10//:futures_core",
-        "@raze__futures_sink__0_3_10//:futures_sink",
-        "@raze__log__0_4_13//:log",
-        "@raze__tokio__0_2_24//:tokio",
+        "@raze__futures_core__0_3_12//:futures_core",
+        "@raze__futures_sink__0_3_12//:futures_sink",
+        "@raze__log__0_4_14//:log",
+        "@raze__tokio__0_2_25//:tokio",
         "@raze__tokio_util__0_2_0//:tokio_util",
     ],
 )

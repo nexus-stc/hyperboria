@@ -41,9 +41,9 @@ class SciHubSource(DoiSource):
                 error_log(RegexNotFoundError(url=url))
 
 
+class SciHubDoSource(SciHubSource):
+    base_url = 'https://sci-hub.do'
+
+
 class SciHubSeSource(SciHubSource):
     base_url = 'https://sci-hub.se'
-
-
-class SciHubTwSource(SciHubSource):
-    base_url = 'https://sci-hub.tw'

@@ -57,7 +57,7 @@ rust_library(
         "@raze__md5__0_7_0//:md5",
         "@raze__memchr__2_3_4//:memchr",
         "@raze__rand__0_7_3//:rand",
-        "@raze__sha2__0_9_2//:sha2",
+        "@raze__sha2__0_9_3//:sha2",
         "@raze__stringprep__0_1_2//:stringprep",
     ],
 )

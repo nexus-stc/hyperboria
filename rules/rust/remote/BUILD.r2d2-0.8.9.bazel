@@ -49,7 +49,7 @@ rust_library(
     version = "0.8.9",
     # buildifier: leave-alone
     deps = [
-        "@raze__log__0_4_13//:log",
+        "@raze__log__0_4_14//:log",
         "@raze__parking_lot__0_11_1//:parking_lot",
         "@raze__scheduled_thread_pool__0_2_5//:scheduled_thread_pool",
     ],

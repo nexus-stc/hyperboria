@@ -40,7 +40,7 @@ rust_library(
     data = [],
     edition = "2015",
     proc_macro_deps = [
-        "@raze__serde_derive__1_0_119//:serde_derive",
+        "@raze__serde_derive__1_0_123//:serde_derive",
     ],
     rustc_flags = [
         "--cap-lints=allow",
@@ -55,9 +55,9 @@ rust_library(
         "@raze__base_x__0_2_8//:base_x",
         "@raze__proc_macro2__1_0_24//:proc_macro2",
         "@raze__quote__1_0_8//:quote",
-        "@raze__serde__1_0_119//:serde",
+        "@raze__serde__1_0_123//:serde",
         "@raze__serde_json__1_0_61//:serde_json",
         "@raze__sha1__0_6_0//:sha1",
-        "@raze__syn__1_0_58//:syn",
+        "@raze__syn__1_0_60//:syn",
     ],
 )

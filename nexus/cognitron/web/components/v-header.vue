@@ -2,7 +2,7 @@
   nav.navbar.navbar-light.bg-light
     b-container
       nuxt-link(to="/" title="Go to search!").logo
-        | > Nexus Search
+        | > Nexus Cognitron
 </template>
 
 <script>

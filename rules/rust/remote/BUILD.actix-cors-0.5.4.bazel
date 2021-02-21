@@ -55,10 +55,10 @@ rust_library(
     # buildifier: leave-alone
     deps = [
         "@raze__actix_web__3_3_2//:actix_web",
-        "@raze__futures_util__0_3_10//:futures_util",
-        "@raze__log__0_4_13//:log",
+        "@raze__futures_util__0_3_12//:futures_util",
+        "@raze__log__0_4_14//:log",
         "@raze__once_cell__1_5_2//:once_cell",
-        "@raze__tinyvec__1_1_0//:tinyvec",
+        "@raze__tinyvec__1_1_1//:tinyvec",
     ],
 )
 

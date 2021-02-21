@@ -200,6 +200,7 @@ class FillDocumentOperationUpdateDocumentScimagPbFromExternalSourceAction(BaseAc
         self.crossref_client = CrossrefClient(
             delay=1.0 / crossref['rps'],
             max_retries=60,
+            proxy_url=crossref.get('proxy_url'),
             timeout=crossref.get('timeout'),
             user_agent=crossref.get('user_agent'),
         )
