@@ -28,7 +28,6 @@ py3_image(
         "//library/configurator",
         "//library/logging",
         "//nexus/actions",
-        "//nexus/cognitron/schema",
         "//nexus/models/proto:models_proto_py",
         requirement("aiosumma"),
         requirement("izihawa_utils"),

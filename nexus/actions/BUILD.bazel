@@ -18,7 +18,6 @@ py_library(
         requirement("aiocrossref"),
         requirement("aiolibgen"),
         "//library/aiopostgres",
-        "//nexus/cognitron/schema",
         "//nexus/models/proto:models_proto_py",
         "//nexus/nlptools",
         requirement("aiosumma"),

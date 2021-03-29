@@ -94,8 +94,8 @@ class DoiValidator(BaseValidator):
     def validate(self):
         if self.md5 and self.md5.lower() == self.v.hexdigest().lower():
             return
-        elif not is_pdf(self.file):
-            raise BadResponseError(doi=self.doi, file=str(self.file[:1000]))
+        elif not is_pdf(f=self.file):
+            raise BadResponseError(doi=self.doi, file=str(self.file[:100]))
 
 
 class BaseSource(AioThing):
@@ -173,7 +173,11 @@ class BaseSource(AioThing):
                 async for content in resp.content.iter_chunked(1024 * 100 + random.randint(-1024, 1024)):
                     file_validator.update(content)
                     yield FileResponsePb(chunk=ChunkPb(content=content), source=prepared_request.url)
-                file_validator.validate()
+                try:
+                    file_validator.validate()
+                except BadResponseError as e:
+                    e.add('url', prepared_request.url)
+                    raise e
 
 
 class Md5Source(BaseSource):

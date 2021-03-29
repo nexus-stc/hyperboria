@@ -1,8 +1,8 @@
+import json
 import os
 import os.path
 from types import ModuleType
 
-import orjson as json
 import yaml
 from izihawa_utils.common import smart_merge_dicts
 from jinja2 import Template

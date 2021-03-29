@@ -11,8 +11,7 @@ You have to write your own configs taking example below into account.
 log_path: '/var/log/nexus-pipe/{{ ENV_TYPE }}'
 pipe:
   brokers: |
-    kafka-0.example.net,
-    kafka-1.example.net
+    kafka-0.example.net
   schema:
     - consumers:
         - class: nexus.pipe.consumers.CrossReferencesBulkConsumer
@@ -24,8 +23,7 @@ pipe:
         - class: nexus.pipe.processors.CrossReferencesProcessor
           kwargs:
             brokers: |
-              kafka-0.example.net,
-              kafka-1.example.net
+              kafka-0.example.net
             database:
               database: nexus
               host: postgres.example.net
@@ -63,8 +61,7 @@ pipe:
               - class: nexus.actions.SendDocumentOperationUpdateDocumentScimagPbReferencesToKafkaAction
                 kwargs:
                   brokers: |
-                    kafka-0.example.net,
-                    kafka-1.example.net
+                    kafka-0.example.net
                   topic: cross_references
               - class: nexus.actions.SendDocumentOperationUpdateDocumentPbToSummaAction
                 kwargs:

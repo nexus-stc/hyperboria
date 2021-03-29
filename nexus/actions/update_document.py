@@ -1,5 +1,5 @@
 from aiosumma import SummaHttpClient
-from nexus.cognitron.schema import coders
+from izihawa_utils.pb_to_json import MessageToDict
 from nexus.models.proto.operation_pb2 import \
     DocumentOperation as DocumentOperationPb
 
@@ -19,8 +19,13 @@ class SendDocumentOperationUpdateDocumentPbToSummaAction(BaseAction):
         original_id = getattr(document, 'original_id', None)
         if not update_document_pb.reindex or original_id:
             return document_operation_pb
-        document_tantivy = coders[schema].encode_document(document)
-        await self.summa_client.put_document(schema, document_tantivy)
+        casted_document = MessageToDict(document, preserving_proto_field_name=True)
+        # ToDo: Required to rework checking for extra fields in document
+        # ToDo: It is needed to go to actual schema and load real fields and then check against them
+        casted_document.pop('is_deleted', None)
+        casted_document.pop('meta_language', None)
+        casted_document.pop('type', None)
+        await self.summa_client.put_document(schema, casted_document)
         if update_document_pb.commit:
             await self.summa_client.commit(schema)
         return document_operation_pb

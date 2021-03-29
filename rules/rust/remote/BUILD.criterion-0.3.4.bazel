@@ -6,15 +6,15 @@ DO NOT EDIT! Replaced on runs of cargo-raze
 """
 
 # buildifier: disable=load
+load("@bazel_skylib//lib:selects.bzl", "selects")
+
+# buildifier: disable=load
 load(
-    "@io_bazel_rules_rust//rust:rust.bzl",
+    "@rules_rust//rust:rust.bzl",
     "rust_binary",
     "rust_library",
     "rust_test",
 )
-
-# buildifier: disable=load
-load("@bazel_skylib//lib:selects.bzl", "selects")
 
 package(default_visibility = [
     # Public for visibility by "@raze__crate__version//" targets.
@@ -44,7 +44,7 @@ rust_library(
     data = [],
     edition = "2018",
     proc_macro_deps = [
-        "@raze__serde_derive__1_0_123//:serde_derive",
+        "@raze__serde_derive__1_0_125//:serde_derive",
     ],
     rustc_flags = [
         "--cap-lints=allow",
@@ -60,19 +60,19 @@ rust_library(
         "@raze__cast__0_2_3//:cast",
         "@raze__clap__2_33_3//:clap",
         "@raze__criterion_plot__0_4_3//:criterion_plot",
-        "@raze__csv__1_1_5//:csv",
+        "@raze__csv__1_1_6//:csv",
         "@raze__itertools__0_10_0//:itertools",
         "@raze__lazy_static__1_4_0//:lazy_static",
         "@raze__num_traits__0_2_14//:num_traits",
         "@raze__oorandom__11_1_3//:oorandom",
         "@raze__plotters__0_3_0//:plotters",
         "@raze__rayon__1_5_0//:rayon",
-        "@raze__regex__1_4_3//:regex",
-        "@raze__serde__1_0_123//:serde",
+        "@raze__regex__1_4_5//:regex",
+        "@raze__serde__1_0_125//:serde",
         "@raze__serde_cbor__0_11_1//:serde_cbor",
-        "@raze__serde_json__1_0_61//:serde_json",
-        "@raze__tinytemplate__1_2_0//:tinytemplate",
-        "@raze__walkdir__2_3_1//:walkdir",
+        "@raze__serde_json__1_0_64//:serde_json",
+        "@raze__tinytemplate__1_2_1//:tinytemplate",
+        "@raze__walkdir__2_3_2//:walkdir",
     ],
 )
 

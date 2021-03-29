@@ -1,11 +1,11 @@
-load("@io_bazel_rules_docker//container:container.bzl", "container_image", "container_push")
+load("@io_bazel_rules_docker//container:container.bzl", "container_image")
 load("@io_bazel_rules_docker//docker/package_managers:download_pkgs.bzl", "download_pkgs")
 load("@io_bazel_rules_docker//docker/package_managers:install_pkgs.bzl", "install_pkgs")
 
 package(default_visibility = ["//visibility:public"])
 
 download_pkgs(
-    name = "download-base-python-image",
+    name = "download-base-production-image",
     image_tar = "//images:base-image.tar",
     packages = [
         "bash",
@@ -15,13 +15,34 @@ download_pkgs(
         "libgoogle-perftools-dev",
         "libprotobuf17",
         "libssl1.1",
+    ],
+)
+
+install_pkgs(
+    name = "install-base-production-image",
+    image_tar = "//images:base-image.tar",
+    installables_tar = ":download-base-production-image.tar",
+    output_image_name = "base-production-image",
+)
+
+container_image(
+    name = "base-production-image",
+    base = ":install-base-production-image",
+    env = {"LANG": "C.UTF-8"},
+)
+
+download_pkgs(
+    name = "download-base-python-image",
+    image_tar = ":base-production-image.tar",
+    packages = [
         "python3.9",
+        "python3.9-distutils",
     ],
 )
 
 install_pkgs(
     name = "install-base-python-image",
-    image_tar = "//images:base-image.tar",
+    image_tar = ":base-production-image.tar",
     installables_tar = ":download-base-python-image.tar",
     installation_cleanup_commands = "rm -rf /var/lib/apt/lists/*",
     output_image_name = "installed-base-python-image",
@@ -31,7 +52,6 @@ container_image(
     name = "base-python-image",
     base = ":install-base-python-image",
     entrypoint = ["/usr/bin/python3.9"],
-    env = {"LANG": "C.UTF-8"},
     symlinks = {
         "/usr/bin/python": "/usr/bin/python3.9",
         "/usr/bin/python3": "/usr/bin/python3.9",
@@ -41,20 +61,15 @@ container_image(
 
 download_pkgs(
     name = "download-base-nodejs-image",
-    image_tar = "//images:base-image.tar",
+    image_tar = ":base-production-image.tar",
     packages = [
-        "bash",
-        "ca-certificates",
-        "libgoogle-perftools-dev",
-        "libprotobuf17",
-        "libssl1.1",
         "nodejs",
     ],
 )
 
 install_pkgs(
     name = "install-base-nodejs-image",
-    image_tar = "//images:base-image.tar",
+    image_tar = ":base-production-image.tar",
     installables_tar = ":download-base-nodejs-image.tar",
     installation_cleanup_commands = "rm -rf /var/lib/apt/lists/*",
     output_image_name = "installed-base-nodejs-image",
@@ -64,7 +79,5 @@ container_image(
     name = "base-nodejs-image",
     base = ":install-base-nodejs-image",
     entrypoint = ["/usr/bin/nodejs"],
-    env = {"LANG": "C.UTF-8"},
     visibility = ["//visibility:public"],
 )
-

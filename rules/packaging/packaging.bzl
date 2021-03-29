@@ -42,7 +42,7 @@ strip_prefix_by_action = {
 
 ScriptsInfo = provider(fields = ["postinst", "postrm", "preinst", "prerm"])
 
-def deploy_command(deb_package, hostname, username = "deployer"):
+def deploy_command(deb_package, hostname, username = "pasha"):
     """Command for start deployment on `target_hosts` of package.
 
     Args:

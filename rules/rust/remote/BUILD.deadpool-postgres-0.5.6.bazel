@@ -6,15 +6,15 @@ DO NOT EDIT! Replaced on runs of cargo-raze
 """
 
 # buildifier: disable=load
+load("@bazel_skylib//lib:selects.bzl", "selects")
+
+# buildifier: disable=load
 load(
-    "@io_bazel_rules_rust//rust:rust.bzl",
+    "@rules_rust//rust:rust.bzl",
     "rust_binary",
     "rust_library",
     "rust_test",
 )
-
-# buildifier: disable=load
-load("@bazel_skylib//lib:selects.bzl", "selects")
 
 package(default_visibility = [
     # Public for visibility by "@raze__crate__version//" targets.
@@ -47,7 +47,7 @@ rust_library(
     data = [],
     edition = "2018",
     proc_macro_deps = [
-        "@raze__async_trait__0_1_42//:async_trait",
+        "@raze__async_trait__0_1_48//:async_trait",
     ],
     rustc_flags = [
         "--cap-lints=allow",
@@ -61,9 +61,9 @@ rust_library(
     deps = [
         "@raze__config__0_10_1//:config",
         "@raze__deadpool__0_5_2//:deadpool",
-        "@raze__futures__0_3_12//:futures",
+        "@raze__futures__0_3_13//:futures",
         "@raze__log__0_4_14//:log",
-        "@raze__serde__1_0_123//:serde",
+        "@raze__serde__1_0_125//:serde",
         "@raze__tokio__0_2_25//:tokio",
         "@raze__tokio_postgres__0_5_5//:tokio_postgres",
     ],

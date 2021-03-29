@@ -50,12 +50,17 @@ class BaseConsumer(AioRootThing):
 
     async def start(self):
         logging.getLogger('statbox').info({
-            'action': 'started',
+            'action': 'starting',
             'group_id': self.group_id,
             'topic_names': self.topic_names,
         })
         self.consumer = self.create_consumer()
         await self.consumer.start()
+        logging.getLogger('statbox').info({
+            'action': 'started',
+            'group_id': self.group_id,
+            'topic_names': self.topic_names,
+        })
         try:
             async for msg in self.consumer:
                 preprocessed_msg = self.preprocess(msg)
@@ -108,12 +113,17 @@ class BaseBulkConsumer(BaseConsumer):
 
     async def start(self):
         logging.getLogger('statbox').info({
-            'action': 'started',
+            'action': 'starting',
             'group_id': self.group_id,
             'topic_names': self.topic_names,
         })
         self.consumer = self.create_consumer()
         await self.consumer.start()
+        logging.getLogger('statbox').info({
+            'action': 'started',
+            'group_id': self.group_id,
+            'topic_names': self.topic_names,
+        })
         while self.started:
             try:
                 result = await self.consumer.getmany(timeout_ms=self.timeout * 1000, max_records=self.bulk_size)

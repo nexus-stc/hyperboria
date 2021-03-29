@@ -56,8 +56,8 @@ en:
     **Donation details**
 
     **LiberaPay**: {libera_pay_url}
-    **BTC Address:** {btc_donate_address}
-    [‌]({btc_donate_qr_url})
+    **BTC Address**: {btc_donate_address}
+    **Amazon Gift Card**: [Buy]({amazon_gift_card_url}) any card using `{amazon_gift_card_recipient}` as recipient email
   DOWNLOAD: Download
   DOWNLOADED: downloaded
   DOWNLOADING: downloading...
@@ -141,7 +141,6 @@ en:
     **Timezone:** {tzinfo}
   SETUP_AUTOMATICALLY: Setup automatically
   SETUP_MANUALLY: Setup manually
-  SHORT_PROMO: ⤴️ Stay tuned with us at {related_channel}
   SOURCES_UNAVAILABLE: '`{document}` is unavailable right now. Please, try later.'
   SUBSCRIBE_TO_CHANNEL: Subscribe to {related_channel} to continue using this bot.
   SYSTEM_MESSAGING_OPTION: Bot Update Notifications
@@ -215,8 +214,8 @@ es:
     **Detalles sobre donaciones**
 
     **LiberaPay**: {libera_pay_url}
-    **Dirección BTC:** {btc_donate_address}
-    [‌]({btc_donate_qr_url})
+    **Dirección BTC**: {btc_donate_address}
+    **Tarjeta de regalo de Amazon**: [Compre]({amazon_gift_card_url}) cualquier tarjeta que use `{amazon_gift_card_recipient}` como correo electrónico del destinatario
   DOWNLOAD: Descargar
   DOWNLOADED: descargado
   DOWNLOADING: descargando...
@@ -300,7 +299,6 @@ es:
     **Zona horaria:** {tzinfo}
   SETUP_AUTOMATICALLY: Configurar automáticamente
   SETUP_MANUALLY: Configurar manualmente
-  SHORT_PROMO: ⤴️ Mantente en contacto con nosotros en {related_channel}
   SOURCES_UNAVAILABLE: '`{document}` no está disponible en este momento. Por favor intenta más tarde.'
   SUBSCRIBE_TO_CHANNEL: Suscríbete a {related_channel} para seguir usando este bot.
   SYSTEM_MESSAGING_OPTION: Notificaciones de actualización de bot
@@ -374,8 +372,8 @@ it:
     **Dettagli per le donazioni**
 
     **LiberaPay**: {libera_pay_url}
-    **Indirizzo BTC:** {btc_donate_address}
-    [‌]({btc_donate_qr_url})
+    **Indirizzo BTC**: {btc_donate_address}
+    **Buono regalo Amazon**: [Acquista]({amazon_gift_card_url}) qualsiasi carta utilizzando `{amazon_gift_card_recipient}` come indirizzo email del destinatario
   DOWNLOAD: Scarica
   DOWNLOADED: scaricato
   DOWNLOADING: scaricamento in corso...
@@ -440,7 +438,6 @@ it:
     **Fuso orario:** {tzinfo}
   SETUP_AUTOMATICALLY: Configura automaticamente
   SETUP_MANUALLY: Configura manualmente
-  SHORT_PROMO: ⤴️ Resta aggiornato con noi su {related_channel}
   SOURCES_UNAVAILABLE: '`{document}` non è disponibile adesso. Per favore, prova più tardi.'
   SUBSCRIBE_TO_CHANNEL: Iscriviti a {related_channel} per continuare ad usare questo bot.
   SYSTEM_MESSAGING_OPTION: Notifiche Aggiornamento Bot
@@ -514,8 +511,8 @@ pb:
     **Detalhes de doação**
 
     **LiberaPay**: {libera_pay_url}
-    **Endereço BTC:** {btc_donate_address}
-    [‌]({btc_donate_qr_url})
+    **Endereço BTC**: {btc_donate_address}
+    **Amazon Gift Card**: [Compre]({amazon_gift_card_url}) qualquer cartão usando `{amazon_gift_card_recipient}` como e-mail do destinatário
   DOWNLOAD: Baixar
   DOWNLOADED: Baixado
   DOWNLOADING: baixando...
@@ -599,7 +596,6 @@ pb:
     **Fuso horário:** {tzinfo}
   SETUP_AUTOMATICALLY: Configurar automaticamente
   SETUP_MANUALLY: Configurar manualmente
-  SHORT_PROMO: ⤴️ Fique ligado conosco em {related_channel}
   SOURCES_UNAVAILABLE: '`{document}` está indisponível nesse momento. Por favor, tente mais tarde.'
   SUBSCRIBE_TO_CHANNEL: Inscreva-se em {related_channel} para continuar usando este bot.
   SYSTEM_MESSAGING_OPTION: Notificações de Atualização do Bot
@@ -661,7 +657,8 @@ ru:
     **Реквизиты для пожертвования**
 
     **LiberaPay**: {libera_pay_url}
-    **BTC Address:** {btc_donate_address}[‌]({btc_donate_qr_url})
+    **BTC Address**: {btc_donate_address}
+    **Amazon Gift Card**: [Купите]({amazon_gift_card_url}) любую карту с `{amazon_gift_card_recipient}` в качестве получателя
   DOWNLOAD: Загрузить
   DOWNLOADED: загружено
   DOWNLOADING: загружаем...
@@ -743,7 +740,6 @@ ru:
     **Часовой пояс:** {tzinfo}
   SETUP_AUTOMATICALLY: Установить автоматически
   SETUP_MANUALLY: Установить вручную
-  SHORT_PROMO: ⤴️ Оставайся на связи с нами на {related_channel}
   SOURCES_UNAVAILABLE: 'Прямо сейчас `{document}` недоступен. Попробуйте скачать его позже.'
   SUBSCRIBE_TO_CHANNEL: Подпишитесь на {related_channel}, чтобы использовать этот бот.
   SYSTEM_MESSAGING_OPTION: Сообщения об обновлениях

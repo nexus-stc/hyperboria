@@ -12,7 +12,6 @@ py_library(
         requirement("brotli"),
         requirement("cchardet"),
         requirement("orjson"),
-        requirement("pdfminer.six"),
         requirement("python-socks"),
         requirement("tenacity"),
         requirement("aiokit"),
