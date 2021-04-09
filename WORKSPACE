@@ -14,6 +14,15 @@ http_archive(
     ],
 )
 
+# ToDo: wait for https://github.com/bazelbuild/rules_docker/pull/1638
+http_archive(
+    name = "io_bazel_rules_docker",
+    sha256 = "5aa15ff7a83f8de8ff0346bd8274fb82eec52c947106a066dc190c2624ec1cb4",
+    strip_prefix = "rules_docker-aefbc69e5f758403d50f789eee55b30a3d947418",
+    urls = [
+        "https://github.com/the-superpirate/rules_docker/archive/aefbc69e5f758403d50f789eee55b30a3d947418.tar.gz",
+    ],
+)
 
 http_archive(
     name = "build_bazel_rules_nodejs",
