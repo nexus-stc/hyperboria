@@ -17,7 +17,7 @@ into [`internal Protobuf format`](nexus/models) and to landing converted data in
 
 #### System Compilers
 ```shell script
-sudo apt-get install -y --no-install-recommends g++ python3.9 protobuf-compiler libprotobuf-dev
+sudo apt-get install -y --no-install-recommends g++ python3.9 protobuf-compiler libprotobuf-dev libev-perl
 ```
 
 #### Bazel Build System
