@@ -12,7 +12,7 @@ def maven_fetch_remote_artifacts():
         artifacts = [
             "com.fasterxml.jackson.core:jackson-core:2.11.2",
             "com.fasterxml.jackson.core:jackson-databind:2.11.2",
-            "org.apache.pdfbox:pdfbox:2.0.20",
+            "org.apache.pdfbox:pdfbox:2.0.23",
             "org.apache.kafka:kafka_2.13:2.6.0",
             "org.apache.kafka:kafka-clients:2.6.0",
             "org.grobid:grobid-core:0.6.1",

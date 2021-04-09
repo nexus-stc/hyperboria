@@ -81,8 +81,8 @@ def rules_misc_setup_internal():
     http_file(
         name = "pdfbox",
         downloaded_file_path = "pdfbox.jar",
-        sha256 = "5300b92552cb6bd13a9c87ff36d1394382427e101ae2b0b02a9d9e5fd257db65",
-        urls = ["https://mirror.linux-ia64.org/apache/pdfbox/2.0.20/pdfbox-app-2.0.20.jar"],
+        sha256 = "4485d9e6713f5b9c93824a0eb54e57717d3fd736244734c6276b65e17eab5cae",
+        urls = ["https://mirror.linux-ia64.org/apache/pdfbox/2.0.23/pdfbox-app-2.0.23.jar"],
     )
 
     http_archive(
