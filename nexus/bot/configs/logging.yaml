@@ -1,0 +1,82 @@
+---
+
+logging:
+  disable_existing_loggers: false
+  formatters:
+    base:
+      class: library.logging.formatters.BaseFormatter
+    default:
+      class: library.logging.formatters.DefaultFormatter
+    traceback:
+      class: library.logging.formatters.TracebackFormatter
+  handlers:
+    debug:
+      class: library.logging.handlers.BaseFileHandler
+      filename: '{{ log_path }}/debug.log'
+      level: DEBUG
+    error:
+      class: library.logging.handlers.BaseFileHandler
+      filename: '{{ log_path }}/error.log'
+      formatter: default
+      level: ERROR
+    operation:
+      class: library.logging.handlers.BaseFileHandler
+      filename: '{{ log_path }}/operation.log'
+      formatter: base
+      level: DEBUG
+    statbox:
+      class: library.logging.handlers.BaseFileHandler
+      filename: '{{ log_path }}/statbox.log'
+      formatter: default
+      level: DEBUG
+    traceback:
+      class: library.logging.handlers.BaseFileHandler
+      filename: '{{ log_path }}/traceback.log'
+      formatter: traceback
+      level: ERROR
+    warning:
+      class: library.logging.handlers.BaseFileHandler
+      filename: '{{ log_path }}/warning.log'
+      formatter: default
+      level: WARNING
+  loggers:
+    aiobaseclient:
+      handlers:
+        - error
+        - warning
+      propagate: false
+    chardet:
+      handlers:
+        - error
+      propagate: false
+    debug:
+      handlers:
+        - debug
+      propagate: false
+    error:
+      handlers:
+        - error
+        - traceback
+        - warning
+      propagate: false
+    metrics:
+      handlers:
+        - error
+      propagate: false
+    operation:
+      handlers:
+        - operation
+      propagate: false
+    statbox:
+      handlers:
+        - statbox
+      propagate: false
+    telethon:
+      handlers:
+        - debug
+      propagate: false
+  root:
+    handlers:
+      - debug
+    level: DEBUG
+  version: 1
