@@ -9,6 +9,10 @@ from .update_document_scitech import (
     CleanDocumentOperationUpdateDocumentScitechPbAction,
     SendDocumentOperationUpdateDocumentScitechPbToGoldenPostgresAction,
 )
+from .update_document_sharience import (
+    SendDocumentOperationUpdateDocumentShariencePbToGoldenPostgresAction,
+)
+from .vote import SendDocumentOperationVotePbToGoldenPostgresAction
 
 __all__ = [
     'CleanDocumentOperationUpdateDocumentScimagPbAction',
@@ -18,4 +22,6 @@ __all__ = [
     'SendDocumentOperationUpdateDocumentScimagPbReferencesToKafkaAction',
     'SendDocumentOperationUpdateDocumentScimagPbToGoldenPostgresAction',
     'SendDocumentOperationUpdateDocumentScitechPbToGoldenPostgresAction',
+    'SendDocumentOperationUpdateDocumentShariencePbToGoldenPostgresAction',
+    'SendDocumentOperationVotePbToGoldenPostgresAction',
 ]

@@ -6,15 +6,15 @@ DO NOT EDIT! Replaced on runs of cargo-raze
 """
 
 # buildifier: disable=load
+load("@bazel_skylib//lib:selects.bzl", "selects")
+
+# buildifier: disable=load
 load(
-    "@io_bazel_rules_rust//rust:rust.bzl",
+    "@rules_rust//rust:rust.bzl",
     "rust_binary",
     "rust_library",
     "rust_test",
 )
-
-# buildifier: disable=load
-load("@bazel_skylib//lib:selects.bzl", "selects")
 
 package(default_visibility = [
     # Public for visibility by "@raze__crate__version//" targets.
@@ -49,10 +49,10 @@ rust_library(
     version = "0.7.0",
     # buildifier: leave-alone
     deps = [
-        "@raze__form_urlencoded__1_0_0//:form_urlencoded",
+        "@raze__form_urlencoded__1_0_1//:form_urlencoded",
         "@raze__itoa__0_4_7//:itoa",
         "@raze__ryu__1_0_5//:ryu",
-        "@raze__serde__1_0_123//:serde",
+        "@raze__serde__1_0_125//:serde",
     ],
 )
 

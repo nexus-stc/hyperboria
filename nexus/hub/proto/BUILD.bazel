@@ -1,0 +1,27 @@
+load("@com_github_grpc_grpc//bazel:python_rules.bzl", "py_grpc_library", "py_proto_library")
+load("@rules_proto//proto:defs.bzl", "proto_library")
+
+package(default_visibility = ["//visibility:public"])
+
+proto_library(
+    name = "hub_proto",
+    srcs = glob([
+        "*.proto",
+    ]),
+    deps = [
+        "//idm/api2/proto:idm_proto",
+        "//nexus/models/proto:models_proto",
+        "@com_google_protobuf//:wrappers_proto",
+    ],
+)
+
+py_proto_library(
+    name = "hub_proto_py",
+    deps = [":hub_proto"],
+)
+
+py_grpc_library(
+    name = "hub_grpc_py",
+    srcs = [":hub_proto"],
+    deps = [":hub_proto_py"],
+)

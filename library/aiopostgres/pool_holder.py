@@ -1,3 +1,4 @@
+import aiopg
 import psycopg2.extras
 from aiokit import AioThing
 from psycopg2 import OperationalError
@@ -10,7 +11,7 @@ from tenacity import (
 
 
 class AioPostgresPoolHolder(AioThing):
-    def __init__(self, fn, *args, **kwargs):
+    def __init__(self, fn=aiopg.create_pool, *args, **kwargs):
         super().__init__()
         self.fn = fn
         self.args = args

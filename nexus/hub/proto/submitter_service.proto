@@ -1,0 +1,15 @@
+syntax = "proto3";
+package nexus.hub.proto;
+
+import "idm/api2/proto/chats_service.proto";
+
+message SubmitRequest {
+    bytes telegram_document = 1;
+    string telegram_file_id = 2;
+    idm.api2.proto.ChatData chat = 3;
+}
+message SubmitResponse { }
+
+service Submitter {
+    rpc submit(SubmitRequest) returns (SubmitResponse) {};
+}

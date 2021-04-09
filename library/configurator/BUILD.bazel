@@ -11,7 +11,6 @@ py_library(
     visibility = ["//visibility:public"],
     deps = [
         requirement("jinja2"),
-        requirement("orjson"),
         requirement("pyyaml"),
         requirement("izihawa_utils"),
     ],

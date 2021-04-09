@@ -1,0 +1,19 @@
+load("@rules_python//python:defs.bzl", "py_library")
+load("@pip_modules//:requirements.bzl", "requirement")
+
+py_library(
+    name = "telegram",
+    srcs = glob(
+        ["**/*.py"],
+        exclude = ["tests/**"],
+    ),
+    srcs_version = "PY3",
+    visibility = ["//visibility:public"],
+    deps = [
+        requirement("telethon"),
+        "//nexus/models/proto:models_proto_py",
+        "//nexus/nlptools",
+        "//nexus/translations",
+        requirement("izihawa_utils"),
+    ],
+)

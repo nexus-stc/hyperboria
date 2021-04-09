@@ -14,14 +14,14 @@ config_setting(
 platform(
     name = "linux_x86",
     constraint_values = [
-        "@io_bazel_rules_rust//rust/platform:linux",
+        "@rules_rust//rust/platform:linux",
         "@bazel_tools//platforms:linux",
         "@bazel_tools//platforms:x86_64",
     ],
 )
 
 
-load("@io_bazel_rules_rust//proto:toolchain.bzl", "rust_proto_toolchain")
+load("@rules_rust//proto:toolchain.bzl", "rust_proto_toolchain")
 
 rust_proto_toolchain(
     name = "proto-toolchain-impl",
@@ -33,5 +33,5 @@ rust_proto_toolchain(
 toolchain(
     name = "proto-toolchain",
     toolchain = ":proto-toolchain-impl",
-    toolchain_type = "@io_bazel_rules_rust//proto:toolchain",
+    toolchain_type = "@rules_rust//proto:toolchain",
 )

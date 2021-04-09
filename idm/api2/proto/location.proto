@@ -1,0 +1,7 @@
+syntax = "proto3";
+package idm.api2.proto;
+
+message Location {
+    float lat = 1;
+    float lon = 2;
+}

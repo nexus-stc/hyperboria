@@ -3,10 +3,12 @@ package nexus.models.proto;
 
 import "nexus/models/proto/scimag.proto";
 import "nexus/models/proto/scitech.proto";
+import "nexus/models/proto/sharience.proto";
 
 message TypedDocument {
   oneof document {
     Scimag scimag = 1;
     Scitech scitech = 2;
+    Sharience sharience = 3;
   }
 }

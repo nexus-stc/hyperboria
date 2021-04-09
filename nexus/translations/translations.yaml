@@ -3,6 +3,7 @@
 
 en:
   ABSTRACT: Abstract
+  ACCEPTED: Accepted!
   ALREADY_DOWNLOADING: |
     I have found this book in the Internet.
     Please, be patient, I will send as it will be ready.
@@ -56,8 +57,8 @@ en:
     **Donation details**
 
     **LiberaPay**: {libera_pay_url}
-    **BTC Address:** {btc_donate_address}
-    [‌]({btc_donate_qr_url})
+    **BTC Address**: {btc_donate_address}
+    **Amazon Gift Card**: [Buy]({amazon_gift_card_url}) any card using `{amazon_gift_card_recipient}` as recipient email
   DOWNLOAD: Download
   DOWNLOADED: downloaded
   DOWNLOADING: downloading...
@@ -67,10 +68,10 @@ en:
     Please, try to download `{document}` in a minute.
   EDITION: Edition
   FILE: File
+  FILE_TOO_BIG_ERROR: File is too big, contact @nexus_search
   HELP: |
     Hi! I'm **Nexus** bot!
-    I can search books or science articles by titles, authors or DOIs.
-    Also, I can send recommendations based on what you were looking for before.
+    I can search books or scientific articles by titles, authors or DOIs.
 
     **Just type your request in plain words.**
 
@@ -80,6 +81,8 @@ en:
     Find only starting from 2019 year: `hemoglobin AND year:[2019 TO *]
     Search by author: `authors:Jack authors:London`
     Exact match: `"Fetal Hemoglobin"`
+
+    Also, I can accept new scientific articles from you. Send me PDF and I will process it.
 
     /copyright - make a copyright infringement claim
     /donate - tells how to support us
@@ -123,13 +126,16 @@ en:
   NAMELESS: Without name
   NEXUS_DISCOVERY_DESCRIPTION: |
     **Nexus Discovery** is a recommendation service. It also notifies you about newly arrived publications you were looking for before. Your personal digest will be sent at every Sunday.
+  PROCESSING_PAPER: '`File {filename} is processed...`'
   PROMO: |
     **Nexus Search - Update and News**
     {related_channel}
   READ_ONLY_MODE: ⚠️ Reduced service until midnight (UTC). /settings is not working, search in slow mode.
   REFERENCED_BY: Referenced by
   REPLY_MESSAGE_HAS_BEEN_DELETED: Search message has been (re-)moved. Do search again.
-  SEARCHING: searching...
+  REPORT_BROKEN_FILE: ❌ Broken File
+  REPORT_OK_FILE: ✅ What Is Needed
+  SEARCHING: '`searching...`'
   SEND_YOUR_LOCATION: Send your location (through the left attach button)
   SETTINGS_ROUTER_HELP: >
     Settings could be set up automatically or manually.
@@ -141,7 +147,6 @@ en:
     **Timezone:** {tzinfo}
   SETUP_AUTOMATICALLY: Setup automatically
   SETUP_MANUALLY: Setup manually
-  SHORT_PROMO: ⤴️ Stay tuned with us at {related_channel}
   SOURCES_UNAVAILABLE: '`{document}` is unavailable right now. Please, try later.'
   SUBSCRIBE_TO_CHANNEL: Subscribe to {related_channel} to continue using this bot.
   SYSTEM_MESSAGING_OPTION: Bot Update Notifications
@@ -155,6 +160,10 @@ en:
     then create a shortlink for query `NID: <NID>`.
   TOO_MANY_DOWNLOADS: Too many active downloads. Please, wait them to complete.
   TRANSMITTED_FROM: 'transmitted from {source}'
+  UNAVAILABLE_METADATA_ERROR: 'Cannot acquire metadata for {doi} from CrossRef API. Ensure it is resolvable before uploading.'
+  UNKNOWN_FILE_FORMAT_ERROR: Only PDF files are supported
+  UNPARSABLE_DOCUMENT_ERROR: Cannot parse the document
+  UNPARSABLE_DOI_ERROR: DOI cannot be found in the document
   UPGRADE_MAINTENANCE: |
     ```Major update is going on, come back to us tomorrow```[‌]({upgrade_maintenance_picture_url})
   UPLOADED_TO_TELEGRAM: uploaded to Telegram...
@@ -215,8 +224,8 @@ es:
     **Detalles sobre donaciones**
 
     **LiberaPay**: {libera_pay_url}
-    **Dirección BTC:** {btc_donate_address}
-    [‌]({btc_donate_qr_url})
+    **Dirección BTC**: {btc_donate_address}
+    **Tarjeta de regalo de Amazon**: [Compre]({amazon_gift_card_url}) cualquier tarjeta que use `{amazon_gift_card_recipient}` como correo electrónico del destinatario
   DOWNLOAD: Descargar
   DOWNLOADED: descargado
   DOWNLOADING: descargando...
@@ -229,7 +238,6 @@ es:
   HELP: |
     ¡Hola! ¡Soy el bot **Nexus**!
     Puedo buscar libros o artículos científicos por títulos, autores o DOI.
-    Además, puedo enviar recomendaciones basadas en lo que estabas buscando antes.
 
     **Simplemente escriba su solicitud en palabras sencillas.**
 
@@ -239,6 +247,8 @@ es:
     Encuentre solo a partir del año 2019: `hemoglobina AND year:[2019 TO *]
     Búsqueda por autor: `authors:Jack authors:London`
     Coincidencia exacta: `"Hemoglobina Fetal"`
+
+    Además, puedo aceptar nuevos artículos científicos suyos. Envíame PDF y lo procesaré.
 
     /copyright - hacer un reclamo por infracción de derechos de autor
     /donate - explica cómo apoyarnos
@@ -288,7 +298,7 @@ es:
   READ_ONLY_MODE: ⚠️ Servicio reducido hasta la medianoche (UTC). /settings no funciona, busque en modo lento.
   REFERENCED_BY: Referenciado por
   REPLY_MESSAGE_HAS_BEEN_DELETED: El mensaje de búsqueda ha sido (re)movido. Vuelve a buscar.
-  SEARCHING: buscando...
+  SEARCHING: '`buscando...`'
   SEND_YOUR_LOCATION: Envía tu ubicación (a través del botón de adjuntar de la izquierda)
   SETTINGS_ROUTER_HELP: >
     Los ajustes se pueden configurar de forma automática o manual.
@@ -300,7 +310,6 @@ es:
     **Zona horaria:** {tzinfo}
   SETUP_AUTOMATICALLY: Configurar automáticamente
   SETUP_MANUALLY: Configurar manualmente
-  SHORT_PROMO: ⤴️ Mantente en contacto con nosotros en {related_channel}
   SOURCES_UNAVAILABLE: '`{document}` no está disponible en este momento. Por favor intenta más tarde.'
   SUBSCRIBE_TO_CHANNEL: Suscríbete a {related_channel} para seguir usando este bot.
   SYSTEM_MESSAGING_OPTION: Notificaciones de actualización de bot
@@ -374,8 +383,8 @@ it:
     **Dettagli per le donazioni**
 
     **LiberaPay**: {libera_pay_url}
-    **Indirizzo BTC:** {btc_donate_address}
-    [‌]({btc_donate_qr_url})
+    **Indirizzo BTC**: {btc_donate_address}
+    **Buono regalo Amazon**: [Acquista]({amazon_gift_card_url}) qualsiasi carta utilizzando `{amazon_gift_card_recipient}` come indirizzo email del destinatario
   DOWNLOAD: Scarica
   DOWNLOADED: scaricato
   DOWNLOADING: scaricamento in corso...
@@ -388,7 +397,6 @@ it:
   HELP: |
     Ciao! Sono il bot **Nexus**!
     Posso cercare libri o articoli scientifici per titolo, autore o DOI.
-    Inoltre, posso fornire suggerimenti in base a quello che hai cercato precedentemente.
 
     **Scrivi qui la tua richiesta a parole.**
 
@@ -398,6 +406,8 @@ it:
     Find only starting from 2019 year: `emoglobina AND year:[2019 TO *]
     Ricerca per autore: `authors:Jack authors:London`
     Risultato esatto: `"Emoglobina fetale"`
+
+    Inoltre, posso accettare nuovi articoli scientifici da te. Inviami PDF e lo elaborerò.
 
     /copyright - segnala una violazione di copyright
     /donate - info su come sostenerci
@@ -428,7 +438,7 @@ it:
   READ_ONLY_MODE: ⚠️ Il servizio è limitato fino a mezzanotte (UTC). /settings non è disponibile, la ricerca è più lenta.
   REFERENCED_BY: Riferito da
   REPLY_MESSAGE_HAS_BEEN_DELETED: Il messaggio di ricerca è stato (ri-)mosso. Ripeti la ricerca.
-  SEARCHING: ricerca in corso...
+  SEARCHING: '`ricerca in corso...`'
   SEND_YOUR_LOCATION: Invia la tua posizione (tramite il pulsante allegato a sinistra)
   SETTINGS_ROUTER_HELP: >
     Le impostazioni possono essere configurate automaticamente o manualmente.
@@ -440,7 +450,6 @@ it:
     **Fuso orario:** {tzinfo}
   SETUP_AUTOMATICALLY: Configura automaticamente
   SETUP_MANUALLY: Configura manualmente
-  SHORT_PROMO: ⤴️ Resta aggiornato con noi su {related_channel}
   SOURCES_UNAVAILABLE: '`{document}` non è disponibile adesso. Per favore, prova più tardi.'
   SUBSCRIBE_TO_CHANNEL: Iscriviti a {related_channel} per continuare ad usare questo bot.
   SYSTEM_MESSAGING_OPTION: Notifiche Aggiornamento Bot
@@ -514,8 +523,8 @@ pb:
     **Detalhes de doação**
 
     **LiberaPay**: {libera_pay_url}
-    **Endereço BTC:** {btc_donate_address}
-    [‌]({btc_donate_qr_url})
+    **Endereço BTC**: {btc_donate_address}
+    **Amazon Gift Card**: [Compre]({amazon_gift_card_url}) qualquer cartão usando `{amazon_gift_card_recipient}` como e-mail do destinatário
   DOWNLOAD: Baixar
   DOWNLOADED: Baixado
   DOWNLOADING: baixando...
@@ -528,7 +537,6 @@ pb:
   HELP: |
     Olá! Eu sou o bot **Nexus**!
     Eu posso procurar livros ou artigos científicos por títulos, autores ou DOIs.
-    Além disso, eu posso enviar recomendações baseadas no que você esteve procurando.
 
     **Basta digitar seu pedido em palavras simples.**
 
@@ -538,6 +546,8 @@ pb:
     Encontre apenas a partir do ano 2019: `hemoglobina AND year:[2019 TO *]
     Buscar pelo autor: `authors:Jack authors:London`
     Combinação exata: `"Hemoglobina fetal"`
+
+    Além disso, posso aceitar novos artigos científicos seus. Envie-me o PDF e irei processá-lo.
 
     /copyright - fazer uma reivindicação de violação de direitos autorais
     /donate - diz como nos apoiar
@@ -587,7 +597,7 @@ pb:
   READ_ONLY_MODE: ⚠️ Serviço reduzido até meia-noite (UTC). /settings não está funcionando, pesquisa está no modo lento.
   REFERENCED_BY: Referenciado por
   REPLY_MESSAGE_HAS_BEEN_DELETED: A mensagem de pesquisa foi (re)movida. Pesquise novamente.
-  SEARCHING: procurando...
+  SEARCHING: '`procurando...`'
   SEND_YOUR_LOCATION: Envie sua localização (através do botão esquerdo anexar)
   SETTINGS_ROUTER_HELP: >
     As configurações podem ser configuradas automática ou manualmente.
@@ -599,7 +609,6 @@ pb:
     **Fuso horário:** {tzinfo}
   SETUP_AUTOMATICALLY: Configurar automaticamente
   SETUP_MANUALLY: Configurar manualmente
-  SHORT_PROMO: ⤴️ Fique ligado conosco em {related_channel}
   SOURCES_UNAVAILABLE: '`{document}` está indisponível nesse momento. Por favor, tente mais tarde.'
   SUBSCRIBE_TO_CHANNEL: Inscreva-se em {related_channel} para continuar usando este bot.
   SYSTEM_MESSAGING_OPTION: Notificações de Atualização do Bot
@@ -661,7 +670,8 @@ ru:
     **Реквизиты для пожертвования**
 
     **LiberaPay**: {libera_pay_url}
-    **BTC Address:** {btc_donate_address}[‌]({btc_donate_qr_url})
+    **BTC Address**: {btc_donate_address}
+    **Amazon Gift Card**: [Купите]({amazon_gift_card_url}) любую карту с `{amazon_gift_card_recipient}` в качестве получателя
   DOWNLOAD: Загрузить
   DOWNLOADED: загружено
   DOWNLOADING: загружаем...
@@ -673,7 +683,6 @@ ru:
   HELP: |
     Привет! Я бот **Nexus**!
     Я могу искать книги и научные статьи по их названиям, авторам или DOI.
-    Ещё я могу присылать вам рекомендации на основе вашей поисковой истории.
 
     **Просто наберите запрос как в поисковике.**
 
@@ -683,6 +692,8 @@ ru:
     Поиск начиная с 2019 года `гемоглобин AND year:[2019 TO *]`
     Поиск по автору: `authors:Jack authors:London`
     Точное совпадение: `"Fetal Hemoglobin"`
+
+    Также я могу принимать от вас новые научные статьи. Отправьте мне PDF-файл, и я его обработаю.
 
     /copyright - пожаловаться на нарушение авторских прав
     /donate - страница поддержки
@@ -731,7 +742,7 @@ ru:
     {related_channel}
   REFERENCED_BY: Ссылки
   REPLY_MESSAGE_HAS_BEEN_DELETED: Сообщение с запросом было удалено/перемещено, выполните поиск заново.
-  SEARCHING: ищем...
+  SEARCHING: '`ищем...`'
   SEND_YOUR_LOCATION: Отправьте вашу геопозицию (кнопка прикрепления файла слева)
   SETTINGS_ROUTER_HELP: >
     Настройки можно установить автоматически или в ручном режиме.
@@ -743,7 +754,6 @@ ru:
     **Часовой пояс:** {tzinfo}
   SETUP_AUTOMATICALLY: Установить автоматически
   SETUP_MANUALLY: Установить вручную
-  SHORT_PROMO: ⤴️ Оставайся на связи с нами на {related_channel}
   SOURCES_UNAVAILABLE: 'Прямо сейчас `{document}` недоступен. Попробуйте скачать его позже.'
   SUBSCRIBE_TO_CHANNEL: Подпишитесь на {related_channel}, чтобы использовать этот бот.
   SYSTEM_MESSAGING_OPTION: Сообщения об обновлениях

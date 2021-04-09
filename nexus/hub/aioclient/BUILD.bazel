@@ -1,0 +1,15 @@
+load("@pip_modules//:requirements.bzl", "requirement")
+
+py_library(
+    name = "aioclient",
+    srcs = glob(["**/*.py"]),
+    visibility = ["//visibility:public"],
+    deps = [
+        requirement("grpcio"),
+        "//idm/api2/proto:idm_proto_py",
+        requirement("aiokit"),
+        "//nexus/hub/proto:hub_grpc_py",
+        "//nexus/hub/proto:hub_proto_py",
+        "//nexus/models/proto:models_proto_py",
+    ],
+)

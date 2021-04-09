@@ -6,15 +6,15 @@ DO NOT EDIT! Replaced on runs of cargo-raze
 """
 
 # buildifier: disable=load
+load("@bazel_skylib//lib:selects.bzl", "selects")
+
+# buildifier: disable=load
 load(
-    "@io_bazel_rules_rust//rust:rust.bzl",
+    "@rules_rust//rust:rust.bzl",
     "rust_binary",
     "rust_library",
     "rust_test",
 )
-
-# buildifier: disable=load
-load("@bazel_skylib//lib:selects.bzl", "selects")
 
 package(default_visibility = [
     # Public for visibility by "@raze__crate__version//" targets.
@@ -40,7 +40,7 @@ rust_library(
     data = [],
     edition = "2018",
     proc_macro_deps = [
-        "@raze__derive_more__0_99_11//:derive_more",
+        "@raze__derive_more__0_99_13//:derive_more",
     ],
     rustc_flags = [
         "--cap-lints=allow",
@@ -59,13 +59,13 @@ rust_library(
         "@raze__base64__0_13_0//:base64",
         "@raze__bytes__0_5_6//:bytes",
         "@raze__cfg_if__1_0_0//:cfg_if",
-        "@raze__futures_core__0_3_12//:futures_core",
+        "@raze__futures_core__0_3_13//:futures_core",
         "@raze__log__0_4_14//:log",
         "@raze__mime__0_3_16//:mime",
         "@raze__percent_encoding__2_1_0//:percent_encoding",
         "@raze__rand__0_7_3//:rand",
-        "@raze__serde__1_0_123//:serde",
-        "@raze__serde_json__1_0_61//:serde_json",
+        "@raze__serde__1_0_125//:serde",
+        "@raze__serde_json__1_0_64//:serde_json",
         "@raze__serde_urlencoded__0_7_0//:serde_urlencoded",
     ],
 )

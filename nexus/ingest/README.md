@@ -23,7 +23,6 @@ jobs:
           kwargs:
             kafka_hosts:
               - kafka-0.example.net
-              - kafka-1.example.net
             topic_name: operations_binary
   libgen-api:
     class: nexus.ingest.jobs.LibgenApiJob
@@ -39,7 +38,6 @@ jobs:
           kwargs:
             kafka_hosts:
               - kafka-0.example.net
-              - kafka-1.example.net
             topic_name: operations_binary
 log_path: '/var/log/nexus-ingest/{{ ENV_TYPE }}'
 ```

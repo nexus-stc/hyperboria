@@ -1,0 +1,71 @@
+load("@io_bazel_rules_docker//python3:image.bzl", "py3_image")
+load("@io_bazel_rules_docker//container:container.bzl", "container_push")
+
+load("@pip_modules//:requirements.bzl", "requirement")
+
+alias(
+    name = "binary",
+    actual = ":image.binary",
+    visibility = ["//visibility:public"],
+)
+
+py3_image(
+    name = "image",
+    srcs = glob(["**/*.py"]),
+    base = "//images/production:base-python-image",
+    data = [
+        "configs/base.yaml",
+        "configs/custom.yaml",
+        "configs/development.yaml",
+        "configs/logging.yaml",
+        "configs/metrics.yaml",
+        "configs/production.yaml",
+        "configs/promotions.yaml",
+        "configs/testing.yaml",
+    ],
+    main = "main.py",
+    srcs_version = "PY3ONLY",
+    visibility = ["//visibility:public"],
+    deps = [
+        requirement("aiodns"),
+        requirement("aiohttp"),
+        requirement("aiohttp_socks"),
+        requirement("psycopg2-binary"),
+        requirement("pytimeparse"),
+        requirement("python_socks"),
+        requirement("tenacity"),
+        requirement("uvloop"),
+        "//idm/api2/aioclient",
+        "//library/aiobaseclient",
+        requirement("aiocrossref"),
+        requirement("aiokit"),
+        "//library/configurator",
+        "//library/logging",
+        "//library/metrics_server",
+        "//library/telegram",
+        "//nexus/hub/aioclient",
+        "//nexus/meta_api/aioclient",
+        "//nexus/models/proto:models_proto_py",
+        "//nexus/nlptools",
+        "//nexus/views/telegram",
+        requirement("izihawa_utils"),
+    ],
+)
+
+container_push(
+    name = "push-testing",
+    format = "Docker",
+    image = ":image",
+    registry = "registry.example.com",
+    repository = "nexus-bot",
+    tag = "testing",
+)
+
+container_push(
+    name = "push-latest",
+    format = "Docker",
+    image = ":image",
+    registry = "registry.example.com",
+    repository = "nexus-bot",
+    tag = "latest",
+)

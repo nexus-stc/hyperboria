@@ -1,0 +1,23 @@
+syntax = "proto3";
+package nexus.hub.proto;
+
+import "nexus/models/proto/typed_document.proto";
+import "idm/api2/proto/chats_service.proto";
+
+message StartDeliveryRequest {
+  nexus.models.proto.TypedDocument typed_document = 1;
+  idm.api2.proto.ChatData chat = 2;
+}
+
+message StartDeliveryResponse {
+  enum Status {
+    OK = 0;
+    TOO_MANY_DOWNLOADS = 1;
+    ALREADY_DOWNLOADING = 2;
+  }
+  Status status = 1;
+}
+
+service Delivery {
+    rpc start_delivery(StartDeliveryRequest) returns (StartDeliveryResponse) {};
+}
