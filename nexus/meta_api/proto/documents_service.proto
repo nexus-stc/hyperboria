@@ -1,0 +1,29 @@
+syntax = "proto3";
+package nexus.meta_api.proto;
+
+import "nexus/models/proto/typed_document.proto";
+
+message RollRequest {
+  string language = 1;
+  string session_id = 2;
+  int64 user_id = 3;
+}
+
+message RollResponse {
+  uint64 document_id = 1;
+}
+
+message TypedDocumentRequest {
+  string schema = 1;
+  uint64 document_id = 2;
+  uint32 position = 3;
+  string session_id = 4;
+  int64 user_id = 5;
+}
+
+message PutTypedDocumentResponse {}
+
+service Documents {
+  rpc get (TypedDocumentRequest) returns (nexus.models.proto.TypedDocument) {}
+  rpc roll (RollRequest) returns (RollResponse) {}
+}

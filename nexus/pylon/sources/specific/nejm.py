@@ -16,6 +16,6 @@ class NejmSource(DoiSource):
             url = f'{self.base_url}/doi/pdf/{self.doi}'
             async with session.get(
                 url,
-                timeout=self.resolve_timeout
+                timeout=self.resolve_timeout,
             ) as resp:
                 yield PreparedRequest(method='get', cookies=resp.cookies, url=str(resp.url))

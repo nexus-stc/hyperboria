@@ -1,0 +1,29 @@
+syntax = "proto3";
+package nexus.meta_api.proto;
+
+import "nexus/models/proto/typed_document.proto";
+
+message ScoredDocument {
+  nexus.models.proto.TypedDocument typed_document = 1;
+  float score = 3;
+  uint32 position = 4;
+}
+
+message SearchResponse {
+  repeated ScoredDocument scored_documents = 1;
+  bool has_next = 2;
+}
+
+message SearchRequest {
+  repeated string schemas = 1;
+  string query = 2;
+  uint32 page = 3;
+  uint32 page_size = 4;
+  string language = 5;
+  int64 user_id = 6;
+  string session_id = 7;
+}
+
+service MetaSearch {
+  rpc search (SearchRequest) returns (SearchResponse) {}
+}

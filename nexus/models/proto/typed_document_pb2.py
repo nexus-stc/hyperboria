@@ -16,6 +16,8 @@ from nexus.models.proto import \
     scimag_pb2 as nexus_dot_models_dot_proto_dot_scimag__pb2
 from nexus.models.proto import \
     scitech_pb2 as nexus_dot_models_dot_proto_dot_scitech__pb2
+from nexus.models.proto import \
+    sharience_pb2 as nexus_dot_models_dot_proto_dot_sharience__pb2
 
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='nexus/models/proto/typed_document.proto',
@@ -23,9 +25,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\'nexus/models/proto/typed_document.proto\x12\x12nexus.models.proto\x1a\x1fnexus/models/proto/scimag.proto\x1a nexus/models/proto/scitech.proto\"y\n\rTypedDocument\x12,\n\x06scimag\x18\x01 \x01(\x0b\x32\x1a.nexus.models.proto.ScimagH\x00\x12.\n\x07scitech\x18\x02 \x01(\x0b\x32\x1b.nexus.models.proto.ScitechH\x00\x42\n\n\x08\x64ocumentb\x06proto3'
+  serialized_pb=b'\n\'nexus/models/proto/typed_document.proto\x12\x12nexus.models.proto\x1a\x1fnexus/models/proto/scimag.proto\x1a nexus/models/proto/scitech.proto\x1a\"nexus/models/proto/sharience.proto\"\xad\x01\n\rTypedDocument\x12,\n\x06scimag\x18\x01 \x01(\x0b\x32\x1a.nexus.models.proto.ScimagH\x00\x12.\n\x07scitech\x18\x02 \x01(\x0b\x32\x1b.nexus.models.proto.ScitechH\x00\x12\x32\n\tsharience\x18\x03 \x01(\x0b\x32\x1d.nexus.models.proto.SharienceH\x00\x42\n\n\x08\x64ocumentb\x06proto3'
   ,
-  dependencies=[nexus_dot_models_dot_proto_dot_scimag__pb2.DESCRIPTOR,nexus_dot_models_dot_proto_dot_scitech__pb2.DESCRIPTOR,])
+  dependencies=[nexus_dot_models_dot_proto_dot_scimag__pb2.DESCRIPTOR,nexus_dot_models_dot_proto_dot_scitech__pb2.DESCRIPTOR,nexus_dot_models_dot_proto_dot_sharience__pb2.DESCRIPTOR,])
 
 
 
@@ -52,6 +54,13 @@ _TYPEDDOCUMENT = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='sharience', full_name='nexus.models.proto.TypedDocument.sharience', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -69,18 +78,22 @@ _TYPEDDOCUMENT = _descriptor.Descriptor(
       create_key=_descriptor._internal_create_key,
     fields=[]),
   ],
-  serialized_start=130,
-  serialized_end=251,
+  serialized_start=167,
+  serialized_end=340,
 )
 
 _TYPEDDOCUMENT.fields_by_name['scimag'].message_type = nexus_dot_models_dot_proto_dot_scimag__pb2._SCIMAG
 _TYPEDDOCUMENT.fields_by_name['scitech'].message_type = nexus_dot_models_dot_proto_dot_scitech__pb2._SCITECH
+_TYPEDDOCUMENT.fields_by_name['sharience'].message_type = nexus_dot_models_dot_proto_dot_sharience__pb2._SHARIENCE
 _TYPEDDOCUMENT.oneofs_by_name['document'].fields.append(
   _TYPEDDOCUMENT.fields_by_name['scimag'])
 _TYPEDDOCUMENT.fields_by_name['scimag'].containing_oneof = _TYPEDDOCUMENT.oneofs_by_name['document']
 _TYPEDDOCUMENT.oneofs_by_name['document'].fields.append(
   _TYPEDDOCUMENT.fields_by_name['scitech'])
 _TYPEDDOCUMENT.fields_by_name['scitech'].containing_oneof = _TYPEDDOCUMENT.oneofs_by_name['document']
+_TYPEDDOCUMENT.oneofs_by_name['document'].fields.append(
+  _TYPEDDOCUMENT.fields_by_name['sharience'])
+_TYPEDDOCUMENT.fields_by_name['sharience'].containing_oneof = _TYPEDDOCUMENT.oneofs_by_name['document']
 DESCRIPTOR.message_types_by_name['TypedDocument'] = _TYPEDDOCUMENT
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 

@@ -1,0 +1,34 @@
+load("@com_github_grpc_grpc//bazel:python_rules.bzl", "py_grpc_library", "py_proto_library")
+load("@rules_rust//proto:proto.bzl", "rust_proto_library")
+load("@rules_proto//proto:defs.bzl", "proto_library")
+
+package(default_visibility = ["//visibility:public"])
+
+proto_library(
+    name = "meta_api_proto",
+    srcs = glob([
+        "*.proto",
+    ]),
+    deps = [
+        "//nexus/models/proto:models_proto",
+        "@com_google_protobuf//:wrappers_proto",
+    ],
+)
+
+py_proto_library(
+    name = "meta_api_proto_py",
+    deps = [":meta_api_proto"],
+)
+
+py_grpc_library(
+    name = "meta_api_grpc_py",
+    srcs = [":meta_api_proto"],
+    deps = [":meta_api_proto_py"],
+)
+
+rust_proto_library(
+    name = "meta_api_proto_rust",
+    rust_deps = ["//rules/rust/cargo:protobuf"],
+    visibility = ["//visibility:public"],
+    deps = [":meta_api_proto"],
+)

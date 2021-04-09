@@ -1,0 +1,13 @@
+syntax = "proto3";
+package nexus.models.proto;
+
+message Sharience {
+  int64 id = 1;
+  int64 parent_id = 2;
+  int64 uploader_id = 3;
+  uint32 updated_at = 4;
+  string md5 = 5;
+  uint32 filesize = 6;
+  repeated string ipfs_multihashes = 7;
+  string telegram_file_id = 8;
+}

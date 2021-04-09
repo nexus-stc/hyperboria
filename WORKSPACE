@@ -68,6 +68,36 @@ http_archive(
     ],
 )
 
+_configure_python_based_on_os = """
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    ./configure --prefix=$(pwd)/bazel_install --with-openssl=$(brew --prefix openssl)
+else
+    ./configure --prefix=$(pwd)/bazel_install
+fi
+"""
+
+http_archive(
+    name = "python_interpreter",
+    build_file_content = """
+exports_files(["python_bin"])
+filegroup(
+    name = "files",
+    srcs = glob(["bazel_install/**"], exclude = ["**/* *"]),
+    visibility = ["//visibility:public"],
+)
+""",
+    patch_cmds = [
+        "mkdir $(pwd)/bazel_install",
+        _configure_python_based_on_os,
+        "make",
+        "make install",
+        "ln -s bazel_install/bin/python3 python_bin",
+    ],
+    sha256 = "4b0e6644a76f8df864ae24ac500a51bbf68bd098f6a173e27d3b61cdca9aa134",
+    strip_prefix = "Python-3.9.4",
+    urls = ["https://www.python.org/ftp/python/3.9.4/Python-3.9.4.tar.xz"],
+)
+
 http_archive(
     name = "rules_python",
     sha256 = "b228318a786d99b665bc83bd6cdb81512cae5f8eb15e8cd19f9956604b8939f5",
@@ -189,12 +219,13 @@ py3_image_repos()
 rust_image_repos()
 
 # Python
-register_toolchains("//rules/python:py_toolchain")
+register_toolchains("//rules/python:py_3_toolchain")
 
 load("@rules_python//python:pip.bzl", "pip_install")
 
 pip_install(
     name = "pip_modules",
+    python_interpreter_target = "@python_interpreter//:python_bin",
     requirements = "//rules/python:requirements.txt",
 )
 

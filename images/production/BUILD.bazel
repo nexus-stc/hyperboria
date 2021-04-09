@@ -13,7 +13,7 @@ download_pkgs(
         "libev4",
         "libgomp1",
         "libgoogle-perftools-dev",
-        "libprotobuf17",
+        "libprotobuf23",
         "libssl1.1",
     ],
 )
@@ -28,7 +28,10 @@ install_pkgs(
 container_image(
     name = "base-production-image",
     base = ":install-base-production-image",
-    env = {"LANG": "C.UTF-8"},
+    env = {
+        "LANG": "C.UTF-8",
+        "LC_CTYPE": "en_US.UTF-8",
+    },
 )
 
 download_pkgs(
