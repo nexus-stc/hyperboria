@@ -41,7 +41,6 @@ py3_image(
         requirement("aiokit"),
         "//library/configurator",
         "//library/logging",
-        ,
         "//library/telegram",
         "//nexus/hub/aioclient",
         "//nexus/meta_api/aioclient",
