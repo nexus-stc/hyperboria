@@ -179,6 +179,9 @@ node_repositories(
     node_repositories = {
         "15.5.1-darwin_amd64": ("node-v15.5.1-darwin-x64.tar.gz", "node-v15.5.1-darwin-x64", "4507dab0481b0b5374b5758b1eba7d105c8cbcb173548119b04d9ef7d9f1d40f"),
         "15.5.1-linux_amd64": ("node-v15.5.1-linux-x64.tar.xz", "node-v15.5.1-linux-x64", "dbc41a611d99aedf2cfd3d0acc50759a6b9084c7447862e990f51958d4a7aa41"),
+        "15.5.1-windows_amd64": ("node-v15.5.1-win-x64.zip", "node-v15.5.1-win-x64", "e1f826f9647fc7058b48c669991956a427fe4b6ccefa415a18b41715483f958d"),
+        "15.5.1-linux_s390x": ("node-v15.5.1-linux-s390x.tar.gz", "node-v15.5.1-linux-s390x", "e05f949ea11e2aafc08a7972c0f41a11a3628762e857d44965e0605d3bcd143f"),
+        "15.5.1-linux_arm64": ("node-v15.5.1-linux-arm64.tar.gz", "node-v15.5.1-linux-arm64", "a2d14db86c6f8a070f227940ea44a3409966f6bed14df0ec6f676fe2e2f601c9"),
     },
     node_version = "15.5.1",
     package_json = ["//rules/nodejs:package.json"],
