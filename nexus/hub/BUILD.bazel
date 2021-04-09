@@ -1,0 +1,72 @@
+load("@io_bazel_rules_docker//python3:image.bzl", "py3_image")
+load("@io_bazel_rules_docker//container:container.bzl", "container_push")
+load("@pip_modules//:requirements.bzl", "requirement")
+
+alias(
+    name = "binary",
+    actual = ":image.binary",
+)
+
+py3_image(
+    name = "image",
+    srcs = glob(
+        ["**/*.py"],
+        exclude = ["proto/**"],
+    ),
+    base = "//images/production:base-python-image",
+    data = [
+        "configs/base.yaml",
+        "configs/development.yaml",
+        "configs/logging.yaml",
+        "configs/production.yaml",
+        "configs/testing.yaml",
+    ],
+    main = "main.py",
+    srcs_version = "PY3ONLY",
+    visibility = ["//visibility:public"],
+    deps = [
+        requirement("aiodns"),
+        requirement("aiohttp"),
+        requirement("aiohttp_socks"),
+        requirement("aioipfs"),
+        requirement("cchardet"),
+        requirement("orjson"),
+        requirement("prometheus-client"),
+        requirement("psycopg2-binary"),
+        requirement("python-socks"),
+        requirement("tenacity"),
+        requirement("uvloop"),
+        "//idm/api2/proto:idm_proto_py",
+        requirement("giogrobid"),
+        "//library/aiogrpctools",
+        requirement("aiokit"),
+        "//library/aiopostgres",
+        "//library/configurator",
+        "//library/telegram",
+        "//nexus/hub/proto:hub_grpc_py",
+        "//nexus/hub/proto:hub_proto_py",
+        "//nexus/meta_api/aioclient",
+        "//nexus/models/proto:models_proto_py",
+        "//nexus/pylon",
+        "//nexus/views/telegram",
+    ],
+)
+
+container_push(
+    name = "push-latest",
+    format = "Docker",
+    image = ":image",
+    registry = "registry.example.com",
+    repository = "nexus-hub",
+    tag = "latest",
+)
+
+container_push(
+    name = "push-testing",
+    format = "Docker",
+    image = ":image",
+    registry = "registry.example.com",
+    repository = "nexus-hub",
+    tag = "testing",
+)
+
