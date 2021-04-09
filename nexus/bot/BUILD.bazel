@@ -36,7 +36,7 @@ py3_image(
         requirement("tenacity"),
         requirement("uvloop"),
         "//idm/api2/aioclient",
-        "//library/aiobaseclient",
+        requirement("aiobaseclient"),
         requirement("aiocrossref"),
         requirement("aiokit"),
         "//library/configurator",
