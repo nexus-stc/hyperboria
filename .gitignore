@@ -1,0 +1,11 @@
+# Ignore all bazel-* symlinks. There is no full list since this can change
+# based on the name of the directory bazel is cloned into.
+/bazel-*
+node_modules/
+__pycache__/
+
+# Telethon session files
+*.session
+
+# IPFS collection for Cognitron
+bafykbzacebzohi352bddfunaub5rgqv5b324nejk5v6fltjh45be5ykw5jsjg/
