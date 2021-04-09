@@ -1,0 +1,18 @@
+load("@pip_modules//:requirements.bzl", "requirement")
+load("@rules_python//python:defs.bzl", "py_library")
+
+py_library(
+    name = "telegram",
+    srcs = glob(
+        ["**/*.py"],
+        exclude = ["tests/**"],
+    ),
+    srcs_version = "PY3",
+    visibility = ["//visibility:public"],
+    deps = [
+        requirement("sqlalchemy"),
+        requirement("telethon"),
+        requirement("aiokit"),
+        "//library/logging",
+    ],
+)

@@ -9,5 +9,6 @@ py_binary(
     deps = [
         "@bazel_tools//tools/build_defs/pkg:archive",
         requirement("python-gflags"),
+        requirement("six"),
     ],
 )
