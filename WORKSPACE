@@ -77,36 +77,6 @@ http_archive(
     ],
 )
 
-_configure_python_based_on_os = """
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    ./configure --prefix=$(pwd)/bazel_install --with-openssl=$(brew --prefix openssl)
-else
-    ./configure --prefix=$(pwd)/bazel_install
-fi
-"""
-
-http_archive(
-    name = "python_interpreter",
-    build_file_content = """
-exports_files(["python_bin"])
-filegroup(
-    name = "files",
-    srcs = glob(["bazel_install/**"], exclude = ["**/* *"]),
-    visibility = ["//visibility:public"],
-)
-""",
-    patch_cmds = [
-        "mkdir $(pwd)/bazel_install",
-        _configure_python_based_on_os,
-        "make",
-        "make install",
-        "ln -s bazel_install/bin/python3 python_bin",
-    ],
-    sha256 = "4b0e6644a76f8df864ae24ac500a51bbf68bd098f6a173e27d3b61cdca9aa134",
-    strip_prefix = "Python-3.9.4",
-    urls = ["https://www.python.org/ftp/python/3.9.4/Python-3.9.4.tar.xz"],
-)
-
 http_archive(
     name = "rules_python",
     sha256 = "b228318a786d99b665bc83bd6cdb81512cae5f8eb15e8cd19f9956604b8939f5",
@@ -118,6 +88,7 @@ http_archive(
 
 http_archive(
     name = "subpar",
+    sha256 = "481233d60c547e0902d381cd4fb85b63168130379600f330821475ad234d9336",
     strip_prefix = "subpar-9fae6b63cfeace2e0fb93c9c1ebdc28d3991b16f",
     urls = [
         "https://github.com/google/subpar/archive/9fae6b63cfeace2e0fb93c9c1ebdc28d3991b16f.tar.gz",
@@ -132,6 +103,22 @@ http_archive(
     urls = [
         "https://github.com/cython/cython/archive/0.29.21.tar.gz",
     ],
+)
+
+# Images Install
+
+load("//images:install.bzl", "images_install")
+
+images_install()
+
+# Python
+register_toolchains("//rules/python:py_toolchain")
+
+load("@rules_python//python:pip.bzl", "pip_install")
+
+pip_install(
+    name = "pip_modules",
+    requirements = "//rules/python:requirements.txt",
 )
 
 # Java
@@ -230,17 +217,6 @@ py3_image_repos()
 
 rust_image_repos()
 
-# Python
-register_toolchains("//rules/python:py_3_toolchain")
-
-load("@rules_python//python:pip.bzl", "pip_install")
-
-pip_install(
-    name = "pip_modules",
-    python_interpreter_target = "@python_interpreter//:python_bin",
-    requirements = "//rules/python:requirements.txt",
-)
-
 # K8s
 
 load("@io_bazel_rules_k8s//k8s:k8s.bzl", "k8s_repositories")
@@ -260,12 +236,6 @@ rules_misc_setup_internal()
 load("//rules/misc:install.bzl", "rules_misc_install_internal")
 
 rules_misc_install_internal()
-
-# Images Install
-
-load("//images:install.bzl", "images_install")
-
-images_install()
 
 # Proto / gRPC
 

@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\"idm/api2/proto/chats_service.proto\x12\x0eidm.api2.proto\x1a\x1didm/api2/proto/location.proto\"\xf2\x01\n\x08\x43hatData\x12\n\n\x02id\x18\x01 \x01(\x03\x12\x10\n\x08username\x18\x02 \x01(\t\x12\x10\n\x08language\x18\x03 \x01(\t\x12#\n\x1bis_system_messaging_enabled\x18\x04 \x01(\x08\x12\x1c\n\x14is_discovery_enabled\x18\x05 \x01(\x08\x12\x11\n\tban_until\x18\x06 \x01(\x05\x12\x13\n\x0b\x62\x61n_message\x18\x07 \x01(\t\x12\x10\n\x08is_admin\x18\x08 \x01(\x08\x12\x0e\n\x06tzinfo\x18\t \x01(\t\x12\x15\n\ris_subscribed\x18\n \x01(\x08\x12\x12\n\ncreated_at\x18\x0b \x01(\x03\"4\n\tChatsData\x12\'\n\x05\x63hats\x18\x01 \x03(\x0b\x32\x18.idm.api2.proto.ChatData\"H\n\x11\x43reateChatRequest\x12\x0f\n\x07\x63hat_id\x18\x01 \x01(\x03\x12\x10\n\x08username\x18\x02 \x01(\t\x12\x10\n\x08language\x18\x03 \x01(\t\"!\n\x0eGetChatRequest\x12\x0f\n\x07\x63hat_id\x18\x01 \x01(\x03\"H\n\x10ListChatsRequest\x12\x1a\n\x10\x62\x61nned_at_moment\x18\x01 \x01(\x05H\x00\x42\x18\n\x16\x62\x61nned_at_moment_oneof\"\x98\x03\n\x11UpdateChatRequest\x12\x0f\n\x07\x63hat_id\x18\x01 \x01(\x03\x12\x12\n\x08language\x18\x02 \x01(\tH\x00\x12%\n\x1bis_system_messaging_enabled\x18\x03 \x01(\x08H\x01\x12\x1e\n\x14is_discovery_enabled\x18\x04 \x01(\x08H\x02\x12\x13\n\tban_until\x18\x05 \x01(\x05H\x03\x12\x15\n\x0b\x62\x61n_message\x18\x06 \x01(\tH\x04\x12\x12\n\x08is_admin\x18\x07 \x01(\x08H\x05\x12\x31\n\rlast_location\x18\x08 \x01(\x0b\x32\x18.idm.api2.proto.LocationH\x06\x42\x10\n\x0elanguage_oneofB#\n!is_system_messaging_enabled_oneofB\x1c\n\x1ais_discovery_enabled_oneofB\x11\n\x0f\x62\x61n_until_oneofB\x13\n\x11\x62\x61n_message_oneofB\x10\n\x0eis_admin_oneofB\x15\n\x13last_location_oneof2\xb8\x02\n\x05\x43hats\x12L\n\x0b\x63reate_chat\x12!.idm.api2.proto.CreateChatRequest\x1a\x18.idm.api2.proto.ChatData\"\x00\x12\x46\n\x08get_chat\x12\x1e.idm.api2.proto.GetChatRequest\x1a\x18.idm.api2.proto.ChatData\"\x00\x12K\n\nlist_chats\x12 .idm.api2.proto.ListChatsRequest\x1a\x19.idm.api2.proto.ChatsData\"\x00\x12L\n\x0bupdate_chat\x12!.idm.api2.proto.UpdateChatRequest\x1a\x18.idm.api2.proto.ChatData\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\"idm/api2/proto/chats_service.proto\x12\x0eidm.api2.proto\x1a\x1didm/api2/proto/location.proto\"\xe2\x01\n\x08\x43hatData\x12\n\n\x02id\x18\x01 \x01(\x03\x12\x10\n\x08username\x18\x02 \x01(\t\x12\x10\n\x08language\x18\x03 \x01(\t\x12#\n\x1bis_system_messaging_enabled\x18\x04 \x01(\x08\x12\x1c\n\x14is_discovery_enabled\x18\x05 \x01(\x08\x12\x11\n\tban_until\x18\x06 \x01(\x05\x12\x13\n\x0b\x62\x61n_message\x18\x07 \x01(\t\x12\x10\n\x08is_admin\x18\x08 \x01(\x08\x12\x15\n\ris_subscribed\x18\n \x01(\x08\x12\x12\n\ncreated_at\x18\x0b \x01(\x03\"4\n\tChatsData\x12\'\n\x05\x63hats\x18\x01 \x03(\x0b\x32\x18.idm.api2.proto.ChatData\"H\n\x11\x43reateChatRequest\x12\x0f\n\x07\x63hat_id\x18\x01 \x01(\x03\x12\x10\n\x08username\x18\x02 \x01(\t\x12\x10\n\x08language\x18\x03 \x01(\t\"!\n\x0eGetChatRequest\x12\x0f\n\x07\x63hat_id\x18\x01 \x01(\x03\"H\n\x10ListChatsRequest\x12\x1a\n\x10\x62\x61nned_at_moment\x18\x01 \x01(\x05H\x00\x42\x18\n\x16\x62\x61nned_at_moment_oneof\"\xce\x02\n\x11UpdateChatRequest\x12\x0f\n\x07\x63hat_id\x18\x01 \x01(\x03\x12\x12\n\x08language\x18\x02 \x01(\tH\x00\x12%\n\x1bis_system_messaging_enabled\x18\x03 \x01(\x08H\x01\x12\x1e\n\x14is_discovery_enabled\x18\x04 \x01(\x08H\x02\x12\x13\n\tban_until\x18\x05 \x01(\x05H\x03\x12\x15\n\x0b\x62\x61n_message\x18\x06 \x01(\tH\x04\x12\x12\n\x08is_admin\x18\x07 \x01(\x08H\x05\x42\x10\n\x0elanguage_oneofB#\n!is_system_messaging_enabled_oneofB\x1c\n\x1ais_discovery_enabled_oneofB\x11\n\x0f\x62\x61n_until_oneofB\x13\n\x11\x62\x61n_message_oneofB\x10\n\x0eis_admin_oneof2\xb8\x02\n\x05\x43hats\x12L\n\x0b\x63reate_chat\x12!.idm.api2.proto.CreateChatRequest\x1a\x18.idm.api2.proto.ChatData\"\x00\x12\x46\n\x08get_chat\x12\x1e.idm.api2.proto.GetChatRequest\x1a\x18.idm.api2.proto.ChatData\"\x00\x12K\n\nlist_chats\x12 .idm.api2.proto.ListChatsRequest\x1a\x19.idm.api2.proto.ChatsData\"\x00\x12L\n\x0bupdate_chat\x12!.idm.api2.proto.UpdateChatRequest\x1a\x18.idm.api2.proto.ChatData\"\x00\x62\x06proto3'
   ,
   dependencies=[idm_dot_api2_dot_proto_dot_location__pb2.DESCRIPTOR,])
 
@@ -93,21 +93,14 @@ _CHATDATA = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='tzinfo', full_name='idm.api2.proto.ChatData.tzinfo', index=8,
-      number=9, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='is_subscribed', full_name='idm.api2.proto.ChatData.is_subscribed', index=9,
+      name='is_subscribed', full_name='idm.api2.proto.ChatData.is_subscribed', index=8,
       number=10, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='created_at', full_name='idm.api2.proto.ChatData.created_at', index=10,
+      name='created_at', full_name='idm.api2.proto.ChatData.created_at', index=9,
       number=11, type=3, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -126,7 +119,7 @@ _CHATDATA = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=86,
-  serialized_end=328,
+  serialized_end=312,
 )
 
 
@@ -157,8 +150,8 @@ _CHATSDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=330,
-  serialized_end=382,
+  serialized_start=314,
+  serialized_end=366,
 )
 
 
@@ -203,8 +196,8 @@ _CREATECHATREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=384,
-  serialized_end=456,
+  serialized_start=368,
+  serialized_end=440,
 )
 
 
@@ -235,8 +228,8 @@ _GETCHATREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=458,
-  serialized_end=491,
+  serialized_start=442,
+  serialized_end=475,
 )
 
 
@@ -272,8 +265,8 @@ _LISTCHATSREQUEST = _descriptor.Descriptor(
       create_key=_descriptor._internal_create_key,
     fields=[]),
   ],
-  serialized_start=493,
-  serialized_end=565,
+  serialized_start=477,
+  serialized_end=549,
 )
 
 
@@ -334,13 +327,6 @@ _UPDATECHATREQUEST = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='last_location', full_name='idm.api2.proto.UpdateChatRequest.last_location', index=7,
-      number=8, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -382,21 +368,15 @@ _UPDATECHATREQUEST = _descriptor.Descriptor(
       index=5, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
-    _descriptor.OneofDescriptor(
-      name='last_location_oneof', full_name='idm.api2.proto.UpdateChatRequest.last_location_oneof',
-      index=6, containing_type=None,
-      create_key=_descriptor._internal_create_key,
-    fields=[]),
   ],
-  serialized_start=568,
-  serialized_end=976,
+  serialized_start=552,
+  serialized_end=886,
 )
 
 _CHATSDATA.fields_by_name['chats'].message_type = _CHATDATA
 _LISTCHATSREQUEST.oneofs_by_name['banned_at_moment_oneof'].fields.append(
   _LISTCHATSREQUEST.fields_by_name['banned_at_moment'])
 _LISTCHATSREQUEST.fields_by_name['banned_at_moment'].containing_oneof = _LISTCHATSREQUEST.oneofs_by_name['banned_at_moment_oneof']
-_UPDATECHATREQUEST.fields_by_name['last_location'].message_type = idm_dot_api2_dot_proto_dot_location__pb2._LOCATION
 _UPDATECHATREQUEST.oneofs_by_name['language_oneof'].fields.append(
   _UPDATECHATREQUEST.fields_by_name['language'])
 _UPDATECHATREQUEST.fields_by_name['language'].containing_oneof = _UPDATECHATREQUEST.oneofs_by_name['language_oneof']
@@ -415,9 +395,6 @@ _UPDATECHATREQUEST.fields_by_name['ban_message'].containing_oneof = _UPDATECHATR
 _UPDATECHATREQUEST.oneofs_by_name['is_admin_oneof'].fields.append(
   _UPDATECHATREQUEST.fields_by_name['is_admin'])
 _UPDATECHATREQUEST.fields_by_name['is_admin'].containing_oneof = _UPDATECHATREQUEST.oneofs_by_name['is_admin_oneof']
-_UPDATECHATREQUEST.oneofs_by_name['last_location_oneof'].fields.append(
-  _UPDATECHATREQUEST.fields_by_name['last_location'])
-_UPDATECHATREQUEST.fields_by_name['last_location'].containing_oneof = _UPDATECHATREQUEST.oneofs_by_name['last_location_oneof']
 DESCRIPTOR.message_types_by_name['ChatData'] = _CHATDATA
 DESCRIPTOR.message_types_by_name['ChatsData'] = _CHATSDATA
 DESCRIPTOR.message_types_by_name['CreateChatRequest'] = _CREATECHATREQUEST
@@ -477,8 +454,8 @@ _CHATS = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=979,
-  serialized_end=1291,
+  serialized_start=889,
+  serialized_end=1201,
   methods=[
   _descriptor.MethodDescriptor(
     name='create_chat',

@@ -137,14 +137,10 @@ en:
   REPORT_OK_FILE: ✅ What Is Needed
   SEARCHING: '`searching...`'
   SEND_YOUR_LOCATION: Send your location (through the left attach button)
-  SETTINGS_ROUTER_HELP: >
-    Settings could be set up automatically or manually.
-    Automatic mode will requests location to set timezone, language and georanking.
   SETTINGS_TEMPLATE: |
     **Bot Version:** {bot_version}
     **Nexus Version:** {nexus_version}
     **Language:** {language}
-    **Timezone:** {tzinfo}
   SETUP_AUTOMATICALLY: Setup automatically
   SETUP_MANUALLY: Setup manually
   SOURCES_UNAVAILABLE: '`{document}` is unavailable right now. Please, try later.'
@@ -300,14 +296,10 @@ es:
   REPLY_MESSAGE_HAS_BEEN_DELETED: El mensaje de búsqueda ha sido (re)movido. Vuelve a buscar.
   SEARCHING: '`buscando...`'
   SEND_YOUR_LOCATION: Envía tu ubicación (a través del botón de adjuntar de la izquierda)
-  SETTINGS_ROUTER_HELP: >
-    Los ajustes se pueden configurar de forma automática o manual.
-    El modo automático solicitará la ubicación para establecer la zona horaria, el idioma y la clasificación geográfica.
   SETTINGS_TEMPLATE: |
     **Versión del bot:** {bot_version}
     **Versión de Nexus:** {nexus_version}
     **Idioma:** {language}
-    **Zona horaria:** {tzinfo}
   SETUP_AUTOMATICALLY: Configurar automáticamente
   SETUP_MANUALLY: Configurar manualmente
   SOURCES_UNAVAILABLE: '`{document}` no está disponible en este momento. Por favor intenta más tarde.'
@@ -440,14 +432,10 @@ it:
   REPLY_MESSAGE_HAS_BEEN_DELETED: Il messaggio di ricerca è stato (ri-)mosso. Ripeti la ricerca.
   SEARCHING: '`ricerca in corso...`'
   SEND_YOUR_LOCATION: Invia la tua posizione (tramite il pulsante allegato a sinistra)
-  SETTINGS_ROUTER_HELP: >
-    Le impostazioni possono essere configurate automaticamente o manualmente.
-    La modalità automatica richiederà la tua posizione per impostare il fuso orario, la lingua e il ranking geografico.
   SETTINGS_TEMPLATE: |
     **Versione del Bot:** {bot_version}
     **Versione del Nexus:** {nexus_version}
     **Lingua:** {language}
-    **Fuso orario:** {tzinfo}
   SETUP_AUTOMATICALLY: Configura automaticamente
   SETUP_MANUALLY: Configura manualmente
   SOURCES_UNAVAILABLE: '`{document}` non è disponibile adesso. Per favore, prova più tardi.'
@@ -599,14 +587,10 @@ pb:
   REPLY_MESSAGE_HAS_BEEN_DELETED: A mensagem de pesquisa foi (re)movida. Pesquise novamente.
   SEARCHING: '`procurando...`'
   SEND_YOUR_LOCATION: Envie sua localização (através do botão esquerdo anexar)
-  SETTINGS_ROUTER_HELP: >
-    As configurações podem ser configuradas automática ou manualmente.
-    O modo automático solicitará um local para definir o fuso horário, o idioma e a classificação geográfica.
   SETTINGS_TEMPLATE: |
     **Versão do bot:** {bot_version}
     **Versão do Nexus:** {nexus_version}
     **Idioma:** {language}
-    **Fuso horário:** {tzinfo}
   SETUP_AUTOMATICALLY: Configurar automaticamente
   SETUP_MANUALLY: Configurar manualmente
   SOURCES_UNAVAILABLE: '`{document}` está indisponível nesse momento. Por favor, tente mais tarde.'
@@ -744,14 +728,10 @@ ru:
   REPLY_MESSAGE_HAS_BEEN_DELETED: Сообщение с запросом было удалено/перемещено, выполните поиск заново.
   SEARCHING: '`ищем...`'
   SEND_YOUR_LOCATION: Отправьте вашу геопозицию (кнопка прикрепления файла слева)
-  SETTINGS_ROUTER_HELP: >
-    Настройки можно установить автоматически или в ручном режиме.
-    Автоматический режим запросит ваше местнонахождение для установки часового пояса, языка и георанжирования.
   SETTINGS_TEMPLATE: |
     **Версия бота:** {bot_version}
     **Версия индекса Nexus:** {nexus_version}
     **Язык:** {language}
-    **Часовой пояс:** {tzinfo}
   SETUP_AUTOMATICALLY: Установить автоматически
   SETUP_MANUALLY: Установить вручную
   SOURCES_UNAVAILABLE: 'Прямо сейчас `{document}` недоступен. Попробуйте скачать его позже.'

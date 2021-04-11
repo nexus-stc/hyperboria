@@ -15,13 +15,8 @@ py3_image(
     base = "//images/production:base-python-image",
     data = [
         "configs/base.yaml",
-        "configs/custom.yaml",
-        "configs/development.yaml",
         "configs/logging.yaml",
-        "configs/metrics.yaml",
-        "configs/production.yaml",
         "configs/promotions.yaml",
-        "configs/testing.yaml",
     ],
     main = "main.py",
     srcs_version = "PY3ONLY",

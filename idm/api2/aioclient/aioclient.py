@@ -105,7 +105,6 @@ class IdmApi2GrpcClient(AioThing):
         ban_until=None,
         ban_message=None,
         is_admin=None,
-        last_location=None,
     ):
         response = await self.chats_stub.update_chat(
             UpdateChatRequest(
@@ -116,7 +115,6 @@ class IdmApi2GrpcClient(AioThing):
                 ban_until=ban_until,
                 ban_message=ban_message,
                 is_admin=is_admin,
-                last_location=last_location,
             ),
             metadata=(
                 ('request-id', request_id),

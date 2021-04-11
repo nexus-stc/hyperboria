@@ -15,7 +15,6 @@ py3_image(
         "configs/base.yaml",
         "configs/logging.yaml",
     ],
-    legacy_create_init = False,
     main = "main.py",
     srcs_version = "PY3ONLY",
     visibility = ["//visibility:public"],
