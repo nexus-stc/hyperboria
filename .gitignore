@@ -1,8 +1,23 @@
-# Ignore all bazel-* symlinks. There is no full list since this can change
-# based on the name of the directory bazel is cloned into.
-/bazel-*
-node_modules/
+# Python
+venv
+test.db
 __pycache__/
+cover
+.coverage
+dump.rdb
+/build/
+tasq
+devenv/
+
+# NodeJS
+node_modules/
+.nuxt
+
+# Development
+/bazel-*
+.idea/
+*.log
+.DS_Store
 
 # Telethon session files
 *.session

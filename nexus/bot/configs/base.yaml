@@ -1,0 +1,98 @@
+---
+
+application:
+  # Amazon Recipient Email in /donate message
+  amazon_gift_card_recipient: pirate@ship.space
+  # Amazon URL for buying card in /donate message
+  amazon_gift_card_url: https://www.amazon.com/dp/B07TMNGSN4
+  bot_version: 1.6.0
+  # Bitcoin Donation address in /donate message
+  btc_donate_address: 3QbF3zRQVjn3qMJBSbmLC1gb6VUc555xkw
+  # List of chat IDs that is allowed to bypass maintenance mode
+  bypass_maintenance: []
+  # Debugging mode
+  debug: true
+  # All users (except `bypass_maintenance` ones) will get UPGRADE_MAINTENANCE message in response
+  is_maintenance_mode: false
+  # Disable /settings, uploading new articles (can be used while vacuuming backend Postgres)
+  # and preventing creation of new users
+  is_read_only_mode: false
+  # Require subscription to `related_channel` before allowing to use the bot
+  is_subscription_required: false
+  # Libera Pay URL in /donate message
+  libera_pay_url:
+  maintenance_picture_url:
+  nexus_version: InterCom
+  # Default page size for SERP
+  page_size: 5
+  # Length of generated Request-ID used for tracking requests across all backends
+  request_id_length: 12
+  # Enabled schemas (passed to Nexus Meta API)
+  schemas:
+    - scimag
+    - scitech
+  # Length of generated Session-ID used in commands to clue user sessions
+  session_id_length: 8
+  too_difficult_picture_url:
+  upgrade_maintenance_picture_url:
+  # Configuring behaviour of the bot in some cases
+  views:
+    settings:
+      has_discovery_button: true
+      has_language_buttons: true
+      has_system_messaging_button: true
+hub:
+  url:
+idm:
+  url:
+log_path: '/var/log/nexus-bot/{{ ENV_TYPE }}'
+meta_api:
+  url:
+telegram:
+  # Telegram App Hash from https://my.telegram.org/
+  app_hash: '{{ APP_HASH }}'
+  # Telegram App ID from https://my.telegram.org/
+  app_id: 00000
+  # External bot name shown in messages to users
+  bot_external_name: libgen_scihub_bot
+  # Internal bot name used in logging
+  bot_name: nexus-bot
+  bot_token: '{{ BOT_TOKEN }}'
+  # WARNING! Potentially buggy telethon option. Sometimes it goes mad and overload users with tons of messages
+  # Collect missed messages at startup time and answer to them
+  catch_up: false
+  # Telegram account for forwarding copyright infringements from /copyright command
+  copyright_infringement_account:
+  # Telethon database for keeping cache
+  database:
+    session_id: '/usr/lib/nexus-bot/{{ ENV_TYPE }}/session.db'
+  # Enabled handlers
+  handlers:
+    - nexus.bot.handlers.admin.AdminHandler
+    - nexus.bot.handlers.ban.BanHandler
+    - nexus.bot.handlers.ban.BanlistHandler
+    - nexus.bot.handlers.ban.UnbanHandler
+    - nexus.bot.handlers.contact.ContactHandler
+    - nexus.bot.handlers.copyright.CopyrightHandler
+    - nexus.bot.handlers.close.CloseHandler
+    - nexus.bot.handlers.donate.DonateHandler
+    - nexus.bot.handlers.download.DownloadHandler
+    - nexus.bot.handlers.emoji.EmojiHandler
+    - nexus.bot.handlers.help.HelpHandler
+    - nexus.bot.handlers.referencing_to.ReferencingToHandler
+    - nexus.bot.handlers.referencing_to.ReferencingToPagingHandler
+    - nexus.bot.handlers.roll.RollHandler
+    - nexus.bot.handlers.settings.SettingsButtonsHandler
+    - nexus.bot.handlers.settings.SettingsHandler
+    - nexus.bot.handlers.shortlink.ShortlinkHandler
+    - nexus.bot.handlers.submit.SubmitHandler
+    - nexus.bot.handlers.start.StartHandler
+    - nexus.bot.handlers.stop.StopHandler
+    - nexus.bot.handlers.view.ViewHandler
+    - nexus.bot.handlers.vote.VoteHandler
+    - nexus.bot.handlers.noop.NoopHandler
+    - nexus.bot.handlers.search.SearchHandler
+    - nexus.bot.handlers.search.SearchEditHandler
+    - nexus.bot.handlers.search.SearchPagingHandler
+  # Channel that will be shown in /help, /donate, /contact and in promotions
+  related_channel: '@nexus_search'

@@ -12,7 +12,6 @@ message ChatData {
     int32 ban_until = 6;
     string ban_message = 7;
     bool is_admin = 8;
-    string tzinfo = 9;
     bool is_subscribed = 10;
     int64 created_at = 11;
 }
@@ -56,9 +55,6 @@ message UpdateChatRequest {
     }
     oneof is_admin_oneof {
         bool is_admin = 7;
-    }
-    oneof last_location_oneof {
-        idm.api2.proto.Location last_location = 8;
     }
 }
 
