@@ -1,19 +1,27 @@
+import asyncio
 import hashlib
-import random
+import socket
+from contextlib import asynccontextmanager
 from typing import (
     AsyncIterable,
+    Callable,
     Optional,
 )
 
 import aiohttp
 import aiohttp.client_exceptions
+from aiohttp.client_reqrep import ClientRequest
 from aiohttp_socks import (
+    ProxyConnectionError,
     ProxyConnector,
     ProxyError,
 )
 from aiokit import AioThing
+from izihawa_utils.importlib import class_fullname
+from library.logging import error_log
 from nexus.pylon.exceptions import (
     BadResponseError,
+    DownloadError,
     IncorrectMD5Error,
     NotFoundError,
 )
@@ -30,19 +38,32 @@ from tenacity import (
 DEFAULT_USER_AGENT = 'PylonBot/1.0 (Linux x86_64) PylonBot/1.0.0'
 
 
+class KeepAliveClientRequest(ClientRequest):
+    async def send(self, conn):
+        sock = conn.protocol.transport.get_extra_info("socket")
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
+        sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPIDLE, 60)
+        sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPINTVL, 2)
+        sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPCNT, 5)
+
+        return await super().send(conn)
+
+
 class PreparedRequest:
     def __init__(
         self,
         method: str,
         url: str,
-        headers: dict = None,
-        params: dict = None,
-        cookies: dict = None,
+        headers: Optional[dict] = None,
+        params: Optional[dict] = None,
+        cookies: Optional[dict] = None,
         ssl: bool = True,
+        timeout: Optional[float] = None
     ):
         self.method = method
         self.url = url
         self.headers = {
+            'Connection': 'keep-alive',
             'User-Agent': DEFAULT_USER_AGENT,
         }
         if headers:
@@ -50,12 +71,41 @@ class PreparedRequest:
         self.params = params
         self.cookies = cookies
         self.ssl = ssl
+        self.timeout = timeout
 
     def __repr__(self):
         return f'{self.method} {self.url} {self.headers} {self.params}'
 
     def __str__(self):
         return repr(self)
+
+    @asynccontextmanager
+    async def execute_with(self, session):
+        async with session.request(
+            method=self.method,
+            url=self.url,
+            timeout=self.timeout,
+            headers=self.headers,
+            cookies=self.cookies,
+            params=self.params,
+            ssl=self.ssl,
+        ) as resp:
+            try:
+                yield resp
+            except BadResponseError as e:
+                e.add('url', self.url)
+                raise e
+            except (
+                aiohttp.client_exceptions.ClientConnectionError,
+                aiohttp.client_exceptions.ClientPayloadError,
+                aiohttp.client_exceptions.ClientResponseError,
+                aiohttp.client_exceptions.TooManyRedirects,
+                asyncio.TimeoutError,
+                ProxyConnectionError,
+                ProxyTimeoutError,
+                ProxyError,
+            ) as e:
+                raise DownloadError(nested_error=repr(e), nested_error_cls=class_fullname(e))
 
 
 class BaseValidator:
@@ -123,12 +173,12 @@ class BaseSource(AioThing):
         return aiohttp.TCPConnector(verify_ssl=self.ssl)
 
     def get_session(self):
-        return aiohttp.ClientSession(connector=self.get_proxy())
+        return aiohttp.ClientSession(request_class=KeepAliveClientRequest, connector=self.get_proxy())
 
     def get_resolve_session(self):
-        return aiohttp.ClientSession(connector=self.get_resolve_proxy())
+        return aiohttp.ClientSession(request_class=KeepAliveClientRequest, connector=self.get_resolve_proxy())
 
-    def resolve(self) -> AsyncIterable[PreparedRequest]:
+    async def resolve(self, error_log_func: Callable = error_log) -> AsyncIterable[PreparedRequest]:
         raise NotImplementedError("`resolve` for BaseSource is not implemented")
 
     def get_validator(self):
@@ -139,19 +189,11 @@ class BaseSource(AioThing):
         stop=stop_after_attempt(3),
         retry=retry_if_exception_type((ProxyError, aiohttp.client_exceptions.ClientPayloadError, ProxyTimeoutError)),
     )
-    async def execute_prepared_request(self, prepared_request: PreparedRequest):
+    async def execute_prepared_file_request(self, prepared_file_request: PreparedRequest):
         async with self.get_session() as session:
-            async with session.request(
-                method=prepared_request.method,
-                url=prepared_request.url,
-                timeout=self.timeout,
-                headers=prepared_request.headers,
-                cookies=prepared_request.cookies,
-                params=prepared_request.params,
-                ssl=prepared_request.ssl,
-            ) as resp:
+            async with prepared_file_request.execute_with(session=session) as resp:
                 if resp.status == 404:
-                    raise NotFoundError(url=prepared_request.url)
+                    raise NotFoundError(url=prepared_file_request.url)
                 elif (
                     resp.status != 200
                     or (
@@ -160,24 +202,17 @@ class BaseSource(AioThing):
                     )
                 ):
                     raise BadResponseError(
-                        request_headers=prepared_request.headers,
-                        url=prepared_request.url,
+                        request_headers=prepared_file_request.headers,
+                        url=prepared_file_request.url,
                         status=resp.status,
                         headers=str(resp.headers),
                     )
                 file_validator = self.get_validator()
-                # Randomness is required due to annoying bug of when separators
-                # (\r\n) are splitted to different chunks
-                # https://github.com/aio-libs/aiohttp/issues/4677
-                yield FileResponsePb(status=FileResponsePb.Status.BEGIN_TRANSMISSION, source=prepared_request.url)
-                async for content in resp.content.iter_chunked(1024 * 100 + random.randint(-1024, 1024)):
+                yield FileResponsePb(status=FileResponsePb.Status.BEGIN_TRANSMISSION, source=prepared_file_request.url)
+                async for content, _ in resp.content.iter_chunks():
                     file_validator.update(content)
-                    yield FileResponsePb(chunk=ChunkPb(content=content), source=prepared_request.url)
-                try:
-                    file_validator.validate()
-                except BadResponseError as e:
-                    e.add('url', prepared_request.url)
-                    raise e
+                    yield FileResponsePb(chunk=ChunkPb(content=content), source=prepared_file_request.url)
+                file_validator.validate()
 
 
 class Md5Source(BaseSource):

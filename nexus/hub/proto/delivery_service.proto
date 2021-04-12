@@ -2,11 +2,11 @@ syntax = "proto3";
 package nexus.hub.proto;
 
 import "nexus/models/proto/typed_document.proto";
-import "idm/api2/proto/chats_service.proto";
+import "idm/api/proto/chat_manager_service.proto";
 
 message StartDeliveryRequest {
   nexus.models.proto.TypedDocument typed_document = 1;
-  idm.api2.proto.ChatData chat = 2;
+  idm.api.proto.Chat chat = 2;
 }
 
 message StartDeliveryResponse {

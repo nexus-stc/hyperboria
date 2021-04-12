@@ -9,7 +9,7 @@ proto_library(
         "*.proto",
     ]),
     deps = [
-        "//idm/api2/proto:idm_proto",
+        "//idm/api/proto:idm_proto",
         "//nexus/models/proto:models_proto",
         "@com_google_protobuf//:wrappers_proto",
     ],

@@ -136,7 +136,7 @@ class RequestContext:
         self.request_id = request_id or RequestContext.generate_request_id(request_id_length)
         self.default_fields = {
             'bot_name': self.bot_name,
-            'chat_id': self.chat.id,
+            'chat_id': self.chat.chat_id,
             'request_id': self.request_id,
         }
 

@@ -4,13 +4,13 @@ from grpc.experimental.aio import (
     AioRpcError,
     insecure_channel,
 )
-from idm.api2.proto.chats_service_pb2 import (
+from idm.api.proto.chat_manager_service_pb2 import (
     CreateChatRequest,
     GetChatRequest,
     ListChatsRequest,
     UpdateChatRequest,
 )
-from idm.api2.proto.chats_service_pb2_grpc import ChatsStub
+from idm.api.proto.chat_manager_service_pb2_grpc import ChatManagerStub
 from lru import LRU
 from tenacity import (
     retry,
@@ -20,7 +20,7 @@ from tenacity import (
 )
 
 
-class IdmApi2GrpcClient(AioThing):
+class IdmApiGrpcClient(AioThing):
     def __init__(
         self,
         base_url,
@@ -33,7 +33,7 @@ class IdmApi2GrpcClient(AioThing):
             ('grpc.min_reconnect_backoff_ms', 1000),
             ('grpc.max_reconnect_backoff_ms', 2000),
         ])
-        self.chats_stub = ChatsStub(self.channel)
+        self.chat_manager_stub = ChatManagerStub(self.channel)
         self.cache = LRU(4096)
 
     async def start(self):
@@ -49,7 +49,7 @@ class IdmApi2GrpcClient(AioThing):
         language,
         request_id: str = None,
     ):
-        response = await self.chats_stub.create_chat(
+        response = await self.chat_manager_stub.create_chat(
             CreateChatRequest(
                 chat_id=chat_id,
                 username=username,
@@ -74,7 +74,7 @@ class IdmApi2GrpcClient(AioThing):
         chat_id,
         request_id: str = None,
     ):
-        response = await self.chats_stub.get_chat(
+        response = await self.chat_manager_stub.get_chat(
             GetChatRequest(chat_id=chat_id),
             metadata=(
                 ('request-id', request_id),
@@ -87,7 +87,7 @@ class IdmApi2GrpcClient(AioThing):
         request_id: str = None,
         banned_at_moment=None,
     ):
-        response = await self.chats_stub.list_chats(
+        response = await self.chat_manager_stub.list_chats(
             ListChatsRequest(banned_at_moment=banned_at_moment),
             metadata=(
                 ('request-id', request_id),
@@ -106,7 +106,7 @@ class IdmApi2GrpcClient(AioThing):
         ban_message=None,
         is_admin=None,
     ):
-        response = await self.chats_stub.update_chat(
+        response = await self.chat_manager_stub.update_chat(
             UpdateChatRequest(
                 chat_id=chat_id,
                 language=language,

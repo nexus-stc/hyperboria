@@ -70,7 +70,7 @@ class BaseHubService(BaseService):
             buttons=buttons,
             caption=f"{document_view.generate_body(language=request_context.chat.language, limit=512)}\n"
                     f"@{self.bot_external_name}",
-            entity=request_context.chat.id,
+            entity=request_context.chat.chat_id,
             file=file,
             progress_callback=progress_callback
         )

@@ -26,7 +26,7 @@ class VoteHandler(BaseCallbackQueryHandler):
             vote=VotePb(
                 document_id=document_id,
                 value=vote_value,
-                voter_id=request_context.chat.id,
+                voter_id=request_context.chat.chat_id,
             ),
         )
 
@@ -43,7 +43,7 @@ class VoteHandler(BaseCallbackQueryHandler):
         # ToDo: Generalize nexus.views.telegram.common.remove_button and use it here
         return await asyncio.gather(
             self.application.telegram_client.edit_message(
-                request_context.chat.id,
+                request_context.chat.chat_id,
                 message.id,
                 message.text,
                 buttons=None,

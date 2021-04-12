@@ -1,5 +1,5 @@
 from aiokit import AioRootThing
-from idm.api2.aioclient import IdmApi2GrpcClient
+from idm.api.aioclient import IdmApiGrpcClient
 from izihawa_utils.importlib import import_object
 from library.telegram.base import BaseTelegramClient
 from nexus.bot.promotioner import Promotioner
@@ -21,7 +21,7 @@ class TelegramApplication(AioRootThing):
         )
 
         self.hub_client = HubGrpcClient(base_url=self.config['hub']['url'])
-        self.idm_client = IdmApi2GrpcClient(base_url=self.config['idm']['url'])
+        self.idm_client = IdmApiGrpcClient(base_url=self.config['idm']['url'])
         self.meta_api_client = MetaApiGrpcClient(base_url=self.config['meta_api']['url'])
 
         self.promotioner = Promotioner(promotions=self.config['promotions'])

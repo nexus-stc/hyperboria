@@ -84,7 +84,7 @@ class ProgressBar:
         try:
             if not self.message:
                 self.message = await self.telegram_client.send_message(
-                    self.request_context.chat.id,
+                    self.request_context.chat.chat_id,
                     text,
                     buttons=[close_button()],
                 )

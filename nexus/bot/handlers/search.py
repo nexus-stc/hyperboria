@@ -52,7 +52,7 @@ class BaseSearchHandler(BaseHandler):
         except AioRpcError as e:
             actions = [
                 self.application.telegram_client.delete_messages(
-                    request_context.chat.id,
+                    request_context.chat.chat_id,
                     [message_id],
                 )
             ]
@@ -118,7 +118,7 @@ class BaseSearchHandler(BaseHandler):
             )
             return await asyncio.gather(
                 self.application.telegram_client.edit_message(
-                    request_context.chat.id,
+                    request_context.chat.chat_id,
                     message_id,
                     view,
                     buttons=buttons,
@@ -127,7 +127,7 @@ class BaseSearchHandler(BaseHandler):
 
         serp, buttons = await search_widget.render()
         return await self.application.telegram_client.edit_message(
-            request_context.chat.id,
+            request_context.chat.chat_id,
             message_id,
             serp,
             buttons=buttons,
@@ -147,7 +147,7 @@ class SearchHandler(BaseSearchHandler):
             'action': 'user_flood_ban',
             'mode': 'search',
             'ban_timeout_seconds': ban_timeout,
-            'chat_id': request_context.chat.id,
+            'chat_id': request_context.chat.chat_id,
         })
         ban_reason = t(
             'BAN_MESSAGE_TOO_MANY_REQUESTS',
@@ -162,10 +162,10 @@ class SearchHandler(BaseSearchHandler):
         ))
 
     async def handler(self, event: events.ChatAction, request_context: RequestContext):
-        ban_timeout = self.application.user_manager.check_search_ban_timeout(user_id=request_context.chat.id)
+        ban_timeout = self.application.user_manager.check_search_ban_timeout(user_id=request_context.chat.chat_id)
         if ban_timeout:
             return await self.ban_handler(event, request_context, ban_timeout)
-        self.application.user_manager.add_search_time(user_id=request_context.chat.id, search_time=time.time())
+        self.application.user_manager.add_search_time(user_id=request_context.chat.chat_id, search_time=time.time())
 
         search_prefix = event.pattern_match.group(1)
         query = event.pattern_match.group(2)
@@ -178,7 +178,7 @@ class SearchHandler(BaseSearchHandler):
         prefetch_message = await event.reply(
             t("SEARCHING", language=request_context.chat.language),
         )
-        self.application.user_manager.last_widget[request_context.chat.id] = prefetch_message.id
+        self.application.user_manager.last_widget[request_context.chat.chat_id] = prefetch_message.id
         try:
             await self.do_search(
                 event, request_context, prefetch_message,

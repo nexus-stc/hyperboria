@@ -1,6 +1,6 @@
 from typing import Optional
 
-from idm.api2.proto.chats_service_pb2 import ChatData as Chat
+from idm.api.proto.chat_manager_service_pb2 import Chat as ChatPb
 from nexus.bot.application import TelegramApplication
 from nexus.translations import t
 from telethon import Button
@@ -34,7 +34,7 @@ class SettingsWidget:
     def __init__(
         self,
         application: TelegramApplication,
-        chat: Chat,
+        chat: ChatPb,
         has_language_buttons: Optional[bool] = None,
         is_group_mode: bool = False,
         request_id: Optional[str] = None,
@@ -54,7 +54,7 @@ class SettingsWidget:
 
     async def _switch_language(self, target_language: str):
         self.chat = await self.application.idm_client.update_chat(
-            chat_id=self.chat.id,
+            chat_id=self.chat.chat_id,
             language=target_language,
             request_id=self.request_id,
         )
@@ -62,7 +62,7 @@ class SettingsWidget:
 
     async def _switch_system_messaging(self, is_system_messaging_enabled: str):
         self.chat = await self.application.idm_client.update_chat(
-            chat_id=self.chat.id,
+            chat_id=self.chat.chat_id,
             is_system_messaging_enabled=bool(int(is_system_messaging_enabled)),
             request_id=self.request_id,
         )
@@ -70,7 +70,7 @@ class SettingsWidget:
 
     async def _switch_discovery(self, is_discovery_enabled: str):
         self.chat = await self.application.idm_client.update_chat(
-            chat_id=self.chat.id,
+            chat_id=self.chat.chat_id,
             is_discovery_enabled=bool(int(is_discovery_enabled)),
             request_id=self.request_id,
         )

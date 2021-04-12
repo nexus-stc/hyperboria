@@ -1,0 +1,17 @@
+---
+application:
+  debug: true
+  service_name: idm-api
+database:
+  port: 5432
+grpc:
+  address: 0.0.0.0
+  port: 9090
+log_path: '/var/log/idm-api/{{ ENV_TYPE }}'
+telegram:
+  # Telegram App Hash from https://my.telegram.org/
+  app_hash: '{{ APP_HASH }}'
+  # Telegram App ID from https://my.telegram.org/
+  app_id: 00000
+  database:
+    session_id: '/usr/lib/idm-api/{{ ENV_TYPE }}/session.db'

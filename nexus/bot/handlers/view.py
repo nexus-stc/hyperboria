@@ -30,7 +30,7 @@ class ViewHandler(BaseHandler):
 
         request_context.add_default_fields(mode='view', session_id=session_id)
         request_context.statbox(action='view', query=str(document_id), position=position)
-        found_old_widget = old_message_id == self.application.user_manager.last_widget.get(request_context.chat.id)
+        found_old_widget = old_message_id == self.application.user_manager.last_widget.get(request_context.chat.chat_id)
 
         try:
             if found_old_widget:
@@ -41,11 +41,11 @@ class ViewHandler(BaseHandler):
                     functions.messages.GetMessagesRequest(id=[old_message_id])
                 )).messages[0]
                 prefetch_message = await self.application.telegram_client.send_message(
-                    request_context.chat.id,
+                    request_context.chat.chat_id,
                     t("SEARCHING", language=request_context.chat.language),
                     reply_to=old_message.reply_to_msg_id,
                 )
-                self.application.user_manager.last_widget[request_context.chat.id] = prefetch_message.id
+                self.application.user_manager.last_widget[request_context.chat.chat_id] = prefetch_message.id
                 message_id = prefetch_message.id
                 link_preview = True
 
@@ -81,7 +81,7 @@ class ViewHandler(BaseHandler):
             )
             actions = [
                 self.application.telegram_client.edit_message(
-                    request_context.chat.id,
+                    request_context.chat.chat_id,
                     message_id,
                     view,
                     buttons=buttons,
@@ -92,7 +92,7 @@ class ViewHandler(BaseHandler):
             if not found_old_widget:
                 actions.append(
                     self.application.telegram_client.delete_messages(
-                        request_context.chat.id,
+                        request_context.chat.chat_id,
                         [old_message_id],
                     )
                 )

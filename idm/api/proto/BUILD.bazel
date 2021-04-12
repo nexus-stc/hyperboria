@@ -6,8 +6,7 @@ package(default_visibility = ["//visibility:public"])
 proto_library(
     name = "idm_proto",
     srcs = [
-        "chats_service.proto",
-        "location.proto",
+        "chat_manager_service.proto",
     ],
     deps = [
         "@com_google_protobuf//:wrappers_proto",

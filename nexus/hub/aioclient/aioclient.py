@@ -2,7 +2,7 @@ from typing import Optional
 
 from aiokit import AioThing
 from grpc.experimental.aio import insecure_channel
-from idm.api2.proto.chats_service_pb2 import ChatData as ChatDataPb
+from idm.api.proto.chat_manager_service_pb2 import Chat as ChatPb
 from nexus.hub.proto.delivery_service_pb2 import \
     StartDeliveryRequest as StartDeliveryRequestPb
 from nexus.hub.proto.delivery_service_pb2 import \
@@ -42,7 +42,7 @@ class HubGrpcClient(AioThing):
     async def start_delivery(
         self,
         typed_document_pb: TypedDocumentPb,
-        chat: ChatDataPb,
+        chat: ChatPb,
         request_id: Optional[str],
         session_id: Optional[str],
     ) -> StartDeliveryResponsePb:
@@ -58,7 +58,7 @@ class HubGrpcClient(AioThing):
         self,
         telegram_document: bytes,
         telegram_file_id: str,
-        chat: ChatDataPb,
+        chat: ChatPb,
         request_id: Optional[str] = None,
         session_id: Optional[str] = None,
     ) -> SubmitResponsePb:

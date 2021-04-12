@@ -11,14 +11,8 @@ def images_install():
 
     container_pull(
         name = "ubuntu",
-        digest = "sha256:5403064f94b617f7975a19ba4d1a1299fd584397f6ee4393d0e16744ed11aab1",
+        digest = "sha256:45ff0162921e61c004010a67db1bee7d039a677bed0cb294e61f2b47346d42b3",
         registry = "index.docker.io",
         repository = "library/ubuntu",
-        tag = "20.04",
-    )
-    container_pull(
-        name = "jupyter",
-        registry = "index.docker.io",
-        repository = "jupyter/tensorflow-notebook",
-        tag = "latest",
+        tag = "20.10",
     )

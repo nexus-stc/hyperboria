@@ -6,7 +6,10 @@ from typing import (
 )
 from urllib.parse import quote
 
-from izihawa_utils.common import filter_none
+from izihawa_utils.common import (
+    filter_none,
+    is_essential,
+)
 from nexus.models.proto.scitech_pb2 import Scitech as ScitechPb
 from nexus.nlptools.utils import (
     cast_string_to_single_string,
@@ -48,7 +51,7 @@ class ScitechView(BaseView, AuthorMixin, DoiMixin, FileMixin, IssuedAtMixin):
 
         locator = self.get_formatted_locator()
 
-        caption = '\n'.join(filter_none([head, doi, locator]))
+        caption = '\n'.join(filter_none([head, doi, locator], predicate=is_essential))
         if limit and len(caption) > limit:
             shorten_title = title[:limit]
             shorten_title = shorten_title[:max(32, shorten_title.rfind(' '))]
