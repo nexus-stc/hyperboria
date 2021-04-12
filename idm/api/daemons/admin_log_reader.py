@@ -9,8 +9,6 @@ from telethon.tl.types import ChannelParticipantsSearch
 
 
 class AdminLogReader(AioThing):
-    channel_name = '@nexus_search'
-
     def __init__(self, telegram_config):
         super().__init__()
         self.subscriptors = set()
@@ -21,6 +19,7 @@ class AdminLogReader(AioThing):
             database=telegram_config['database'],
             flood_sleep_threshold=25,
         )
+        self.channel_name = telegram_config['related_channel']
         self.last_max_id = 0
 
     def statbox(self, **kwargs):

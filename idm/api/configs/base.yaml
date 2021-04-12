@@ -15,3 +15,4 @@ telegram:
   app_id: 00000
   database:
     session_id: '/usr/lib/idm-api/{{ ENV_TYPE }}/session.db'
+  related_channel: '@nexus_search'
