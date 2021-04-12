@@ -101,13 +101,13 @@ class SubmitterService(SubmitterServicer, BaseHubService):
         if document.size > 20 * 1024 * 1024:
             request_context.error_log(FileTooBigError(size=document.size))
             await self.telegram_client.send_message(
-                request_context.chat.id,
+                request_context.chat.chat_id,
                 t('FILE_TOO_BIG_ERROR', language=request_context.chat.language),
                 buttons=[close_button()],
             )
             return SubmitResponsePb()
         processing_message = await self.telegram_client.send_message(
-            request_context.chat.id,
+            request_context.chat.chat_id,
             t("PROCESSING_PAPER", language=request_context.chat.language).format(
                 filename=document.attributes[0].file_name,
             ),
@@ -121,7 +121,7 @@ class SubmitterService(SubmitterServicer, BaseHubService):
             except BadRequestError as e:
                 request_context.error_log(e)
                 await self.telegram_client.send_message(
-                    request_context.chat.id,
+                    request_context.chat.chat_id,
                     t('UNPARSABLE_DOCUMENT_ERROR', language=request_context.chat.language),
                     buttons=[close_button()],
                 )
@@ -130,7 +130,7 @@ class SubmitterService(SubmitterServicer, BaseHubService):
             if not processed_document.get('doi'):
                 request_context.error_log(UnparsableDoiError())
                 await self.telegram_client.send_message(
-                    request_context.chat.id,
+                    request_context.chat.chat_id,
                     t('UNPARSABLE_DOI_ERROR', language=request_context.chat.language),
                     buttons=[close_button()],
                 )
@@ -143,14 +143,14 @@ class SubmitterService(SubmitterServicer, BaseHubService):
                 page_size=1,
                 request_id=request_context.request_id,
                 session_id=session_id,
-                user_id=request_context.chat.id,
+                user_id=request_context.chat.chat_id,
                 language=request_context.chat.language,
             )
 
             if len(search_response_pb.scored_documents) == 0:
                 request_context.error_log(UnavailableMetadataError(doi=processed_document['doi']))
                 await self.telegram_client.send_message(
-                    request_context.chat.id,
+                    request_context.chat.chat_id,
                     t(
                         'UNAVAILABLE_METADATA_ERROR',
                         language=request_context.chat.language
@@ -175,7 +175,7 @@ class SubmitterService(SubmitterServicer, BaseHubService):
             update_document=UpdateDocumentPb(
                 typed_document=TypedDocumentPb(sharience=ShariencePb(
                     parent_id=document_view.id,
-                    uploader_id=request_context.chat.id,
+                    uploader_id=request_context.chat.chat_id,
                     updated_at=int(time.time()),
                     md5=hashlib.md5(file).hexdigest(),
                     filesize=document.size,

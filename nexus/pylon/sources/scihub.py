@@ -1,5 +1,8 @@
 import re
-from typing import AsyncIterable
+from typing import (
+    AsyncIterable,
+    Callable,
+)
 
 from library.logging import error_log
 from nexus.pylon.exceptions import RegexNotFoundError
@@ -19,16 +22,17 @@ class SciHubSource(DoiSource):
     base_url = None
     ssl = False
 
-    async def resolve(self, timeout=None) -> AsyncIterable[PreparedRequest]:
+    async def resolve(self, error_log_func: Callable = error_log) -> AsyncIterable[PreparedRequest]:
         async with self.get_resolve_session() as session:
             url = f'{self.base_url}/{self.doi}'
-            async with session.get(
-                url,
-                timeout=timeout or self.timeout
-            ) as resp:
+            async with PreparedRequest(
+                method='get',
+                url=url,
+                timeout=self.resolve_timeout
+            ).execute_with(session=session) as resp:
                 # Sometimes sci-hub returns file
                 if resp.headers.get('Content-Type') == 'application/pdf':
-                    yield PreparedRequest(method='get', url=url)
+                    yield PreparedRequest(method='get', url=url, timeout=self.timeout)
                 downloaded_page_bytes = await resp.read()
                 downloaded_page = downloaded_page_bytes.decode('utf-8', 'backslashreplace')
             match = re.search('(?:https?:)?//.*\\?download=true', downloaded_page, re.IGNORECASE)
@@ -36,9 +40,9 @@ class SciHubSource(DoiSource):
                 url = match.group()
                 if url.startswith('//'):
                     url = 'http:' + url
-                yield PreparedRequest(method='get', url=url)
+                yield PreparedRequest(method='get', url=url, timeout=self.timeout)
             else:
-                error_log(RegexNotFoundError(url=url))
+                error_log_func(RegexNotFoundError(url=url))
 
 
 class SciHubDoSource(SciHubSource):

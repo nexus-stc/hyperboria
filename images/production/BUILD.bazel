@@ -13,7 +13,7 @@ download_pkgs(
         "libev4",
         "libgomp1",
         "libgoogle-perftools-dev",
-        "libprotobuf17",
+        "libprotobuf23",
         "libssl1.1",
     ],
 )

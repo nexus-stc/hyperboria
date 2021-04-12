@@ -31,7 +31,7 @@ def error_log(e, level=logging.ERROR, **fields):
         e = e.as_internal_dict()
         e.update(fields)
     elif fields:
-        e = {'error': str(e), **fields}
+        e = {'error': repr(e), **fields}
     logging.getLogger('error').log(
         msg=e,
         level=level

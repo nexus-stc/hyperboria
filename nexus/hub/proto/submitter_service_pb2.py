@@ -12,8 +12,9 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
-from idm.api2.proto import \
-    chats_service_pb2 as idm_dot_api2_dot_proto_dot_chats__service__pb2
+from idm.api.proto import \
+    chat_manager_service_pb2 as \
+    idm_dot_api_dot_proto_dot_chat__manager__service__pb2
 
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='nexus/hub/proto/submitter_service.proto',
@@ -21,9 +22,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\'nexus/hub/proto/submitter_service.proto\x12\x0fnexus.hub.proto\x1a\"idm/api2/proto/chats_service.proto\"R\n\rSubmitRequest\x12\x19\n\x11telegram_document\x18\x01 \x01(\x0c\x12&\n\x04\x63hat\x18\x02 \x01(\x0b\x32\x18.idm.api2.proto.ChatData\"\x10\n\x0eSubmitResponse2X\n\tSubmitter\x12K\n\x06submit\x12\x1e.nexus.hub.proto.SubmitRequest\x1a\x1f.nexus.hub.proto.SubmitResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\'nexus/hub/proto/submitter_service.proto\x12\x0fnexus.hub.proto\x1a(idm/api/proto/chat_manager_service.proto\"g\n\rSubmitRequest\x12\x19\n\x11telegram_document\x18\x01 \x01(\x0c\x12\x18\n\x10telegram_file_id\x18\x02 \x01(\t\x12!\n\x04\x63hat\x18\x03 \x01(\x0b\x32\x13.idm.api.proto.Chat\"\x10\n\x0eSubmitResponse2X\n\tSubmitter\x12K\n\x06submit\x12\x1e.nexus.hub.proto.SubmitRequest\x1a\x1f.nexus.hub.proto.SubmitResponse\"\x00\x62\x06proto3'
   ,
-  dependencies=[idm_dot_api2_dot_proto_dot_chats__service__pb2.DESCRIPTOR,])
+  dependencies=[idm_dot_api_dot_proto_dot_chat__manager__service__pb2.DESCRIPTOR,])
 
 
 
@@ -44,8 +45,15 @@ _SUBMITREQUEST = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='chat', full_name='nexus.hub.proto.SubmitRequest.chat', index=1,
-      number=2, type=11, cpp_type=10, label=1,
+      name='telegram_file_id', full_name='nexus.hub.proto.SubmitRequest.telegram_file_id', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='chat', full_name='nexus.hub.proto.SubmitRequest.chat', index=2,
+      number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -62,8 +70,8 @@ _SUBMITREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=96,
-  serialized_end=178,
+  serialized_start=102,
+  serialized_end=205,
 )
 
 
@@ -87,11 +95,11 @@ _SUBMITRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=180,
-  serialized_end=196,
+  serialized_start=207,
+  serialized_end=223,
 )
 
-_SUBMITREQUEST.fields_by_name['chat'].message_type = idm_dot_api2_dot_proto_dot_chats__service__pb2._CHATDATA
+_SUBMITREQUEST.fields_by_name['chat'].message_type = idm_dot_api_dot_proto_dot_chat__manager__service__pb2._CHAT
 DESCRIPTOR.message_types_by_name['SubmitRequest'] = _SUBMITREQUEST
 DESCRIPTOR.message_types_by_name['SubmitResponse'] = _SUBMITRESPONSE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
@@ -119,8 +127,8 @@ _SUBMITTER = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=198,
-  serialized_end=286,
+  serialized_start=225,
+  serialized_end=313,
   methods=[
   _descriptor.MethodDescriptor(
     name='submit',

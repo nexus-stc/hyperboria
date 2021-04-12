@@ -9,7 +9,7 @@ py_library(
         requirement("cachetools"),
         requirement("lru-dict"),
         requirement("tenacity"),
-        "//idm/api2/proto:idm_grpc_py",
-        "//idm/api2/proto:idm_proto_py",
+        "//idm/api/proto:idm_grpc_py",
+        "//idm/api/proto:idm_proto_py",
     ],
 )

@@ -1,6 +1,6 @@
 from typing import Optional
 
-from idm.api2.proto.chats_service_pb2 import ChatData as Chat
+from idm.api.proto.chat_manager_service_pb2 import Chat as ChatPb
 from nexus.bot.application import TelegramApplication
 from nexus.meta_api.proto.meta_search_service_pb2 import \
     ScoredDocument as ScoredDocumentPb
@@ -21,7 +21,7 @@ class SearchWidget:
     def __init__(
         self,
         application: TelegramApplication,
-        chat: Chat,
+        chat: ChatPb,
         session_id: str,
         message_id: int,
         request_id: str,
@@ -41,7 +41,7 @@ class SearchWidget:
     @staticmethod
     async def create(
         application: TelegramApplication,
-        chat: Chat,
+        chat: ChatPb,
         session_id: str,
         message_id: int,
         request_id: str,
@@ -70,7 +70,7 @@ class SearchWidget:
             page_size=self.application.config['application']['page_size'],
             request_id=self.request_id,
             session_id=self.session_id,
-            user_id=self.chat.id,
+            user_id=self.chat.chat_id,
             language=self.chat.language,
         )
 

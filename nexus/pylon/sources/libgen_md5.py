@@ -1,5 +1,10 @@
 import re
-from typing import AsyncIterable
+from typing import (
+    AsyncIterable,
+    Callable,
+)
+
+from library.logging import error_log
 
 from .base import (
     Md5Source,
@@ -12,10 +17,11 @@ class LibgenMd5Source(Md5Source):
     resolve_timeout = 10
 
     async def resolve_lg(self, session, url):
-        async with session.get(
-            url,
+        async with PreparedRequest(
+            method='get',
+            url=url,
             timeout=self.resolve_timeout
-        ) as resp:
+        ).execute_with(session=session) as resp:
             downloaded_page_fiction = await resp.text()
         match = re.search(
             'https?://.*/get\\.php\\?md5=.*&key=[A-Za-z0-9]+',
@@ -23,9 +29,9 @@ class LibgenMd5Source(Md5Source):
             re.IGNORECASE,
         )
         if match:
-            return PreparedRequest(method='get', url=match.group())
+            return PreparedRequest(method='get', url=match.group(), timeout=self.timeout)
 
-    async def resolve(self) -> AsyncIterable[PreparedRequest]:
+    async def resolve(self, error_log_func: Callable = error_log) -> AsyncIterable[PreparedRequest]:
         async with self.get_resolve_session() as session:
             url = f'{self.base_url}/ads.php?md5={self.md5}'
             result = await self.resolve_lg(session, url)

@@ -62,7 +62,7 @@ idna==2.10
 isort==5.8.0
 itsdangerous==1.1.0
 izihawa_types==0.1.0
-izihawa_utils==0.3.0
+izihawa_utils==0.3.1
 Jinja2==2.11.3
 jupyter==1.0.0
 kazoo==2.8.0

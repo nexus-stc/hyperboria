@@ -1,0 +1,50 @@
+syntax = "proto3";
+package idm.api.proto;
+
+message Chat {
+    int64 chat_id = 1;
+    string username = 2;
+    string language = 3;
+    bool is_system_messaging_enabled = 4;
+    bool is_discovery_enabled = 5;
+    int32 ban_until = 6;
+    string ban_message = 7;
+    bool is_admin = 8;
+    bool is_subscribed = 9;
+    int64 created_at = 10;
+}
+
+message Chats {
+    repeated Chat chats = 1;
+}
+
+message CreateChatRequest {
+    int64 chat_id = 1;
+    string username = 2;
+    string language = 3;
+}
+
+message GetChatRequest {
+    int64 chat_id = 1;
+}
+
+message ListChatsRequest {
+    optional int32 banned_at_moment = 1;
+}
+
+message UpdateChatRequest {
+    int64 chat_id = 1;
+    optional string language = 2;
+    optional bool is_system_messaging_enabled = 3;
+    optional bool is_discovery_enabled = 4;
+    optional int32 ban_until = 5;
+    optional string ban_message = 6;
+    optional bool is_admin = 7;
+}
+
+service ChatManager {
+    rpc create_chat(CreateChatRequest) returns (Chat) {};
+    rpc get_chat(GetChatRequest) returns (Chat) {};
+    rpc list_chats(ListChatsRequest) returns (Chats) {};
+    rpc update_chat(UpdateChatRequest) returns (Chat) {};
+}

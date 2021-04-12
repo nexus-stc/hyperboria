@@ -41,7 +41,7 @@ class ReferencingToHandler(BaseCallbackQueryHandler):
 
         serp, buttons = await document_list_widget.render()
         return await self.application.telegram_client.edit_message(
-            request_context.chat.id,
+            request_context.chat.chat_id,
             message_id,
             serp,
             buttons=buttons,

@@ -6,44 +6,48 @@ load("@pip_modules//:requirements.bzl", "requirement")
 alias(
     name = "binary",
     actual = ":image.binary",
-    visibility = ["//visibility:public"],
 )
 
 py3_image(
     name = "image",
-    srcs = glob(["**/*.py"]),
+    srcs = glob(
+        [
+            "*.py",
+            "configs/**/*.py",
+            "daemons/**/*.py",
+            "models/**",
+            "proto/**",
+            "services/**",
+        ],
+        exclude = [
+            "**/__pycache__/**",
+            "**/*.pyc",
+            "**/README",
+            "**/*.mako",
+            "proto/**/*.py",
+        ],
+    ),
     base = "//images/production:base-python-image",
     data = [
         "configs/base.yaml",
         "configs/logging.yaml",
-        "configs/promotions.yaml",
+    ],
+    layers = [
+        requirement("grpcio"),
+        requirement("pypika"),
+        requirement("uvloop"),
+        "//idm/api/proto:idm_grpc_py",
+        "//idm/api/proto:idm_proto_py",
+        "//library/aiogrpctools",
+        requirement("aiokit"),
+        "//library/aiopostgres",
+        "//library/configurator",
+        "//library/telegram",
+        requirement("izihawa_utils"),
     ],
     main = "main.py",
     srcs_version = "PY3ONLY",
     visibility = ["//visibility:public"],
-    deps = [
-        requirement("aiodns"),
-        requirement("aiohttp"),
-        requirement("aiohttp_socks"),
-        requirement("psycopg2-binary"),
-        requirement("pytimeparse"),
-        requirement("python_socks"),
-        requirement("tenacity"),
-        requirement("uvloop"),
-        "//idm/api/aioclient",
-        requirement("aiobaseclient"),
-        requirement("aiocrossref"),
-        requirement("aiokit"),
-        "//library/configurator",
-        "//library/logging",
-        "//library/telegram",
-        "//nexus/hub/aioclient",
-        "//nexus/meta_api/aioclient",
-        "//nexus/models/proto:models_proto_py",
-        "//nexus/nlptools",
-        "//nexus/views/telegram",
-        requirement("izihawa_utils"),
-    ],
 )
 
 container_push(
@@ -51,7 +55,7 @@ container_push(
     format = "Docker",
     image = ":image",
     registry = "registry.example.com",
-    repository = "nexus-bot",
+    repository = "idm-api",
     tag = "testing",
 )
 
@@ -60,6 +64,7 @@ container_push(
     format = "Docker",
     image = ":image",
     registry = "registry.example.com",
-    repository = "nexus-bot",
+    repository = "idm-api",
     tag = "latest",
 )
+

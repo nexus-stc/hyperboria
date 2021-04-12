@@ -6,7 +6,7 @@ from typing import Union
 
 from grpc import StatusCode
 from grpc.experimental.aio import AioRpcError
-from idm.api2.proto.chats_service_pb2 import ChatData as Chat
+from idm.api.proto.chat_manager_service_pb2 import Chat as ChatPb
 from izihawa_utils.exceptions import BaseError
 from izihawa_utils.random import random_string
 from library.logging import error_log
@@ -40,12 +40,12 @@ def get_language(event: events.ChatAction, chat):
     return chat.lang_code
 
 
-def is_banned(chat: Chat) -> bool:
+def is_banned(chat: ChatPb) -> bool:
     return chat.ban_until is not None and datetime.utcnow().timestamp() < chat.ban_until
 
 
-def is_subscribed(chat: Chat) -> bool:
-    return chat.is_subscribed or chat.id < 0 or chat.created_at > time.time() - 10 * 60
+def is_subscribed(chat: ChatPb) -> bool:
+    return chat.is_subscribed or chat.chat_id < 0 or chat.created_at > time.time() - 10 * 60
 
 
 class ReadOnlyModeError(BaseError):
@@ -97,7 +97,7 @@ class BaseHandler(ABC):
             session_id=session_id,
             position=position,
             request_id=request_context.request_id,
-            user_id=request_context.chat.id,
+            user_id=request_context.chat.chat_id,
         )
 
     async def resolve_scimag(
@@ -136,7 +136,7 @@ class BaseHandler(ABC):
             page_size=16,
             request_id=request_context.request_id,
             session_id=session_id,
-            user_id=request_context.chat.id,
+            user_id=request_context.chat.chat_id,
         )
         duplicates = [
             scored_document.typed_document.scitech
@@ -209,7 +209,7 @@ class BaseHandler(ABC):
             )
             return chat
 
-    async def _check_ban(self, event: events.ChatAction, request_context: RequestContext, chat: Chat):
+    async def _check_ban(self, event: events.ChatAction, request_context: RequestContext, chat: ChatPb):
         if is_banned(chat):
             if chat.ban_message is not None:
                 async with safe_execution(
@@ -245,7 +245,7 @@ class BaseHandler(ABC):
             )
             raise events.StopPropagation()
 
-    async def _check_subscription(self, event: events.ChatAction, request_context: RequestContext, chat: Chat):
+    async def _check_subscription(self, event: events.ChatAction, request_context: RequestContext, chat: ChatPb):
         if (
             self.application.config['application']['is_subscription_required']
             and self.is_subscription_required_for_handler
@@ -261,7 +261,7 @@ class BaseHandler(ABC):
                 ).format(related_channel=self.application.config['telegram']['related_channel']))
             raise events.StopPropagation()
 
-    def _has_access(self, chat: Chat) -> bool:
+    def _has_access(self, chat: ChatPb) -> bool:
         return True
 
     async def _process_chat(self, event: events.ChatAction, request_id: str):
@@ -271,8 +271,8 @@ class BaseHandler(ABC):
             error_log(e)
             event_chat = await event.get_chat()
             username = get_username(event, event_chat)
-            chat = Chat(
-                id=event.chat_id,
+            chat = ChatPb(
+                chat_id=event.chat_id,
                 is_system_messaging_enabled=True,
                 is_discovery_enabled=True,
                 language='en',
@@ -307,7 +307,7 @@ class BaseHandler(ABC):
         await self._check_ban(event=event, request_context=request_context, chat=chat)
 
         if self.should_reset_last_widget:
-            self.reset_last_widget(request_context.chat.id)
+            self.reset_last_widget(request_context.chat.chat_id)
 
         async with safe_execution(
             request_context=request_context,

@@ -12,8 +12,9 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
-from idm.api2.proto import \
-    chats_service_pb2 as idm_dot_api2_dot_proto_dot_chats__service__pb2
+from idm.api.proto import \
+    chat_manager_service_pb2 as \
+    idm_dot_api_dot_proto_dot_chat__manager__service__pb2
 from nexus.models.proto import \
     typed_document_pb2 as nexus_dot_models_dot_proto_dot_typed__document__pb2
 
@@ -23,9 +24,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n&nexus/hub/proto/delivery_service.proto\x12\x0fnexus.hub.proto\x1a\'nexus/models/proto/typed_document.proto\x1a\"idm/api2/proto/chats_service.proto\"y\n\x14StartDeliveryRequest\x12\x39\n\x0etyped_document\x18\x01 \x01(\x0b\x32!.nexus.models.proto.TypedDocument\x12&\n\x04\x63hat\x18\x02 \x01(\x0b\x32\x18.idm.api2.proto.ChatData\"\x99\x01\n\x15StartDeliveryResponse\x12=\n\x06status\x18\x01 \x01(\x0e\x32-.nexus.hub.proto.StartDeliveryResponse.Status\"A\n\x06Status\x12\x06\n\x02OK\x10\x00\x12\x16\n\x12TOO_MANY_DOWNLOADS\x10\x01\x12\x17\n\x13\x41LREADY_DOWNLOADING\x10\x03\x32m\n\x08\x44\x65livery\x12\x61\n\x0estart_delivery\x12%.nexus.hub.proto.StartDeliveryRequest\x1a&.nexus.hub.proto.StartDeliveryResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n&nexus/hub/proto/delivery_service.proto\x12\x0fnexus.hub.proto\x1a\'nexus/models/proto/typed_document.proto\x1a(idm/api/proto/chat_manager_service.proto\"t\n\x14StartDeliveryRequest\x12\x39\n\x0etyped_document\x18\x01 \x01(\x0b\x32!.nexus.models.proto.TypedDocument\x12!\n\x04\x63hat\x18\x02 \x01(\x0b\x32\x13.idm.api.proto.Chat\"\x99\x01\n\x15StartDeliveryResponse\x12=\n\x06status\x18\x01 \x01(\x0e\x32-.nexus.hub.proto.StartDeliveryResponse.Status\"A\n\x06Status\x12\x06\n\x02OK\x10\x00\x12\x16\n\x12TOO_MANY_DOWNLOADS\x10\x01\x12\x17\n\x13\x41LREADY_DOWNLOADING\x10\x02\x32m\n\x08\x44\x65livery\x12\x61\n\x0estart_delivery\x12%.nexus.hub.proto.StartDeliveryRequest\x1a&.nexus.hub.proto.StartDeliveryResponse\"\x00\x62\x06proto3'
   ,
-  dependencies=[nexus_dot_models_dot_proto_dot_typed__document__pb2.DESCRIPTOR,idm_dot_api2_dot_proto_dot_chats__service__pb2.DESCRIPTOR,])
+  dependencies=[nexus_dot_models_dot_proto_dot_typed__document__pb2.DESCRIPTOR,idm_dot_api_dot_proto_dot_chat__manager__service__pb2.DESCRIPTOR,])
 
 
 
@@ -47,15 +48,15 @@ _STARTDELIVERYRESPONSE_STATUS = _descriptor.EnumDescriptor(
       type=None,
       create_key=_descriptor._internal_create_key),
     _descriptor.EnumValueDescriptor(
-      name='ALREADY_DOWNLOADING', index=2, number=3,
+      name='ALREADY_DOWNLOADING', index=2, number=2,
       serialized_options=None,
       type=None,
       create_key=_descriptor._internal_create_key),
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=348,
-  serialized_end=413,
+  serialized_start=349,
+  serialized_end=414,
 )
 _sym_db.RegisterEnumDescriptor(_STARTDELIVERYRESPONSE_STATUS)
 
@@ -94,8 +95,8 @@ _STARTDELIVERYREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=136,
-  serialized_end=257,
+  serialized_start=142,
+  serialized_end=258,
 )
 
 
@@ -127,12 +128,12 @@ _STARTDELIVERYRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=260,
-  serialized_end=413,
+  serialized_start=261,
+  serialized_end=414,
 )
 
 _STARTDELIVERYREQUEST.fields_by_name['typed_document'].message_type = nexus_dot_models_dot_proto_dot_typed__document__pb2._TYPEDDOCUMENT
-_STARTDELIVERYREQUEST.fields_by_name['chat'].message_type = idm_dot_api2_dot_proto_dot_chats__service__pb2._CHATDATA
+_STARTDELIVERYREQUEST.fields_by_name['chat'].message_type = idm_dot_api_dot_proto_dot_chat__manager__service__pb2._CHAT
 _STARTDELIVERYRESPONSE.fields_by_name['status'].enum_type = _STARTDELIVERYRESPONSE_STATUS
 _STARTDELIVERYRESPONSE_STATUS.containing_type = _STARTDELIVERYRESPONSE
 DESCRIPTOR.message_types_by_name['StartDeliveryRequest'] = _STARTDELIVERYREQUEST
@@ -162,8 +163,8 @@ _DELIVERY = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=415,
-  serialized_end=524,
+  serialized_start=416,
+  serialized_end=525,
   methods=[
   _descriptor.MethodDescriptor(
     name='start_delivery',

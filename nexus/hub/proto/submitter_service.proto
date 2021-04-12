@@ -1,12 +1,12 @@
 syntax = "proto3";
 package nexus.hub.proto;
 
-import "idm/api2/proto/chats_service.proto";
+import "idm/api/proto/chat_manager_service.proto";
 
 message SubmitRequest {
     bytes telegram_document = 1;
     string telegram_file_id = 2;
-    idm.api2.proto.ChatData chat = 3;
+    idm.api.proto.Chat chat = 3;
 }
 message SubmitResponse { }
 

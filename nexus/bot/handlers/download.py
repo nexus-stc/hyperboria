@@ -19,7 +19,7 @@ class DownloadHandler(BaseCallbackQueryHandler):
         document_id = int(event.pattern_match.group(3))
         position = int(event.pattern_match.group(4).decode())
 
-        self.application.user_manager.last_widget[request_context.chat.id] = None
+        self.application.user_manager.last_widget[request_context.chat.chat_id] = None
 
         request_context.add_default_fields(mode='download', session_id=session_id)
         request_context.statbox(action='get', query=str(document_id), position=position)
@@ -48,4 +48,4 @@ class DownloadHandler(BaseCallbackQueryHandler):
             )
         else:
             await remove_button(event, '⬇️', and_empty_too=True)
-            self.application.user_manager.last_widget[request_context.chat.id] = None
+            self.application.user_manager.last_widget[request_context.chat.chat_id] = None

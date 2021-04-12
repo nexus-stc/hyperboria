@@ -32,7 +32,7 @@ class StartHandler(BaseSearchHandler):
             prefetch_message = await request_message.reply(
                 t("SEARCHING", language=request_context.chat.language),
             )
-            self.application.user_manager.last_widget[request_context.chat.id] = prefetch_message.id
+            self.application.user_manager.last_widget[request_context.chat.chat_id] = prefetch_message.id
             await asyncio.gather(
                 event.delete(),
                 self.do_search(event, request_context, prefetch_message, query=query,

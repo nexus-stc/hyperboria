@@ -76,7 +76,7 @@ class DownloadTask:
             )
         )
 
-        self.delivery_service.user_manager.add_task(self.request_context.chat.id, self.document_view.id)
+        self.delivery_service.user_manager.add_task(self.request_context.chat.chat_id, self.document_view.id)
         self.delivery_service.downloadings.add(self)
 
         self.task.add_done_callback(self.done_callback)
@@ -84,7 +84,7 @@ class DownloadTask:
     def done_callback(self, f):
         self.delivery_service.downloadings.remove(self)
         self.delivery_service.user_manager.remove_task(
-            self.request_context.chat.id,
+            self.request_context.chat.chat_id,
             self.document_view.id,
         )
 
@@ -93,7 +93,7 @@ class DownloadTask:
 
         async def _on_fail():
             await self.delivery_service.telegram_client.send_message(
-                request_context.chat.id,
+                request_context.chat.chat_id,
                 t('MAINTENANCE', language=request_context.chat.language).format(
                     maintenance_picture_url=self.delivery_service.maintenance_picture_url
                 ),
@@ -165,7 +165,7 @@ class DownloadTask:
                     progress_callback=progress_bar_upload.callback,
                     request_context=self.request_context,
                     session_id=self.session_id,
-                    voting=not is_group_or_channel(self.request_context.chat.id),
+                    voting=not is_group_or_channel(self.request_context.chat.chat_id),
                 )
                 request_context.statbox(
                     action='uploaded',
@@ -191,7 +191,7 @@ class DownloadTask:
             finally:
                 downloads_gauge.dec()
                 messages = filter_none([progress_bar_download.message])
-                await self.delivery_service.telegram_client.delete_messages(request_context.chat.id, messages)
+                await self.delivery_service.telegram_client.delete_messages(request_context.chat.chat_id, messages)
 
     async def process_resp(self, resp, progress_bar, collected, filesize):
         progress_bar.set_source(get_fancy_name(resp.source))
@@ -206,7 +206,7 @@ class DownloadTask:
 
     async def respond_not_found(self, request_context: RequestContext, document_view):
         return await self.delivery_service.telegram_client.send_message(
-            request_context.chat.id,
+            request_context.chat.chat_id,
             t("SOURCES_UNAVAILABLE", language=request_context.chat.language).format(
                 document=document_view.get_robust_title()
             ),
@@ -244,6 +244,7 @@ class DownloadTask:
                 async for resp in self.delivery_service.pylon_client.by_doi(
                     doi=document_view.doi,
                     md5=document_view.md5,
+                    error_log_func=self.request_context.error_log,
                 ):
                     await self.process_resp(
                         resp=resp,
@@ -252,11 +253,14 @@ class DownloadTask:
                         filesize=document_view.filesize,
                     )
                 return bytes(collected)
-            except DownloadError:
-                pass
+            except DownloadError as e:
+                self.request_context.error_log(e)
         if document_view.md5:
             try:
-                async for resp in self.delivery_service.pylon_client.by_md5(md5=document_view.md5):
+                async for resp in self.delivery_service.pylon_client.by_md5(
+                    md5=document_view.md5,
+                    error_log_func=self.request_context.error_log,
+                ):
                     await self.process_resp(
                         resp=resp,
                         progress_bar=progress_bar,
@@ -264,14 +268,14 @@ class DownloadTask:
                         filesize=document_view.filesize,
                     )
                 return bytes(collected)
-            except DownloadError:
-                pass
+            except DownloadError as e:
+                self.request_context.error_log(e)
 
     async def external_cancel(self):
         self.task.cancel()
         self.request_context.statbox(action='externally_canceled')
         await self.delivery_service.telegram_client.send_message(
-            self.request_context.chat.id,
+            self.request_context.chat.chat_id,
             t("DOWNLOAD_CANCELED", language=self.request_context.chat.language).format(
                 document=self.document_view.get_robust_title()
             ),
@@ -366,15 +370,15 @@ class DeliveryService(DeliveryServicer, BaseHubService):
                     file=document_view.telegram_file_id,
                     session_id=metadata.get('session-id'),
                     request_context=request_context,
-                    voting=not is_group_or_channel(request_context.chat.id),
+                    voting=not is_group_or_channel(request_context.chat.chat_id),
                 )
                 request_context.statbox(action='cache_hit', document_id=document_view.id)
             except ValueError:
                 cache_hit = False
         if not cache_hit:
-            if self.user_manager.has_task(request.chat.id, document_view.id):
+            if self.user_manager.has_task(request.chat.chat_id, document_view.id):
                 return StartDeliveryResponsePb(status=StartDeliveryResponsePb.Status.ALREADY_DOWNLOADING)
-            if self.user_manager.hit_limits(request.chat.id):
+            if self.user_manager.hit_limits(request.chat.chat_id):
                 return StartDeliveryResponsePb(status=StartDeliveryResponsePb.Status.TOO_MANY_DOWNLOADS)
             await DownloadTask(
                 delivery_service=self,
