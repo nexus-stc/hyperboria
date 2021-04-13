@@ -15,11 +15,16 @@ from .admin import BaseAdminHandler
 class BanHandler(BaseAdminHandler):
     filter = events.NewMessage(incoming=True, pattern='^/ban ([0-9]+) ([A-Za-z0-9]+)\\s?(.*)?$')
 
-    async def handler(self, event: events.ChatAction, request_context: RequestContext):
+    def parse_pattern(self, event: events.ChatAction):
         chat_id = int(event.pattern_match.group(1))
         ban_duration = event.pattern_match.group(2)
         ban_message = event.pattern_match.group(3)
         ban_end_date = datetime.utcnow() + timedelta(seconds=timeparse(ban_duration))
+
+        return chat_id, ban_duration, ban_message, ban_end_date
+
+    async def handler(self, event: events.ChatAction, request_context: RequestContext):
+        chat_id, ban_duration, ban_message, ban_end_date = self.parse_pattern(event)
 
         try:
             await self.application.idm_client.update_chat(

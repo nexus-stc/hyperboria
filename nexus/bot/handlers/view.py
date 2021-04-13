@@ -2,6 +2,7 @@ import asyncio
 import re
 
 from library.telegram.base import RequestContext
+from nexus.bot.exceptions import MessageHasBeenDeletedError
 from nexus.translations import t
 from telethon import (
     events,
@@ -17,7 +18,7 @@ class ViewHandler(BaseHandler):
                                                       '([0-9]+)')
     should_reset_last_widget = False
 
-    async def handler(self, event: events.ChatAction, request_context: RequestContext):
+    def parse_pattern(self, event: events.ChatAction):
         short_schema = event.pattern_match.group(1)
         parent_view_type = event.pattern_match.group(2) or 's'
         schema = self.short_schema_to_schema(short_schema)
@@ -28,26 +29,63 @@ class ViewHandler(BaseHandler):
 
         page = int(position / self.application.config['application']['page_size'])
 
+        return parent_view_type, schema, session_id, old_message_id, document_id, position, page
+
+    async def process_widgeting(self, has_found_old_widget, old_message_id, request_context: RequestContext):
+        if has_found_old_widget:
+            message_id = old_message_id
+            link_preview = None
+        else:
+            old_message = (await self.application.telegram_client(
+                functions.messages.GetMessagesRequest(id=[old_message_id])
+            )).messages[0]
+            prefetch_message = await self.application.telegram_client.send_message(
+                request_context.chat.chat_id,
+                t("SEARCHING", language=request_context.chat.language),
+                reply_to=old_message.reply_to_msg_id,
+            )
+            self.application.user_manager.last_widget[request_context.chat.chat_id] = prefetch_message.id
+            message_id = prefetch_message.id
+            link_preview = True
+        return message_id, link_preview
+
+    async def compose_back_command(
+        self,
+        parent_view_type,
+        session_id,
+        old_message_id,
+        message_id,
+        page,
+    ):
+        back_command = None
+        if parent_view_type == 's':
+            back_command = f'/search_{session_id}_{message_id}_{page}'
+        elif parent_view_type == 'r':
+            messages = (await self.application.telegram_client(
+                functions.messages.GetMessagesRequest(id=[old_message_id])
+            )).messages
+            if not messages:
+                raise MessageHasBeenDeletedError()
+            message = messages[0]
+            referencing_to = re.search(r'Linked to: ([0-9]+)', message.raw_text).group(1)
+            back_command = f'/rp_{session_id}_{message_id}_{referencing_to}_{page}'
+
+        return back_command
+
+    async def handler(self, event: events.ChatAction, request_context: RequestContext):
+        parent_view_type, schema, session_id, old_message_id, document_id, position, page = self.parse_pattern(event)
+
         request_context.add_default_fields(mode='view', session_id=session_id)
         request_context.statbox(action='view', document_id=document_id, position=position, schema=schema)
-        found_old_widget = old_message_id == self.application.user_manager.last_widget.get(request_context.chat.chat_id)
+
+        has_found_old_widget = old_message_id == self.application.user_manager.last_widget.get(request_context.chat.chat_id)
 
         try:
-            if found_old_widget:
-                message_id = old_message_id
-                link_preview = None
-            else:
-                old_message = (await self.application.telegram_client(
-                    functions.messages.GetMessagesRequest(id=[old_message_id])
-                )).messages[0]
-                prefetch_message = await self.application.telegram_client.send_message(
-                    request_context.chat.chat_id,
-                    t("SEARCHING", language=request_context.chat.language),
-                    reply_to=old_message.reply_to_msg_id,
-                )
-                self.application.user_manager.last_widget[request_context.chat.chat_id] = prefetch_message.id
-                message_id = prefetch_message.id
-                link_preview = True
+            message_id, link_preview = await self.process_widgeting(
+                has_found_old_widget=has_found_old_widget,
+                old_message_id=old_message_id,
+                request_context=request_context
+            )
 
             document_view = await self.resolve_document(
                 schema,
@@ -56,21 +94,18 @@ class ViewHandler(BaseHandler):
                 session_id,
                 request_context,
             )
-
-            back_command = None
-            if parent_view_type == 's':
-                back_command = f'/search_{session_id}_{message_id}_{page}'
-            elif parent_view_type == 'r':
-                messages = (await self.application.telegram_client(
-                    functions.messages.GetMessagesRequest(id=[old_message_id])
-                )).messages
-                if not messages:
-                    return await event.respond(
-                        t('REPLY_MESSAGE_HAS_BEEN_DELETED', language=request_context.chat.language),
-                    )
-                message = messages[0]
-                referencing_to = re.search(r'Linked to: ([0-9]+)', message.raw_text).group(1)
-                back_command = f'/rp_{session_id}_{message_id}_{referencing_to}_{page}'
+            try:
+                back_command = await self.compose_back_command(
+                    parent_view_type=parent_view_type,
+                    session_id=session_id,
+                    old_message_id=old_message_id,
+                    message_id=message_id,
+                    page=page,
+                )
+            except MessageHasBeenDeletedError:
+                return await event.respond(
+                    t('REPLY_MESSAGE_HAS_BEEN_DELETED', language=request_context.chat.language),
+                )
 
             view, buttons = document_view.get_view(
                 language=request_context.chat.language,
@@ -89,7 +124,7 @@ class ViewHandler(BaseHandler):
                 ),
                 event.delete(),
             ]
-            if not found_old_widget:
+            if not has_found_old_widget:
                 actions.append(
                     self.application.telegram_client.delete_messages(
                         request_context.chat.chat_id,

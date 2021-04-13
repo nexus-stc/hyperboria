@@ -12,12 +12,17 @@ class DownloadHandler(BaseCallbackQueryHandler):
     filter = events.CallbackQuery(pattern='^/dl([abcm])_([A-Za-z0-9]+)_([0-9]+)_([0-9]+)$')
     is_group_handler = True
 
-    async def handler(self, event: events.ChatAction, request_context: RequestContext):
+    def parse_pattern(self, event: events.ChatAction):
         short_schema = event.pattern_match.group(1).decode()
         schema = self.short_schema_to_schema(short_schema)
         session_id = event.pattern_match.group(2).decode()
         document_id = int(event.pattern_match.group(3))
         position = int(event.pattern_match.group(4).decode())
+
+        return short_schema, schema, session_id, document_id, position
+
+    async def handler(self, event: events.ChatAction, request_context: RequestContext):
+        short_schema, schema, session_id, document_id, position = self.parse_pattern(event)
 
         self.application.user_manager.last_widget[request_context.chat.chat_id] = None
 
