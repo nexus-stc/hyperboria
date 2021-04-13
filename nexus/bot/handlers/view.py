@@ -13,7 +13,7 @@ from .base import BaseHandler
 
 
 class ViewHandler(BaseHandler):
-    filter = events.NewMessage(incoming=True, pattern='^/v([abcm])([sr])?_([A-Za-z0-9]+)_([0-9]+)_([0-9]+)_'
+    filter = events.NewMessage(incoming=True, pattern='^/v([ab])([sr])?_([A-Za-z0-9]+)_([0-9]+)_([0-9]+)_'
                                                       '([0-9]+)')
     should_reset_last_widget = False
 
@@ -29,7 +29,7 @@ class ViewHandler(BaseHandler):
         page = int(position / self.application.config['application']['page_size'])
 
         request_context.add_default_fields(mode='view', session_id=session_id)
-        request_context.statbox(action='view', query=str(document_id), position=position)
+        request_context.statbox(action='view', document_id=document_id, position=position, schema=schema)
         found_old_widget = old_message_id == self.application.user_manager.last_widget.get(request_context.chat.chat_id)
 
         try:

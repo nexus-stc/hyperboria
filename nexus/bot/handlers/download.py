@@ -22,7 +22,7 @@ class DownloadHandler(BaseCallbackQueryHandler):
         self.application.user_manager.last_widget[request_context.chat.chat_id] = None
 
         request_context.add_default_fields(mode='download', session_id=session_id)
-        request_context.statbox(action='get', query=str(document_id), position=position)
+        request_context.statbox(action='get', document_id=document_id, position=position, schema=schema)
 
         typed_document_pb = await self.get_typed_document_pb(
             schema=schema,

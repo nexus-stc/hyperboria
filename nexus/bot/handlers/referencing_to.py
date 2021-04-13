@@ -36,7 +36,8 @@ class ReferencingToHandler(BaseCallbackQueryHandler):
         request_context.statbox(
             action=action,
             duration=time.time() - start_time,
-            query=f'{document_id}',
+            document_id=document_id,
+            schema='scimag',
         )
 
         serp, buttons = await document_list_widget.render()
