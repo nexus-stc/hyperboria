@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n,nexus/meta_api/proto/documents_service.proto\x12\x14nexus.meta_api.proto\x1a\'nexus/models/proto/typed_document.proto\"D\n\x0bRollRequest\x12\x10\n\x08language\x18\x01 \x01(\t\x12\x12\n\nsession_id\x18\x02 \x01(\t\x12\x0f\n\x07user_id\x18\x03 \x01(\x03\"#\n\x0cRollResponse\x12\x13\n\x0b\x64ocument_id\x18\x01 \x01(\x04\"r\n\x14TypedDocumentRequest\x12\x0e\n\x06schema\x18\x01 \x01(\t\x12\x13\n\x0b\x64ocument_id\x18\x02 \x01(\x04\x12\x10\n\x08position\x18\x03 \x01(\r\x12\x12\n\nsession_id\x18\x04 \x01(\t\x12\x0f\n\x07user_id\x18\x05 \x01(\x03\"\x1a\n\x18PutTypedDocumentResponse2\xb4\x01\n\tDocuments\x12V\n\x03get\x12*.nexus.meta_api.proto.TypedDocumentRequest\x1a!.nexus.models.proto.TypedDocument\"\x00\x12O\n\x04roll\x12!.nexus.meta_api.proto.RollRequest\x1a\".nexus.meta_api.proto.RollResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n,nexus/meta_api/proto/documents_service.proto\x12\x14nexus.meta_api.proto\x1a\'nexus/models/proto/typed_document.proto\"D\n\x0bRollRequest\x12\x10\n\x08language\x18\x01 \x01(\t\x12\x12\n\nsession_id\x18\x02 \x01(\t\x12\x0f\n\x07user_id\x18\x03 \x01(\x03\"#\n\x0cRollResponse\x12\x13\n\x0b\x64ocument_id\x18\x01 \x01(\x04\"X\n\x10TopMissedRequest\x12\x0c\n\x04page\x18\x01 \x01(\r\x12\x11\n\tpage_size\x18\x02 \x01(\r\x12\x12\n\nsession_id\x18\x03 \x01(\t\x12\x0f\n\x07user_id\x18\x04 \x01(\x03\"a\n\x11TopMissedResponse\x12:\n\x0ftyped_documents\x18\x01 \x03(\x0b\x32!.nexus.models.proto.TypedDocument\x12\x10\n\x08has_next\x18\x02 \x01(\x08\"r\n\x14TypedDocumentRequest\x12\x0e\n\x06schema\x18\x01 \x01(\t\x12\x13\n\x0b\x64ocument_id\x18\x02 \x01(\x04\x12\x10\n\x08position\x18\x03 \x01(\r\x12\x12\n\nsession_id\x18\x04 \x01(\t\x12\x0f\n\x07user_id\x18\x05 \x01(\x03\"\x1a\n\x18PutTypedDocumentResponse2\x95\x02\n\tDocuments\x12V\n\x03get\x12*.nexus.meta_api.proto.TypedDocumentRequest\x1a!.nexus.models.proto.TypedDocument\"\x00\x12O\n\x04roll\x12!.nexus.meta_api.proto.RollRequest\x1a\".nexus.meta_api.proto.RollResponse\"\x00\x12_\n\ntop_missed\x12&.nexus.meta_api.proto.TopMissedRequest\x1a\'.nexus.meta_api.proto.TopMissedResponse\"\x00\x62\x06proto3'
   ,
   dependencies=[nexus_dot_models_dot_proto_dot_typed__document__pb2.DESCRIPTOR,])
 
@@ -106,6 +106,98 @@ _ROLLRESPONSE = _descriptor.Descriptor(
 )
 
 
+_TOPMISSEDREQUEST = _descriptor.Descriptor(
+  name='TopMissedRequest',
+  full_name='nexus.meta_api.proto.TopMissedRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='page', full_name='nexus.meta_api.proto.TopMissedRequest.page', index=0,
+      number=1, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='page_size', full_name='nexus.meta_api.proto.TopMissedRequest.page_size', index=1,
+      number=2, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='session_id', full_name='nexus.meta_api.proto.TopMissedRequest.session_id', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='user_id', full_name='nexus.meta_api.proto.TopMissedRequest.user_id', index=3,
+      number=4, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=218,
+  serialized_end=306,
+)
+
+
+_TOPMISSEDRESPONSE = _descriptor.Descriptor(
+  name='TopMissedResponse',
+  full_name='nexus.meta_api.proto.TopMissedResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='typed_documents', full_name='nexus.meta_api.proto.TopMissedResponse.typed_documents', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='has_next', full_name='nexus.meta_api.proto.TopMissedResponse.has_next', index=1,
+      number=2, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=308,
+  serialized_end=405,
+)
+
+
 _TYPEDDOCUMENTREQUEST = _descriptor.Descriptor(
   name='TypedDocumentRequest',
   full_name='nexus.meta_api.proto.TypedDocumentRequest',
@@ -161,8 +253,8 @@ _TYPEDDOCUMENTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=218,
-  serialized_end=332,
+  serialized_start=407,
+  serialized_end=521,
 )
 
 
@@ -186,12 +278,15 @@ _PUTTYPEDDOCUMENTRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=334,
-  serialized_end=360,
+  serialized_start=523,
+  serialized_end=549,
 )
 
+_TOPMISSEDRESPONSE.fields_by_name['typed_documents'].message_type = nexus_dot_models_dot_proto_dot_typed__document__pb2._TYPEDDOCUMENT
 DESCRIPTOR.message_types_by_name['RollRequest'] = _ROLLREQUEST
 DESCRIPTOR.message_types_by_name['RollResponse'] = _ROLLRESPONSE
+DESCRIPTOR.message_types_by_name['TopMissedRequest'] = _TOPMISSEDREQUEST
+DESCRIPTOR.message_types_by_name['TopMissedResponse'] = _TOPMISSEDRESPONSE
 DESCRIPTOR.message_types_by_name['TypedDocumentRequest'] = _TYPEDDOCUMENTREQUEST
 DESCRIPTOR.message_types_by_name['PutTypedDocumentResponse'] = _PUTTYPEDDOCUMENTRESPONSE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
@@ -209,6 +304,20 @@ RollResponse = _reflection.GeneratedProtocolMessageType('RollResponse', (_messag
   # @@protoc_insertion_point(class_scope:nexus.meta_api.proto.RollResponse)
   })
 _sym_db.RegisterMessage(RollResponse)
+
+TopMissedRequest = _reflection.GeneratedProtocolMessageType('TopMissedRequest', (_message.Message,), {
+  'DESCRIPTOR' : _TOPMISSEDREQUEST,
+  '__module__' : 'nexus.meta_api.proto.documents_service_pb2'
+  # @@protoc_insertion_point(class_scope:nexus.meta_api.proto.TopMissedRequest)
+  })
+_sym_db.RegisterMessage(TopMissedRequest)
+
+TopMissedResponse = _reflection.GeneratedProtocolMessageType('TopMissedResponse', (_message.Message,), {
+  'DESCRIPTOR' : _TOPMISSEDRESPONSE,
+  '__module__' : 'nexus.meta_api.proto.documents_service_pb2'
+  # @@protoc_insertion_point(class_scope:nexus.meta_api.proto.TopMissedResponse)
+  })
+_sym_db.RegisterMessage(TopMissedResponse)
 
 TypedDocumentRequest = _reflection.GeneratedProtocolMessageType('TypedDocumentRequest', (_message.Message,), {
   'DESCRIPTOR' : _TYPEDDOCUMENTREQUEST,
@@ -233,8 +342,8 @@ _DOCUMENTS = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=363,
-  serialized_end=543,
+  serialized_start=552,
+  serialized_end=829,
   methods=[
   _descriptor.MethodDescriptor(
     name='get',
@@ -253,6 +362,16 @@ _DOCUMENTS = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_ROLLREQUEST,
     output_type=_ROLLRESPONSE,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='top_missed',
+    full_name='nexus.meta_api.proto.Documents.top_missed',
+    index=2,
+    containing_service=None,
+    input_type=_TOPMISSEDREQUEST,
+    output_type=_TOPMISSEDRESPONSE,
     serialized_options=None,
     create_key=_descriptor._internal_create_key,
   ),

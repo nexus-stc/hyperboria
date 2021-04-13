@@ -54,12 +54,14 @@ class BaseHubService(BaseService):
             buttons = [
                 vote_button(
                     case='broken',
+                    schema=document_view.schema,
                     document_id=document_id,
                     language=request_context.chat.language,
                     session_id=session_id,
                 ),
                 vote_button(
                     case='ok',
+                    schema=document_view.schema,
                     document_id=document_id,
                     language=request_context.chat.language,
                     session_id=session_id,
@@ -77,6 +79,7 @@ class BaseHubService(BaseService):
         request_context.statbox(
             action='sent',
             document_id=document_id,
+            schema=document_view.schema,
             voting=voting,
         )
         return message

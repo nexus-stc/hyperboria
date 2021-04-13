@@ -30,12 +30,13 @@ def close_button(session_id: str = None):
         )
 
 
-def vote_button(language: str, session_id: str, document_id: int, case: str):
+def vote_button(language: str, session_id: str, schema: str, document_id: int, case: str):
     label = f"REPORT_{case.upper()}_FILE"
     case = {'broken': 'b', 'ok': 'o'}[case]
+    schema = {'scimag': 'a', 'scitech': 'b'}[schema]
     return Button.inline(
         text=t(label, language=language),
-        data=f'/vote_{session_id}_{document_id}_{case}',
+        data=f'/vote{schema}_{session_id}_{document_id}_{case}',
     )
 
 

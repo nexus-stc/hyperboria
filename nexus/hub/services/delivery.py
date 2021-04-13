@@ -123,6 +123,7 @@ class DownloadTask:
                         action='missed',
                         duration=time.time() - start_time,
                         document_id=document_view.id,
+                        schema=document_view.schema,
                     )
                     is_served_from_sharience = False
                     if self.delivery_service.is_sharience_enabled:
@@ -135,6 +136,7 @@ class DownloadTask:
                             action='not_found',
                             document_id=document_view.id,
                             duration=time.time() - start_time,
+                            schema=document_view.schema,
                         )
                         await self.respond_not_found(
                             request_context=request_context,
@@ -147,6 +149,7 @@ class DownloadTask:
                         duration=time.time() - start_time,
                         document_id=document_view.id,
                         len=len(file),
+                        schema=document_view.schema,
                     )
 
                 progress_bar_upload = ProgressBar(
@@ -171,6 +174,7 @@ class DownloadTask:
                     action='uploaded',
                     duration=time.time() - start_time,
                     document_id=document_view.id,
+                    schema=document_view.schema,
                 )
                 if self.delivery_service.should_store_hashes:
                     asyncio.create_task(self.store_hashes(
@@ -185,6 +189,7 @@ class DownloadTask:
                     action='user_canceled',
                     duration=time.time() - start_time,
                     document_id=document_view.id,
+                    schema=document_view.schema,
                 )
             except asyncio.CancelledError:
                 pass
@@ -215,7 +220,7 @@ class DownloadTask:
 
     async def try_sharience(self, request_context, document_view):
         if document_view.doi:
-            request_context.statbox(action='try_sharience', doi=document_view.doi)
+            request_context.statbox(action='try_sharience', doi=document_view.doi, schema=document_view.schema)
             pg_data = await self.delivery_service.pool_holder.execute(
                 '''
                 select sh.id, sh.telegram_file_id as vote_sum
@@ -273,7 +278,11 @@ class DownloadTask:
 
     async def external_cancel(self):
         self.task.cancel()
-        self.request_context.statbox(action='externally_canceled')
+        self.request_context.statbox(
+            action='externally_canceled',
+            document_id=self.document_view.id,
+            schema=self.document_view.schema,
+        )
         await self.delivery_service.telegram_client.send_message(
             self.request_context.chat.chat_id,
             t("DOWNLOAD_CANCELED", language=self.request_context.chat.language).format(
@@ -372,7 +381,7 @@ class DeliveryService(DeliveryServicer, BaseHubService):
                     request_context=request_context,
                     voting=not is_group_or_channel(request_context.chat.chat_id),
                 )
-                request_context.statbox(action='cache_hit', document_id=document_view.id)
+                request_context.statbox(action='cache_hit', document_id=document_view.id, schema=document_view.schema)
             except ValueError:
                 cache_hit = False
         if not cache_hit:

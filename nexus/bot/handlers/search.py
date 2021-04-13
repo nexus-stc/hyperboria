@@ -1,11 +1,15 @@
 import asyncio
-import logging
 import re
 import time
+from abc import ABC
 
 from grpc import StatusCode
 from grpc.experimental.aio import AioRpcError
 from library.telegram.base import RequestContext
+from nexus.bot.exceptions import (
+    BannedUserError,
+    MessageHasBeenDeletedError,
+)
 from nexus.bot.widgets.search_widget import SearchWidget
 from nexus.translations import t
 from nexus.views.telegram.common import close_button
@@ -21,8 +25,9 @@ from .base import (
 )
 
 
-class BaseSearchHandler(BaseHandler):
-    should_reset_last_widget = False
+class BaseSearchHandler(BaseHandler, ABC):
+    def preprocess_query(self, query):
+        return query.replace(f'@{self.application.config["telegram"]["bot_external_name"]}', '').strip()
 
     async def do_search(
         self,
@@ -35,10 +40,9 @@ class BaseSearchHandler(BaseHandler):
     ):
         session_id = self.generate_session_id()
         message_id = prefetch_message.id
-
         request_context.add_default_fields(is_group_mode=is_group_mode, mode='search', session_id=session_id)
-
         start_time = time.time()
+
         try:
             search_widget = await SearchWidget.create(
                 application=self.application,
@@ -141,47 +145,50 @@ class SearchHandler(BaseSearchHandler):
     should_reset_last_widget = False
     is_subscription_required_for_handler = True
 
-    async def ban_handler(self, event: events.ChatAction, request_context: RequestContext, ban_timeout: float):
-        logging.getLogger('statbox').info({
-            'bot_name': self.application.config['telegram']['bot_name'],
-            'action': 'user_flood_ban',
-            'mode': 'search',
-            'ban_timeout_seconds': ban_timeout,
-            'chat_id': request_context.chat.chat_id,
-        })
-        ban_reason = t(
-            'BAN_MESSAGE_TOO_MANY_REQUESTS',
-            language=request_context.chat.language
-        )
-        return await event.reply(t(
-            'BANNED_FOR_SECONDS',
-            language=request_context.chat.language
-        ).format(
-            seconds=str(ban_timeout),
-            reason=ban_reason,
-        ))
+    def check_search_ban_timeout(self, chat_id: int):
+        ban_timeout = self.application.user_manager.check_search_ban_timeout(user_id=chat_id)
+        if ban_timeout:
+            raise BannedUserError(ban_timeout=ban_timeout)
+        self.application.user_manager.add_search_time(user_id=chat_id, search_time=time.time())
+
+    def parse_pattern(self, event: events.ChatAction):
+        search_prefix = event.pattern_match.group(1)
+        query = self.preprocess_query(event.pattern_match.group(2))
+        is_group_mode = event.is_group or event.is_channel
+
+        return search_prefix, query, is_group_mode
 
     async def handler(self, event: events.ChatAction, request_context: RequestContext):
-        ban_timeout = self.application.user_manager.check_search_ban_timeout(user_id=request_context.chat.chat_id)
-        if ban_timeout:
-            return await self.ban_handler(event, request_context, ban_timeout)
-        self.application.user_manager.add_search_time(user_id=request_context.chat.chat_id, search_time=time.time())
-
-        search_prefix = event.pattern_match.group(1)
-        query = event.pattern_match.group(2)
-        is_group_mode = event.is_group or event.is_channel
+        try:
+            self.check_search_ban_timeout(chat_id=request_context.chat.chat_id)
+        except BannedUserError as e:
+            request_context.error_log(e)
+            return await event.reply(t(
+                'BANNED_FOR_SECONDS',
+                language=request_context.chat.language
+            ).format(
+                seconds=e.ban_timeout,
+                reason=t(
+                    'BAN_MESSAGE_TOO_MANY_REQUESTS',
+                    language=request_context.chat.language
+                ),
+            ))
+        search_prefix, query, is_group_mode = self.parse_pattern(event)
 
         if is_group_mode and not search_prefix:
             return
         if not is_group_mode and search_prefix:
             query = event.raw_text
+
         prefetch_message = await event.reply(
             t("SEARCHING", language=request_context.chat.language),
         )
         self.application.user_manager.last_widget[request_context.chat.chat_id] = prefetch_message.id
         try:
             await self.do_search(
-                event, request_context, prefetch_message,
+                event=event,
+                request_context=request_context,
+                prefetch_message=prefetch_message,
                 query=query,
                 is_group_mode=is_group_mode,
                 is_shortpath_enabled=True,
@@ -199,63 +206,77 @@ class SearchEditHandler(BaseSearchHandler):
     is_group_handler = True
     should_reset_last_widget = False
 
-    async def handler(self, event: events.ChatAction, request_context: RequestContext):
-        request_context.add_default_fields(mode='search_edit')
+    def parse_pattern(self, event: events.ChatAction):
         search_prefix = event.pattern_match.group(1)
-        query = event.pattern_match.group(2)
+        query = self.preprocess_query(event.pattern_match.group(2))
         is_group_mode = event.is_group or event.is_channel
+        return search_prefix, query, is_group_mode
+
+    async def get_last_messages_in_chat(self, event: events.ChatAction):
+        return await self.application.telegram_client(functions.messages.GetMessagesRequest(
+            id=list(range(event.id + 1, event.id + 10)))
+        )
+
+    async def handler(self, event: events.ChatAction, request_context: RequestContext):
+        search_prefix, query, is_group_mode = self.parse_pattern(event)
+        request_context.add_default_fields(mode='search_edit')
+
         if is_group_mode and not search_prefix:
             return
         if not is_group_mode and search_prefix:
             query = event.raw_text
-        result = await self.application.telegram_client(functions.messages.GetMessagesRequest(
-            id=list(range(event.id + 1, event.id + 10)))
-        )
-        if not result:
-            request_context.statbox(action='failed')
+
+        last_messages = await self.get_last_messages_in_chat(event)
+        try:
+            if not last_messages:
+                raise MessageHasBeenDeletedError()
+            for next_message in last_messages.messages:
+                if next_message.is_reply and event.id == next_message.reply_to_msg_id:
+                    request_context.statbox(action='resolved')
+                    return await self.do_search(
+                        event=event,
+                        request_context=request_context,
+                        prefetch_message=next_message,
+                        query=query,
+                        is_group_mode=is_group_mode,
+                    )
+            raise MessageHasBeenDeletedError()
+        except MessageHasBeenDeletedError as e:
+            request_context.error_log(e)
             return await event.reply(
                 t('REPLY_MESSAGE_HAS_BEEN_DELETED', language=request_context.chat.language),
             )
-        for next_message in result.messages:
-            if next_message.is_reply and event.id == next_message.reply_to_msg_id:
-                request_context.statbox(action='resolved')
-                await self.do_search(
-                    event,
-                    request_context,
-                    prefetch_message=next_message,
-                    query=query,
-                    is_group_mode=is_group_mode,
-                )
-                return
-        request_context.statbox(action='failed')
-        return await event.reply(
-            t('REPLY_MESSAGE_HAS_BEEN_DELETED', language=request_context.chat.language),
-        )
 
 
 class SearchPagingHandler(BaseCallbackQueryHandler):
     filter = events.CallbackQuery(pattern='^/search_([A-Za-z0-9]+)_([0-9]+)_([0-9]+)$')
     should_reset_last_widget = False
 
-    async def handler(self, event: events.ChatAction, request_context: RequestContext):
+    def preprocess_query(self, query):
+        return query.replace(f'@{self.application.config["telegram"]["bot_external_name"]}', '').strip()
+
+    def parse_pattern(self, event: events.ChatAction):
         session_id = event.pattern_match.group(1).decode()
         message_id = int(event.pattern_match.group(2).decode())
         page = int(event.pattern_match.group(3).decode())
 
+        return session_id, message_id, page
+
+    async def handler(self, event: events.ChatAction, request_context: RequestContext):
+        session_id, message_id, page = self.parse_pattern(event)
+
         request_context.add_default_fields(mode='search_paging', session_id=session_id)
+        start_time = time.time()
 
         message = await event.get_message()
         if not message:
             return await event.answer()
-        reply_message = await message.get_reply_message()
-        if not reply_message:
-            return await event.respond(
-                t('REPLY_MESSAGE_HAS_BEEN_DELETED', language=request_context.chat.language),
-            )
 
-        start_time = time.time()
-        query = reply_message.raw_text
+        reply_message = await message.get_reply_message()
         try:
+            if not reply_message:
+                raise MessageHasBeenDeletedError()
+            query = self.preprocess_query(reply_message.raw_text)
             search_widget = await SearchWidget.create(
                 application=self.application,
                 chat=request_context.chat,
@@ -264,6 +285,10 @@ class SearchPagingHandler(BaseCallbackQueryHandler):
                 request_id=request_context.request_id,
                 query=query,
                 page=page,
+            )
+        except MessageHasBeenDeletedError:
+            return await event.respond(
+                t('REPLY_MESSAGE_HAS_BEEN_DELETED', language=request_context.chat.language),
             )
         except AioRpcError as e:
             if e.code() == StatusCode.INVALID_ARGUMENT or e.code() == StatusCode.CANCELLED:

@@ -6,6 +6,7 @@ from typing import (
 )
 from urllib.parse import quote
 
+from izihawa_types.safecast import safe_int
 from izihawa_utils.common import filter_none
 from nexus.models.proto.scimag_pb2 import Scimag as ScimagPb
 from nexus.nlptools.utils import (
@@ -204,16 +205,17 @@ class ScimagView(BaseView, AuthorMixin, DoiMixin, FileMixin, IssuedAtMixin):
             )
             if self.ref_by_count:
                 buttons[-1].append(
-                    Button.inline(
+                    Button.switch_inline(
                         text=f'🔗 {self.ref_by_count or ""}',
-                        data=f'/r_{session_id}_{self.id}',
+                        query=f'references:"{self.doi}"',
+                        same_peer=True,
                     )
                 )
             buttons[-1].append(close_button(session_id))
         return '\n'.join(parts).strip()[:4096], buttons
 
-    def get_view_command(self, session_id: str, message_id: int, parent_view_type: str = 's', position: int = 0) -> str:
-        return f'/va{parent_view_type}_{session_id}_{message_id}_{self.id}_{position}'
+    def get_view_command(self, session_id: str, message_id: int, position: int = 0) -> str:
+        return f'/va_{session_id}_{message_id}_{self.id}_{position}'
 
     def get_robust_journal(self):
         if self.type != 'chapter' and self.type != 'book-chapter':
@@ -232,4 +234,7 @@ class ScimagView(BaseView, AuthorMixin, DoiMixin, FileMixin, IssuedAtMixin):
             if self.issue:
                 return f'vol. {self.volume}({self.issue})'
             else:
-                return self.volume
+                if safe_int(self.volume):
+                    return f'vol. {self.volume}'
+                else:
+                    return self.volume
