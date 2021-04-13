@@ -10,7 +10,6 @@ from . import (
     help,
     legacy,
     noop,
-    referencing_to,
     roll,
     search,
     settings,
@@ -18,10 +17,11 @@ from . import (
     start,
     stop,
     submit,
+    top_missed,
     view,
     vote,
 )
 
 __all__ = ['admin', 'ban', 'contact', 'copyright', 'close', 'donate', 'download', 'emoji', 'help',
-           'legacy', 'noop', 'referencing_to', 'roll', 'search', 'settings',
-           'shortlink', 'start', 'stop', 'submit', 'view', 'vote']
+           'legacy', 'noop', 'roll', 'search', 'settings',
+           'shortlink', 'start', 'stop', 'submit', 'top_missed', 'view', 'vote']

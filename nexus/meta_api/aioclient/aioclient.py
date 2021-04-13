@@ -17,6 +17,10 @@ from nexus.meta_api.proto.documents_service_pb2 import \
 from nexus.meta_api.proto.documents_service_pb2 import \
     RollResponse as RollResponsePb
 from nexus.meta_api.proto.documents_service_pb2 import \
+    TopMissedRequest as TopMissedRequestPb
+from nexus.meta_api.proto.documents_service_pb2 import \
+    TopMissedResponse as TopMissedResponsePb
+from nexus.meta_api.proto.documents_service_pb2 import \
     TypedDocumentRequest as TypedDocumentRequestPb
 from nexus.meta_api.proto.documents_service_pb2_grpc import DocumentsStub
 from nexus.meta_api.proto.meta_search_service_pb2 import \
@@ -123,6 +127,26 @@ class MetaApiGrpcClient(AioThing):
                 page=page,
                 page_size=page_size,
                 language=language,
+                session_id=session_id,
+                user_id=user_id,
+            ),
+            metadata=(
+                ('request-id', request_id),
+            ),
+        )
+
+    async def top_missed(
+        self,
+        page: int,
+        page_size: int,
+        request_id: Optional[str] = None,
+        session_id: Optional[str] = None,
+        user_id: Optional[int] = None,
+    ) -> TopMissedResponsePb:
+        return await self.documents_stub.top_missed(
+            TopMissedRequestPb(
+                page=page,
+                page_size=page_size,
                 session_id=session_id,
                 user_id=user_id,
             ),

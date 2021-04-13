@@ -5,8 +5,8 @@ import "nexus/models/proto/typed_document.proto";
 
 message ScoredDocument {
   nexus.models.proto.TypedDocument typed_document = 1;
-  float score = 3;
-  uint32 position = 4;
+  float score = 2;
+  uint32 position = 3;
 }
 
 message SearchResponse {

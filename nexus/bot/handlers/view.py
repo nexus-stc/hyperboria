@@ -1,5 +1,4 @@
 import asyncio
-import re
 
 from library.telegram.base import RequestContext
 from nexus.bot.exceptions import MessageHasBeenDeletedError
@@ -20,7 +19,6 @@ class ViewHandler(BaseHandler):
 
     def parse_pattern(self, event: events.ChatAction):
         short_schema = event.pattern_match.group(1)
-        parent_view_type = event.pattern_match.group(2) or 's'
         schema = self.short_schema_to_schema(short_schema)
         session_id = event.pattern_match.group(3)
         old_message_id = int(event.pattern_match.group(4))
@@ -29,7 +27,7 @@ class ViewHandler(BaseHandler):
 
         page = int(position / self.application.config['application']['page_size'])
 
-        return parent_view_type, schema, session_id, old_message_id, document_id, position, page
+        return schema, session_id, old_message_id, document_id, position, page
 
     async def process_widgeting(self, has_found_old_widget, old_message_id, request_context: RequestContext):
         if has_found_old_widget:
@@ -51,29 +49,14 @@ class ViewHandler(BaseHandler):
 
     async def compose_back_command(
         self,
-        parent_view_type,
         session_id,
-        old_message_id,
         message_id,
         page,
     ):
-        back_command = None
-        if parent_view_type == 's':
-            back_command = f'/search_{session_id}_{message_id}_{page}'
-        elif parent_view_type == 'r':
-            messages = (await self.application.telegram_client(
-                functions.messages.GetMessagesRequest(id=[old_message_id])
-            )).messages
-            if not messages:
-                raise MessageHasBeenDeletedError()
-            message = messages[0]
-            referencing_to = re.search(r'Linked to: ([0-9]+)', message.raw_text).group(1)
-            back_command = f'/rp_{session_id}_{message_id}_{referencing_to}_{page}'
-
-        return back_command
+        return f'/search_{session_id}_{message_id}_{page}'
 
     async def handler(self, event: events.ChatAction, request_context: RequestContext):
-        parent_view_type, schema, session_id, old_message_id, document_id, position, page = self.parse_pattern(event)
+        schema, session_id, old_message_id, document_id, position, page = self.parse_pattern(event)
 
         request_context.add_default_fields(mode='view', session_id=session_id)
         request_context.statbox(action='view', document_id=document_id, position=position, schema=schema)
@@ -96,9 +79,7 @@ class ViewHandler(BaseHandler):
             )
             try:
                 back_command = await self.compose_back_command(
-                    parent_view_type=parent_view_type,
                     session_id=session_id,
-                    old_message_id=old_message_id,
                     message_id=message_id,
                     page=page,
                 )

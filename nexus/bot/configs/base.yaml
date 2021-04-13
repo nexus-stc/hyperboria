@@ -79,8 +79,6 @@ telegram:
     - nexus.bot.handlers.download.DownloadHandler
     - nexus.bot.handlers.emoji.EmojiHandler
     - nexus.bot.handlers.help.HelpHandler
-    - nexus.bot.handlers.referencing_to.ReferencingToHandler
-    - nexus.bot.handlers.referencing_to.ReferencingToPagingHandler
     - nexus.bot.handlers.roll.RollHandler
     - nexus.bot.handlers.settings.SettingsButtonsHandler
     - nexus.bot.handlers.settings.SettingsHandler
@@ -88,6 +86,7 @@ telegram:
     - nexus.bot.handlers.submit.SubmitHandler
     - nexus.bot.handlers.start.StartHandler
     - nexus.bot.handlers.stop.StopHandler
+    - nexus.bot.handlers.top_missed.TopMissedHandler
     - nexus.bot.handlers.view.ViewHandler
     - nexus.bot.handlers.vote.VoteHandler
     - nexus.bot.handlers.noop.NoopHandler

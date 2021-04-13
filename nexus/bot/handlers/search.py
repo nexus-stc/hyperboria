@@ -1,6 +1,7 @@
 import asyncio
 import re
 import time
+from abc import ABC
 
 from grpc import StatusCode
 from grpc.experimental.aio import AioRpcError
@@ -24,8 +25,9 @@ from .base import (
 )
 
 
-class BaseSearchHandler(BaseHandler):
-    should_reset_last_widget = False
+class BaseSearchHandler(BaseHandler, ABC):
+    def preprocess_query(self, query):
+        return query.replace(f'@{self.application.config["telegram"]["bot_external_name"]}', '').strip()
 
     async def do_search(
         self,
@@ -38,10 +40,9 @@ class BaseSearchHandler(BaseHandler):
     ):
         session_id = self.generate_session_id()
         message_id = prefetch_message.id
-
         request_context.add_default_fields(is_group_mode=is_group_mode, mode='search', session_id=session_id)
-
         start_time = time.time()
+
         try:
             search_widget = await SearchWidget.create(
                 application=self.application,
@@ -152,7 +153,7 @@ class SearchHandler(BaseSearchHandler):
 
     def parse_pattern(self, event: events.ChatAction):
         search_prefix = event.pattern_match.group(1)
-        query = event.pattern_match.group(2)
+        query = self.preprocess_query(event.pattern_match.group(2))
         is_group_mode = event.is_group or event.is_channel
 
         return search_prefix, query, is_group_mode
@@ -185,7 +186,9 @@ class SearchHandler(BaseSearchHandler):
         self.application.user_manager.last_widget[request_context.chat.chat_id] = prefetch_message.id
         try:
             await self.do_search(
-                event, request_context, prefetch_message,
+                event=event,
+                request_context=request_context,
+                prefetch_message=prefetch_message,
                 query=query,
                 is_group_mode=is_group_mode,
                 is_shortpath_enabled=True,
@@ -205,7 +208,7 @@ class SearchEditHandler(BaseSearchHandler):
 
     def parse_pattern(self, event: events.ChatAction):
         search_prefix = event.pattern_match.group(1)
-        query = event.pattern_match.group(2)
+        query = self.preprocess_query(event.pattern_match.group(2))
         is_group_mode = event.is_group or event.is_channel
         return search_prefix, query, is_group_mode
 
@@ -231,8 +234,8 @@ class SearchEditHandler(BaseSearchHandler):
                 if next_message.is_reply and event.id == next_message.reply_to_msg_id:
                     request_context.statbox(action='resolved')
                     return await self.do_search(
-                        event,
-                        request_context,
+                        event=event,
+                        request_context=request_context,
                         prefetch_message=next_message,
                         query=query,
                         is_group_mode=is_group_mode,
@@ -249,10 +252,18 @@ class SearchPagingHandler(BaseCallbackQueryHandler):
     filter = events.CallbackQuery(pattern='^/search_([A-Za-z0-9]+)_([0-9]+)_([0-9]+)$')
     should_reset_last_widget = False
 
-    async def handler(self, event: events.ChatAction, request_context: RequestContext):
+    def preprocess_query(self, query):
+        return query.replace(f'@{self.application.config["telegram"]["bot_external_name"]}', '').strip()
+
+    def parse_pattern(self, event: events.ChatAction):
         session_id = event.pattern_match.group(1).decode()
         message_id = int(event.pattern_match.group(2).decode())
         page = int(event.pattern_match.group(3).decode())
+
+        return session_id, message_id, page
+
+    async def handler(self, event: events.ChatAction, request_context: RequestContext):
+        session_id, message_id, page = self.parse_pattern(event)
 
         request_context.add_default_fields(mode='search_paging', session_id=session_id)
         start_time = time.time()
@@ -265,7 +276,7 @@ class SearchPagingHandler(BaseCallbackQueryHandler):
         try:
             if not reply_message:
                 raise MessageHasBeenDeletedError()
-            query = reply_message.raw_text
+            query = self.preprocess_query(reply_message.raw_text)
             search_widget = await SearchWidget.create(
                 application=self.application,
                 chat=request_context.chat,

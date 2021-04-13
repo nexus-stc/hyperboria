@@ -27,6 +27,11 @@ class DocumentsStub(object):
                 request_serializer=nexus_dot_meta__api_dot_proto_dot_documents__service__pb2.RollRequest.SerializeToString,
                 response_deserializer=nexus_dot_meta__api_dot_proto_dot_documents__service__pb2.RollResponse.FromString,
                 )
+        self.top_missed = channel.unary_unary(
+                '/nexus.meta_api.proto.Documents/top_missed',
+                request_serializer=nexus_dot_meta__api_dot_proto_dot_documents__service__pb2.TopMissedRequest.SerializeToString,
+                response_deserializer=nexus_dot_meta__api_dot_proto_dot_documents__service__pb2.TopMissedResponse.FromString,
+                )
 
 
 class DocumentsServicer(object):
@@ -44,6 +49,12 @@ class DocumentsServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def top_missed(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_DocumentsServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -56,6 +67,11 @@ def add_DocumentsServicer_to_server(servicer, server):
                     servicer.roll,
                     request_deserializer=nexus_dot_meta__api_dot_proto_dot_documents__service__pb2.RollRequest.FromString,
                     response_serializer=nexus_dot_meta__api_dot_proto_dot_documents__service__pb2.RollResponse.SerializeToString,
+            ),
+            'top_missed': grpc.unary_unary_rpc_method_handler(
+                    servicer.top_missed,
+                    request_deserializer=nexus_dot_meta__api_dot_proto_dot_documents__service__pb2.TopMissedRequest.FromString,
+                    response_serializer=nexus_dot_meta__api_dot_proto_dot_documents__service__pb2.TopMissedResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -98,5 +114,22 @@ class Documents(object):
         return grpc.experimental.unary_unary(request, target, '/nexus.meta_api.proto.Documents/roll',
             nexus_dot_meta__api_dot_proto_dot_documents__service__pb2.RollRequest.SerializeToString,
             nexus_dot_meta__api_dot_proto_dot_documents__service__pb2.RollResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def top_missed(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/nexus.meta_api.proto.Documents/top_missed',
+            nexus_dot_meta__api_dot_proto_dot_documents__service__pb2.TopMissedRequest.SerializeToString,
+            nexus_dot_meta__api_dot_proto_dot_documents__service__pb2.TopMissedResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
