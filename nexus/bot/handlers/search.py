@@ -91,6 +91,7 @@ class BaseSearchHandler(BaseHandler, ABC):
                     buttons=[close_button()],
                 ))
                 return await asyncio.gather(*actions)
+            await asyncio.gather(*actions)
             raise e
 
         action = 'documents_found'

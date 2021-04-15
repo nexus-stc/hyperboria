@@ -21,6 +21,7 @@ class SubmitHandler(BaseHandler):
         request_context.statbox(action='show', mode='submit')
 
         if event.document.mime_type != 'application/pdf':
+            request_context.statbox(action='unknown_file_format')
             request_context.error_log(UnknownFileFormatError(format=event.document.mime_type))
             return await asyncio.gather(
                 event.reply(

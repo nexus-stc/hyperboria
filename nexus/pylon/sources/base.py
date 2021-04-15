@@ -81,31 +81,31 @@ class PreparedRequest:
 
     @asynccontextmanager
     async def execute_with(self, session):
-        async with session.request(
-            method=self.method,
-            url=self.url,
-            timeout=self.timeout,
-            headers=self.headers,
-            cookies=self.cookies,
-            params=self.params,
-            ssl=self.ssl,
-        ) as resp:
-            try:
+        try:
+            async with session.request(
+                method=self.method,
+                url=self.url,
+                timeout=self.timeout,
+                headers=self.headers,
+                cookies=self.cookies,
+                params=self.params,
+                ssl=self.ssl,
+            ) as resp:
                 yield resp
-            except BadResponseError as e:
-                e.add('url', self.url)
-                raise e
-            except (
-                aiohttp.client_exceptions.ClientConnectionError,
-                aiohttp.client_exceptions.ClientPayloadError,
-                aiohttp.client_exceptions.ClientResponseError,
-                aiohttp.client_exceptions.TooManyRedirects,
-                asyncio.TimeoutError,
-                ProxyConnectionError,
-                ProxyTimeoutError,
-                ProxyError,
-            ) as e:
-                raise DownloadError(nested_error=repr(e), nested_error_cls=class_fullname(e))
+        except BadResponseError as e:
+            e.add('url', self.url)
+            raise e
+        except (
+            aiohttp.client_exceptions.ClientConnectionError,
+            aiohttp.client_exceptions.ClientPayloadError,
+            aiohttp.client_exceptions.ClientResponseError,
+            aiohttp.client_exceptions.TooManyRedirects,
+            asyncio.TimeoutError,
+            ProxyConnectionError,
+            ProxyTimeoutError,
+            ProxyError,
+        ) as e:
+            raise DownloadError(nested_error=repr(e), nested_error_cls=class_fullname(e))
 
 
 class BaseValidator:

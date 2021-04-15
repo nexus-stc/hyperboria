@@ -14,6 +14,8 @@ deps = [
     "@npm//sass",
     "@npm//sass-loader",
     "@npm//vue",
+    "//nexus/meta_api/proto:meta_api_grpc_js",
+    "//nexus/meta_api/proto:meta_api_proto_js",
 ]
 
 js_library(

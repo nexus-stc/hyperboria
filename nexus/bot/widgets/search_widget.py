@@ -2,7 +2,7 @@ from typing import Optional
 
 from idm.api.proto.chat_manager_service_pb2 import Chat as ChatPb
 from nexus.bot.application import TelegramApplication
-from nexus.meta_api.proto.meta_search_service_pb2 import \
+from nexus.meta_api.proto.search_service_pb2 import \
     ScoredDocument as ScoredDocumentPb
 from nexus.translations import t
 from nexus.views.telegram.common import (

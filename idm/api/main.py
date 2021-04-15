@@ -44,9 +44,12 @@ async def create_app(config: Configurator):
 
 
 def main():
-    uvloop.install()
     config = get_config()
     configure_logging(config)
+    if config['metrics']['enabled']:
+        from library.metrics_server import MetricsServer
+        MetricsServer(config['metrics']).fork_process()
+    asyncio.set_event_loop(uvloop.new_event_loop())
     asyncio.get_event_loop().run_until_complete(create_app(config))
 
 
