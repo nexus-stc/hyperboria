@@ -9,6 +9,7 @@ py_library(
         requirement("grpcio"),
         requirement("lru-dict"),
         requirement("tenacity"),
+        requirement("aiogrpcclient"),
         requirement("aiokit"),
         "//nexus/meta_api/proto:meta_api_grpc_py",
         "//nexus/meta_api/proto:meta_api_proto_py",

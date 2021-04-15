@@ -6,10 +6,9 @@ py_library(
     srcs = glob(["**/*.py"]),
     visibility = ["//visibility:public"],
     deps = [
-        requirement("cachetools"),
-        requirement("lru-dict"),
         requirement("tenacity"),
         "//idm/api/proto:idm_grpc_py",
         "//idm/api/proto:idm_proto_py",
+        requirement("aiogrpcclient"),
     ],
 )

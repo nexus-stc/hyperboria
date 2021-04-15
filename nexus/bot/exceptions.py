@@ -17,6 +17,7 @@ class MessageHasBeenDeletedError(BaseError):
 
 
 class UnknownFileFormatError(BaseError):
+    level = logging.WARNING
     code = 'unknown_file_format_error'
 
 

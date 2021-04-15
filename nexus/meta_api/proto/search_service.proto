@@ -24,6 +24,6 @@ message SearchRequest {
   string session_id = 7;
 }
 
-service MetaSearch {
+service Search {
   rpc search (SearchRequest) returns (SearchResponse) {}
 }

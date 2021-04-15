@@ -78,7 +78,7 @@ class SubmitterService(SubmitterServicer, BaseHubService):
     async def stop(self):
         await self.ipfs_client.close()
 
-    @aiogrpc_request_wrapper()
+    @aiogrpc_request_wrapper(log=False)
     async def submit(
         self,
         request: SubmitRequestPb,
@@ -100,6 +100,7 @@ class SubmitterService(SubmitterServicer, BaseHubService):
         document = BinaryReader(request.telegram_document).tgread_object()
         if document.size > 20 * 1024 * 1024:
             request_context.error_log(FileTooBigError(size=document.size))
+            request_context.statbox(action='file_too_big')
             await self.telegram_client.send_message(
                 request_context.chat.chat_id,
                 t('FILE_TOO_BIG_ERROR', language=request_context.chat.language),
@@ -113,12 +114,11 @@ class SubmitterService(SubmitterServicer, BaseHubService):
             ),
         )
         try:
-
             file = await self.telegram_client.download_document(document=document, file=bytes)
-
             try:
                 processed_document = await self.grobid_client.process_fulltext_document(pdf_file=file)
             except BadRequestError as e:
+                request_context.statbox(action='unparsable_document')
                 request_context.error_log(e)
                 await self.telegram_client.send_message(
                     request_context.chat.chat_id,
@@ -128,6 +128,7 @@ class SubmitterService(SubmitterServicer, BaseHubService):
                 return SubmitResponsePb()
 
             if not processed_document.get('doi'):
+                request_context.statbox(action='unparsable_doi')
                 request_context.error_log(UnparsableDoiError())
                 await self.telegram_client.send_message(
                     request_context.chat.chat_id,
@@ -148,6 +149,7 @@ class SubmitterService(SubmitterServicer, BaseHubService):
             )
 
             if len(search_response_pb.scored_documents) == 0:
+                request_context.statbox(action='unavailable_metadata')
                 request_context.error_log(UnavailableMetadataError(doi=processed_document['doi']))
                 await self.telegram_client.send_message(
                     request_context.chat.chat_id,
@@ -183,6 +185,11 @@ class SubmitterService(SubmitterServicer, BaseHubService):
                     telegram_file_id=uploaded_message.file.id,
                 )),
             ),
+        )
+        request_context.statbox(
+            action='success',
+            document_id=document_view.id,
+            schema='scimag',
         )
         await operation_log(document_operation_pb)
         return SubmitResponsePb()

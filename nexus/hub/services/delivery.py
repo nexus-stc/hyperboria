@@ -366,7 +366,7 @@ class DeliveryService(DeliveryServicer, BaseHubService):
             request_id=metadata.get('request-id'),
         )
         request_context.add_default_fields(
-            mode='start_delivery',
+            mode='delivery',
             session_id=metadata.get('session-id'),
             **self.get_default_service_fields(),
         )
