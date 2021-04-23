@@ -1,6 +1,7 @@
 load("@com_github_grpc_grpc//bazel:python_rules.bzl", "py_proto_library")
 load("@rules_rust//proto:proto.bzl", "rust_proto_library")
 load("@rules_proto//proto:defs.bzl", "proto_library")
+load("@rules_proto_grpc//js:defs.bzl", "js_proto_library")
 
 proto_library(
     name = "models_proto",
@@ -21,4 +22,11 @@ rust_proto_library(
     rust_deps = ["//rules/rust/cargo:protobuf"],
     visibility = ["//visibility:public"],
     deps = [":models_proto"],
+)
+
+js_proto_library(
+    name = "models_proto_js",
+    prefix_path = "../../../../",
+    protos = [":models_proto"],
+    visibility = ["//visibility:public"],
 )

@@ -34,16 +34,6 @@ rust_library(
     name = "config",
     srcs = glob(["**/*.rs"]),
     crate_features = [
-        "default",
-        "hjson",
-        "ini",
-        "json",
-        "rust-ini",
-        "serde-hjson",
-        "serde_json",
-        "toml",
-        "yaml",
-        "yaml-rust",
     ],
     crate_root = "src/lib.rs",
     crate_type = "lib",
@@ -61,12 +51,7 @@ rust_library(
     deps = [
         "@raze__lazy_static__1_4_0//:lazy_static",
         "@raze__nom__5_1_2//:nom",
-        "@raze__rust_ini__0_13_0//:rust_ini",
         "@raze__serde__1_0_125//:serde",
-        "@raze__serde_hjson__0_9_1//:serde_hjson",
-        "@raze__serde_json__1_0_64//:serde_json",
-        "@raze__toml__0_5_8//:toml",
-        "@raze__yaml_rust__0_4_5//:yaml_rust",
     ],
 )
 

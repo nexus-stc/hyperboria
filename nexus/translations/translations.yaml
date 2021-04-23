@@ -158,8 +158,8 @@ en:
   TRANSMITTED_FROM: 'transmitted from {source}'
   UNAVAILABLE_METADATA_ERROR: 'Cannot acquire metadata for {doi} from CrossRef API. Ensure it is resolvable before uploading.'
   UNKNOWN_FILE_FORMAT_ERROR: Only PDF files are supported
-  UNPARSABLE_DOCUMENT_ERROR: Cannot parse the document
-  UNPARSABLE_DOI_ERROR: DOI cannot be found in the document
+  UNPARSABLE_DOCUMENT_ERROR: Cannot parse `{filename}`
+  UNPARSABLE_DOI_ERROR: DOI cannot be found in `{filename}`
   UPGRADE_MAINTENANCE: |
     ```Major update is going on, come back to us tomorrow```[‌]({upgrade_maintenance_picture_url})
   UPLOADED_TO_TELEGRAM: uploaded to Telegram...

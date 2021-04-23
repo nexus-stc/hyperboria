@@ -1,7 +1,6 @@
 <template lang="pug">
   div.document
-    v-scimag(v-if="schema === 'scimag' && document", :document="document")
-    v-scitech(v-if="schema === 'scitech' && document", :document="document")
+    v-scitech(:document="document")
 </template>
 
 <script>
@@ -11,10 +10,7 @@ export default {
     document: {
       type: Object,
       required: true
-    },
-    schema: {
-      required: true
-    },
+    }
   }
 }
 </script>

@@ -122,7 +122,9 @@ class SubmitterService(SubmitterServicer, BaseHubService):
                 request_context.error_log(e)
                 await self.telegram_client.send_message(
                     request_context.chat.chat_id,
-                    t('UNPARSABLE_DOCUMENT_ERROR', language=request_context.chat.language),
+                    t('UNPARSABLE_DOCUMENT_ERROR', language=request_context.chat.language).format(
+                        filename=document.attributes[0].file_name,
+                    ),
                     buttons=[close_button()],
                 )
                 return SubmitResponsePb()
@@ -132,7 +134,9 @@ class SubmitterService(SubmitterServicer, BaseHubService):
                 request_context.error_log(UnparsableDoiError())
                 await self.telegram_client.send_message(
                     request_context.chat.chat_id,
-                    t('UNPARSABLE_DOI_ERROR', language=request_context.chat.language),
+                    t('UNPARSABLE_DOI_ERROR', language=request_context.chat.language).format(
+                        filename=document.attributes[0].file_name,
+                    ),
                     buttons=[close_button()],
                 )
                 return SubmitResponsePb()
@@ -162,16 +166,15 @@ class SubmitterService(SubmitterServicer, BaseHubService):
                 return SubmitResponsePb()
 
             document_view = ScimagView(search_response_pb.scored_documents[0].typed_document.scimag)
+            uploaded_message = await self.send_file(
+                document_view=document_view,
+                file=file,
+                request_context=request_context,
+                session_id=session_id,
+                voting=False,
+            )
         finally:
             await processing_message.delete()
-
-        uploaded_message = await self.send_file(
-            document_view=document_view,
-            file=file,
-            request_context=request_context,
-            session_id=session_id,
-            voting=False,
-        )
 
         document_operation_pb = DocumentOperationPb(
             update_document=UpdateDocumentPb(

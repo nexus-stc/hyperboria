@@ -1,22 +1,44 @@
 ---
-
 services:
   nexus-cognitron-web:
     depends_on:
       - summa
     environment:
       ENV_TYPE: production
-      NEXUS_COGNITRON_WEB_IPFS_GATEWAY: https://cloudflare-ipfs.com
-      NEXUS_COGNITRON_WEB_SEARCH_API: http://localhost:50000
+      NEXUS_COGNITRON_WEB_ipfs.gateway.url: https://cloudflare-ipfs.com
+      NEXUS_COGNITRON_WEB_meta_api.url: http://nexus-meta-api:8080
     image: thesuperpirate/cognitron-web:latest
     ports:
-      - "3000:80"
+      - '3000:80'
+  nexus-meta-api:
+    depends_on:
+      - summa
+    environment:
+      ENV_TYPE: development
+      NEXUS_META_API_grpc.address: '0.0.0.0'
+      NEXUS_META_API_grpc.port: 9090
+      NEXUS_META_API_summa.url: 'http://summa:8082'
+    image: thesuperpirate/meta-api:latest
+    ports:
+      - '9090:9090'
+  nexus-meta-api-envoy:
+    depends_on:
+      - nexus-meta-api
+    image: envoyproxy/envoy-dev:latest
+    ports:
+      - '8080:8080'
+      - '9901:9901'
+    volumes:
+      - './nexus-meta-api-envoy.yaml:/etc/envoy/envoy.yaml'
   summa:
     environment:
       ENV_TYPE: production
+      SUMMA_debug: 'true'
+      SUMMA_http.address: '0.0.0.0'
+      SUMMA_http.port: '8082'
     image: izihawa/summa:latest
     ports:
-      - "50000:80"
+      - '8082:8082'
     volumes:
-      - '${COLLECTION_PATH}:/summa'
+      - '${DATA_PATH}:/summa/data'
 version: "3"

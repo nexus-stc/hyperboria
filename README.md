@@ -10,25 +10,15 @@ into [`internal Protobuf format`](nexus/models) and to landing converted data in
 
 ## Prerequisite
 
+Install system packages for various OSes:
+```shell script
+sudo ./repository/install-packages.sh
+```
+
 ### Ubuntu 20.04
 
 #### Docker
 [Installation Guide](https://docs.docker.com/engine/install/ubuntu/)
-
-#### System Compilers
-```shell script
-sudo apt-get install -y --no-install-recommends g++ python3.9 protobuf-compiler libprotobuf-dev libev-perl
-```
-
-#### Bazel Build System
-[Installation Guide](https://docs.bazel.build/versions/master/install-ubuntu.html) or _one-liner_:
-```shell script
-sudo apt install curl gnupg
-curl -fsSL https://bazel.build/bazel-release.pub.gpg | gpg --dearmor > bazel.gpg
-sudo mv bazel.gpg /etc/apt/trusted.gpg.d/
-echo "deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list
-sudo apt update && sudo apt install bazel
-```
 
 #### IPFS
 [Installation Guide](https://docs.ipfs.io/install/)
@@ -37,17 +27,6 @@ sudo apt update && sudo apt install bazel
 
 #### Docker
 [Installation Guide](https://docs.docker.com/docker-for-mac/install/)
-
-#### System Compilers
-```shell script
-brew install llvm protobuf python3.9
-```
-
-#### Bazel Build System
-[Installation Guide](https://docs.bazel.build/versions/master/install-os-x.html) or _one-liner_:
-```shell script
-brew install bazel
-```
 
 #### IPFS
 [Installation Guide](https://docs.ipfs.io/install/)

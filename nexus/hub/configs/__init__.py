@@ -7,7 +7,7 @@ def get_config():
         'nexus/hub/configs/base.yaml',
         'nexus/hub/configs/%s.yaml?' % env.type,
         'nexus/hub/configs/logging.yaml',
-    ])
+    ], env_prefix='NEXUS_HUB')
 
 
 config = get_config()

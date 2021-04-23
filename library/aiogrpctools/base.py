@@ -14,14 +14,26 @@ from library.logging import error_log
 class AioGrpcServer(AioRootThing):
     def __init__(self, address, port):
         super().__init__()
+        self.address = address
+        self.port = port
         self.server = aio.server()
         self.server.add_insecure_port(f'{address}:{port}')
 
     async def start(self):
+        logging.getLogger('debug').info({
+            'action': 'starting',
+            'address': self.address,
+            'mode': 'grpc',
+            'port': self.port,
+        })
         await self.server.start()
         await self.server.wait_for_termination()
 
     async def stop(self):
+        logging.getLogger('debug').info({
+            'action': 'stopping',
+            'mode': 'grpc',
+        })
         await self.server.stop(None)
 
 
@@ -50,21 +62,21 @@ def aiogrpc_request_wrapper(log=True):
                     self.statbox(
                         action='enter',
                         mode=func.__name__,
-                        request_id=metadata['request-id'],
+                        request_id=metadata.get('request-id'),
                     )
                 r = await func(self, request, context, metadata)
                 if log:
                     self.statbox(
                         action='exit',
                         mode=func.__name__,
-                        request_id=metadata['request-id'],
+                        request_id=metadata.get('request-id'),
                     )
                 return r
             except aio.AbortError:
                 raise
             except Exception as e:
                 serialized_request = MessageToDict(request, preserving_proto_field_name=True)
-                error_log(e, request=serialized_request, request_id=metadata['request-id'])
+                error_log(e, request=serialized_request, request_id=metadata.get('request-id'))
                 if e.__class__ in self.error_mapping:
                     await context.abort(*self.error_mapping[e.__class__])
                 raise e
@@ -80,20 +92,20 @@ def aiogrpc_streaming_request_wrapper(func):
             self.statbox(
                 action='enter',
                 mode=func.__name__,
-                request_id=metadata['request-id'],
+                request_id=metadata.get('request-id'),
             )
             async for item in func(self, request, context, metadata):
                 yield item
             self.statbox(
                 action='exit',
                 mode=func.__name__,
-                request_id=metadata['request-id'],
+                request_id=metadata.get('request-id'),
             )
         except aio.AbortError:
             raise
         except Exception as e:
             serialized_request = MessageToDict(request, preserving_proto_field_name=True)
-            error_log(e, request=serialized_request, request_id=metadata['request-id'])
+            error_log(e, request=serialized_request, request_id=metadata.get('request-id'))
             if e.__class__ in self.error_mapping:
                 await context.abort(*self.error_mapping[e.__class__])
             raise e

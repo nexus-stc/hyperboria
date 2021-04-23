@@ -2,15 +2,15 @@
   div
     form
       .input-group
-        b-form-input(v-model='search' placeholder='Enter book name or DOI')
-        b-button(type='submit' @click.stop.prevent='submit(search, 1, schema)') Search
+        b-form-input(v-model='query' placeholder='Enter book name or DOI')
+        b-button(type='submit' @click.stop.prevent='submit(query, 1, schema)') Search
       b-form-radio-group(
         v-model="schema"
         :options="schemas"
         class="radio-group"
         value-field="item"
         text-field="name")
-    p.mt-5(v-if="nothingFound") Nothing found
+    p.mt-5(v-if="scoredDocuments.length == 0") Nothing found
     b-pagination(v-if='scoredDocuments.length > 0' v-model='page' :total-rows='totalRows' :per-page='perPage' limit="2" :disabled="isLoading")
     .search_list
       search-list(:scored-documents='scoredDocuments')
@@ -25,48 +25,40 @@ export default {
   loading: true,
   data () {
     return {
-      search: '',
+      query: '',
       scoredDocuments: [],
       defaultSchema: 'scitech',
       schema: 'scitech',
       schemas: [
-        { item: 'scitech', name: 'Scitech' }
+        { item: 'scitech', name: 'Scitech' },
         // { item: 'scimag', name: 'Scimag' }
       ],
       page: 1,
       totalRows: 10,
-      perPage: 1,
-      nothingFound: false
+      perPage: 1
     }
   },
   async fetch () {
-    this.search = this.$route.query.search
-    if (!this.search) {
+    this.query = this.$route.query.query
+    if (!this.query) {
       await this.$router.push({ path: '/' })
       this.scoredDocuments = []
-      this.nothingFound = false
       return
     }
     this.page = this.$route.query.page
     this.schema = this.$route.query.schema || this.defaultSchema
-    let scoredDocuments = []
 
     if (!process.server) {
       this.$nuxt.$loading.start()
     }
-    await this.$search_api.search(this.schema, this.search, this.page, 5).then(response => {
-      if (!response.hasNext) {
-        this.totalRows = this.page
-      } else {
-        this.totalRows = Number(this.page) + 1
-      }
-      scoredDocuments = response.scoredDocuments
-    }).catch(e => {
-      console.error(e)
-      this.$nuxt.error(500)
-    })
-    this.scoredDocuments = scoredDocuments
-    this.nothingFound = (!scoredDocuments.length > 0)
+    const response = await this.$meta_api.search(this.schema, this.query, this.page - 1, 5)
+    if (response.hasNext) {
+      this.totalRows = Number(this.page) + 1
+    } else {
+      this.totalRows = this.page
+    }
+    this.scoredDocuments = response.scoredDocumentsList
+
     if (!process.server) {
       this.$nuxt.$loading.finish()
     }
@@ -80,17 +72,17 @@ export default {
   watch: {
     '$route.query': '$fetch',
     schema () {
-      if (this.search) {
-        this.submit(this.search, this.page, this.schema)
+      if (this.query) {
+        this.submit(this.query, this.page, this.schema)
       }
     },
     page () {
-      this.submit(this.search, this.page, this.schema)
+      this.submit(this.query, this.page, this.schema)
     }
   },
   methods: {
-    submit (search, page, schema) {
-      this.$router.push({ path: '/', query: { search: search, page: page, schema: schema } })
+    submit (query, page, schema) {
+      this.$router.push({ path: '/', query: { query: query, page: page, schema: schema } })
     }
   }
 }

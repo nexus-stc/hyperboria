@@ -44,7 +44,7 @@ rust_library(
     data = [],
     edition = "2018",
     proc_macro_deps = [
-        "@raze__async_trait__0_1_48//:async_trait",
+        "@raze__async_trait__0_1_50//:async_trait",
     ],
     rustc_flags = [
         "--cap-lints=allow",
@@ -56,10 +56,10 @@ rust_library(
     version = "0.5.5",
     # buildifier: leave-alone
     deps = [
-        "@raze__byteorder__1_3_4//:byteorder",
+        "@raze__byteorder__1_4_3//:byteorder",
         "@raze__bytes__0_5_6//:bytes",
         "@raze__fallible_iterator__0_2_0//:fallible_iterator",
-        "@raze__futures__0_3_13//:futures",
+        "@raze__futures__0_3_14//:futures",
         "@raze__log__0_4_14//:log",
         "@raze__parking_lot__0_11_1//:parking_lot",
         "@raze__percent_encoding__2_1_0//:percent_encoding",

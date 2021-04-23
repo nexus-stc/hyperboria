@@ -4,7 +4,10 @@ import os.path
 from types import ModuleType
 
 import yaml
-from izihawa_utils.common import smart_merge_dicts
+from izihawa_utils.common import (
+    smart_merge_dicts,
+    unflatten,
+)
 from jinja2 import Template
 from library.configurator.exceptions import UnknownConfigFormatError
 
@@ -42,7 +45,7 @@ class RichDict(dict):
 
 
 class Configurator(RichDict):
-    def __init__(self, configs: list):
+    def __init__(self, configs: list, env_prefix: str = None, env_key_separator: str = '.'):
         """
         Create Configurator object
 
@@ -54,12 +57,16 @@ class Configurator(RichDict):
         self._by_basenames = {}
         self._omitted_files = []
 
-        env_config = {}
-        env_config_var = os.environ.get('CONFIGURATOR', '')
-        if env_config_var:
-            env_config = yaml.safe_load(env_config_var)
+        env_dict = {}
 
-        for config in ([os.environ] + configs + [env_config]):
+        if env_prefix:
+            env_prefix = env_prefix.lower()
+            for name, value in os.environ.items():
+                if name.lower().startswith(env_prefix):
+                    env_dict[name[len(env_prefix):].lstrip('_')] = value
+            env_dict = unflatten(env_dict, sep=env_key_separator)
+
+        for config in ([os.environ] + configs + [env_dict]):
             file_found = self.update(config)
             if not file_found:
                 self._omitted_files.append(config)

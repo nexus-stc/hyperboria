@@ -1,7 +1,7 @@
 <template lang="pug">
   ul
     li(v-for='scoredDocument in scoredDocuments')
-      search-item(:scored-document='scoredDocument', :key='scoredDocument.document.id')
+      search-item(:scored-document='scoredDocument', :key='scoredDocument.typedDocument.scitech.id')
 </template>
 
 <script>

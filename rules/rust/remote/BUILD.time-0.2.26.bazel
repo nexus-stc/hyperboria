@@ -92,7 +92,7 @@ rust_library(
     data = [],
     edition = "2018",
     proc_macro_deps = [
-        "@raze__const_fn__0_4_6//:const_fn",
+        "@raze__const_fn__0_4_7//:const_fn",
     ],
     rustc_flags = [
         "--cap-lints=allow",
@@ -114,7 +114,7 @@ rust_library(
             "@rules_rust//rust/platform:x86_64-apple-darwin",
             "@rules_rust//rust/platform:x86_64-unknown-linux-gnu",
         ): [
-            "@raze__libc__0_2_91//:libc",
+            "@raze__libc__0_2_93//:libc",
         ],
         "//conditions:default": [],
     }),

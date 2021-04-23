@@ -49,6 +49,6 @@ rust_library(
     version = "0.2.0",
     # buildifier: leave-alone
     deps = [
-        "@raze__tokio_postgres__0_7_0//:tokio_postgres",
+        "@raze__tokio_postgres__0_7_1//:tokio_postgres",
     ],
 )

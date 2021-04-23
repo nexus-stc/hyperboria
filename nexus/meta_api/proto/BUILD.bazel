@@ -1,7 +1,7 @@
 load("@com_github_grpc_grpc//bazel:python_rules.bzl", "py_grpc_library", "py_proto_library")
 load("@rules_rust//proto:proto.bzl", "rust_proto_library")
 load("@rules_proto//proto:defs.bzl", "proto_library")
-load("@rules_proto_grpc//js:defs.bzl", "js_grpc_node_library", "js_proto_library")
+load("@rules_proto_grpc//js:defs.bzl", "js_grpc_web_library")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -34,13 +34,10 @@ rust_proto_library(
     deps = [":meta_api_proto"],
 )
 
-js_proto_library(
-    name = "meta_api_proto_js",
-    deps = ["meta_api_proto"],
-)
-
-js_grpc_node_library(
-    name = "meta_api_grpc_js",
+js_grpc_web_library(
+    name = "meta_api_grpc_web_js",
+    prefix_path = "../../../../",
     protos = [":meta_api_proto"],
-    deps = [":meta_api_proto_js"],
+    visibility = ["//visibility:public"],
+    deps = ["//nexus/models/proto:models_proto_js"],
 )

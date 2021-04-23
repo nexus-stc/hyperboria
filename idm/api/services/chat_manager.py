@@ -57,27 +57,30 @@ class ChatManagerService(ChatManagerServicer, BaseService):
                 chat.is_system_messaging_enabled,
                 chat.is_discovery_enabled,
             )
-            .returning('*')
+            .on_conflict('chat_id')
+            .do_nothing()
         ).get_sql()
         async with self.pool_holder.pool.acquire() as session:
-            result = await session.execute(query)
-            chat = await result.fetchone()
-        return self.enrich_chat(ChatPb(**chat))
+            await session.execute(query)
+            return await self._get_chat(session=session, chat_id=request.chat_id, context=context)
 
-    @aiogrpc_request_wrapper()
-    async def get_chat(self, request, context, metadata):
+    async def _get_chat(self, session, chat_id, context):
         query = (
             PostgreSQLQuery
             .from_(self.chats_table)
             .select('*')
-            .where(self.chats_table.chat_id == request.chat_id)
+            .where(self.chats_table.chat_id == chat_id)
         ).get_sql()
+        result = await session.execute(query)
+        chat = await result.fetchone()
+        if chat is None:
+            await context.abort(StatusCode.NOT_FOUND, 'not_found')
+        return self.enrich_chat(ChatPb(**chat))
+
+    @aiogrpc_request_wrapper()
+    async def get_chat(self, request, context, metadata):
         async with self.pool_holder.pool.acquire() as session:
-            result = await session.execute(query)
-            chat = await result.fetchone()
-            if chat is None:
-                await context.abort(StatusCode.NOT_FOUND, 'not_found')
-            return self.enrich_chat(ChatPb(**chat))
+            return await self._get_chat(session=session, chat_id=request.chat_id, context=context)
 
     @aiogrpc_request_wrapper()
     async def list_chats(self, request, context, metadata):

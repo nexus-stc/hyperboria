@@ -52,7 +52,7 @@ rust_library(
     version = "0.3.3",
     # buildifier: leave-alone
     deps = [
-        "@raze__futures_channel__0_3_13//:futures_channel",
+        "@raze__futures_channel__0_3_14//:futures_channel",
         "@raze__lazy_static__1_4_0//:lazy_static",
         "@raze__log__0_4_14//:log",
         "@raze__num_cpus__1_13_0//:num_cpus",

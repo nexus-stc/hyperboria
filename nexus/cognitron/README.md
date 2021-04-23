@@ -10,8 +10,8 @@ Follow the [root guide](../../README.md) to install Docker, IPFS and Bazel (opti
 
 ```shell script
 export COLLECTION=bafykbzacebzohi352bddfunaub5rgqv5b324nejk5v6fltjh45be5ykw5jsjg
-export COLLECTION_PATH=$(realpath $COLLECTION)
-ipfs get $COLLECTION && ipfs pin add $COLLECTION
+ipfs get $COLLECTION -o data && ipfs pin add $COLLECTION
+export DATA_PATH=$(realpath ./data)
 ```
 
 #### 2. Launch Nexus Cognitron
@@ -32,6 +32,6 @@ By default this script is just printing documents.
 
 ```shell script
 bazel run -c opt installer -- iterate \
-  --data-filepath $COLLECTION_PATH/index/scitech \
+  --data-filepath $DATA_PATH/index/scitech \
   --schema-filepath schema/scitech.yaml
 ```

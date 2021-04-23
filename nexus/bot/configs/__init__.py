@@ -9,7 +9,7 @@ def get_config():
         'nexus/bot/configs/%s.yaml?' % env.type,
         'nexus/bot/configs/logging.yaml',
         'nexus/bot/configs/promotions.yaml',
-    ])
+    ], env_prefix='NEXUS_BOT')
 
 
 config = get_config()

@@ -45,7 +45,7 @@ hub:
   url:
 idm:
   url:
-log_path: '/var/log/nexus-bot/{{ ENV_TYPE }}'
+log_path: '/var/log/nexus-bot'
 meta_api:
   url:
 telegram:
@@ -57,7 +57,7 @@ telegram:
   bot_external_name: libgen_scihub_bot
   # Internal bot name used in logging
   bot_name: nexus-bot
-  bot_token: '{{ BOT_TOKEN }}'
+  bot_token:
   # WARNING! Potentially buggy telethon option. Sometimes it goes mad and overload users with tons of messages
   # Collect missed messages at startup time and answer to them
   catch_up: false
@@ -65,7 +65,7 @@ telegram:
   copyright_infringement_account:
   # Telethon database for keeping cache
   database:
-    session_id: '/usr/lib/nexus-bot/{{ ENV_TYPE }}/session.db'
+    session_id: '/usr/lib/nexus-bot/session.db'
   # Enabled handlers
   handlers:
     - nexus.bot.handlers.admin.AdminHandler
