@@ -1,27 +1,26 @@
 <template lang="pug">
   div.d-flex
     div
-      nuxt-link(:to="link") {{ document.title }}
+      nuxt-link(:to="{ name: 'documents-schema-id', params: { schema: schema, id: document.id }}") {{ document.title }}
       .detail
         div
           i.mr-1(v-if='document.doi') DOI:
           span {{ document.doi }}
-        div(v-if='authors')
-          span {{ authors }} {{ issuedAt }}
+        div(v-if='document.firstAuthors')
+          span {{ document.firstAuthors }} {{ issuedAt }}
         .gp
           span.el.text-uppercase(v-if="document.extension") {{ document.extension }}
           span.el.text-uppercase(v-if="document.language") {{ document.language }}
-          span.el.text-uppercase(v-if="filesize") {{ filesize }}
+          span.el.text-uppercase(v-if="document.filesize") {{ document.filesize }}
           span.el(v-if="document.pages")
             span.mr-2 {{ document.pages }}
             span pages
-    img(:src="coverUrl" alt="" onerror="this.style.display='none'")
 
 </template>
 
 <script>
 
-import { getCoverUrl, getFirstAuthors, getIssuedDate, getMegabytes } from '@/plugins/helpers'
+import { getIssuedDate } from '@/plugins/helpers'
 
 export default {
   name: 'SearchItem',
@@ -33,25 +32,17 @@ export default {
   },
 
   computed: {
-    authors: function () {
-      return getFirstAuthors(this.document.authors, false, 3)
-    },
-    coverUrl: function () {
-      return getCoverUrl(this.document.cu, this.document.fictionId, this.document.libgenId, this.document.cuSuf, this.document.md5)
-    },
     document: function () {
-      return this.scoredDocument.document
+      return this.scoredDocument.typedDocument[this.schema]
     },
     issuedAt: function () {
       const date = getIssuedDate(this.document.issuedAt)
       if (date != null) return '(' + date + ')'
       return null
     },
-    filesize: function () {
-      return getMegabytes(this.document.filesize)
-    },
-    link: function () {
-      return `/documents/id:${this.document.id}?schema=${this.scoredDocument.schema}`
+    schema: function () {
+      const td = this.scoredDocument.typedDocument
+      return Object.keys(td).filter(k => td[k] !== undefined)[0]
     }
   }
 }

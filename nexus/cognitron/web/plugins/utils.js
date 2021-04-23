@@ -2,9 +2,7 @@ const ALNUMWHITESPACE_REGEX = /\P{L}/gu
 const MULTIWHITESPACE_REGEX = /\s+/g
 
 export function castStringToSingleString (s) {
-  let processed = s.replace(ALNUMWHITESPACE_REGEX, ' ')
-  processed = processed.replace(MULTIWHITESPACE_REGEX, '-')
-  return processed
+  return s.replace(ALNUMWHITESPACE_REGEX, ' ').replace(MULTIWHITESPACE_REGEX, '-')
 }
 
 export function escapeFormat (text) {

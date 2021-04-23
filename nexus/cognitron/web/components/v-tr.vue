@@ -1,28 +1,28 @@
 <template lang="pug">
-  tr(v-if="value")
-    th {{label}}
+  tr(v-show="value")
+    th {{ label }}
     td(:class="valueClasses")
-      | {{formattedValue}}
+      | {{ formattedValue }}
       cite
-        a(href="javascript:void(null);" @click="showMore" v-if="collapseText")  show more...
+        a(href="javascript:void(null);" @click="showMore" v-if="shouldCollapseText")  show more...
 </template>
 
 <script>
 export default {
   name: 'VTr',
-
   props: {
     label: {
       type: String,
-      required: true
+      required: true,
+      default: ''
     },
     valueClasses: {
       type: String,
-      required: false
+      required: false,
+      default: ''
     },
     value: {
-      required: true,
-      default: null
+      type: [String, Number]
     },
     maxLength: {
       type: Number,
@@ -35,18 +35,15 @@ export default {
     }
   },
   computed: {
-    collapseText () {
-      return this.value.length > this.maxLength && !this.showAll
+    shouldCollapseText () {
+      return this.value && this.value.length > this.maxLength && !this.showAll
     },
     formattedValue () {
-      if (this.value) {
-        if (this.collapseText) {
-          return this.value.substr(0, this.maxLength)
-        } else {
-          return this.value
-        }
+      if (this.shouldCollapseText) {
+        return this.value.substr(0, this.maxLength)
+      } else {
+        return this.value
       }
-      return null
     }
   },
   methods: {
@@ -56,7 +53,3 @@ export default {
   }
 }
 </script>
-
-<style scoped lang="scss">
-
-</style>

@@ -21,6 +21,3 @@ node_modules/
 
 # Telethon session files
 *.session
-
-# IPFS collection for Cognitron
-bafykbzacebzohi352bddfunaub5rgqv5b324nejk5v6fltjh45be5ykw5jsjg/

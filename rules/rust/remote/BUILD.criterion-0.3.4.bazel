@@ -57,7 +57,7 @@ rust_library(
     # buildifier: leave-alone
     deps = [
         "@raze__atty__0_2_14//:atty",
-        "@raze__cast__0_2_3//:cast",
+        "@raze__cast__0_2_5//:cast",
         "@raze__clap__2_33_3//:clap",
         "@raze__criterion_plot__0_4_3//:criterion_plot",
         "@raze__csv__1_1_6//:csv",

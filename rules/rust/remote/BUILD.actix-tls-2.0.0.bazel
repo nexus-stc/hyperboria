@@ -53,6 +53,6 @@ rust_library(
         "@raze__actix_codec__0_3_0//:actix_codec",
         "@raze__actix_service__1_0_6//:actix_service",
         "@raze__actix_utils__2_0_0//:actix_utils",
-        "@raze__futures_util__0_3_13//:futures_util",
+        "@raze__futures_util__0_3_14//:futures_util",
     ],
 )

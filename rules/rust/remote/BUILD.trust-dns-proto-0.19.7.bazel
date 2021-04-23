@@ -46,7 +46,7 @@ rust_library(
     data = [],
     edition = "2018",
     proc_macro_deps = [
-        "@raze__async_trait__0_1_48//:async_trait",
+        "@raze__async_trait__0_1_50//:async_trait",
         "@raze__enum_as_inner__0_3_3//:enum_as_inner",
     ],
     rustc_flags = [
@@ -60,8 +60,8 @@ rust_library(
     # buildifier: leave-alone
     deps = [
         "@raze__cfg_if__1_0_0//:cfg_if",
-        "@raze__futures__0_3_13//:futures",
-        "@raze__idna__0_2_2//:idna",
+        "@raze__futures__0_3_14//:futures",
+        "@raze__idna__0_2_3//:idna",
         "@raze__lazy_static__1_4_0//:lazy_static",
         "@raze__log__0_4_14//:log",
         "@raze__rand__0_7_3//:rand",

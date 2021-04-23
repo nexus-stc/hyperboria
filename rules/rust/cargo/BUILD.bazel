@@ -86,7 +86,7 @@ alias(
 
 alias(
     name = "async_trait",
-    actual = "@raze__async_trait__0_1_48//:async_trait",
+    actual = "@raze__async_trait__0_1_50//:async_trait",
     tags = [
         "cargo-raze",
         "manual",
@@ -149,7 +149,7 @@ alias(
 
 alias(
     name = "bincode",
-    actual = "@raze__bincode__1_3_2//:bincode",
+    actual = "@raze__bincode__1_3_3//:bincode",
     tags = [
         "cargo-raze",
         "manual",
@@ -176,7 +176,7 @@ alias(
 
 alias(
     name = "byteorder",
-    actual = "@raze__byteorder__1_3_4//:byteorder",
+    actual = "@raze__byteorder__1_4_3//:byteorder",
     tags = [
         "cargo-raze",
         "manual",
@@ -239,7 +239,7 @@ alias(
 
 alias(
     name = "config",
-    actual = "@raze__config__0_10_1//:config",
+    actual = "@raze__config__0_11_0//:config",
     tags = [
         "cargo-raze",
         "manual",
@@ -275,7 +275,7 @@ alias(
 
 alias(
     name = "crossbeam_channel",
-    actual = "@raze__crossbeam_channel__0_5_0//:crossbeam_channel",
+    actual = "@raze__crossbeam_channel__0_5_1//:crossbeam_channel",
     tags = [
         "cargo-raze",
         "manual",
@@ -410,7 +410,7 @@ alias(
 
 alias(
     name = "futures",
-    actual = "@raze__futures__0_3_13//:futures",
+    actual = "@raze__futures__0_3_14//:futures",
     tags = [
         "cargo-raze",
         "manual",
@@ -502,7 +502,7 @@ alias(
 
 alias(
     name = "libc",
-    actual = "@raze__libc__0_2_91//:libc",
+    actual = "@raze__libc__0_2_93//:libc",
     tags = [
         "cargo-raze",
         "manual",
@@ -828,7 +828,7 @@ alias(
 
 alias(
     name = "signal_hook",
-    actual = "@raze__signal_hook__0_3_7//:signal_hook",
+    actual = "@raze__signal_hook__0_3_8//:signal_hook",
     tags = [
         "cargo-raze",
         "manual",

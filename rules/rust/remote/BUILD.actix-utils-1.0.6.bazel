@@ -55,7 +55,7 @@ rust_library(
         "@raze__bitflags__1_2_1//:bitflags",
         "@raze__bytes__0_5_6//:bytes",
         "@raze__either__1_6_1//:either",
-        "@raze__futures__0_3_13//:futures",
+        "@raze__futures__0_3_14//:futures",
         "@raze__log__0_4_14//:log",
         "@raze__pin_project__0_4_28//:pin_project",
         "@raze__slab__0_4_2//:slab",

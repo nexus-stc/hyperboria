@@ -52,7 +52,7 @@ rust_library(
     # buildifier: leave-alone
     deps = [
         "@raze__bytestring__1_0_0//:bytestring",
-        "@raze__http__0_2_3//:http",
+        "@raze__http__0_2_4//:http",
         "@raze__log__0_4_14//:log",
         "@raze__regex__1_4_5//:regex",
         "@raze__serde__1_0_125//:serde",

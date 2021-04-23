@@ -8,7 +8,7 @@ if (buildDir) {
 export default {
   server: {
     host: '0.0.0.0',
-    port: 80
+    port: 8082
   },
   buildDir: buildDir,
   srcDir: 'nexus/cognitron/web',
@@ -39,16 +39,20 @@ export default {
   ],
 
   publicRuntimeConfig: {
-    ipfsGateway: process.env.NEXUS_COGNITRON_WEB_IPFS_GATEWAY || 'http://localhost:8080',
-    searchApi: process.env.NEXUS_COGNITRON_WEB_SEARCH_API || 'http://localhost:50000'
+    meta_api: {
+      url: process.env.NEXUS_COGNITRON_WEB_meta_api.url || 'http://nexus-meta-api:8080'
+    },
+    ipfs: {
+      gateway: {
+        url: process.env.NEXUS_COGNITRON_WEB_ipfs.gateway.url || 'https://ipfs.io'
+      }
+    }
   },
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
     'plugins/helpers',
-    'plugins/search-api',
-    'plugins/scimag-helpers',
-    'plugins/scitech-helpers',
+    'plugins/meta-api',
     'plugins/utils'
   ],
 
@@ -66,6 +70,11 @@ export default {
   ],
 
   loading: { color: '#1a95e0', throttle: 0 },
+  watchers: {
+    webpack: {
+      poll: true
+    }
+  },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {

@@ -59,7 +59,7 @@ rust_library(
         "@raze__base64__0_13_0//:base64",
         "@raze__bytes__0_5_6//:bytes",
         "@raze__cfg_if__1_0_0//:cfg_if",
-        "@raze__futures_core__0_3_13//:futures_core",
+        "@raze__futures_core__0_3_14//:futures_core",
         "@raze__log__0_4_14//:log",
         "@raze__mime__0_3_16//:mime",
         "@raze__percent_encoding__2_1_0//:percent_encoding",

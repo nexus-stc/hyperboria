@@ -14,8 +14,7 @@ deps = [
     "@npm//sass",
     "@npm//sass-loader",
     "@npm//vue",
-    "//nexus/meta_api/proto:meta_api_grpc_js",
-    "//nexus/meta_api/proto:meta_api_proto_js",
+    "//nexus/meta_api/js/client",
 ]
 
 js_library(
@@ -30,9 +29,6 @@ js_library(
         "static/*",
         "store/*.js",
     ]),
-    data = [
-        "//nexus/cognitron/web/client",
-    ],
 )
 
 nuxt(
@@ -40,6 +36,7 @@ nuxt(
     args = [
         "-c",
         "nexus/cognitron/web/nuxt.config.js",
+        "--watch-poll",
     ],
     data = [":nuxt-srcs"] + deps,
 )

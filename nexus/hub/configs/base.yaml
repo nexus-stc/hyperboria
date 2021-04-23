@@ -12,8 +12,8 @@ application:
 database:
   database: nexus
   host:
-  password: '{{ DATABASE_PASSWORD }}'
-  username: '{{ DATABASE_USERNAME }}'
+  password:
+  username:
 grobid:
   url:
 grpc:
@@ -24,7 +24,7 @@ grpc:
 ipfs:
   address:
   port: 4001
-log_path: '/var/log/nexus-hub/{{ ENV_TYPE }}'
+log_path: '/var/log/nexus-hub'
 meta_api:
   url:
 pylon:
@@ -34,14 +34,14 @@ pylon:
   resolve_proxy: socks5://127.0.0.1:9050
 telegram:
   # Telegram App Hash from https://my.telegram.org/
-  app_hash: '{{ APP_HASH }}'
+  app_hash:
   # Telegram App ID from https://my.telegram.org/
   app_id: 00000
   # External bot name shown in messages to users
   bot_external_name: libgen_scihub_bot
   # Internal bot name used in logging
   bot_name: nexus-hub
-  bot_token: '{{ BOT_TOKEN }}'
+  bot_token:
   # Telethon database for keeping cache
   database:
     session_id: nexus-hub

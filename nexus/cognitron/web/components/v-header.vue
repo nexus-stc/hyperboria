@@ -10,7 +10,7 @@ export default {
   name: 'VHeader',
   data () {
     return {
-      search: ''
+      query: ''
     }
   }
 }

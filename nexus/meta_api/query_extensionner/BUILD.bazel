@@ -1,0 +1,16 @@
+load("@pip_modules//:requirements.bzl", "requirement")
+load("@rules_python//python:defs.bzl", "py_library")
+
+py_library(
+    name = "query_extensionner",
+    srcs = glob(["**/*.py"]),
+    srcs_version = "PY3",
+    visibility = ["//visibility:public"],
+    deps = [
+        requirement("en_core_web_sm"),
+        requirement("ply"),
+        requirement("izihawa_types"),
+        "//nexus/nlptools",
+        requirement("izihawa_utils"),
+    ],
+)

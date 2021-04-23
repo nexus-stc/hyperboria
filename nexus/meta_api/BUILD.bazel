@@ -1,0 +1,94 @@
+load("@io_bazel_rules_docker//python3:image.bzl", "py3_image")
+load("@io_bazel_rules_docker//container:container.bzl", "container_push")
+load("@pip_modules//:requirements.bzl", "requirement")
+
+alias(
+    name = "binary",
+    actual = ":image.binary",
+    visibility = ["//visibility:public"],
+)
+
+py3_image(
+    name = "image",
+    srcs = glob(
+        ["**/*.py"],
+        exclude = ["proto/**/*.py"],
+    ),
+    base = "//images/production:base-python-image",
+    data = [
+        "configs/base.yaml",
+        "configs/logging.yaml",
+        "models/classic.txt",
+    ],
+    main = "main.py",
+    srcs_version = "PY3ONLY",
+    visibility = ["//visibility:public"],
+    deps = [
+        requirement("aiochclient"),
+        requirement("aiopg"),
+        requirement("cachetools"),
+        requirement("grpcio"),
+        requirement("lightgbm"),
+        requirement("numpy"),
+        requirement("protobuf"),
+        requirement("recordclass"),
+        requirement("uvloop"),
+        "//library/aiogrpctools",
+        "//library/aiopostgres",
+        "//library/configurator",
+        "//library/logging",
+        "//nexus/meta_api/proto:meta_api_grpc_py",
+        "//nexus/meta_api/query_extensionner",
+        "//nexus/models/proto:models_proto_py",
+        "//nexus/nlptools",
+        "//nexus/views/telegram",
+        requirement("aiosumma"),
+    ],
+)
+
+py3_image(
+    name = "learn",
+    srcs = ["learn.py"],
+    base = "//images/production:base-python-image",
+    main = "learn.py",
+    srcs_version = "PY3ONLY",
+    visibility = ["//visibility:public"],
+    deps = [
+        requirement("fire"),
+        requirement("lightgbm"),
+        requirement("numpy"),
+        requirement("orjson"),
+        requirement("pandas"),
+        "//nexus/meta_api/proto:meta_api_proto_py",
+        requirement("izihawa_utils"),
+    ],
+)
+
+py_binary(
+    name = "cli",
+    srcs = ["cli.py"],
+    main = "cli.py",
+    deps = [
+        "//nexus/meta_api/aioclient",
+        requirement("fire"),
+    ],
+)
+
+
+container_push(
+    name = "push-public-latest",
+    format = "Docker",
+    image = ":image",
+    registry = "registry.hub.docker.com",
+    repository = "thesuperpirate/meta-api",
+    tag = "latest",
+)
+
+container_push(
+    name = "push-public-testing",
+    format = "Docker",
+    image = ":image",
+    registry = "registry.hub.docker.com",
+    repository = "thesuperpirate/meta-api",
+    tag = "testing",
+)

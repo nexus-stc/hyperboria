@@ -59,7 +59,7 @@ rust_library(
     # buildifier: leave-alone
     deps = [
         "@raze__cfg_if__0_1_10//:cfg_if",
-        "@raze__futures__0_3_13//:futures",
+        "@raze__futures__0_3_14//:futures",
         "@raze__lazy_static__1_4_0//:lazy_static",
         "@raze__log__0_4_14//:log",
         "@raze__lru_cache__0_1_2//:lru_cache",

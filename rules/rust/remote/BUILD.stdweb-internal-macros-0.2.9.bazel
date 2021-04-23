@@ -53,11 +53,11 @@ rust_library(
     # buildifier: leave-alone
     deps = [
         "@raze__base_x__0_2_8//:base_x",
-        "@raze__proc_macro2__1_0_24//:proc_macro2",
+        "@raze__proc_macro2__1_0_26//:proc_macro2",
         "@raze__quote__1_0_9//:quote",
         "@raze__serde__1_0_125//:serde",
         "@raze__serde_json__1_0_64//:serde_json",
         "@raze__sha1__0_6_0//:sha1",
-        "@raze__syn__1_0_67//:syn",
+        "@raze__syn__1_0_69//:syn",
     ],
 )

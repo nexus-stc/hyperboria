@@ -74,7 +74,7 @@ rust_library(
     deps = [
         "@raze__bit_set__0_5_2//:bit_set",
         "@raze__bitflags__1_2_1//:bitflags",
-        "@raze__byteorder__1_3_4//:byteorder",
+        "@raze__byteorder__1_4_3//:byteorder",
         "@raze__lazy_static__1_4_0//:lazy_static",
         "@raze__num_traits__0_2_14//:num_traits",
         "@raze__quick_error__1_2_3//:quick_error",
