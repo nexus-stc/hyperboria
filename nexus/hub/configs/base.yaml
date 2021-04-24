@@ -23,7 +23,7 @@ grpc:
   # Listen port
   port: 9090
 ipfs:
-  address:
+  address: localhost
   port: 4001
 log_path: '/var/log/nexus-hub'
 meta_api:
