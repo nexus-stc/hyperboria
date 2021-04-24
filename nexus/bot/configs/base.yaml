@@ -29,7 +29,6 @@ application:
   request_id_length: 12
   # Enabled schemas (passed to Nexus Meta API)
   schemas:
-    - scimag
     - scitech
   # Length of generated Session-ID used in commands to clue user sessions
   session_id_length: 8
