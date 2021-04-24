@@ -3,7 +3,7 @@
 application:
   debug: true
   # Enable special Postgres `sharience` table to retrieve user-sent files
-  is_sharience_enabled: true
+  is_sharience_enabled: false
   # URL to the picture shown while maintenance
   maintenance_picture_url:
   # Used in logging
@@ -12,6 +12,7 @@ application:
   should_store_hashes: true
 database:
   database: nexus
+  enabled: false
   host:
   password:
   username:

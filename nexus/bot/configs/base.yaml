@@ -44,6 +44,7 @@ application:
 hub:
   url:
 idm:
+  enabled: false
   url:
 log_path: '/var/log/nexus-bot'
 meta_api:

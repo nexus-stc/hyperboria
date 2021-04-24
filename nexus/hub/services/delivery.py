@@ -324,6 +324,8 @@ class DeliveryService(DeliveryServicer, BaseHubService):
         should_use_telegram_file_id: bool,
         telegram_client: BaseTelegramClient,
     ):
+        if is_sharience_enabled and not pool_holder:
+            raise ValueError('Sharience can be used only with enabled database')
         super().__init__(
             service_name=service_name,
             bot_external_name=bot_external_name,
