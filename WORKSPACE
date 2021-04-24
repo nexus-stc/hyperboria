@@ -229,18 +229,6 @@ container_repositories()
 
 load("@io_bazel_rules_docker//repositories:deps.bzl", container_deps = "deps")
 
-# ToDo: temorary fix as registry was broken at 24.04.2021
-load("@bazel_gazelle//:deps.bzl", "go_repository")
-
-go_repository(
-    name = "com_github_google_go_containerregistry",
-    importpath = "github.com/google/go-containerregistry",
-    sha256 = "60b9a600affa5667bd444019a4e218b7752d8500cfa923c1ac54ce2f88f773e2",
-    strip_prefix = "google-go-containerregistry-8a28419",
-    type = "tar.gz",
-    urls = ["https://api.github.com/repos/google/go-containerregistry/tarball/8a2841911ffee4f6892ca0083e89752fb46c48dd"],  # v0.1.4
-)
-
 container_deps()
 
 load("@io_bazel_rules_docker//repositories:py_repositories.bzl", "py_deps")
