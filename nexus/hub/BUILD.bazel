@@ -35,7 +35,7 @@ py3_image(
         requirement("tenacity"),
         requirement("uvloop"),
         "//idm/api/proto:idm_proto_py",
-        requirement("giogrobid"),
+        requirement("aiogrobid"),
         "//library/aiogrpctools",
         requirement("aiokit"),
         "//library/aiopostgres",
