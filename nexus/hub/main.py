@@ -31,6 +31,7 @@ class GrpcServer(AioGrpcServer):
             database=config['telegram'].get('database'),
             mtproxy=config['telegram'].get('mtproxy'),
         )
+        self.starts.append(self.telegram_client)
         self.delivery_service = DeliveryService(
             server=self.server,
             service_name=config['application']['service_name'],
@@ -44,17 +45,19 @@ class GrpcServer(AioGrpcServer):
             should_use_telegram_file_id=config['telegram']['should_use_telegram_file_id'],
             telegram_client=self.telegram_client,
         )
-        self.submitter_service = SubmitterService(
-            server=self.server,
-            service_name=config['application']['service_name'],
-            bot_external_name=config['telegram']['bot_external_name'],
-            grobid_config=config['grobid'],
-            ipfs_config=config['ipfs'],
-            meta_api_config=config['meta_api'],
-            telegram_client=self.telegram_client,
-        )
+        self.starts.append(self.delivery_service)
+        if config['grobid']['enabled']:
+            self.submitter_service = SubmitterService(
+                server=self.server,
+                service_name=config['application']['service_name'],
+                bot_external_name=config['telegram']['bot_external_name'],
+                grobid_config=config['grobid'],
+                ipfs_config=config['ipfs'],
+                meta_api_config=config['meta_api'],
+                telegram_client=self.telegram_client,
+            )
+            self.starts.append(self.submitter_service)
         self.waits.append(self.pool_holder)
-        self.starts.extend([self.telegram_client, self.delivery_service, self.submitter_service])
 
 
 def main():

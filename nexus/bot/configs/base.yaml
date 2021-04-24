@@ -48,6 +48,8 @@ idm:
 log_path: '/var/log/nexus-bot'
 meta_api:
   url:
+metrics:
+  enabled: false
 telegram:
   # Telegram App Hash from https://my.telegram.org/
   app_hash: '{{ APP_HASH }}'
@@ -65,7 +67,7 @@ telegram:
   copyright_infringement_account:
   # Telethon database for keeping cache
   database:
-    session_id: '/usr/lib/nexus-bot/session.db'
+    session_id: /tmp/nexus-bot.db
   # Enabled handlers
   handlers:
     - nexus.bot.handlers.admin.AdminHandler

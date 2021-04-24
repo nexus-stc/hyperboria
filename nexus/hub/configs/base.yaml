@@ -16,6 +16,7 @@ database:
   password:
   username:
 grobid:
+  enabled: false
   url:
 grpc:
   # Listen address
@@ -45,7 +46,7 @@ telegram:
   bot_token:
   # Telethon database for keeping cache
   database:
-    session_id: nexus-hub
+    session_id: /tmp/nexus-hub.db
   # Frequency of updating downloading progress
   progress_throttle_seconds: 5
   # Send files using stored telegram_file_id
