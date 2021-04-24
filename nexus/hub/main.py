@@ -13,6 +13,7 @@ from nexus.hub.services.submitter import SubmitterService
 
 class GrpcServer(AioGrpcServer):
     def __init__(self, config: Configurator):
+        self.log_config(config)
         super().__init__(address=config['grpc']['address'], port=config['grpc']['port'])
         self.pool_holder = AioPostgresPoolHolder(
             dsn=f'dbname={config["database"]["database"]} '

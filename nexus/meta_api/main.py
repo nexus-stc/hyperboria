@@ -15,6 +15,7 @@ from nexus.meta_api.services.search import SearchService
 
 class GrpcServer(AioGrpcServer):
     def __init__(self, config):
+        self.log_config(config)
         super().__init__(address=config['grpc']['host'], port=config['grpc']['port'])
         self.config = config
 
