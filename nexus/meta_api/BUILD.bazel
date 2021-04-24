@@ -1,5 +1,6 @@
 load("@io_bazel_rules_docker//python3:image.bzl", "py3_image")
 load("@io_bazel_rules_docker//container:container.bzl", "container_push")
+
 load("@pip_modules//:requirements.bzl", "requirement")
 
 alias(
@@ -46,31 +47,13 @@ py3_image(
     ],
 )
 
-py3_image(
-    name = "learn",
-    srcs = ["learn.py"],
-    base = "//images/production:base-python-image",
-    main = "learn.py",
-    srcs_version = "PY3ONLY",
-    visibility = ["//visibility:public"],
-    deps = [
-        requirement("fire"),
-        requirement("lightgbm"),
-        requirement("numpy"),
-        requirement("orjson"),
-        requirement("pandas"),
-        "//nexus/meta_api/proto:meta_api_proto_py",
-        requirement("izihawa_utils"),
-    ],
-)
-
 py_binary(
     name = "cli",
     srcs = ["cli.py"],
     main = "cli.py",
     deps = [
-        "//nexus/meta_api/aioclient",
         requirement("fire"),
+        "//nexus/meta_api/aioclient",
     ],
 )
 

@@ -1,8 +1,9 @@
 ---
 
 application:
+  debug: true
   # Enable special Postgres `sharience` table to retrieve user-sent files
-  is_sharience_enabled: true
+  is_sharience_enabled: false
   # URL to the picture shown while maintenance
   maintenance_picture_url:
   # Used in logging
@@ -11,10 +12,12 @@ application:
   should_store_hashes: true
 database:
   database: nexus
+  enabled: false
   host:
   password:
   username:
 grobid:
+  enabled: false
   url:
 grpc:
   # Listen address
@@ -22,7 +25,7 @@ grpc:
   # Listen port
   port: 9090
 ipfs:
-  address:
+  address: localhost
   port: 4001
 log_path: '/var/log/nexus-hub'
 meta_api:
@@ -44,7 +47,7 @@ telegram:
   bot_token:
   # Telethon database for keeping cache
   database:
-    session_id: nexus-hub
+    session_id: /tmp/nexus-hub.db
   # Frequency of updating downloading progress
   progress_throttle_seconds: 5
   # Send files using stored telegram_file_id

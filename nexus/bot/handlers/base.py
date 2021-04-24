@@ -185,6 +185,15 @@ class BaseHandler(ABC):
             request_context.error_log(e)
 
     async def _put_chat(self, event: events.ChatAction, request_id: str):
+        event_chat = await event.get_chat()
+        username = get_username(event, event_chat)
+        language = get_language(event, event_chat)
+        if not self.application.idm_client:
+            return ChatPb(
+                chat_id=event.chat_id,
+                username=username,
+                language=language,
+            )
         try:
             chat = await self.application.idm_client.get_chat(
                 chat_id=event.chat_id,
@@ -196,9 +205,6 @@ class BaseHandler(ABC):
                 raise
             if self.application.config['application']['is_read_only_mode']:
                 raise ReadOnlyModeError()
-            event_chat = await event.get_chat()
-            username = get_username(event, event_chat)
-            language = get_language(event, event_chat)
             if language not in {'en', 'ru'}:
                 language = 'en'
             chat = await self.application.idm_client.create_chat(

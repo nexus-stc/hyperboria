@@ -153,3 +153,6 @@ class Configurator(RichDict):
 
     def has_file(self, basename):
         return basename in self._by_basenames
+
+    def get_files(self):
+        return self._by_basenames

@@ -29,7 +29,6 @@ application:
   request_id_length: 12
   # Enabled schemas (passed to Nexus Meta API)
   schemas:
-    - scimag
     - scitech
   # Length of generated Session-ID used in commands to clue user sessions
   session_id_length: 8
@@ -44,10 +43,13 @@ application:
 hub:
   url:
 idm:
+  enabled: false
   url:
 log_path: '/var/log/nexus-bot'
 meta_api:
   url:
+metrics:
+  enabled: false
 telegram:
   # Telegram App Hash from https://my.telegram.org/
   app_hash: '{{ APP_HASH }}'
@@ -65,7 +67,7 @@ telegram:
   copyright_infringement_account:
   # Telethon database for keeping cache
   database:
-    session_id: '/usr/lib/nexus-bot/session.db'
+    session_id: /tmp/nexus-bot.db
   # Enabled handlers
   handlers:
     - nexus.bot.handlers.admin.AdminHandler

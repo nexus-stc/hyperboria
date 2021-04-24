@@ -1,9 +1,10 @@
 setuptools==54.1.2
 
-aiobaseclient==0.2.1
+aiobaseclient==0.2.4
 aiochclient==2.0.0
-aiocrossref==0.2.0
-aiogrpcclient==0.1.0
+aiocrossref==0.2.1
+aiogrobid==0.1.2
+aiogrpcclient==0.1.2
 aiodns==2.0.0
 aioftp==0.18.1
 aiohttp[speedups]==3.7.4.post0
@@ -64,7 +65,7 @@ idna==2.10
 isort==5.8.0
 itsdangerous==1.1.0
 izihawa_types==0.1.0
-izihawa_utils==0.3.1
+izihawa_utils==0.3.2
 Jinja2==2.11.3
 jupyter==1.0.0
 kazoo==2.8.0

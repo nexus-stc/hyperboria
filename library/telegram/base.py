@@ -1,5 +1,9 @@
 import datetime
 import logging
+from typing import (
+    Optional,
+    Union,
+)
 
 from aiokit import AioThing
 from izihawa_utils.random import random_string
@@ -19,8 +23,20 @@ from .session_backend import AlchemySessionContainer
 
 
 class BaseTelegramClient(AioThing):
-    def __init__(self, app_id, app_hash, database, bot_token=None, mtproxy=None, flood_sleep_threshold: int = 60):
-        AioThing.__init__(self)
+    def __init__(
+        self,
+        app_id: Union[int, str],
+        app_hash: str,
+        database: dict,
+        bot_token: Optional[str] = None,
+        mtproxy: Optional[dict] = None,
+        flood_sleep_threshold: int = 60,
+    ):
+        super().__init__()
+        if not app_id or not app_hash:
+            raise ValueError(
+                'Your API ID or Hash cannot be empty or None. Set up telegram.app_id and/or telegram.app_hash'
+            )
         self._telegram_client = TelegramClient(
             self._get_session(database),
             app_id,

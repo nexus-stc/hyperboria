@@ -1,6 +1,7 @@
 import logging
 from functools import wraps
 
+import yaml
 from aiokit import (
     AioRootThing,
     AioThing,
@@ -35,6 +36,11 @@ class AioGrpcServer(AioRootThing):
             'mode': 'grpc',
         })
         await self.server.stop(None)
+
+    def log_config(self, config):
+        logging.getLogger('debug').info(
+            '\n' + yaml.safe_dump(config.get_files()),
+        )
 
 
 class BaseService(AioThing):

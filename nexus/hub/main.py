@@ -13,16 +13,22 @@ from nexus.hub.services.submitter import SubmitterService
 
 class GrpcServer(AioGrpcServer):
     def __init__(self, config: Configurator):
+        self.log_config(config)
         super().__init__(address=config['grpc']['address'], port=config['grpc']['port'])
-        self.pool_holder = AioPostgresPoolHolder(
-            dsn=f'dbname={config["database"]["database"]} '
-            f'user={config["database"]["username"]} '
-            f'password={config["database"]["password"]} '
-            f'host={config["database"]["host"]}',
-            timeout=30,
-            pool_recycle=60,
-            maxsize=4,
-        )
+
+        self.pool_holder = None
+        if config['database']['enabled']:
+            self.pool_holder = AioPostgresPoolHolder(
+                dsn=f'dbname={config["database"]["database"]} '
+                f'user={config["database"]["username"]} '
+                f'password={config["database"]["password"]} '
+                f'host={config["database"]["host"]}',
+                timeout=30,
+                pool_recycle=60,
+                maxsize=4,
+            )
+            self.waits.append(self.pool_holder)
+
         self.telegram_client = BaseTelegramClient(
             app_id=config['telegram']['app_id'],
             app_hash=config['telegram']['app_hash'],
@@ -30,6 +36,8 @@ class GrpcServer(AioGrpcServer):
             database=config['telegram'].get('database'),
             mtproxy=config['telegram'].get('mtproxy'),
         )
+        self.starts.append(self.telegram_client)
+
         self.delivery_service = DeliveryService(
             server=self.server,
             service_name=config['application']['service_name'],
@@ -43,17 +51,19 @@ class GrpcServer(AioGrpcServer):
             should_use_telegram_file_id=config['telegram']['should_use_telegram_file_id'],
             telegram_client=self.telegram_client,
         )
-        self.submitter_service = SubmitterService(
-            server=self.server,
-            service_name=config['application']['service_name'],
-            bot_external_name=config['telegram']['bot_external_name'],
-            grobid_config=config['grobid'],
-            ipfs_config=config['ipfs'],
-            meta_api_config=config['meta_api'],
-            telegram_client=self.telegram_client,
-        )
-        self.waits.append(self.pool_holder)
-        self.starts.extend([self.telegram_client, self.delivery_service, self.submitter_service])
+        self.starts.append(self.delivery_service)
+
+        if config['grobid']['enabled']:
+            self.submitter_service = SubmitterService(
+                server=self.server,
+                service_name=config['application']['service_name'],
+                bot_external_name=config['telegram']['bot_external_name'],
+                grobid_config=config['grobid'],
+                ipfs_config=config['ipfs'],
+                meta_api_config=config['meta_api'],
+                telegram_client=self.telegram_client,
+            )
+            self.starts.append(self.submitter_service)
 
 
 def main():

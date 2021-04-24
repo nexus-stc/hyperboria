@@ -11,6 +11,7 @@ py_library(
     visibility = ["//visibility:public"],
     deps = [
         requirement("grpcio"),
+        requirement("pyyaml"),
         requirement("aiokit"),
         "//library/configurator",
         "//library/logging",
