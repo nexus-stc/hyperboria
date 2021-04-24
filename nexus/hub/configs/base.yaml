@@ -1,6 +1,7 @@
 ---
 
 application:
+  debug: true
   # Enable special Postgres `sharience` table to retrieve user-sent files
   is_sharience_enabled: true
   # URL to the picture shown while maintenance
