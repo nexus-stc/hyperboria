@@ -14,7 +14,7 @@ services:
     depends_on:
       - summa
     environment:
-      ENV_TYPE: development
+      ENV_TYPE: production
       NEXUS_META_API_grpc.address: '0.0.0.0'
       NEXUS_META_API_grpc.port: 9090
       NEXUS_META_API_summa.url: 'http://summa:8082'
