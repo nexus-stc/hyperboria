@@ -1,20 +1,22 @@
-load("//rules/nodejs:common.bzl", "js_library")
+load("@build_bazel_rules_nodejs//:index.bzl", "js_library")
 
 js_library(
     name = "base-client",
+    package_name = "base-client",
     srcs = ["base-client.js"],
-    data = [
+    visibility = ["//visibility:public"],
+    deps = [
         "//library/js:utils",
         "@npm//axios",
     ],
-    visibility = ["//visibility:public"],
 )
 
 js_library(
     name = "utils",
+    package_name = "utils",
     srcs = ["utils.js"],
-    data = [
+    visibility = ["//visibility:public"],
+    deps = [
         "@npm//lodash",
     ],
-    visibility = ["//visibility:public"],
 )

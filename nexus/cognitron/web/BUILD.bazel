@@ -1,7 +1,18 @@
+load("@build_bazel_rules_nodejs//:index.bzl", "js_library")
 load("@io_bazel_rules_docker//container:container.bzl", "container_push")
 load("@io_bazel_rules_docker//nodejs:image.bzl", "nodejs_image")
 load("@npm//nuxt:index.bzl", "nuxt")
-load("//rules/nodejs:common.bzl", "js_library")
+
+files = ["nuxt.config.js"] + glob([
+    "assets/**",
+    "components/**/*.vue",
+    "layouts/*.vue",
+    "middleware/*.js",
+    "pages/**/*.vue",
+    "plugins/*.js",
+    "static/*",
+    "store/*.js",
+])
 
 deps = [
     "@npm//@nuxtjs/axios",
@@ -18,27 +29,20 @@ deps = [
 ]
 
 js_library(
-    name = "nuxt-srcs",
-    srcs = ["nuxt.config.js"] + glob([
-        "assets/**",
-        "components/**/*.vue",
-        "layouts/*.vue",
-        "middleware/*.js",
-        "pages/**/*.vue",
-        "plugins/*.js",
-        "static/*",
-        "store/*.js",
-    ]),
+    name = "nexus-cognitron-web",
+    package_name = "nexus-cognitron-web",
+    srcs = files,
+    deps = deps,
 )
 
 nuxt(
-    name = "web_dev",
+    name = "web-dev",
     args = [
         "-c",
         "nexus/cognitron/web/nuxt.config.js",
         "--watch-poll",
     ],
-    data = [":nuxt-srcs"] + deps,
+    data = [":nexus-cognitron-web"],
 )
 
 nuxt(
@@ -50,7 +54,8 @@ nuxt(
         "nexus/cognitron/web/nuxt.config.js",
         "--buildDir=$(@D)",
     ],
-    data = [":nuxt-srcs"] + deps,
+    data = files + deps,
+    link_workspace_root = True,
     output_dir = True,
 )
 

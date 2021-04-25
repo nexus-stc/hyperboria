@@ -1,5 +1,5 @@
-import documentsProto from '~/nexus/meta_api/proto/documents_service_grpc_web_pb'
-import searchProto from '~/nexus/meta_api/proto/search_service_grpc_web_pb'
+import documentsProto from 'meta-api-grpc-web-js/meta-api-grpc-web-js_pb/nexus/meta_api/proto/documents_service_grpc_web_pb'
+import searchProto from 'meta-api-grpc-web-js/meta-api-grpc-web-js_pb/nexus/meta_api/proto/search_service_grpc_web_pb'
 
 export default class MetaApi {
   constructor (config) {

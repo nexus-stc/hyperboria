@@ -1,6 +1,6 @@
-import MetaApi from '~/nexus/meta_api/js/client'
+import MetaApi from 'nexus-meta-api-js-client'
 
 export default ({ $config }, inject) => {
-  const metaApi = new MetaApi($config.metaApi)
+  const metaApi = new MetaApi($config.meta_api)
   inject('meta_api', metaApi)
 }

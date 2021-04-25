@@ -26,7 +26,6 @@ rust_proto_library(
 
 js_proto_library(
     name = "models_proto_js",
-    prefix_path = "../../../../",
     protos = [":models_proto"],
     visibility = ["//visibility:public"],
 )
