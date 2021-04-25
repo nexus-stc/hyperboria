@@ -1,12 +1,11 @@
-load("//rules/nodejs:common.bzl", "js_library")
+load("@build_bazel_rules_nodejs//:index.bzl", "js_library")
 
 js_library(
     name = "client",
+    package_name = "nexus-meta-api-js-client",
     srcs = glob(["*.js"]),
-    data = [
-        "//library/js:base-client",
-        "//library/js:utils",
-        "//nexus/meta_api/proto:meta_api_grpc_web_js",
-    ],
     visibility = ["//visibility:public"],
+    deps = [
+        "//nexus/meta_api/proto:meta-api-grpc-web-js",
+    ],
 )

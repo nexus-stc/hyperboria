@@ -6,7 +6,7 @@ load("@rules_proto_grpc//js:defs.bzl", "js_grpc_web_library")
 package(default_visibility = ["//visibility:public"])
 
 proto_library(
-    name = "meta_api_proto",
+    name = "meta-api-proto",
     srcs = glob([
         "*.proto",
     ]),
@@ -17,27 +17,29 @@ proto_library(
 )
 
 py_proto_library(
-    name = "meta_api_proto_py",
-    deps = [":meta_api_proto"],
+    name = "meta-api-proto-py",
+    deps = [":meta-api-proto"],
 )
 
 py_grpc_library(
-    name = "meta_api_grpc_py",
-    srcs = [":meta_api_proto"],
-    deps = [":meta_api_proto_py"],
+    name = "meta-api-grpc-py",
+    srcs = [":meta-api-proto"],
+    deps = [":meta-api-proto-py"],
 )
 
 rust_proto_library(
-    name = "meta_api_proto_rust",
+    name = "meta-api-proto-rust",
     rust_deps = ["//rules/rust/cargo:protobuf"],
     visibility = ["//visibility:public"],
-    deps = [":meta_api_proto"],
+    deps = [":meta-api-proto"],
 )
 
 js_grpc_web_library(
-    name = "meta_api_grpc_web_js",
-    prefix_path = "../../../../",
-    protos = [":meta_api_proto"],
+    name = "meta-api-grpc-web-js",
+    protos = [
+        ":meta-api-proto",
+        "//nexus/models/proto:models_proto",
+    ],
     visibility = ["//visibility:public"],
     deps = ["//nexus/models/proto:models_proto_js"],
 )

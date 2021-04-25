@@ -1,4 +1,4 @@
-import { removeUndefined, toCamel, toSnake } from '~/library/js/utils'
+import { removeUndefined, toCamel, toSnake } from 'utils'
 import Axios from 'axios'
 
 export default class BaseClient {

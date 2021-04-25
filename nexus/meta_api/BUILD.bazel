@@ -38,7 +38,7 @@ py3_image(
         "//library/aiopostgres",
         "//library/configurator",
         "//library/logging",
-        "//nexus/meta_api/proto:meta_api_grpc_py",
+        "//nexus/meta_api/proto:meta-api-grpc-py",
         "//nexus/meta_api/query_extensionner",
         "//nexus/models/proto:models_proto_py",
         "//nexus/nlptools",

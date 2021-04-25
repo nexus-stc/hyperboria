@@ -5,10 +5,10 @@ if (buildDir) {
   buildDir = 'nexus/cognitron/web/.nuxt'
 }
 
-export default {
+module.exports = {
   server: {
     host: '0.0.0.0',
-    port: 8082
+    port: 3000
   },
   buildDir: buildDir,
   srcDir: 'nexus/cognitron/web',
@@ -40,11 +40,11 @@ export default {
 
   publicRuntimeConfig: {
     meta_api: {
-      url: process.env.NEXUS_COGNITRON_WEB_meta_api.url || 'http://nexus-meta-api:8080'
+      url: process.env['NEXUS_COGNITRON_WEB_meta_api.url'] || 'http://localhost:8080'
     },
     ipfs: {
       gateway: {
-        url: process.env.NEXUS_COGNITRON_WEB_ipfs.gateway.url || 'https://ipfs.io'
+        url: process.env['NEXUS_COGNITRON_WEB_ipfs.gateway.url'] || 'https://ipfs.io'
       }
     }
   },
@@ -80,6 +80,7 @@ export default {
   build: {
     extend (config) {
       config.resolve.alias['~'] = process.cwd()
-    }
+    },
+    transpile: ['nexus-meta-api-js-client'],
   }
 }
