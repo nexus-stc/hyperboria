@@ -55,7 +55,6 @@ nuxt(
         "--buildDir=$(@D)",
     ],
     data = files + deps,
-    link_workspace_root = True,
     output_dir = True,
 )
 
