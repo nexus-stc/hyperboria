@@ -39,12 +39,12 @@ export default {
   ],
 
   publicRuntimeConfig: {
-    meta_api: {
-      url: process.env.NEXUS_COGNITRON_WEB_meta_api.url || 'http://nexus-meta-api:8080'
+    metaApi: {
+      url: process.env["NEXUS_COGNITRON_WEB_meta_api.url"] || 'http://nexus-meta-api:8080'
     },
     ipfs: {
       gateway: {
-        url: process.env.NEXUS_COGNITRON_WEB_ipfs.gateway.url || 'https://ipfs.io'
+        url: process.env["NEXUS_COGNITRON_WEB_ipfs.gateway.url"] || 'https://ipfs.io'
       }
     }
   },

@@ -2,6 +2,7 @@ load("@com_github_grpc_grpc//bazel:python_rules.bzl", "py_proto_library")
 load("@rules_rust//proto:proto.bzl", "rust_proto_library")
 load("@rules_proto//proto:defs.bzl", "proto_library")
 load("@rules_proto_grpc//js:defs.bzl", "js_proto_library")
+load("//rules/nodejs:common.bzl", "js_library")
 
 proto_library(
     name = "models_proto",
@@ -28,5 +29,11 @@ js_proto_library(
     name = "models_proto_js",
     prefix_path = "../../../../",
     protos = [":models_proto"],
+    visibility = ["//visibility:public"],
+)
+
+js_library(
+    name = "models_proto_js_client",
+    srcs = glob(["*.js"]),
     visibility = ["//visibility:public"],
 )

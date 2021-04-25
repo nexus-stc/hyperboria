@@ -6,10 +6,10 @@ services:
     environment:
       ENV_TYPE: production
       NEXUS_COGNITRON_WEB_ipfs.gateway.url: https://cloudflare-ipfs.com
-      NEXUS_COGNITRON_WEB_meta_api.url: http://nexus-meta-api:8080
+      NEXUS_COGNITRON_WEB_meta_api.url: http://localhost:8080
     image: thesuperpirate/cognitron-web:latest
     ports:
-      - '3000:80'
+      - '3000:8082'
   nexus-meta-api:
     depends_on:
       - summa
