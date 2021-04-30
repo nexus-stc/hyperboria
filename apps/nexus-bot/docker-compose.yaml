@@ -1,0 +1,29 @@
+---
+services:
+  nexus-bot:
+    depends_on:
+      - nexus-meta-api
+    environment:
+      ENV_TYPE: production
+    image: thesuperpirate/nexus-bot:latest
+    ports:
+      - '3000:3000'
+  nexus-meta-api:
+    depends_on:
+      - summa
+    environment:
+      ENV_TYPE: production
+      NEXUS_META_API_grpc.address: '0.0.0.0'
+      NEXUS_META_API_grpc.port: 9090
+      NEXUS_META_API_summa.url: 'http://summa:8082'
+    image: thesuperpirate/nexus-meta-api:latest
+  summa:
+    environment:
+      ENV_TYPE: production
+      SUMMA_debug: 'true'
+      SUMMA_http.address: '0.0.0.0'
+      SUMMA_http.port: '8082'
+    image: izihawa/summa:latest
+    volumes:
+      - '${DATA_PATH}:/summa/data'
+version: "3"

@@ -1,21 +1,15 @@
 <template lang="pug">
   div.d-flex
     div
-      nuxt-link(:to="{ name: 'documents-schema-id', params: { schema: schema, id: document.id }}") {{ document.title }}
+      nuxt-link(:to="{ name: 'documents-schema-id', params: { schema: document.schema, id: document.id }}") {{ document.icon }} {{ document.title }}
       .detail
         div
           i.mr-1(v-if='document.doi') DOI:
           span {{ document.doi }}
-        div(v-if='document.firstAuthors')
-          span {{ document.firstAuthors }} {{ issuedAt }}
+        div(v-if='document.getFirstAuthors(false, 1)')
+          span {{ document.getFirstAuthors(false, 1) }} {{ issuedAt }}
         .gp
-          span.el.text-uppercase(v-if="document.extension") {{ document.extension }}
-          span.el.text-uppercase(v-if="document.language") {{ document.language }}
-          span.el.text-uppercase(v-if="document.filesize") {{ document.filesize }}
-          span.el(v-if="document.pages")
-            span.mr-2 {{ document.pages }}
-            span pages
-
+          span.el.text-uppercase {{ document.getFormattedFiledata() }}
 </template>
 
 <script>
@@ -25,25 +19,19 @@ import { getIssuedDate } from '@/plugins/helpers'
 export default {
   name: 'SearchItem',
   props: {
-    scoredDocument: {
+    document: {
       type: Object,
       required: true
     }
   },
 
   computed: {
-    document: function () {
-      return this.scoredDocument.typedDocument[this.schema]
-    },
     issuedAt: function () {
       const date = getIssuedDate(this.document.issuedAt)
       if (date != null) return '(' + date + ')'
       return null
     },
-    schema: function () {
-      const td = this.scoredDocument.typedDocument
-      return Object.keys(td).filter(k => td[k] !== undefined)[0]
-    }
+
   }
 }
 </script>

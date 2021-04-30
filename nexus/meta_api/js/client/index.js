@@ -2,9 +2,13 @@ import documentsProto from 'meta-api-grpc-web-js/meta-api-grpc-web-js_pb/nexus/m
 import searchProto from 'meta-api-grpc-web-js/meta-api-grpc-web-js_pb/nexus/meta_api/proto/search_service_grpc_web_pb'
 
 export default class MetaApi {
-  constructor (config) {
-    this.documentsClient = new documentsProto.DocumentsPromiseClient(config.url)
-    this.searchClient = new searchProto.SearchPromiseClient(config.url)
+  constructor (url, hostname) {
+    this.metadata = {}
+    if (hostname) {
+      this.metadata['X-Forwarded-Host'] = hostname
+    }
+    this.documentsClient = new documentsProto.DocumentsPromiseClient(url)
+    this.searchClient = new searchProto.SearchPromiseClient(url)
   }
 
   generateId (length) {
@@ -17,23 +21,27 @@ export default class MetaApi {
     return result.join('')
   }
 
-  async getView (schema, documentId) {
+  prepareMetadata () {
+    return Object.assign({ 'request-id': this.generateId(12) }, this.metadata)
+  }
+
+  async get (schema, documentId) {
     const request = new documentsProto.TypedDocumentRequest()
     request.setSchema(schema)
     request.setDocumentId(documentId)
     request.setSessionId(this.generateId(8))
-    const response = await this.documentsClient.get_view(request, { 'request-id': this.generateId(12) })
+    const response = await this.documentsClient.get(request, this.prepareMetadata())
     return response.toObject()
   }
 
-  async search (schema, query, page, pageSize = 5) {
+  async search (schemas, query, page, pageSize = 5) {
     const request = new searchProto.SearchRequest()
     request.setPage(page)
     request.setPageSize(pageSize)
-    request.addSchemas(schema)
+    schemas.forEach((schema) => request.addSchemas(schema))
     request.setQuery(query)
     request.setSessionId(this.generateId(8))
-    const response = await this.searchClient.search(request, { 'request-id': this.generateId(12) })
+    const response = await this.searchClient.search(request, this.prepareMetadata())
     return response.toObject()
   }
 }

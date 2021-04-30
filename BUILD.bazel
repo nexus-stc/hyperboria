@@ -20,18 +20,3 @@ platform(
     ],
 )
 
-
-load("@rules_rust//proto:toolchain.bzl", "rust_proto_toolchain")
-
-rust_proto_toolchain(
-    name = "proto-toolchain-impl",
-    grpc_plugin = "//rules/rust/cargo:cargo_bin_protoc_gen_rust_grpc",
-    proto_plugin = "//rules/rust/cargo:cargo_bin_protoc_gen_rust",
-    protoc = "@com_google_protobuf//:protoc",
-)
-
-toolchain(
-    name = "proto-toolchain",
-    toolchain = ":proto-toolchain-impl",
-    toolchain_type = "@rules_rust//proto:toolchain",
-)

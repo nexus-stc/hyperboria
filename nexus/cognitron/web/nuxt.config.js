@@ -7,8 +7,8 @@ if (buildDir) {
 
 module.exports = {
   server: {
-    host: '0.0.0.0',
-    port: 3000
+    host: process.env['NEXUS_COGNITRON_WEB_application.address'] || '0.0.0.0',
+    port: process.env['NEXUS_COGNITRON_WEB_application.port'] || 3000
   },
   buildDir: buildDir,
   srcDir: 'nexus/cognitron/web',
@@ -40,7 +40,8 @@ module.exports = {
 
   publicRuntimeConfig: {
     meta_api: {
-      url: process.env['NEXUS_COGNITRON_WEB_meta_api.url'] || 'http://localhost:8080'
+      hostname: process.env['NEXUS_COGNITRON_WEB_meta_api.hostname'],
+      url: process.env['NEXUS_COGNITRON_WEB_meta_api.url']
     },
     ipfs: {
       gateway: {
@@ -52,7 +53,7 @@ module.exports = {
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
     'plugins/helpers',
-    'plugins/meta-api',
+    { src: 'plugins/meta-api', mode: 'client' },
     'plugins/utils'
   ],
 
@@ -81,6 +82,9 @@ module.exports = {
     extend (config) {
       config.resolve.alias['~'] = process.cwd()
     },
-    transpile: ['nexus-meta-api-js-client'],
+    transpile: ['nexus-meta-api-js-client', 'nexus-views-js']
+  },
+  node: {
+    window: 'empty'
   }
 }

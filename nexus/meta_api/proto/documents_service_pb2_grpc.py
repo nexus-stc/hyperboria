@@ -22,11 +22,6 @@ class DocumentsStub(object):
                 request_serializer=nexus_dot_meta__api_dot_proto_dot_documents__service__pb2.TypedDocumentRequest.SerializeToString,
                 response_deserializer=nexus_dot_models_dot_proto_dot_typed__document__pb2.TypedDocument.FromString,
                 )
-        self.get_view = channel.unary_unary(
-                '/nexus.meta_api.proto.Documents/get_view',
-                request_serializer=nexus_dot_meta__api_dot_proto_dot_documents__service__pb2.TypedDocumentRequest.SerializeToString,
-                response_deserializer=nexus_dot_meta__api_dot_proto_dot_documents__service__pb2.GetViewResponse.FromString,
-                )
         self.roll = channel.unary_unary(
                 '/nexus.meta_api.proto.Documents/roll',
                 request_serializer=nexus_dot_meta__api_dot_proto_dot_documents__service__pb2.RollRequest.SerializeToString,
@@ -43,12 +38,6 @@ class DocumentsServicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def get(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def get_view(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -73,11 +62,6 @@ def add_DocumentsServicer_to_server(servicer, server):
                     servicer.get,
                     request_deserializer=nexus_dot_meta__api_dot_proto_dot_documents__service__pb2.TypedDocumentRequest.FromString,
                     response_serializer=nexus_dot_models_dot_proto_dot_typed__document__pb2.TypedDocument.SerializeToString,
-            ),
-            'get_view': grpc.unary_unary_rpc_method_handler(
-                    servicer.get_view,
-                    request_deserializer=nexus_dot_meta__api_dot_proto_dot_documents__service__pb2.TypedDocumentRequest.FromString,
-                    response_serializer=nexus_dot_meta__api_dot_proto_dot_documents__service__pb2.GetViewResponse.SerializeToString,
             ),
             'roll': grpc.unary_unary_rpc_method_handler(
                     servicer.roll,
@@ -113,23 +97,6 @@ class Documents(object):
         return grpc.experimental.unary_unary(request, target, '/nexus.meta_api.proto.Documents/get',
             nexus_dot_meta__api_dot_proto_dot_documents__service__pb2.TypedDocumentRequest.SerializeToString,
             nexus_dot_models_dot_proto_dot_typed__document__pb2.TypedDocument.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def get_view(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/nexus.meta_api.proto.Documents/get_view',
-            nexus_dot_meta__api_dot_proto_dot_documents__service__pb2.TypedDocumentRequest.SerializeToString,
-            nexus_dot_meta__api_dot_proto_dot_documents__service__pb2.GetViewResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 

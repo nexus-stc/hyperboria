@@ -1,23 +1,18 @@
 <template lang="pug">
-  tr(v-if="value")
+  tr
     th {{ label }}
     td
-      a(:href="url" download) {{ value }}
+      a(v-for="link in links" :href="link.url" download) {{ link.value }}
 </template>
 
 <script>
 export default {
-  name: 'VTrLink',
+  name: 'VTrMultiLink',
 
   props: {
-    value: {
-      default: null,
+    links: {
       required: true,
-      type: String
-    },
-    url: {
-      required: true,
-      type: String
+      type: Array
     },
     label: {
       required: true,
@@ -38,5 +33,8 @@ export default {
   }
   th {
     white-space: nowrap;
+  }
+  td > a {
+    margin-right: 10px;
   }
 </style>

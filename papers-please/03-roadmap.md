@@ -1,4 +1,4 @@
-# Agenda v.0.1
+# Roadmap v.0.1
 
 This paper is composed of lifetime goals for Nexus STC (Standard Template Construct).
 
@@ -6,7 +6,7 @@ Although many of goals looks complex and faraway I strongly believe that we will
 
 #### Legend
 - (*) Big theoretical task
-- (E) Perhaps non-essential but worth to try
+- (E) Non-essential but still worth to try
 
 ## Accessibility of Science
 
@@ -26,24 +26,15 @@ Although many of goals looks complex and faraway I strongly believe that we will
 - Create Onion configuration
 - Discuss the possibility of switching original LibGen backend to Nexus
 
-#### Community
-
-- Announce goals widely
-- Write and maintain documentation in clean English language
-
 ### Data Accessibility
 
 #### Infrastructure
 
 - Putting scimag collection onto IPFS
 - Announce data dumps for both scitech and scimag collections
-- Pinning feature in the app that will allow to users pinning subset of the collection in an easy way
+- Pinning feature in the app that will allow users to pin subset of the collection in an easy way
 - (*) Consider various **reliable** ways to announce new releases of **initial** data dumps
 - Maintain and curate the list of already publicly available journals in Pylon
-
-#### Community
-
-- Encourage people to pin in ideological, social and competitionus ways
 
 ### Decentilized Publishing
 
@@ -73,7 +64,7 @@ Although many of goals looks complex and faraway I strongly believe that we will
 ### References
 
 - Maintain graph statistics (at least PageRank) in Summa/Meta API
-- Reference links in Cognitron Web
+- Clickable reference links in Cognitron Web (as in the bot)
 
 ### Entity Extraction
 

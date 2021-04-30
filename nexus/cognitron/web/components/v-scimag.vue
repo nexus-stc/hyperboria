@@ -2,8 +2,9 @@
   div
     .top
       h6 {{ document.title }}
-      h6
-        i {{ document.locator }}
+    .top
+      i
+        h6 {{ document.getFormattedLocator() }}
     table
       tbody
         v-tr(label="DOI", :value="document.doi")
@@ -11,17 +12,17 @@
         v-tr(label="Tags", :value="tags")
         v-tr(label="ISSNS", :value="issns")
         v-tr(label="ISBNS", :value="isbns")
-        v-tr(label="File", :value="document.filedata")
-        v-tr-link(label="Download link", v-if="ipfsMultihash" :value="document.filename", :url="ipfsUrl")
+        v-tr(label="File", :value="document.getFormattedFiledata()")
+        v-tr-multi-link(label="Links", :links="links")
 </template>
 
 <script>
 import { getIssuedDate } from '@/plugins/helpers'
 import VTr from './v-tr'
-import VTrLink from './v-tr-link'
+import VTrMultiLink from './v-tr-multi-link'
 export default {
   name: 'VScimag',
-  components: { VTrLink, VTr },
+  components: { VTr, VTrMultiLink },
   props: {
     document: {
       type: Object,
@@ -29,13 +30,13 @@ export default {
     }
   },
   computed: {
-    pages: function () {
+    pages () {
       if (this.document.firstPage && this.document.lastPage && this.document.firstPage !== this.document.lastPage) {
         return `${this.document.firstPage}-${this.document.lastPage}`
       }
       return null
     },
-    page: function () {
+    page () {
       if (this.document.firstPage) {
         if (this.document.lastPage) {
           if (this.document.firstPage === this.document.lastPage) {
@@ -49,26 +50,35 @@ export default {
       }
       return null
     },
-    issns: function () {
+    issns () {
       return (this.document.issnsList || []).join('; ')
     },
-    isbns: function () {
+    isbns () {
       return (this.document.isbnsList || []).join('; ')
     },
-    issuedAt: function () {
+    issuedAt () {
       return getIssuedDate(this.document.issuedAt)
     },
-    ipfsUrl: function () {
-      if (!this.ipfsMultihash) return null
-      return `${this.$config.ipfs.gateway.url}/ipfs/${this.ipfsMultihash}?filename=${this.filename}&download=true`
+    ipfsUrl () {
+      if (!this.document.getIpfsMultihash()) return null
+      return `${this.$config.ipfs.gateway.url}/ipfs/${this.document.getIpfsMultihash()}?filename=${this.document.getFilename()}&download=true`
     },
-    ipfsMultihash: function () {
-      if (this.document.ipfsMultihashesList) {
-        return this.document.ipfsMultihashesList[0]
+    links () {
+      const links = []
+      if (this.ipfsUrl) {
+        links.push({
+          url: this.ipfsUrl,
+          value: 'IPFS.io'
+        })
+      } else {
+        links.push({
+          url: this.document.getTelegramLink(),
+          value: 'Nexus Bot'
+        })
       }
-      return null
+      return links
     },
-    tags: function () {
+    tags () {
       return (this.document.tagsList || []).join('; ')
     }
   }

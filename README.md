@@ -1,39 +1,16 @@
 # Hyperboria
 
+![Ancient Tech](media/ancient-tech.jpg)
+
 ## Introduction
 
-Hyperboria repository is a pack of tools for dealing with SciMag and SciTech collections.
+Hyperboria is a monorepository of tools aimed to enhance availability of science.
 
-It consists of configurable [`search engine`](nexus/cognitron), [`pipeline`](nexus/pipe) for [`ingesting`](nexus/ingest) data
-from upstream sources. So-called [`actions`](nexus/actions) aimed to converting data from external APIs
-into [`internal Protobuf format`](nexus/models) and to landing converted data into databases and/or search engines.
+Here you find applications for accessing and searching in the biggest libraries of the Earth and other supportive tools.
 
-## Prerequisite
-
-Install system packages for various OSes:
-```shell script
-sudo ./repository/install-packages.sh
-```
-
-### Ubuntu 20.04
-
-#### Docker
-[Installation Guide](https://docs.docker.com/engine/install/ubuntu/)
-
-#### IPFS
-[Installation Guide](https://docs.ipfs.io/install/)
-
-### MacOS
-
-#### Docker
-[Installation Guide](https://docs.docker.com/docker-for-mac/install/)
-
-#### IPFS
-[Installation Guide](https://docs.ipfs.io/install/)
+All sources are under [The Unlicense](https://unlicense.org). They are literally yours.
 
 ## Content
 
-- [`images`](images) - base docker images for [`nexus`](nexus)
-- [`library`](library) - shared libraries
 - [`nexus`](nexus) - processing and searching in scientific text collections
-- [`rules`](rules) - build rules
+- [`apps`](packages) - ready applications and images to deploy in various environments

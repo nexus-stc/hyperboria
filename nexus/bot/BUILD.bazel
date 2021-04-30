@@ -63,3 +63,21 @@ container_push(
     repository = "nexus-bot",
     tag = "latest",
 )
+
+container_push(
+    name = "push-public-latest",
+    format = "Docker",
+    image = ":image",
+    registry = "registry.hub.docker.com",
+    repository = "thesuperpirate/nexus-bot",
+    tag = "latest",
+)
+
+container_push(
+    name = "push-public-testing",
+    format = "Docker",
+    image = ":image",
+    registry = "registry.hub.docker.com",
+    repository = "thesuperpirate/nexus-bot",
+    tag = "testing",
+)

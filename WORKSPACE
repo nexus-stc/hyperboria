@@ -188,8 +188,6 @@ load("//rules/rust:crates.bzl", "raze_fetch_remote_crates")
 
 raze_fetch_remote_crates()
 
-register_toolchains("//:proto-toolchain")
-
 # NodeJS
 load("@build_bazel_rules_nodejs//:index.bzl", "node_repositories", "yarn_install")
 

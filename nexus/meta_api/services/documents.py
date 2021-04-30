@@ -4,8 +4,6 @@ import time
 from grpc import StatusCode
 from library.aiogrpctools.base import aiogrpc_request_wrapper
 from nexus.meta_api.proto.documents_service_pb2 import \
-    GetViewResponse as GetViewResponsePb
-from nexus.meta_api.proto.documents_service_pb2 import \
     RollResponse as RollResponsePb
 from nexus.meta_api.proto.documents_service_pb2 import \
     TopMissedResponse as TopMissedResponsePb
@@ -16,7 +14,6 @@ from nexus.meta_api.proto.documents_service_pb2_grpc import (
 from nexus.models.proto.scimag_pb2 import Scimag as ScimagPb
 from nexus.models.proto.typed_document_pb2 import \
     TypedDocument as TypedDocumentPb
-from nexus.views.telegram import parse_typed_document_to_view
 from nexus.views.telegram.registry import pb_registry
 
 from .base import BaseService
@@ -52,7 +49,8 @@ class DocumentsService(DocumentsServicer, BaseService):
     async def start(self):
         add_DocumentsServicer_to_server(self, self.server)
 
-    async def _get_typed_document(self, request, context, metadata):
+    @aiogrpc_request_wrapper()
+    async def get(self, request, context, metadata) -> TypedDocumentPb:
         document = await self.get_document(request.schema, request.document_id, metadata['request-id'], context)
         if document.get('original_id'):
             original_document = await self.get_document(
@@ -99,24 +97,6 @@ class DocumentsService(DocumentsServicer, BaseService):
 
         return TypedDocumentPb(
             **{request.schema: document_pb},
-        )
-
-    @aiogrpc_request_wrapper()
-    async def get(self, request, context, metadata) -> TypedDocumentPb:
-        return await self._get_typed_document(request, context, metadata)
-
-    @aiogrpc_request_wrapper()
-    async def get_view(self, request, context, metadata) -> GetViewResponsePb:
-        typed_document = await self._get_typed_document(request, context, metadata)
-        view = parse_typed_document_to_view(typed_document)
-
-        return GetViewResponsePb(
-            typed_document=typed_document,
-            filedata=view.get_formatted_filedata(show_filesize=True),
-            filename=view.get_filename(),
-            filesize=view.get_formatted_filesize(),
-            first_authors=view.get_first_authors(),
-            locator=view.get_formatted_locator(),
         )
 
     @aiogrpc_request_wrapper()
