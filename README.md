@@ -12,5 +12,5 @@ All sources are under [The Unlicense](https://unlicense.org). They are literally
 
 ## Content
 
+- [`apps`](apps) - ready applications and images to deploy in various environments
 - [`nexus`](nexus) - processing and searching in scientific text collections
-- [`apps`](packages) - ready applications and images to deploy in various environments
