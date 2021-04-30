@@ -1,0 +1,11 @@
+load("@build_bazel_rules_nodejs//:index.bzl", "js_library")
+
+js_library(
+    name = "js",
+    package_name = "nexus-views-js",
+    srcs = glob(["*.js"]),
+    visibility = ["//visibility:public"],
+    deps = [
+        "@npm//dateformat",
+    ],
+)

@@ -35,7 +35,7 @@ from tenacity import (
     stop_after_attempt,
 )
 
-DEFAULT_USER_AGENT = 'PylonBot/1.0 (Linux x86_64) PylonBot/1.0.0'
+DEFAULT_USER_AGENT = 'curl/7.68.0'
 
 
 class KeepAliveClientRequest(ClientRequest):

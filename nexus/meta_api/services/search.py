@@ -103,10 +103,11 @@ class Searcher(BaseService):
         processor_response = None
         cache_hit = True
         page_size = request.page_size or 5
+        schemas = tuple(sorted([schema for schema in request.schemas]))
 
         if (
-            (request.user_id, request.language, request.query) not in self.query_cache
-            or len(self.query_cache[(request.user_id, request.language, request.query)].scored_documents) == 0
+            (request.user_id, request.language, schemas, request.query) not in self.query_cache
+            or len(self.query_cache[(request.user_id, request.language, schemas, request.query)].scored_documents) == 0
         ):
             cache_hit = False
             query = despace_full(request.query)
@@ -121,7 +122,7 @@ class Searcher(BaseService):
                 ):
                     with attempt:
                         requests = []
-                        for schema in request.schemas:
+                        for schema in schemas:
                             requests.append(
                                 self.summa_client.search(
                                     schema=schema,
@@ -149,7 +150,7 @@ class Searcher(BaseService):
             )
             search_response['scored_documents'] = rescored_documents
             search_response_pb = self.cast_search_response(search_response)
-            self.query_cache[(request.user_id, request.language, request.query)] = search_response_pb
+            self.query_cache[(request.user_id, request.language, schemas, request.query)] = search_response_pb
 
         logging.getLogger('query').info({
             'action': 'request',
@@ -162,12 +163,12 @@ class Searcher(BaseService):
             'query': request.query,
             'query_class': processor_response['class'].value if processor_response else None,
             'request_id': metadata['request-id'],
-            'schemas': [schema for schema in request.schemas],
+            'schemas': schemas,
             'session_id': request.session_id,
             'user_id': request.user_id,
         })
 
-        scored_documents = self.query_cache[(request.user_id, request.language, request.query)].scored_documents
+        scored_documents = self.query_cache[(request.user_id, request.language, schemas, request.query)].scored_documents
         left_offset = request.page * page_size
         right_offset = left_offset + page_size
         has_next = len(scored_documents) > right_offset

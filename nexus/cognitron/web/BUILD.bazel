@@ -1,4 +1,3 @@
-load("@build_bazel_rules_nodejs//:index.bzl", "js_library")
 load("@io_bazel_rules_docker//container:container.bzl", "container_push")
 load("@io_bazel_rules_docker//nodejs:image.bzl", "nodejs_image")
 load("@npm//nuxt:index.bzl", "nuxt")
@@ -20,20 +19,15 @@ deps = [
     "@npm//bootstrap-vue",
     "@npm//core-js",
     "@npm//dateformat",
+    "@npm//electron",
     "@npm//pug",
     "@npm//pug-plain-loader",
     "@npm//sass",
     "@npm//sass-loader",
     "@npm//vue",
     "//nexus/meta_api/js/client",
+    "//nexus/views/js",
 ]
-
-js_library(
-    name = "nexus-cognitron-web",
-    package_name = "nexus-cognitron-web",
-    srcs = files,
-    deps = deps,
-)
 
 nuxt(
     name = "web-dev",
@@ -42,7 +36,7 @@ nuxt(
         "nexus/cognitron/web/nuxt.config.js",
         "--watch-poll",
     ],
-    data = [":nexus-cognitron-web"],
+    data = files + deps,
 )
 
 nuxt(
@@ -82,7 +76,7 @@ container_push(
     format = "Docker",
     image = ":image",
     registry = "registry.hub.docker.com",
-    repository = "thesuperpirate/cognitron-web",
+    repository = "thesuperpirate/nexus-cognitron-web",
     tag = "latest",
 )
 
@@ -91,6 +85,7 @@ container_push(
     format = "Docker",
     image = ":image",
     registry = "registry.hub.docker.com",
-    repository = "thesuperpirate/cognitron-web",
+    repository = "thesuperpirate/nexus-cognitron-web",
     tag = "testing",
 )
+

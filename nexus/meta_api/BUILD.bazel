@@ -63,7 +63,7 @@ container_push(
     format = "Docker",
     image = ":image",
     registry = "registry.hub.docker.com",
-    repository = "thesuperpirate/meta-api",
+    repository = "thesuperpirate/nexus-meta-api",
     tag = "latest",
 )
 
@@ -72,6 +72,6 @@ container_push(
     format = "Docker",
     image = ":image",
     registry = "registry.hub.docker.com",
-    repository = "thesuperpirate/meta-api",
+    repository = "thesuperpirate/nexus-meta-api",
     tag = "testing",
 )

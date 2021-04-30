@@ -1,6 +1,7 @@
 <template lang="pug">
   div.document
-    v-scitech(:document="document")
+    v-scimag(v-if="document.schema === 'scimag'" :document="document")
+    v-scitech(v-if="document.schema === 'scitech'" :document="document")
 </template>
 
 <script>

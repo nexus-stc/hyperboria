@@ -1,16 +1,19 @@
 <template lang="pug">
   ul
-    li(v-for='scoredDocument in scoredDocuments')
-      search-item(:scored-document='scoredDocument', :key='scoredDocument.typedDocument.scitech.id')
+    li(v-for='document in documents')
+      v-scimag-search-item(v-if="document.schema == 'scimag'", :document='document', :key='document.id')
+      v-scitech-search-item(v-if="document.schema == 'scitech'", :document='document', :key='document.id')
 </template>
 
 <script>
-import SearchItem from '@/components/search-item'
+import VScimagSearchItem from '@/components/v-scimag-search-item'
+import VScitechSearchItem from '@/components/v-scitech-search-item'
+
 export default {
   name: 'SearchList',
-  components: { SearchItem },
+  components: { VScimagSearchItem, VScitechSearchItem },
   props: {
-    scoredDocuments: {
+    documents: {
       type: Array,
       required: true
     }

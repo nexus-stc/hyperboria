@@ -15,15 +15,7 @@ export default {
     }
   },
   async fetch () {
-    const response = await this.$meta_api.getView(this.$route.params.schema, this.$route.params.id)
-    this.document = {
-      ...response.typedDocument.scitech,
-      filedata: response.filedata,
-      filename: response.filename,
-      filesize: response.filesize,
-      firstAuthors: response.firstAuthors,
-      locator: response.locator
-    }
+    this.document = await this.$meta_api.get(this.$route.params.schema, this.$route.params.id)
   },
   fetchOnServer: false
 }

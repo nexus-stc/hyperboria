@@ -2,5 +2,5 @@
 
 #### Development
 ```shell script
-bazel run web_dev
+bazel run web-dev
 ```

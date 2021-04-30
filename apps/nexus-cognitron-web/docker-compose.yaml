@@ -5,9 +5,11 @@ services:
       - nexus-meta-api-envoy
     environment:
       ENV_TYPE: production
+      NEXUS_COGNITRON_WEB_application.address: 0.0.0.0
+      NEXUS_COGNITRON_WEB_application.port: 3000
       NEXUS_COGNITRON_WEB_ipfs.gateway.url: https://cloudflare-ipfs.com
       NEXUS_COGNITRON_WEB_meta_api.url: http://localhost:8080
-    image: thesuperpirate/cognitron-web:latest
+    image: thesuperpirate/nexus-cognitron-web:latest
     ports:
       - '3000:3000'
   nexus-meta-api:
@@ -18,7 +20,7 @@ services:
       NEXUS_META_API_grpc.address: '0.0.0.0'
       NEXUS_META_API_grpc.port: 9090
       NEXUS_META_API_summa.url: 'http://summa:8082'
-    image: thesuperpirate/meta-api:latest
+    image: thesuperpirate/nexus-meta-api:latest
   nexus-meta-api-envoy:
     depends_on:
       - nexus-meta-api
@@ -26,7 +28,7 @@ services:
     ports:
       - '8080:8080'
     volumes:
-      - './nexus-meta-api-envoy.yaml:/etc/envoy/envoy.yaml'
+      - './envoy.yaml:/etc/envoy/envoy.yaml'
   summa:
     environment:
       ENV_TYPE: production

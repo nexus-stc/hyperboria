@@ -4,7 +4,7 @@
       h6 {{ document.title }}
     .top
       i
-        h6 {{ document.locator }}
+        h6 {{ document.getFormattedLocator() }}
     table
       tbody
         v-tr(label="DOI", :value="document.doi")
@@ -12,8 +12,8 @@
         v-tr(label="Tags", :value="tags")
         v-tr(label="ISBNS", :value="isbns")
         v-tr(label="ISSNS", :value="issns")
-        v-tr(label="File", :value="document.filedata")
-        v-tr-link(label="Download link", v-if="ipfsMultihash" :value="document.filename", :url="ipfsUrl")
+        v-tr(label="File", :value="document.getFormattedFiledata()")
+        v-tr-multi-link(label="Links", :links="links")
 </template>
 
 <script>
@@ -27,26 +27,44 @@ export default {
     }
   },
   computed: {
-    isbns: function () {
+    isbns () {
       return (this.document.isbnsList || []).join('; ')
     },
-    issns: function () {
+    issns () {
       return (this.document.issnsList || []).join('; ')
     },
-    issuedAt: function () {
+    issuedAt () {
       return getIssuedDate(this.document.issuedAt)
     },
-    ipfsUrl: function () {
+    ipfsUrl () {
       if (!this.ipfsMultihash) return null
-      return `${this.$config.ipfs.gateway.url}/ipfs/${this.ipfsMultihash}?filename=${this.document.filename}&download=true`
+      return `${this.$config.ipfs.gateway.url}/ipfs/${this.ipfsMultihash}?filename=${this.document.getFilename()}&download=true`
     },
-    ipfsMultihash: function () {
+    ipfsMultihash () {
       if (this.document.ipfsMultihashesList) {
         return this.document.ipfsMultihashesList[0]
       }
       return ''
     },
-    tags: function () {
+    links () {
+      const links = []
+      if (this.ipfsUrl) {
+        links.push({
+          url: this.ipfsUrl,
+          value: 'IPFS.io'
+        })
+      } else {
+        links.push({
+          url: this.document.getTelegramLink(),
+          value: 'Nexus Bot'
+        })
+      }
+      return links
+    },
+    locator () {
+      return ''
+    },
+    tags () {
       return (this.document.tagsList || []).join('; ')
     }
   }

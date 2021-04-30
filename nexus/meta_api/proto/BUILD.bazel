@@ -1,5 +1,4 @@
 load("@com_github_grpc_grpc//bazel:python_rules.bzl", "py_grpc_library", "py_proto_library")
-load("@rules_rust//proto:proto.bzl", "rust_proto_library")
 load("@rules_proto//proto:defs.bzl", "proto_library")
 load("@rules_proto_grpc//js:defs.bzl", "js_grpc_web_library")
 
@@ -25,13 +24,6 @@ py_grpc_library(
     name = "meta-api-grpc-py",
     srcs = [":meta-api-proto"],
     deps = [":meta-api-proto-py"],
-)
-
-rust_proto_library(
-    name = "meta-api-proto-rust",
-    rust_deps = ["//rules/rust/cargo:protobuf"],
-    visibility = ["//visibility:public"],
-    deps = [":meta-api-proto"],
 )
 
 js_grpc_web_library(

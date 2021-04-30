@@ -33,20 +33,8 @@ message TypedDocumentRequest {
   int64 user_id = 5;
 }
 
-message PutTypedDocumentResponse {}
-
-message GetViewResponse {
-  nexus.models.proto.TypedDocument typed_document = 1;
-  string filedata = 2;
-  string filename = 3;
-  string filesize = 4;
-  string first_authors = 5;
-  string locator = 6;
-}
-
 service Documents {
   rpc get (TypedDocumentRequest) returns (nexus.models.proto.TypedDocument) {}
-  rpc get_view (TypedDocumentRequest) returns (GetViewResponse) {}
   rpc roll (RollRequest) returns (RollResponse) {}
   rpc top_missed (TopMissedRequest) returns (TopMissedResponse) {}
 }

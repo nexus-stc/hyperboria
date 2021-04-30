@@ -5,7 +5,6 @@ export function getIssuedDate (unixtime) {
   try {
     return dateFormat(new Date(unixtime * 1000), 'yyyy')
   } catch (e) {
-    console.error(e)
     return null
   }
 }

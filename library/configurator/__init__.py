@@ -63,7 +63,13 @@ class Configurator(RichDict):
             env_prefix = env_prefix.lower()
             for name, value in os.environ.items():
                 if name.lower().startswith(env_prefix):
-                    env_dict[name[len(env_prefix):].lstrip('_')] = value
+                    stripped_name = name[len(env_prefix):].lstrip('_')
+                    if stripped_name[-2:] == '[]':
+                        if stripped_name not in env_dict:
+                            env_dict[stripped_name[:-2]] = []
+                        env_dict[stripped_name[:-2]].append(value)
+                    else:
+                        env_dict[stripped_name] = value
             env_dict = unflatten(env_dict, sep=env_key_separator)
 
         for config in ([os.environ] + configs + [env_dict]):
