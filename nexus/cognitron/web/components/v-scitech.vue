@@ -1,5 +1,5 @@
 <template lang="pug">
-  div.document
+  div
     .top
       h6 {{ document.title }}
     .top
@@ -18,8 +18,11 @@
 
 <script>
 import { getIssuedDate } from '@/plugins/helpers'
+import VTr from './v-tr'
+import VTrMultiLink from './v-tr-multi-link'
 export default {
   name: 'VScitech',
+  components: { VTr, VTrMultiLink },
   props: {
     document: {
       type: Object,
@@ -37,14 +40,8 @@ export default {
       return getIssuedDate(this.document.issuedAt)
     },
     ipfsUrl () {
-      if (!this.ipfsMultihash) return null
-      return `${this.$config.ipfs.gateway.url}/ipfs/${this.ipfsMultihash}?filename=${this.document.getFilename()}&download=true`
-    },
-    ipfsMultihash () {
-      if (this.document.ipfsMultihashesList) {
-        return this.document.ipfsMultihashesList[0]
-      }
-      return ''
+      if (!this.document.getIpfsMultihash()) return null
+      return `${this.$config.ipfs.gateway.url}/ipfs/${this.document.getIpfsMultihash()}?filename=${this.document.getFilename()}&download=true`
     },
     links () {
       const links = []
@@ -60,9 +57,6 @@ export default {
         })
       }
       return links
-    },
-    locator () {
-      return ''
     },
     tags () {
       return (this.document.tagsList || []).join('; ')

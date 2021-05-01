@@ -111,7 +111,6 @@ export class BaseView {
     if (this.ipfsMultihashesList) {
       return this.ipfsMultihashesList[0]
     }
-    return ''
   }
 
   getTelegramLink () {

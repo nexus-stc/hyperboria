@@ -10,7 +10,6 @@
         value-field="item"
         text-field="name")
     p.mt-5(v-if="nothingFound") Nothing found
-    b-pagination(v-if='documents.length > 0' v-model='page' :total-rows='totalRows' :per-page='perPage' limit="2" :disabled="isLoading")
     .search-list
       search-list(:documents='documents')
     b-pagination(v-if='documents.length > 0' v-model='page' :total-rows='totalRows' :per-page='perPage' limit="2" :disabled="isLoading")
