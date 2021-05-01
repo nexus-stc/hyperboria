@@ -1,8 +1,8 @@
-const ALNUMWHITESPACE_REGEX = /([^\s\w])/gu
+const NON_ALNUMWHITESPACE_REGEX = /([^\s\p{L}\p{Nd}])/gu
 const MULTIWHITESPACE_REGEX = /\s+/g
 
 export function castStringToSingleString (s) {
-  let processed = s.replace(ALNUMWHITESPACE_REGEX, ' ')
+  let processed = s.replace(NON_ALNUMWHITESPACE_REGEX, ' ')
   processed = processed.replace(MULTIWHITESPACE_REGEX, '-')
   return processed
 }

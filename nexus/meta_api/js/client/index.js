@@ -22,14 +22,16 @@ export default class MetaApi {
   }
 
   prepareMetadata () {
-    return Object.assign({ 'request-id': this.generateId(12) }, this.metadata)
+    return Object.assign({
+      'request-id': this.generateId(12),
+      'session-id': this.generateId(8)
+    }, this.metadata)
   }
 
   async get (schema, documentId) {
     const request = new documentsProto.TypedDocumentRequest()
     request.setSchema(schema)
     request.setDocumentId(documentId)
-    request.setSessionId(this.generateId(8))
     const response = await this.documentsClient.get(request, this.prepareMetadata())
     return response.toObject()
   }
@@ -40,7 +42,6 @@ export default class MetaApi {
     request.setPageSize(pageSize)
     schemas.forEach((schema) => request.addSchemas(schema))
     request.setQuery(query)
-    request.setSessionId(this.generateId(8))
     const response = await this.searchClient.search(request, this.prepareMetadata())
     return response.toObject()
   }

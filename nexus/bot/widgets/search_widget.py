@@ -70,7 +70,7 @@ class SearchWidget:
             page_size=self.application.config['application']['page_size'],
             request_id=self.request_id,
             session_id=self.session_id,
-            user_id=self.chat.chat_id,
+            user_id=str(self.chat.chat_id),
             language=self.chat.language,
         )
 

@@ -69,7 +69,7 @@ class DocumentsService(DocumentsServicer, BaseService):
         if self.learn_logger:
             self.learn_logger.info({
                 'action': 'get',
-                'session_id': request.session_id,
+                'session_id': metadata['session-id'],
                 'unixtime': time.time(),
                 'schema': request.schema,
                 'document_id': document['id'],
@@ -83,8 +83,8 @@ class DocumentsService(DocumentsServicer, BaseService):
             'position': request.position,
             'request_id': metadata['request-id'],
             'schema': request.schema,
-            'session_id': request.session_id,
-            'user_id': request.user_id,
+            'session_id': metadata['session-id'],
+            'user_id': metadata['user-id'],
         })
 
         document_pb = pb_registry[request.schema](**document)
@@ -109,8 +109,8 @@ class DocumentsService(DocumentsServicer, BaseService):
             'id': random_id,
             'mode': 'roll',
             'request_id': metadata['request-id'],
-            'session_id': request.session_id,
-            'user_id': request.user_id,
+            'session_id': metadata['session-id'],
+            'user_id': metadata['user-id'],
         })
 
         return RollResponsePb(document_id=random_id)

@@ -44,39 +44,39 @@ class MetaApiGrpcClient(BaseGrpcClient):
         self,
         schema: str,
         document_id: int,
+        user_id: str,
         position: Optional[int] = None,
         request_id: Optional[str] = None,
         session_id: Optional[str] = None,
-        user_id: Optional[int] = None,
     ) -> TypedDocumentPb:
         return await self.stubs['documents'].get(
             TypedDocumentRequestPb(
                 schema=schema,
                 document_id=document_id,
                 position=position,
-                session_id=session_id,
-                user_id=user_id,
             ),
             metadata=(
                 ('request-id', request_id),
+                ('session-id', session_id),
+                ('user-id', user_id),
             ),
         )
 
     async def roll(
         self,
+        user_id: str,
         language: Optional[str] = None,
         request_id: Optional[str] = None,
         session_id: Optional[str] = None,
-        user_id: Optional[int] = None,
     ) -> RollResponsePb:
         return await self.stubs['documents'].roll(
             RollRequestPb(
                 language=language,
-                session_id=session_id,
-                user_id=user_id,
             ),
             metadata=(
                 ('request-id', request_id),
+                ('session-id', session_id),
+                ('user-id', user_id),
             ),
         )
 
@@ -95,12 +95,12 @@ class MetaApiGrpcClient(BaseGrpcClient):
         self,
         schemas: Union[List[str], Tuple[str]],
         query: str,
+        user_id: str,
         page: Optional[int] = None,
         page_size: Optional[int] = None,
         language: Optional[str] = None,
         request_id: Optional[str] = None,
         session_id: Optional[str] = None,
-        user_id: Optional[int] = None,
     ) -> SearchResponsePb:
         return await self.stubs['search'].search(
             SearchRequestPb(
@@ -109,11 +109,11 @@ class MetaApiGrpcClient(BaseGrpcClient):
                 page=page,
                 page_size=page_size,
                 language=language,
-                session_id=session_id,
-                user_id=user_id,
             ),
             metadata=(
                 ('request-id', request_id),
+                ('session-id', session_id),
+                ('user-id', user_id),
             ),
         )
 
@@ -121,18 +121,18 @@ class MetaApiGrpcClient(BaseGrpcClient):
         self,
         page: int,
         page_size: int,
+        user_id: str,
         request_id: Optional[str] = None,
         session_id: Optional[str] = None,
-        user_id: Optional[int] = None,
     ) -> TopMissedResponsePb:
         return await self.stubs['documents'].top_missed(
             TopMissedRequestPb(
                 page=page,
                 page_size=page_size,
-                session_id=session_id,
-                user_id=user_id,
             ),
             metadata=(
                 ('request-id', request_id),
+                ('session-id', session_id),
+                ('user-id', user_id),
             ),
         )

@@ -20,7 +20,7 @@ class RollHandler(BaseHandler):
             language=request_context.chat.language,
             session_id=session_id,
             request_id=request_context.request_id,
-            user_id=request_context.chat.chat_id,
+            user_id=str(request_context.chat.chat_id),
         )
         scitech_view = await self.resolve_scitech(
             document_id=roll_response_pb.document_id,

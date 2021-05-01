@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n,nexus/meta_api/proto/documents_service.proto\x12\x14nexus.meta_api.proto\x1a\'nexus/models/proto/typed_document.proto\"D\n\x0bRollRequest\x12\x10\n\x08language\x18\x01 \x01(\t\x12\x12\n\nsession_id\x18\x02 \x01(\t\x12\x0f\n\x07user_id\x18\x03 \x01(\x03\"#\n\x0cRollResponse\x12\x13\n\x0b\x64ocument_id\x18\x01 \x01(\x04\"X\n\x10TopMissedRequest\x12\x0c\n\x04page\x18\x01 \x01(\r\x12\x11\n\tpage_size\x18\x02 \x01(\r\x12\x12\n\nsession_id\x18\x03 \x01(\t\x12\x0f\n\x07user_id\x18\x04 \x01(\x03\"a\n\x11TopMissedResponse\x12:\n\x0ftyped_documents\x18\x01 \x03(\x0b\x32!.nexus.models.proto.TypedDocument\x12\x10\n\x08has_next\x18\x02 \x01(\x08\"r\n\x14TypedDocumentRequest\x12\x0e\n\x06schema\x18\x01 \x01(\t\x12\x13\n\x0b\x64ocument_id\x18\x02 \x01(\x04\x12\x10\n\x08position\x18\x03 \x01(\r\x12\x12\n\nsession_id\x18\x04 \x01(\t\x12\x0f\n\x07user_id\x18\x05 \x01(\x03\x32\x95\x02\n\tDocuments\x12V\n\x03get\x12*.nexus.meta_api.proto.TypedDocumentRequest\x1a!.nexus.models.proto.TypedDocument\"\x00\x12O\n\x04roll\x12!.nexus.meta_api.proto.RollRequest\x1a\".nexus.meta_api.proto.RollResponse\"\x00\x12_\n\ntop_missed\x12&.nexus.meta_api.proto.TopMissedRequest\x1a\'.nexus.meta_api.proto.TopMissedResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n,nexus/meta_api/proto/documents_service.proto\x12\x14nexus.meta_api.proto\x1a\'nexus/models/proto/typed_document.proto\"\x1f\n\x0bRollRequest\x12\x10\n\x08language\x18\x01 \x01(\t\"#\n\x0cRollResponse\x12\x13\n\x0b\x64ocument_id\x18\x01 \x01(\x04\"3\n\x10TopMissedRequest\x12\x0c\n\x04page\x18\x01 \x01(\r\x12\x11\n\tpage_size\x18\x02 \x01(\r\"a\n\x11TopMissedResponse\x12:\n\x0ftyped_documents\x18\x01 \x03(\x0b\x32!.nexus.models.proto.TypedDocument\x12\x10\n\x08has_next\x18\x02 \x01(\x08\"M\n\x14TypedDocumentRequest\x12\x0e\n\x06schema\x18\x01 \x01(\t\x12\x13\n\x0b\x64ocument_id\x18\x02 \x01(\x04\x12\x10\n\x08position\x18\x03 \x01(\r2\x95\x02\n\tDocuments\x12V\n\x03get\x12*.nexus.meta_api.proto.TypedDocumentRequest\x1a!.nexus.models.proto.TypedDocument\"\x00\x12O\n\x04roll\x12!.nexus.meta_api.proto.RollRequest\x1a\".nexus.meta_api.proto.RollResponse\"\x00\x12_\n\ntop_missed\x12&.nexus.meta_api.proto.TopMissedRequest\x1a\'.nexus.meta_api.proto.TopMissedResponse\"\x00\x62\x06proto3'
   ,
   dependencies=[nexus_dot_models_dot_proto_dot_typed__document__pb2.DESCRIPTOR,])
 
@@ -43,20 +43,6 @@ _ROLLREQUEST = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='session_id', full_name='nexus.meta_api.proto.RollRequest.session_id', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='user_id', full_name='nexus.meta_api.proto.RollRequest.user_id', index=2,
-      number=3, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -70,7 +56,7 @@ _ROLLREQUEST = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=111,
-  serialized_end=179,
+  serialized_end=142,
 )
 
 
@@ -101,8 +87,8 @@ _ROLLRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=181,
-  serialized_end=216,
+  serialized_start=144,
+  serialized_end=179,
 )
 
 
@@ -128,20 +114,6 @@ _TOPMISSEDREQUEST = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='session_id', full_name='nexus.meta_api.proto.TopMissedRequest.session_id', index=2,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='user_id', full_name='nexus.meta_api.proto.TopMissedRequest.user_id', index=3,
-      number=4, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -154,8 +126,8 @@ _TOPMISSEDREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=218,
-  serialized_end=306,
+  serialized_start=181,
+  serialized_end=232,
 )
 
 
@@ -193,8 +165,8 @@ _TOPMISSEDRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=308,
-  serialized_end=405,
+  serialized_start=234,
+  serialized_end=331,
 )
 
 
@@ -227,20 +199,6 @@ _TYPEDDOCUMENTREQUEST = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='session_id', full_name='nexus.meta_api.proto.TypedDocumentRequest.session_id', index=3,
-      number=4, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='user_id', full_name='nexus.meta_api.proto.TypedDocumentRequest.user_id', index=4,
-      number=5, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -253,8 +211,8 @@ _TYPEDDOCUMENTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=407,
-  serialized_end=521,
+  serialized_start=333,
+  serialized_end=410,
 )
 
 _TOPMISSEDRESPONSE.fields_by_name['typed_documents'].message_type = nexus_dot_models_dot_proto_dot_typed__document__pb2._TYPEDDOCUMENT
@@ -309,8 +267,8 @@ _DOCUMENTS = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=524,
-  serialized_end=801,
+  serialized_start=413,
+  serialized_end=690,
   methods=[
   _descriptor.MethodDescriptor(
     name='get',
