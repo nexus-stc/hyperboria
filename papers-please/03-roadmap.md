@@ -30,9 +30,9 @@ Although many of goals looks complex and faraway I strongly believe that we will
 
 #### Infrastructure
 
-- Putting scimag collection onto IPFS
+- Putting scimag collection onto IPFS (#37)
 - Announce data dumps for both scitech and scimag collections
-- Pinning feature in the app that will allow users to pin subset of the collection in an easy way
+- Pinning feature in the app that will allow users to pin subset of the collection in an easy way (#38)
 - (*) Consider various **reliable** ways to announce new releases of **initial** data dumps
 - Maintain and curate the list of already publicly available journals in Pylon
 
