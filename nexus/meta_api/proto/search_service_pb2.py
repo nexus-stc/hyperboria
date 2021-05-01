@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n)nexus/meta_api/proto/search_service.proto\x12\x14nexus.meta_api.proto\x1a\'nexus/models/proto/typed_document.proto\"l\n\x0eScoredDocument\x12\x39\n\x0etyped_document\x18\x01 \x01(\x0b\x32!.nexus.models.proto.TypedDocument\x12\r\n\x05score\x18\x02 \x01(\x02\x12\x10\n\x08position\x18\x03 \x01(\r\"b\n\x0eSearchResponse\x12>\n\x10scored_documents\x18\x01 \x03(\x0b\x32$.nexus.meta_api.proto.ScoredDocument\x12\x10\n\x08has_next\x18\x02 \x01(\x08\"\x87\x01\n\rSearchRequest\x12\x0f\n\x07schemas\x18\x01 \x03(\t\x12\r\n\x05query\x18\x02 \x01(\t\x12\x0c\n\x04page\x18\x03 \x01(\r\x12\x11\n\tpage_size\x18\x04 \x01(\r\x12\x10\n\x08language\x18\x05 \x01(\t\x12\x0f\n\x07user_id\x18\x06 \x01(\x03\x12\x12\n\nsession_id\x18\x07 \x01(\t2_\n\x06Search\x12U\n\x06search\x12#.nexus.meta_api.proto.SearchRequest\x1a$.nexus.meta_api.proto.SearchResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n)nexus/meta_api/proto/search_service.proto\x12\x14nexus.meta_api.proto\x1a\'nexus/models/proto/typed_document.proto\"l\n\x0eScoredDocument\x12\x39\n\x0etyped_document\x18\x01 \x01(\x0b\x32!.nexus.models.proto.TypedDocument\x12\r\n\x05score\x18\x02 \x01(\x02\x12\x10\n\x08position\x18\x03 \x01(\r\"b\n\x0eSearchResponse\x12>\n\x10scored_documents\x18\x01 \x03(\x0b\x32$.nexus.meta_api.proto.ScoredDocument\x12\x10\n\x08has_next\x18\x02 \x01(\x08\"b\n\rSearchRequest\x12\x0f\n\x07schemas\x18\x01 \x03(\t\x12\r\n\x05query\x18\x02 \x01(\t\x12\x0c\n\x04page\x18\x03 \x01(\r\x12\x11\n\tpage_size\x18\x04 \x01(\r\x12\x10\n\x08language\x18\x05 \x01(\t2_\n\x06Search\x12U\n\x06search\x12#.nexus.meta_api.proto.SearchRequest\x1a$.nexus.meta_api.proto.SearchResponse\"\x00\x62\x06proto3'
   ,
   dependencies=[nexus_dot_models_dot_proto_dot_typed__document__pb2.DESCRIPTOR,])
 
@@ -156,20 +156,6 @@ _SEARCHREQUEST = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='user_id', full_name='nexus.meta_api.proto.SearchRequest.user_id', index=5,
-      number=6, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='session_id', full_name='nexus.meta_api.proto.SearchRequest.session_id', index=6,
-      number=7, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -182,8 +168,8 @@ _SEARCHREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=319,
-  serialized_end=454,
+  serialized_start=318,
+  serialized_end=416,
 )
 
 _SCOREDDOCUMENT.fields_by_name['typed_document'].message_type = nexus_dot_models_dot_proto_dot_typed__document__pb2._TYPEDDOCUMENT
@@ -223,8 +209,8 @@ _SEARCH = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=456,
-  serialized_end=551,
+  serialized_start=418,
+  serialized_end=513,
   methods=[
   _descriptor.MethodDescriptor(
     name='search',

@@ -4,9 +4,9 @@
 
 ## Introduction
 
-Hyperboria is a monorepository of tools aimed to enhance availability of science.
+Hyperboria is a monorepository of tools aimed to enhance an availability of the science.
 
-Here you find applications for accessing and searching in the biggest libraries of the Earth and other supportive tools.
+Here you find Docker and desktop application for accessing and searching in the biggest libraries of the Earth.
 
 All sources are under [The Unlicense](https://unlicense.org). They are literally yours.
 

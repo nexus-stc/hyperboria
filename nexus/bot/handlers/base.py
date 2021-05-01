@@ -97,7 +97,7 @@ class BaseHandler(ABC):
             session_id=session_id,
             position=position,
             request_id=request_context.request_id,
-            user_id=request_context.chat.chat_id,
+            user_id=str(request_context.chat.chat_id),
         )
 
     async def resolve_scimag(
@@ -136,7 +136,7 @@ class BaseHandler(ABC):
             page_size=16,
             request_id=request_context.request_id,
             session_id=session_id,
-            user_id=request_context.chat.chat_id,
+            user_id=str(request_context.chat.chat_id),
         )
         duplicates = [
             scored_document.typed_document.scitech

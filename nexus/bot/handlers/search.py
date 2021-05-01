@@ -146,11 +146,11 @@ class SearchHandler(BaseSearchHandler):
     should_reset_last_widget = False
     is_subscription_required_for_handler = True
 
-    def check_search_ban_timeout(self, chat_id: int):
-        ban_timeout = self.application.user_manager.check_search_ban_timeout(user_id=chat_id)
+    def check_search_ban_timeout(self, user_id: str):
+        ban_timeout = self.application.user_manager.check_search_ban_timeout(user_id=user_id)
         if ban_timeout:
             raise BannedUserError(ban_timeout=ban_timeout)
-        self.application.user_manager.add_search_time(user_id=chat_id, search_time=time.time())
+        self.application.user_manager.add_search_time(user_id=user_id, search_time=time.time())
 
     def parse_pattern(self, event: events.ChatAction):
         search_prefix = event.pattern_match.group(1)
@@ -161,7 +161,7 @@ class SearchHandler(BaseSearchHandler):
 
     async def handler(self, event: events.ChatAction, request_context: RequestContext):
         try:
-            self.check_search_ban_timeout(chat_id=request_context.chat.chat_id)
+            self.check_search_ban_timeout(user_id=str(request_context.chat.chat_id))
         except BannedUserError as e:
             request_context.error_log(e)
             return await event.reply(t(

@@ -148,7 +148,7 @@ class SubmitterService(SubmitterServicer, BaseHubService):
                 page_size=1,
                 request_id=request_context.request_id,
                 session_id=session_id,
-                user_id=request_context.chat.chat_id,
+                user_id=str(request_context.chat.chat_id),
                 language=request_context.chat.language,
             )
 

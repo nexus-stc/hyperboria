@@ -20,8 +20,6 @@ message SearchRequest {
   uint32 page = 3;
   uint32 page_size = 4;
   string language = 5;
-  int64 user_id = 6;
-  string session_id = 7;
 }
 
 service Search {
