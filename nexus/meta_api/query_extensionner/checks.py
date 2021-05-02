@@ -5,6 +5,7 @@ from nexus.nlptools.regex import (
     DOI_REGEX,
     ISBN_REGEX,
     NID_REGEX,
+    ONLY_DOI_REGEX,
     URL_REGEX,
 )
 
@@ -20,10 +21,10 @@ class QueryClass(Enum):
 
 
 def check_doi(query) -> (QueryClass, str):
-    # ToDo: rewrite normally, just hotfixed
-    if query.startswith('references:'):
-        return
-    if r := re.search(DOI_REGEX, query):
+    if (
+        ((r := re.search(DOI_REGEX, query)) and re.search(URL_REGEX, query))
+        or re.search(ONLY_DOI_REGEX, query)
+    ):
         doi = (r[1] + '/' + r[2]).lower()
         return {
             'doi': doi,
