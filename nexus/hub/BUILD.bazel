@@ -35,7 +35,7 @@ py3_image(
         "//idm/api/proto:proto_py",
         requirement("aiogrobid"),
         "//library/aiogrpctools",
-        "//library/aioipfs",
+        requirement("aioipfs-2"),
         requirement("aiokit"),
         "//library/aiopostgres",
         "//library/configurator",
