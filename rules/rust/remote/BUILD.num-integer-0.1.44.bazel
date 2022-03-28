@@ -10,9 +10,10 @@ load("@bazel_skylib//lib:selects.bzl", "selects")
 
 # buildifier: disable=load
 load(
-    "@rules_rust//rust:rust.bzl",
+    "@rules_rust//rust:defs.bzl",
     "rust_binary",
     "rust_library",
+    "rust_proc_macro",
     "rust_test",
 )
 
@@ -42,8 +43,6 @@ cargo_build_script(
     build_script_env = {
     },
     crate_features = [
-        "i128",
-        "std",
     ],
     crate_root = "build.rs",
     data = glob(["**"]),
@@ -58,7 +57,7 @@ cargo_build_script(
     version = "0.1.44",
     visibility = ["//visibility:private"],
     deps = [
-        "@raze__autocfg__1_0_1//:autocfg",
+        "@raze__autocfg__1_1_0//:autocfg",
     ],
 )
 
@@ -72,11 +71,8 @@ rust_library(
     name = "num_integer",
     srcs = glob(["**/*.rs"]),
     crate_features = [
-        "i128",
-        "std",
     ],
     crate_root = "src/lib.rs",
-    crate_type = "lib",
     data = [],
     edition = "2015",
     rustc_flags = [
@@ -84,6 +80,7 @@ rust_library(
     ],
     tags = [
         "cargo-raze",
+        "crate-name=num-integer",
         "manual",
     ],
     version = "0.1.44",

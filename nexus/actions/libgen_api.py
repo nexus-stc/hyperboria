@@ -84,7 +84,7 @@ def create_cu(libgen_id, coverurl, md5):
     return coverurl, cu_suf
 
 
-class LibgenApiToScitechPbAction(BaseAction):
+class ToScitechPbAction(BaseAction):
     async def do(self, item: dict) -> ScitechPb:
         scitech_pb = ScitechPb(
             authors=(item.get('author') or '').split('; '),
@@ -113,7 +113,7 @@ class LibgenApiToScitechPbAction(BaseAction):
                     item['tags'].split(';')
                 ),
             )),
-            title=item['title'],
+            title=item['title'].replace('\0', '').strip(),
         )
 
         scitech_pb.cu, scitech_pb.cu_suf = create_cu(
@@ -123,6 +123,7 @@ class LibgenApiToScitechPbAction(BaseAction):
         )
         year = safe_int(item['year'])
         if year and year < 9999:
-            scitech_pb.year = str(year)
-            scitech_pb.issued_at = np.datetime64(scitech_pb.year).astype('<M8[s]').astype(np.int64)
+            scitech_pb.year = year
+            # Subtract 1970
+            scitech_pb.issued_at = np.datetime64(year, 'Y').astype('datetime64[s]').astype(np.int64) - 62167132800
         return scitech_pb

@@ -5,132 +5,45 @@ version = "0.0.0"
 
 # Mandatory (or Cargo tooling is unhappy)
 [lib]
-path = "src/main.rs"
+path = "bin/main.rs"
+
+[build-dependencies]
+tonic-build = { version = "0.6.2", default-features = false, features = ["prost", "transport"] }
 
 [dependencies]
-actix-cors = "0.5.4"
-actix = "0.10.0"
-actix-http = { version = "2", default-features = false }
-actix-rt = "1"
-actix-service = "1"
-actix-threadpool = "0.3"
-async-trait = "0.1.37"
-actix-web = { version = "3", default-features = false }
-actix-utils = "1"
-atomicwrites = { version = "0.2.5", optional = true }
-autocfg = "1.0.0"
-backtrace = "0.3.55"
-base64 = "0.12.3"
-bb8 = "0.4.2"
-bb8-postgres = "0.4.0"
-bincode = { version = "1.3.1", features = ["i128"] }
-bitpacking = { version = "0.8", default-features = false, features = ["bitpacker4x"] }
-brotli = "3.3.0"
-byteorder = "1.3.4"
-bytes = "0.5.6"
-census = "0.4.0"
-chrono = { version = "0.4.13", features = ["serde"] }
-clap = "2.33.3"
-colored = "2"
-combine = { version = "4", default-features = false, features = [] }
-config = "0.11.0"
-crc32fast = "1.2.0"
-criterion = "0.3.3"
-crossbeam = "0.7.3"
-crossbeam-channel = "0.5.0"
-deadpool = "0.5.2"
-deadpool-postgres = "0.5.6"
-derive_more = "0.99.9"
-dotenv = "0.15.0"
-downcast-rs = { version="1.2.0" }
-env_logger = "0.8.2"
-erased-serde = "0.3.12"
-fail = "0.4.0"
-failure = "0.1.8"
-fancy-regex = "0.3.5"
-fastdivide = "0.3.0"
-fnv = "1.0.7"
-fs2 = { version="0.4.3", optional = true }
-fst = "0.4"
-futures = { version = "0.3.5", features = ["thread-pool"] }
-grpc = "0.8.2"
-grpc-compiler = "0.8.2"
-htmlescape = "0.3.1"
-integer-encoding = "2.0.0"
-itertools = "0.9.0"
+clap = { version = "3.1.6", features = ["cargo"] }
+colored = "2.0.0"
+config = "0.12.0"
+crossbeam-channel = "0.5.4"
+futures = "0.3.21"
+futures-util = "0.3.21"
+hyper = "0.14.17"
 lazy_static = "1.4.0"
-levenshtein_automata = { version="0.1", features = ["fst_automaton"] }
-lexical-core = "0.7.5"
-libc = "0.2.74"
-log = { version = "0.4.11", features = ["std"] }
-log4rs = { version = "0.10.0", features = ["file", "json_encoder"] }
-lru = "0.6.0"
-lz4 = "1.23.2"
-lz4-sys = "1.9.2"
-maplit = "1.0.2"
-matches = "0.1.8"
-memmap = { version = "0.7.0", optional=true }
-murmurhash32 = "0.2.0"
-num-bigint = "0.3.1"
-num_cpus = "1.13.0"
-num-traits = "0.2.14"
-once_cell = "1.4.0"
-owned-read = "0.4.1"
-owning_ref = "0.4.1"
-pin-project = "0.4.23"
-postgres = { version = "0.17.5" }
-postgres-types = { version = "0.1.2", features = ["with-serde_json-1", "derive"] }
-proptest = "0.10.1"
-protobuf = { version = "2.18.1", features = ["with-bytes"] }
-protobuf-codegen = "2.18.1"
-r2d2 = "0.8.9"
-r2d2_postgres = "0.16.0"
-rand = "0.7.3"
-rayon = "1.3.1"
-regex = { version = "1.4.2", default-features = false, features = ["std"] }
-reopen = { version = "1.0.1", features = ["signals"] }
-rust-stemmers = "1.2.0"
-rustc-serialize = "0.3.24"
-serde = { version = "1.0.118", features = ["derive"] }
-serde_derive = "1.0.118"
-serde_json = "1.0.61"
-serde_qs = "0.8.2"
-serde_yaml = "0.8.15"
-signal-hook = "0.3.2"
-slog = { version = "2.7.0", features = ["nested-values"] }
-slog-async = "2.5.0"
-slog_derive = "0.2.0"
-slog-json = "2.3.0"
-slog-stdlog = "4.1.0"
-slog-term = "2.6.0"
-smallvec = "1.6.0"
-snap = "1.0.3"
-stable_deref_trait = "1.2.0"
-strum = "0.20.0"
-strum_macros = "0.20.1"
+num_cpus = "1.13.1"
+opentelemetry = "0.17.0"
+opentelemetry-prometheus = "0.10.0"
+parking_lot = { version = "0.12.0", features = ["send_guard"] }
+prometheus = "0.13.0"
+prost = "0.9.0"
+prost-types = "0.9.0"
+rand = "0.8.5"
+rdkafka = "0.28.0"
+serde = { version = "1.0.136", features = ["derive"] }
+serde_derive = "1.0.136"
+serde_yaml = "0.8.23"
+signal-hook = "0.3.13"
+tantivy = { version = "0.17.0", features = ["brotli-compression"] }
 tantivy-fst = "0.3.0"
-tar = "0.4.30"
-tempdir = "0.3.7"
-tempfile = "3.1.0"
-textwrap = "0.13.2"
-thiserror = "1.0.23"
-time = { version = "0.2", features = ["std"] }
-tls-api = "0.4.0"
-tls-api-stub = "0.4.0"
-tokio = { version = "0.2", features = ["full", "time"] }
-tokio-pg-mapper = "0.2.0"
-tokio-pg-mapper-derive = "0.2.0"
-tokio-postgres = "0.5"
-typenum = { version = "1.12.0", features = ["force_unix_path_separator"] }
-urlparse = "0.7.3"
-uuid = { version = "0.8.1", features = ["v4", "serde"] }
-
-[features]
-default = ["mmap"]
-mmap = ["atomicwrites", "fs2", "memmap"]
-failpoints = ["fail/failpoints"]
-unstable = [] # useful for benches.
-wasm-bindgen = ["uuid/wasm-bindgen"]
+textwrap = "0.15.0"
+thiserror = "1.0.30"
+tokio = { version = "1.17.0", features = ["full", "time"] }
+tonic = "0.6.2"
+tower = "0.4.12"
+tower-http = { version = "0.2.5", features = ["set-header", "trace"] }
+tracing = "0.1.32"
+tracing-appender = "0.2.2"
+tracing-futures = "0.2.5"
+tracing-subscriber = { version = "0.3.9", features = ["env-filter", "json"] }
 
 [workspace.metadata.raze]
 default_gen_buildrs = true
@@ -143,45 +56,5 @@ targets = [
 ]
 workspace_path = "//rules/rust"
 
-
-[package.metadata.raze.crates.indexmap.'*']
-additional_flags = [
-    "--cfg=has_std",
-]
-
-[package.metadata.raze.crates.grpc-compiler.'*']
-extra_aliased_targets = ["cargo_bin_protoc_gen_rust_grpc"]
-
-[package.metadata.raze.crates.libc.'*']
-additional_flags = [
-    "--cfg=libc_priv_mod_use",
-    "--cfg=libc_union",
-    "--cfg=libc_const_size_of",
-    "--cfg=libc_core_cvoid",
-    "--cfg=libc_align",
-    "--cfg=libc_packedN",
-]
-
-[package.metadata.raze.crates.log.'*']
-additional_flags = [
-    "--cfg=atomic_cas"
-]
-
-[package.metadata.raze.crates.proc-macro2.'*']
-additional_flags = [
-    "--cfg=use_proc_macro",
-    "--cfg=wrap_proc_macro",
-]
-
-[package.metadata.raze.crates.protobuf-codegen.'*']
-extra_aliased_targets = ["cargo_bin_protoc_gen_rust"]
-
-[package.metadata.raze.crates.serde.'*']
-additional_flags = [
-    "--cfg=integer128",
-]
-
-[package.metadata.raze.crates.time.'*']
-additional_flags = [
-    "--cfg=std",
-]
+[package.metadata.raze.crates.json5.'*']
+data_attr = "glob([\"**/*.pest\"])"

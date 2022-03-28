@@ -6,8 +6,6 @@ from typing import (
 )
 
 from aiogrpcclient import BaseGrpcClient
-from grpc import StatusCode
-from grpc.experimental.aio import AioRpcError
 from nexus.meta_api.proto.documents_service_pb2 import \
     RollRequest as RollRequestPb
 from nexus.meta_api.proto.documents_service_pb2 import \
@@ -26,12 +24,6 @@ from nexus.meta_api.proto.search_service_pb2 import \
 from nexus.meta_api.proto.search_service_pb2_grpc import SearchStub
 from nexus.models.proto.typed_document_pb2 import \
     TypedDocument as TypedDocumentPb
-from tenacity import (
-    retry,
-    retry_if_exception,
-    stop_after_attempt,
-    wait_fixed,
-)
 
 
 class MetaApiGrpcClient(BaseGrpcClient):
@@ -42,7 +34,7 @@ class MetaApiGrpcClient(BaseGrpcClient):
 
     async def get(
         self,
-        schema: str,
+        index_alias: str,
         document_id: int,
         user_id: str,
         position: Optional[int] = None,
@@ -51,7 +43,7 @@ class MetaApiGrpcClient(BaseGrpcClient):
     ) -> TypedDocumentPb:
         return await self.stubs['documents'].get(
             TypedDocumentRequestPb(
-                schema=schema,
+                index_alias=index_alias,
                 document_id=document_id,
                 position=position,
             ),
@@ -80,20 +72,9 @@ class MetaApiGrpcClient(BaseGrpcClient):
             ),
         )
 
-    @retry(
-        retry=retry_if_exception(
-            lambda e: isinstance(e, AioRpcError) and (
-                e.code() == StatusCode.CANCELLED
-                or e.code() == StatusCode.UNAVAILABLE
-            )
-        ),
-        reraise=True,
-        stop=stop_after_attempt(5),
-        wait=wait_fixed(2),
-    )
     async def search(
         self,
-        schemas: Union[List[str], Tuple[str]],
+        index_aliases: Union[List[str], Tuple[str]],
         query: str,
         user_id: str,
         page: Optional[int] = None,
@@ -104,7 +85,7 @@ class MetaApiGrpcClient(BaseGrpcClient):
     ) -> SearchResponsePb:
         return await self.stubs['search'].search(
             SearchRequestPb(
-                schemas=schemas,
+                index_aliases=index_aliases,
                 query=query,
                 page=page,
                 page_size=page_size,

@@ -1,42 +1,51 @@
-import aiopg
-import psycopg2.extras
+from typing import Optional
+
 from aiokit import AioThing
-from psycopg2 import OperationalError
-from tenacity import (
-    retry,
-    retry_if_exception_type,
-    stop_after_attempt,
-    wait_fixed,
-)
+from psycopg.rows import tuple_row
+from psycopg_pool import AsyncConnectionPool
 
 
 class AioPostgresPoolHolder(AioThing):
-    def __init__(self, fn=aiopg.create_pool, *args, **kwargs):
+    def __init__(self, conninfo, timeout=30, min_size=1, max_size=4):
         super().__init__()
-        self.fn = fn
-        self.args = args
-        self.kwargs = kwargs
         self.pool = None
+        self.fn = lambda: AsyncConnectionPool(
+            conninfo=conninfo,
+            timeout=timeout,
+            min_size=min_size,
+            max_size=max_size,
+        )
 
-    @retry(
-        retry=retry_if_exception_type(OperationalError),
-        stop=stop_after_attempt(3),
-        wait=wait_fixed(1.0),
-    )
     async def start(self):
         if not self.pool:
-            self.pool = await self.fn(*self.args, **self.kwargs)
+            self.pool = self.fn()
 
     async def stop(self):
         if self.pool:
-            self.pool.close()
-            await self.pool.wait_closed()
+            await self.pool.close()
             self.pool = None
 
-    async def execute(self, stmt, values=None, fetch=False, timeout=None, cursor_factory=psycopg2.extras.DictCursor):
-        async with self.pool.acquire() as conn:
-            async with conn.cursor(cursor_factory=cursor_factory) as cur:
-                await cur.execute(stmt, values, timeout=timeout)
-                if fetch:
-                    return await cur.fetchall()
-                return cur.rowcount
+    async def iterate(
+        self,
+        stmt: str,
+        values=None,
+        row_factory=tuple_row,
+        cursor_name: Optional[str] = None,
+        itersize: Optional[int] = None,
+    ):
+        if not self.pool:
+            raise RuntimeError('AioPostgresPoolHolder has not been started')
+        async with self.pool.connection() as conn:
+            async with conn.cursor(name=cursor_name, row_factory=row_factory) as cur:
+                if itersize is not None:
+                    cur.itersize = itersize
+                await cur.execute(stmt, values)
+                async for row in cur:
+                    yield row
+
+    async def execute(self, stmt: str, values=None, cursor_name: Optional[str] = None, row_factory=tuple_row):
+        if not self.pool:
+            raise RuntimeError('AioPostgresPoolHolder has not been started')
+        async with self.pool.connection() as conn:
+            async with conn.cursor(name=cursor_name, row_factory=row_factory) as cur:
+                await cur.execute(stmt, values)

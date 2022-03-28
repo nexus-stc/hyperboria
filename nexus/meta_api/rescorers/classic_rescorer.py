@@ -15,7 +15,7 @@ from .base import Rescorer
 
 def convert_scoring_to_vec_current_version(
     original_score,
-    schema_id,
+    index_id,
     document_age,
     downloads_count,
     ref_by_count,
@@ -26,7 +26,7 @@ def convert_scoring_to_vec_current_version(
 ):
     return np.array([
         original_score,
-        schema_id,
+        index_id,
         document_age,
         downloads_count,
         ref_by_count,
@@ -37,9 +37,9 @@ def convert_scoring_to_vec_current_version(
 
 
 def convert_scoring_to_vec_future_version(
-    doc_id,
+    document_id,
     original_score,
-    schema_id,
+    index_id,
     document_age,
     downloads_count,
     ref_by_count,
@@ -49,9 +49,9 @@ def convert_scoring_to_vec_future_version(
     query_documents_similarity_vector,
 ):
     return np.array([
-        doc_id,
+        document_id,
         original_score,
-        schema_id,
+        index_id,
         document_age,
         downloads_count,
         ref_by_count,
@@ -61,8 +61,8 @@ def convert_scoring_to_vec_future_version(
     ] + query_documents_similarity_vector)
 
 
-def schema_to_id(schema):
-    return 1 if schema == 'scimag' else 2
+def index_alias_to_id(name):
+    return 1 if name == 'scimag' else 2
 
 
 def query_document_similarity_measures(query_tokens, query_tokens_set, query_tokens_count, document_tokens):
@@ -95,9 +95,9 @@ def query_document_similarity_measures(query_tokens, query_tokens_set, query_tok
 
 
 def cast_issued_at(document):
-    if 'issued_at' in document:
+    if document.HasField('issued_at'):
         try:
-            return datetime.date.fromtimestamp(document['issued_at'])
+            return datetime.date.fromtimestamp(document.issued_at)
         except ValueError:
             return datetime.date(2000, 1, 1)
     else:
@@ -106,9 +106,9 @@ def cast_issued_at(document):
 
 def calculate_title_tokens(document):
     # ToDo: should we add tags?
-    title_tokens = list(document.get('authors', []))
-    if document.get('title'):
-        title_tokens.append(document['title'])
+    title_tokens = list(document.authors)
+    if document.title:
+        title_tokens.append(document.title)
     return (' '.join(title_tokens)).lower().split()
 
 
@@ -126,8 +126,8 @@ class ClassicRescorer(Rescorer):
         query_tokens_set = set(query_tokens)
 
         for scored_document in scored_documents:
-            document = scored_document['document']
-            original_id = document.get('original_id') or document['id']
+            document = getattr(scored_document.typed_document, scored_document.typed_document.WhichOneof('document'))
+            original_id = document.original_id or document.id
 
             title_tokens = calculate_title_tokens(document)
 
@@ -138,14 +138,14 @@ class ClassicRescorer(Rescorer):
                 title_tokens,
             )
             future_scoring_vecs.append(convert_scoring_to_vec_future_version(
-                doc_id=original_id,
-                original_score=scored_document['score'],
-                schema_id=schema_to_id(scored_document['schema']),
+                document_id=original_id,
+                original_score=scored_document.score,
+                index_id=index_alias_to_id(scored_document.typed_document.WhichOneof('document')),
                 document_age=(now - cast_issued_at(document)).total_seconds(),
-                downloads_count=scored_document['document'].get('downloads_count', 0),
-                ref_by_count=document.get('ref_by_count', 0),
-                same_language=int(language == document.get('language')),
-                same_query_language=int(query_language == document.get('language')),
+                downloads_count=scored_document.document.downloads_count,
+                ref_by_count=getattr(document, 'ref_by_count', 0),
+                same_language=int(language == document.language),
+                same_query_language=int(query_language == document.language),
                 query_tokens_count=query_tokens_count,
                 query_documents_similarity_vector=query_documents_similarity_vector
             ))
@@ -175,7 +175,7 @@ class ClassicRescorer(Rescorer):
 
         for scored_document in scored_documents:
             # ToDo: Use shared wrappers
-            document = scored_document['document']
+            document = getattr(scored_document.typed_document, scored_document.typed_document.WhichOneof('document'))
 
             title_tokens = calculate_title_tokens(document)
             query_documents_similarity_vector = query_document_similarity_measures(
@@ -185,24 +185,24 @@ class ClassicRescorer(Rescorer):
                 title_tokens,
             )
             current_scoring_vecs.append(convert_scoring_to_vec_current_version(
-                original_score=scored_document['score'],
-                schema_id=schema_to_id(scored_document['schema']),
+                original_score=scored_document.score,
+                index_id=index_alias_to_id(scored_document.typed_document.WhichOneof('document')),
                 document_age=(now - cast_issued_at(document)).total_seconds(),
-                downloads_count=scored_document['document'].get('downloads_count', 0),
-                ref_by_count=document.get('ref_by_count', 0),
-                same_language=int(language == document.get('language')),
-                same_query_language=int(query_language == document.get('language')),
+                downloads_count=document.downloads_count,
+                ref_by_count=getattr(document, 'ref_by_count', 0),
+                same_language=int(language == document.language),
+                same_query_language=int(query_language == document.language),
                 query_tokens_count=query_tokens_count,
                 query_documents_similarity_vector=query_documents_similarity_vector,
             ))
 
         scores = self.lgbm_ranker.predict(current_scoring_vecs)
         for score, scored_document in zip(scores, scored_documents):
-            scored_document['score'] = score
+            scored_document.score = score
 
-        scored_documents = sorted(scored_documents, key=lambda x: x['score'], reverse=True)
+        scored_documents = sorted(scored_documents, key=lambda x: x.score, reverse=True)
         for position, scored_document in enumerate(scored_documents):
-            scored_document['position'] = position
+            scored_document.position = position
         return scored_documents
 
     async def rescore(self, scored_documents, query, session_id, language):

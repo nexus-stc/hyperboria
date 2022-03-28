@@ -13,10 +13,10 @@ logging:
       class: library.logging.formatters.TracebackFormatter
   handlers:
     debug:
-      class: logging.StreamHandler
+      class: library.logging.handlers.BaseFileHandler
       formatter: default
+      filename: '{{ log_path }}/debug.log'
       level: DEBUG
-      stream: 'ext://sys.stderr'
     error:
       class: library.logging.handlers.BaseFileHandler
       filename: '{{ log_path }}/error.log'

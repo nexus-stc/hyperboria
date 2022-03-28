@@ -14,12 +14,12 @@ from .base import (
 
 
 class LibgenDoiSource(DoiSource):
-    base_url = 'http://libgen.gs'
+    base_url = 'http://libgen.rocks'
     resolve_timeout = 10
 
     async def resolve(self, error_log_func: Callable = error_log) -> AsyncIterable[PreparedRequest]:
         async with self.get_resolve_session() as session:
-            url = f'{self.base_url}/scimag/ads.php?doi={self.doi}'
+            url = f'{self.base_url}/ads.php?doi={self.doi}'
             async with PreparedRequest(
                 method='get',
                 url=url,
@@ -28,7 +28,7 @@ class LibgenDoiSource(DoiSource):
                 downloaded_page_bytes = await resp.read()
                 downloaded_page = downloaded_page_bytes.decode('utf-8', 'backslashreplace')
             match = re.search(
-                'https?://.*/scimag/get\\.php\\?doi=.*&key=[A-Za-z0-9]+',
+                'https?://.*/get\\.php\\?md5=[a-fA-F\\d]+&key=[A-Za-z\\d]+&doi=.*',
                 downloaded_page,
                 re.IGNORECASE,
             )

@@ -24,21 +24,21 @@ class LibgenNewSource(Md5Source):
             ).execute_with(session) as resp:
                 downloaded_page = await resp.text()
             match_ipfs = re.search(
-                'https://ipfs.io/ipfs/[A-Za-z0-9]+',
+                'https://ipfs.io/ipfs/[A-Za-z\\d]+',
                 downloaded_page,
                 re.IGNORECASE,
             )
             if match_ipfs:
                 yield PreparedRequest(method='get', url=match_ipfs.group(), ssl=self.ssl, timeout=self.timeout)
             match_cf = re.search(
-                'https://cloudflare-ipfs.com/ipfs/[A-Za-z0-9]+',
+                'https://cloudflare-ipfs.com/ipfs/[A-Za-z\\d]+',
                 downloaded_page,
                 re.IGNORECASE,
             )
             if match_cf:
                 yield PreparedRequest(method='get', url=match_cf.group(), ssl=self.ssl, timeout=self.timeout)
             match_infura = re.search(
-                'https://ipfs.infura.io/ipfs/[A-Za-z0-9]+',
+                'https://ipfs.infura.io/ipfs/[A-Za-z\\d]+',
                 downloaded_page,
                 re.IGNORECASE,
             )

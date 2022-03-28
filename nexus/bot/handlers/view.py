@@ -18,8 +18,8 @@ class ViewHandler(BaseHandler):
     should_reset_last_widget = False
 
     def parse_pattern(self, event: events.ChatAction):
-        short_schema = event.pattern_match.group(1)
-        schema = self.short_schema_to_schema(short_schema)
+        short_index_alias = event.pattern_match.group(1)
+        index_alias = self.short_index_alias_to_index_alias(short_index_alias)
         session_id = event.pattern_match.group(3)
         old_message_id = int(event.pattern_match.group(4))
         document_id = int(event.pattern_match.group(5))
@@ -27,7 +27,7 @@ class ViewHandler(BaseHandler):
 
         page = int(position / self.application.config['application']['page_size'])
 
-        return schema, session_id, old_message_id, document_id, position, page
+        return index_alias, session_id, old_message_id, document_id, position, page
 
     async def process_widgeting(self, has_found_old_widget, old_message_id, request_context: RequestContext):
         if has_found_old_widget:
@@ -56,10 +56,10 @@ class ViewHandler(BaseHandler):
         return f'/search_{session_id}_{message_id}_{page}'
 
     async def handler(self, event: events.ChatAction, request_context: RequestContext):
-        schema, session_id, old_message_id, document_id, position, page = self.parse_pattern(event)
+        index_alias, session_id, old_message_id, document_id, position, page = self.parse_pattern(event)
 
         request_context.add_default_fields(mode='view', session_id=session_id)
-        request_context.statbox(action='view', document_id=document_id, position=position, schema=schema)
+        request_context.statbox(action='view', document_id=document_id, position=position, index_alias=index_alias)
 
         has_found_old_widget = old_message_id == self.application.user_manager.last_widget.get(request_context.chat.chat_id)
 
@@ -71,7 +71,7 @@ class ViewHandler(BaseHandler):
             )
 
             document_view = await self.resolve_document(
-                schema,
+                index_alias,
                 document_id,
                 position,
                 session_id,
@@ -91,7 +91,7 @@ class ViewHandler(BaseHandler):
             view, buttons = document_view.get_view(
                 language=request_context.chat.language,
                 session_id=session_id,
-                bot_external_name=self.application.config['telegram']['bot_external_name'],
+                bot_name=self.application.config['telegram']['bot_name'],
                 position=position,
                 back_command=back_command,
             )

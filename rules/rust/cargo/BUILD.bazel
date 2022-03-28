@@ -13,206 +13,8 @@ licenses([
 
 # Aliased targets
 alias(
-    name = "actix",
-    actual = "@raze__actix__0_10_0//:actix",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "actix_cors",
-    actual = "@raze__actix_cors__0_5_4//:actix_cors",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "actix_http",
-    actual = "@raze__actix_http__2_2_0//:actix_http",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "actix_rt",
-    actual = "@raze__actix_rt__1_1_1//:actix_rt",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "actix_service",
-    actual = "@raze__actix_service__1_0_6//:actix_service",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "actix_threadpool",
-    actual = "@raze__actix_threadpool__0_3_3//:actix_threadpool",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "actix_utils",
-    actual = "@raze__actix_utils__1_0_6//:actix_utils",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "actix_web",
-    actual = "@raze__actix_web__3_3_2//:actix_web",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "async_trait",
-    actual = "@raze__async_trait__0_1_50//:async_trait",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "atomicwrites",
-    actual = "@raze__atomicwrites__0_2_5//:atomicwrites",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "autocfg",
-    actual = "@raze__autocfg__1_0_1//:autocfg",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "backtrace",
-    actual = "@raze__backtrace__0_3_56//:backtrace",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "base64",
-    actual = "@raze__base64__0_12_3//:base64",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "bb8",
-    actual = "@raze__bb8__0_4_2//:bb8",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "bb8_postgres",
-    actual = "@raze__bb8_postgres__0_4_0//:bb8_postgres",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "bincode",
-    actual = "@raze__bincode__1_3_3//:bincode",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "bitpacking",
-    actual = "@raze__bitpacking__0_8_2//:bitpacking",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "brotli",
-    actual = "@raze__brotli__3_3_0//:brotli",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "byteorder",
-    actual = "@raze__byteorder__1_4_3//:byteorder",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "bytes",
-    actual = "@raze__bytes__0_5_6//:bytes",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "census",
-    actual = "@raze__census__0_4_0//:census",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "chrono",
-    actual = "@raze__chrono__0_4_19//:chrono",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
     name = "clap",
-    actual = "@raze__clap__2_33_3//:clap",
+    actual = "@raze__clap__3_1_6//:clap",
     tags = [
         "cargo-raze",
         "manual",
@@ -229,44 +31,8 @@ alias(
 )
 
 alias(
-    name = "combine",
-    actual = "@raze__combine__4_5_2//:combine",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
     name = "config",
-    actual = "@raze__config__0_11_0//:config",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "crc32fast",
-    actual = "@raze__crc32fast__1_2_1//:crc32fast",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "criterion",
-    actual = "@raze__criterion__0_3_4//:criterion",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "crossbeam",
-    actual = "@raze__crossbeam__0_7_3//:crossbeam",
+    actual = "@raze__config__0_12_0//:config",
     tags = [
         "cargo-raze",
         "manual",
@@ -275,133 +41,7 @@ alias(
 
 alias(
     name = "crossbeam_channel",
-    actual = "@raze__crossbeam_channel__0_5_1//:crossbeam_channel",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "deadpool",
-    actual = "@raze__deadpool__0_5_2//:deadpool",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "deadpool_postgres",
-    actual = "@raze__deadpool_postgres__0_5_6//:deadpool_postgres",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "derive_more",
-    actual = "@raze__derive_more__0_99_13//:derive_more",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "dotenv",
-    actual = "@raze__dotenv__0_15_0//:dotenv",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "downcast_rs",
-    actual = "@raze__downcast_rs__1_2_0//:downcast_rs",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "env_logger",
-    actual = "@raze__env_logger__0_8_3//:env_logger",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "erased_serde",
-    actual = "@raze__erased_serde__0_3_13//:erased_serde",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "fail",
-    actual = "@raze__fail__0_4_0//:fail",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "failure",
-    actual = "@raze__failure__0_1_8//:failure",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "fancy_regex",
-    actual = "@raze__fancy_regex__0_3_5//:fancy_regex",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "fastdivide",
-    actual = "@raze__fastdivide__0_3_0//:fastdivide",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "fnv",
-    actual = "@raze__fnv__1_0_7//:fnv",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "fs2",
-    actual = "@raze__fs2__0_4_3//:fs2",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "fst",
-    actual = "@raze__fst__0_4_5//:fst",
+    actual = "@raze__crossbeam_channel__0_5_4//:crossbeam_channel",
     tags = [
         "cargo-raze",
         "manual",
@@ -410,7 +50,7 @@ alias(
 
 alias(
     name = "futures",
-    actual = "@raze__futures__0_3_14//:futures",
+    actual = "@raze__futures__0_3_21//:futures",
     tags = [
         "cargo-raze",
         "manual",
@@ -418,8 +58,8 @@ alias(
 )
 
 alias(
-    name = "grpc",
-    actual = "@raze__grpc__0_8_3//:grpc",
+    name = "futures_util",
+    actual = "@raze__futures_util__0_3_21//:futures_util",
     tags = [
         "cargo-raze",
         "manual",
@@ -427,46 +67,8 @@ alias(
 )
 
 alias(
-    name = "grpc_compiler",
-    actual = "@raze__grpc_compiler__0_8_3//:grpc_compiler",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    # Extra aliased target, from raze configuration
-    # N.B.: The exact form of this is subject to change.
-    name = "cargo_bin_protoc_gen_rust_grpc",
-    actual = "@raze__grpc_compiler__0_8_3//:cargo_bin_protoc_gen_rust_grpc",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "htmlescape",
-    actual = "@raze__htmlescape__0_3_1//:htmlescape",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "integer_encoding",
-    actual = "@raze__integer_encoding__2_1_3//:integer_encoding",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "itertools",
-    actual = "@raze__itertools__0_9_0//:itertools",
+    name = "hyper",
+    actual = "@raze__hyper__0_14_17//:hyper",
     tags = [
         "cargo-raze",
         "manual",
@@ -483,134 +85,8 @@ alias(
 )
 
 alias(
-    name = "levenshtein_automata",
-    actual = "@raze__levenshtein_automata__0_1_1//:levenshtein_automata",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "lexical_core",
-    actual = "@raze__lexical_core__0_7_5//:lexical_core",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "libc",
-    actual = "@raze__libc__0_2_93//:libc",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "log",
-    actual = "@raze__log__0_4_14//:log",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "log4rs",
-    actual = "@raze__log4rs__0_10_0//:log4rs",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "lru",
-    actual = "@raze__lru__0_6_5//:lru",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "lz4",
-    actual = "@raze__lz4__1_23_2//:lz4",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "lz4_sys",
-    actual = "@raze__lz4_sys__1_9_2//:lz4_sys",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "maplit",
-    actual = "@raze__maplit__1_0_2//:maplit",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "matches",
-    actual = "@raze__matches__0_1_8//:matches",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "memmap",
-    actual = "@raze__memmap__0_7_0//:memmap",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "murmurhash32",
-    actual = "@raze__murmurhash32__0_2_0//:murmurhash32",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "num_bigint",
-    actual = "@raze__num_bigint__0_3_2//:num_bigint",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "num_traits",
-    actual = "@raze__num_traits__0_2_14//:num_traits",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
     name = "num_cpus",
-    actual = "@raze__num_cpus__1_13_0//:num_cpus",
+    actual = "@raze__num_cpus__1_13_1//:num_cpus",
     tags = [
         "cargo-raze",
         "manual",
@@ -618,8 +94,8 @@ alias(
 )
 
 alias(
-    name = "once_cell",
-    actual = "@raze__once_cell__1_7_2//:once_cell",
+    name = "opentelemetry",
+    actual = "@raze__opentelemetry__0_17_0//:opentelemetry",
     tags = [
         "cargo-raze",
         "manual",
@@ -627,8 +103,8 @@ alias(
 )
 
 alias(
-    name = "owned_read",
-    actual = "@raze__owned_read__0_4_1//:owned_read",
+    name = "opentelemetry_prometheus",
+    actual = "@raze__opentelemetry_prometheus__0_10_0//:opentelemetry_prometheus",
     tags = [
         "cargo-raze",
         "manual",
@@ -636,8 +112,8 @@ alias(
 )
 
 alias(
-    name = "owning_ref",
-    actual = "@raze__owning_ref__0_4_1//:owning_ref",
+    name = "parking_lot",
+    actual = "@raze__parking_lot__0_12_0//:parking_lot",
     tags = [
         "cargo-raze",
         "manual",
@@ -645,8 +121,8 @@ alias(
 )
 
 alias(
-    name = "pin_project",
-    actual = "@raze__pin_project__0_4_28//:pin_project",
+    name = "prometheus",
+    actual = "@raze__prometheus__0_13_0//:prometheus",
     tags = [
         "cargo-raze",
         "manual",
@@ -654,8 +130,8 @@ alias(
 )
 
 alias(
-    name = "postgres",
-    actual = "@raze__postgres__0_17_5//:postgres",
+    name = "prost",
+    actual = "@raze__prost__0_9_0//:prost",
     tags = [
         "cargo-raze",
         "manual",
@@ -663,64 +139,8 @@ alias(
 )
 
 alias(
-    name = "postgres_types",
-    actual = "@raze__postgres_types__0_1_3//:postgres_types",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "proptest",
-    actual = "@raze__proptest__0_10_1//:proptest",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "protobuf",
-    actual = "@raze__protobuf__2_18_2//:protobuf",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "protobuf_codegen",
-    actual = "@raze__protobuf_codegen__2_18_2//:protobuf_codegen",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    # Extra aliased target, from raze configuration
-    # N.B.: The exact form of this is subject to change.
-    name = "cargo_bin_protoc_gen_rust",
-    actual = "@raze__protobuf_codegen__2_18_2//:cargo_bin_protoc_gen_rust",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "r2d2",
-    actual = "@raze__r2d2__0_8_9//:r2d2",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "r2d2_postgres",
-    actual = "@raze__r2d2_postgres__0_16_0//:r2d2_postgres",
+    name = "prost_types",
+    actual = "@raze__prost_types__0_9_0//:prost_types",
     tags = [
         "cargo-raze",
         "manual",
@@ -729,7 +149,7 @@ alias(
 
 alias(
     name = "rand",
-    actual = "@raze__rand__0_7_3//:rand",
+    actual = "@raze__rand__0_8_5//:rand",
     tags = [
         "cargo-raze",
         "manual",
@@ -737,44 +157,8 @@ alias(
 )
 
 alias(
-    name = "rayon",
-    actual = "@raze__rayon__1_5_0//:rayon",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "regex",
-    actual = "@raze__regex__1_4_5//:regex",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "reopen",
-    actual = "@raze__reopen__1_0_2//:reopen",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "rust_stemmers",
-    actual = "@raze__rust_stemmers__1_2_0//:rust_stemmers",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "rustc_serialize",
-    actual = "@raze__rustc_serialize__0_3_24//:rustc_serialize",
+    name = "rdkafka",
+    actual = "@raze__rdkafka__0_28_0//:rdkafka",
     tags = [
         "cargo-raze",
         "manual",
@@ -783,7 +167,7 @@ alias(
 
 alias(
     name = "serde",
-    actual = "@raze__serde__1_0_125//:serde",
+    actual = "@raze__serde__1_0_136//:serde",
     tags = [
         "cargo-raze",
         "manual",
@@ -792,25 +176,7 @@ alias(
 
 alias(
     name = "serde_derive",
-    actual = "@raze__serde_derive__1_0_125//:serde_derive",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "serde_json",
-    actual = "@raze__serde_json__1_0_64//:serde_json",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "serde_qs",
-    actual = "@raze__serde_qs__0_8_3//:serde_qs",
+    actual = "@raze__serde_derive__1_0_136//:serde_derive",
     tags = [
         "cargo-raze",
         "manual",
@@ -819,7 +185,7 @@ alias(
 
 alias(
     name = "serde_yaml",
-    actual = "@raze__serde_yaml__0_8_17//:serde_yaml",
+    actual = "@raze__serde_yaml__0_8_23//:serde_yaml",
     tags = [
         "cargo-raze",
         "manual",
@@ -828,7 +194,7 @@ alias(
 
 alias(
     name = "signal_hook",
-    actual = "@raze__signal_hook__0_3_8//:signal_hook",
+    actual = "@raze__signal_hook__0_3_13//:signal_hook",
     tags = [
         "cargo-raze",
         "manual",
@@ -836,98 +202,8 @@ alias(
 )
 
 alias(
-    name = "slog",
-    actual = "@raze__slog__2_7_0//:slog",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "slog_async",
-    actual = "@raze__slog_async__2_6_0//:slog_async",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "slog_json",
-    actual = "@raze__slog_json__2_3_0//:slog_json",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "slog_stdlog",
-    actual = "@raze__slog_stdlog__4_1_0//:slog_stdlog",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "slog_term",
-    actual = "@raze__slog_term__2_8_0//:slog_term",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "slog_derive",
-    actual = "@raze__slog_derive__0_2_0//:slog_derive",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "smallvec",
-    actual = "@raze__smallvec__1_6_1//:smallvec",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "snap",
-    actual = "@raze__snap__1_0_4//:snap",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "stable_deref_trait",
-    actual = "@raze__stable_deref_trait__1_2_0//:stable_deref_trait",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "strum",
-    actual = "@raze__strum__0_20_0//:strum",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "strum_macros",
-    actual = "@raze__strum_macros__0_20_1//:strum_macros",
+    name = "tantivy",
+    actual = "@raze__tantivy__0_17_0//:tantivy",
     tags = [
         "cargo-raze",
         "manual",
@@ -944,35 +220,8 @@ alias(
 )
 
 alias(
-    name = "tar",
-    actual = "@raze__tar__0_4_33//:tar",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "tempdir",
-    actual = "@raze__tempdir__0_3_7//:tempdir",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "tempfile",
-    actual = "@raze__tempfile__3_2_0//:tempfile",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
     name = "textwrap",
-    actual = "@raze__textwrap__0_13_4//:textwrap",
+    actual = "@raze__textwrap__0_15_0//:textwrap",
     tags = [
         "cargo-raze",
         "manual",
@@ -981,34 +230,7 @@ alias(
 
 alias(
     name = "thiserror",
-    actual = "@raze__thiserror__1_0_24//:thiserror",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "time",
-    actual = "@raze__time__0_2_26//:time",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "tls_api",
-    actual = "@raze__tls_api__0_4_0//:tls_api",
-    tags = [
-        "cargo-raze",
-        "manual",
-    ],
-)
-
-alias(
-    name = "tls_api_stub",
-    actual = "@raze__tls_api_stub__0_4_0//:tls_api_stub",
+    actual = "@raze__thiserror__1_0_30//:thiserror",
     tags = [
         "cargo-raze",
         "manual",
@@ -1017,7 +239,7 @@ alias(
 
 alias(
     name = "tokio",
-    actual = "@raze__tokio__0_2_25//:tokio",
+    actual = "@raze__tokio__1_17_0//:tokio",
     tags = [
         "cargo-raze",
         "manual",
@@ -1025,8 +247,8 @@ alias(
 )
 
 alias(
-    name = "tokio_pg_mapper",
-    actual = "@raze__tokio_pg_mapper__0_2_0//:tokio_pg_mapper",
+    name = "tonic",
+    actual = "@raze__tonic__0_6_2//:tonic",
     tags = [
         "cargo-raze",
         "manual",
@@ -1034,8 +256,8 @@ alias(
 )
 
 alias(
-    name = "tokio_pg_mapper_derive",
-    actual = "@raze__tokio_pg_mapper_derive__0_2_0//:tokio_pg_mapper_derive",
+    name = "tonic_build",
+    actual = "@raze__tonic_build__0_6_2//:tonic_build",
     tags = [
         "cargo-raze",
         "manual",
@@ -1043,8 +265,8 @@ alias(
 )
 
 alias(
-    name = "tokio_postgres",
-    actual = "@raze__tokio_postgres__0_5_5//:tokio_postgres",
+    name = "tower",
+    actual = "@raze__tower__0_4_12//:tower",
     tags = [
         "cargo-raze",
         "manual",
@@ -1052,8 +274,8 @@ alias(
 )
 
 alias(
-    name = "typenum",
-    actual = "@raze__typenum__1_13_0//:typenum",
+    name = "tower_http",
+    actual = "@raze__tower_http__0_2_5//:tower_http",
     tags = [
         "cargo-raze",
         "manual",
@@ -1061,8 +283,8 @@ alias(
 )
 
 alias(
-    name = "urlparse",
-    actual = "@raze__urlparse__0_7_3//:urlparse",
+    name = "tracing",
+    actual = "@raze__tracing__0_1_32//:tracing",
     tags = [
         "cargo-raze",
         "manual",
@@ -1070,8 +292,26 @@ alias(
 )
 
 alias(
-    name = "uuid",
-    actual = "@raze__uuid__0_8_2//:uuid",
+    name = "tracing_appender",
+    actual = "@raze__tracing_appender__0_2_2//:tracing_appender",
+    tags = [
+        "cargo-raze",
+        "manual",
+    ],
+)
+
+alias(
+    name = "tracing_futures",
+    actual = "@raze__tracing_futures__0_2_5//:tracing_futures",
+    tags = [
+        "cargo-raze",
+        "manual",
+    ],
+)
+
+alias(
+    name = "tracing_subscriber",
+    actual = "@raze__tracing_subscriber__0_3_9//:tracing_subscriber",
     tags = [
         "cargo-raze",
         "manual",

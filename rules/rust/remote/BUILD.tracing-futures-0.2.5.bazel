@@ -10,9 +10,10 @@ load("@bazel_skylib//lib:selects.bzl", "selects")
 
 # buildifier: disable=load
 load(
-    "@rules_rust//rust:rust.bzl",
+    "@rules_rust//rust:defs.bzl",
     "rust_binary",
     "rust_library",
+    "rust_proc_macro",
     "rust_test",
 )
 
@@ -34,11 +35,12 @@ rust_library(
     name = "tracing_futures",
     srcs = glob(["**/*.rs"]),
     crate_features = [
+        "default",
         "pin-project",
+        "std",
         "std-future",
     ],
     crate_root = "src/lib.rs",
-    crate_type = "lib",
     data = [],
     edition = "2018",
     rustc_flags = [
@@ -46,13 +48,14 @@ rust_library(
     ],
     tags = [
         "cargo-raze",
+        "crate-name=tracing-futures",
         "manual",
     ],
     version = "0.2.5",
     # buildifier: leave-alone
     deps = [
-        "@raze__pin_project__1_0_7//:pin_project",
-        "@raze__tracing__0_1_25//:tracing",
+        "@raze__pin_project__1_0_10//:pin_project",
+        "@raze__tracing__0_1_32//:tracing",
     ],
 )
 

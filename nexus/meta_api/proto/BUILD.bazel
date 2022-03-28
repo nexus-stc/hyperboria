@@ -5,33 +5,33 @@ load("@rules_proto_grpc//js:defs.bzl", "js_grpc_web_library")
 package(default_visibility = ["//visibility:public"])
 
 proto_library(
-    name = "meta-api-proto",
+    name = "proto",
     srcs = glob([
         "*.proto",
     ]),
     deps = [
-        "//nexus/models/proto:models_proto",
+        "//nexus/models/proto",
         "@com_google_protobuf//:wrappers_proto",
     ],
 )
 
 py_proto_library(
-    name = "meta-api-proto-py",
-    deps = [":meta-api-proto"],
+    name = "proto_py",
+    deps = [":proto"],
 )
 
 py_grpc_library(
-    name = "meta-api-grpc-py",
-    srcs = [":meta-api-proto"],
-    deps = [":meta-api-proto-py"],
+    name = "grpc_py",
+    srcs = [":proto"],
+    deps = [":proto_py"],
 )
 
 js_grpc_web_library(
-    name = "meta-api-grpc-web-js",
+    name = "grpc_web_js",
     protos = [
-        ":meta-api-proto",
-        "//nexus/models/proto:models_proto",
+        ":proto",
+        "//nexus/models/proto",
     ],
     visibility = ["//visibility:public"],
-    deps = ["//nexus/models/proto:models_proto_js"],
+    deps = ["//nexus/models/proto:proto_js"],
 )

@@ -18,8 +18,8 @@ py_library(
         requirement("aiocrossref"),
         requirement("aiolibgen"),
         "//library/aiopostgres",
-        "//nexus/models/proto:models_proto_py",
+        requirement("izihawa_types"),
+        "//nexus/models/proto:proto_py",
         "//nexus/nlptools",
-        requirement("aiosumma"),
     ],
 )

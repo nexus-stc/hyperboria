@@ -4,13 +4,12 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 ROOT_DIR="$(dirname "$(dirname $SCRIPT_DIR)")"
 
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
-    apt install curl gnupg
-    curl -fsSL https://bazel.build/bazel-release.pub.gpg | gpg --dearmor > bazel.gpg
-    mv bazel.gpg /etc/apt/trusted.gpg.d/
-    echo "deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8" | tee /etc/apt/sources.list.d/bazel.list
+    apt install wget
+    wget https://github.com/bazelbuild/bazelisk/releases/download/v1.11.0/bazelisk-linux-amd64 -O /usr/bin/bazel
+    chmod +x /usr/bin/bazel
     apt-get update
-    apt-get -y install bazel llvm make openjdk-8-jdk python3.9 python3.9-venv python3.9-dev python-dev \
-     libsqlite3-dev nodejs libev-dev libev-perl python3-distutils yarn
+    apt-get -y install llvm make openjdk-17-jdk python3.9 python3.9-venv python3.9-dev python-dev \
+     libsqlite3-dev nodejs libev-dev libev-perl python3-distutils wireguard yarn
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     required_packages='bazel coreutils ibazel libev libomp llvm protobuf python3.9 sqlite3'
     brew tap bazelbuild/tap

@@ -12,6 +12,7 @@ logging:
   handlers:
     debug:
       class: library.logging.handlers.BaseFileHandler
+      formatter: default
       filename: '{{ log_path }}/debug.log'
       level: DEBUG
     error:

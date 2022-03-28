@@ -114,7 +114,7 @@ export class BaseView {
   }
 
   getTelegramLink () {
-    return `https://t.me/libgen_scihub_bot?start=${Buffer.from('NID: ' + this.id.toString()).toString('base64')}`
+    return `https://t.me/libgen_scihub_1_bot?start=${Buffer.from('NID: ' + this.id.toString()).toString('base64')}`
   }
 
   getRobustTitle () {

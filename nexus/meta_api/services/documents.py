@@ -1,8 +1,12 @@
+import json
 import logging
 import time
 
 from grpc import StatusCode
-from library.aiogrpctools.base import aiogrpc_request_wrapper
+from library.aiogrpctools.base import (
+    BaseService,
+    aiogrpc_request_wrapper,
+)
 from nexus.meta_api.proto.documents_service_pb2 import \
     RollResponse as RollResponsePb
 from nexus.meta_api.proto.documents_service_pb2 import \
@@ -16,8 +20,6 @@ from nexus.models.proto.typed_document_pb2 import \
     TypedDocument as TypedDocumentPb
 from nexus.views.telegram.registry import pb_registry
 
-from .base import BaseService
-
 
 class DocumentsService(DocumentsServicer, BaseService):
     def __init__(self, server, summa_client, data_provider, stat_provider, learn_logger=None):
@@ -28,19 +30,24 @@ class DocumentsService(DocumentsServicer, BaseService):
         self.data_provider = data_provider
         self.learn_logger = learn_logger
 
-    async def get_document(self, schema, document_id, request_id, context):
+    async def get_document(self, index_alias, document_id, request_id, context):
         search_response = await self.summa_client.search(
-            schema=schema,
+            index_alias=index_alias,
             query=f'id:{document_id}',
-            page=0,
-            page_size=1,
+            offset=0,
+            limit=1,
             request_id=request_id,
         )
 
-        if len(search_response['scored_documents']) == 0:
+        if len(search_response.scored_documents) == 0:
             await context.abort(StatusCode.NOT_FOUND, 'not_found')
 
-        return search_response['scored_documents'][0]['document']
+        loaded = json.loads(search_response.scored_documents[0].document)
+        for field in loaded:
+            if field in {'authors', 'ipfs_multihashes', 'isbns', 'issns', 'references', 'tags'}:
+                continue
+            loaded[field] = loaded[field][0]
+        return loaded
 
     def copy_document(self, source, target):
         for key in source:
@@ -51,15 +58,15 @@ class DocumentsService(DocumentsServicer, BaseService):
 
     @aiogrpc_request_wrapper()
     async def get(self, request, context, metadata) -> TypedDocumentPb:
-        document = await self.get_document(request.schema, request.document_id, metadata['request-id'], context)
+        document = await self.get_document(request.index_alias, request.document_id, metadata['request-id'], context)
         if document.get('original_id'):
             original_document = await self.get_document(
-                request.schema,
-                document['original_id'],
-                metadata['request-id'],
-                context,
+                index_alias=request.index_alias,
+                document_id=document['original_id'],
+                request_id=metadata['request-id'],
+                context=context,
             )
-            for to_remove in ('doi', 'fiction_id', 'filesize', 'libgen_id', 'telegram_file_id',):
+            for to_remove in ('doi', 'fiction_id', 'filesize', 'libgen_id',):
                 original_document.pop(to_remove, None)
             document = {**original_document, **document}
 
@@ -69,34 +76,33 @@ class DocumentsService(DocumentsServicer, BaseService):
         if self.learn_logger:
             self.learn_logger.info({
                 'action': 'get',
+                'document_id': document['id'],
+                'index_alias': request.index_alias,
                 'session_id': metadata['session-id'],
                 'unixtime': time.time(),
-                'schema': request.schema,
-                'document_id': document['id'],
             })
 
         logging.getLogger('query').info({
             'action': 'get',
             'cache_hit': False,
             'id': document['id'],
+            'index_alias': request.index_alias,
             'mode': 'get',
             'position': request.position,
             'request_id': metadata['request-id'],
-            'schema': request.schema,
             'session_id': metadata['session-id'],
             'user_id': metadata['user-id'],
         })
 
-        document_pb = pb_registry[request.schema](**document)
+        document_pb = pb_registry[request.index_alias](**document)
         if document_data:
-            document_pb.telegram_file_id = document_data.telegram_file_id
             del document_pb.ipfs_multihashes[:]
             document_pb.ipfs_multihashes.extend(document_data.ipfs_multihashes)
         if download_stats and download_stats.downloads_count:
             document_pb.downloads_count = download_stats.downloads_count
 
         return TypedDocumentPb(
-            **{request.schema: document_pb},
+            **{request.index_alias: document_pb},
         )
 
     @aiogrpc_request_wrapper()
@@ -125,19 +131,18 @@ class DocumentsService(DocumentsServicer, BaseService):
         document_ids = ' OR '.join(document_ids)
 
         search_response = await self.summa_client.search(
-            schema='scimag',
+            index_alias='scimag',
             query=document_ids,
-            page=0,
-            page_size=limit,
+            limit=limit,
             request_id=metadata['request-id'],
         )
 
-        if len(search_response['scored_documents']) == 0:
+        if len(search_response.scored_documents) == 0:
             await context.abort(StatusCode.NOT_FOUND, 'not_found')
 
         documents = list(map(
-            lambda document: TypedDocumentPb(scimag=ScimagPb(**document['document'])),
-            search_response['scored_documents'],
+            lambda document: TypedDocumentPb(scimag=ScimagPb(**json.loads(document.typed_document.scimag))),
+            search_response.scored_documents,
         ))
 
         return TopMissedResponsePb(typed_documents=documents)

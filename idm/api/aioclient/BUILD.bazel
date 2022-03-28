@@ -7,8 +7,8 @@ py_library(
     visibility = ["//visibility:public"],
     deps = [
         requirement("tenacity"),
-        "//idm/api/proto:idm_grpc_py",
-        "//idm/api/proto:idm_proto_py",
+        "//idm/api/proto:grpc_py",
+        "//idm/api/proto:proto_py",
         requirement("aiogrpcclient"),
     ],
 )

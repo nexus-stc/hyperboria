@@ -3,26 +3,10 @@ from typing import Optional
 from urllib.parse import quote
 
 import numpy as np
+from izihawa_types.datetime import CustomDatetime
 from nexus.nlptools.utils import escape_format
 
 from .common import encode_query_to_deep_link
-
-
-class CustomDatetime:
-    def __init__(self, dt: np.datetime64):
-        self.dt = dt
-
-    @property
-    def year(self) -> int:
-        return self.dt.astype('datetime64[Y]').astype(int) + 1970
-
-    @property
-    def month(self) -> int:
-        return self.dt.astype('datetime64[M]').astype(int) % 12 + 1
-
-    @property
-    def day(self) -> int:
-        return self.dt - self.dt.astype('datetime64[M]') + 1
 
 
 class DoiMixin:
@@ -93,7 +77,7 @@ class FileMixin:
 
 
 class BaseView:
-    schema = None
+    index_alias = None
     multihash_ix = 0
 
     def __getattr__(self, name):
@@ -113,15 +97,15 @@ class BaseView:
         )
         return f'[IPFS]({ipfs_link})'
 
-    def get_deep_link(self, bot_external_name, text=None):
+    def get_deep_link(self, bot_name, text=None):
         if not text:
             text = str(self.id)
-        encoded_query = encode_query_to_deep_link(f'NID: {self.id}', bot_external_name)
+        encoded_query = encode_query_to_deep_link(f'NID: {self.id}', bot_name)
         return f'[{text}]({encoded_query})'
 
-    def generate_links(self, bot_external_name):
+    def generate_links(self, bot_name):
         links = [
-            self.get_deep_link(bot_external_name=bot_external_name, text='Nexus Bot')
+            self.get_deep_link(bot_name=bot_name, text='Nexus Bot')
         ]
         if self.ipfs_multihashes:
             links.append(self.get_ipfs_gateway_link())

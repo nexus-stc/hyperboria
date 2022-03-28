@@ -1,0 +1,129 @@
+"""
+@generated
+cargo-raze crate build file.
+
+DO NOT EDIT! Replaced on runs of cargo-raze
+"""
+
+# buildifier: disable=load
+load("@bazel_skylib//lib:selects.bzl", "selects")
+
+# buildifier: disable=load
+load(
+    "@rules_rust//rust:defs.bzl",
+    "rust_binary",
+    "rust_library",
+    "rust_proc_macro",
+    "rust_test",
+)
+
+package(default_visibility = [
+    # Public for visibility by "@raze__crate__version//" targets.
+    #
+    # Prefer access through "//rules/rust", which limits external
+    # visibility to explicit Cargo.toml dependencies.
+    "//visibility:public",
+])
+
+licenses([
+    "notice",  # MIT from expression "MIT"
+])
+
+# Generated Targets
+
+# Unsupported target "enter" with type "bench" omitted
+
+# Unsupported target "filter" with type "bench" omitted
+
+# Unsupported target "filter_log" with type "bench" omitted
+
+# Unsupported target "fmt" with type "bench" omitted
+
+rust_library(
+    name = "tracing_subscriber",
+    srcs = glob(["**/*.rs"]),
+    crate_features = [
+        "alloc",
+        "ansi",
+        "ansi_term",
+        "default",
+        "env-filter",
+        "fmt",
+        "json",
+        "lazy_static",
+        "matchers",
+        "regex",
+        "registry",
+        "serde",
+        "serde_json",
+        "sharded-slab",
+        "smallvec",
+        "std",
+        "thread_local",
+        "tracing",
+        "tracing-log",
+        "tracing-serde",
+    ],
+    crate_root = "src/lib.rs",
+    data = [],
+    edition = "2018",
+    rustc_flags = [
+        "--cap-lints=allow",
+    ],
+    tags = [
+        "cargo-raze",
+        "crate-name=tracing-subscriber",
+        "manual",
+    ],
+    version = "0.3.9",
+    # buildifier: leave-alone
+    deps = [
+        "@raze__ansi_term__0_12_1//:ansi_term",
+        "@raze__lazy_static__1_4_0//:lazy_static",
+        "@raze__matchers__0_1_0//:matchers",
+        "@raze__regex__1_5_5//:regex",
+        "@raze__serde__1_0_136//:serde",
+        "@raze__serde_json__1_0_79//:serde_json",
+        "@raze__sharded_slab__0_1_4//:sharded_slab",
+        "@raze__smallvec__1_8_0//:smallvec",
+        "@raze__thread_local__1_1_4//:thread_local",
+        "@raze__tracing__0_1_32//:tracing",
+        "@raze__tracing_core__0_1_23//:tracing_core",
+        "@raze__tracing_log__0_1_2//:tracing_log",
+        "@raze__tracing_serde__0_1_3//:tracing_serde",
+    ],
+)
+
+# Unsupported target "cached_layer_filters_dont_break_other_layers" with type "test" omitted
+
+# Unsupported target "duplicate_spans" with type "test" omitted
+
+# Unsupported target "field_filter" with type "test" omitted
+
+# Unsupported target "filter" with type "test" omitted
+
+# Unsupported target "filter_log" with type "test" omitted
+
+# Unsupported target "fmt_max_level_hint" with type "test" omitted
+
+# Unsupported target "hinted_layer_filters_dont_break_other_layers" with type "test" omitted
+
+# Unsupported target "layer_filter_interests_are_cached" with type "test" omitted
+
+# Unsupported target "layer_filters" with type "test" omitted
+
+# Unsupported target "multiple_layer_filter_interests_cached" with type "test" omitted
+
+# Unsupported target "registry_max_level_hint" with type "test" omitted
+
+# Unsupported target "registry_with_subscriber" with type "test" omitted
+
+# Unsupported target "reload" with type "test" omitted
+
+# Unsupported target "same_len_filters" with type "test" omitted
+
+# Unsupported target "support" with type "test" omitted
+
+# Unsupported target "unhinted_layer_filters_dont_break_other_layers" with type "test" omitted
+
+# Unsupported target "utils" with type "test" omitted

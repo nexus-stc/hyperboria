@@ -6,8 +6,8 @@ from izihawa_utils.exceptions import BaseError
 class InterruptProcessing(BaseError):
     code = 'interrupt_processing'
 
-    def __init__(self, doc_id, reason):
-        super().__init__(doc_id=doc_id, reason=reason)
+    def __init__(self, document_id, reason):
+        super().__init__(document_id=document_id, reason=reason)
 
 
 class ConflictError(BaseError):

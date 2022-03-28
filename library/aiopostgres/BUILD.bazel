@@ -10,7 +10,9 @@ py_library(
     srcs_version = "PY3",
     visibility = ["//visibility:public"],
     deps = [
-        requirement("aiopg"),
+        requirement("psycopg"),
+        requirement("psycopg-pool"),
+        requirement("psycopg-binary"),
         requirement("tenacity"),
         requirement("aiokit"),
     ],

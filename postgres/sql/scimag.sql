@@ -39,7 +39,6 @@ CREATE TABLE public.scimag (
     meta_language text,
     md5 uuid,
     tags text[],
-    telegram_file_id text,
     title text,
     updated_at integer DEFAULT date_part('epoch'::text, now()) NOT NULL,
     volume text,
@@ -74,13 +73,6 @@ CREATE UNIQUE INDEX scimag_doi_idx ON public.scimag USING btree (doi);
 --
 
 CREATE INDEX scimag_md5_idx ON public.scimag USING btree (md5);
-
-
---
--- Name: scimag_telegram_file_id_not_null_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX scimag_telegram_file_id_not_null_idx ON public.scimag USING btree (telegram_file_id) WHERE (telegram_file_id IS NOT NULL);
 
 
 --

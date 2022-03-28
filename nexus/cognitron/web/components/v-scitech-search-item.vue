@@ -1,15 +1,15 @@
 <template lang="pug">
-  div.d-flex
-    div
-      nuxt-link(:to="{ name: 'documents-schema-id', params: { schema: document.schema, id: document.id }}") {{ document.icon }} {{ document.title }}
-      .detail
-        div
-          i.mr-1(v-if='document.doi') DOI:
-          span {{ document.doi }}
-        div(v-if='document.getFirstAuthors(false, 1)')
-          span {{ document.getFirstAuthors(false, 1) }} {{ issuedAt }}
-        .gp
-          span.el.text-uppercase {{ document.getFormattedFiledata() }}
+div.d-flex
+  div
+    nuxt-link(:to="{ name: 'documents-index-name-id', params: { index_alias: document.index_alias, id: document.id }}") {{ document.icon }} {{ document.title }}
+    .detail
+      div
+        i.mr-1(v-if='document.doi') DOI:
+        span {{ document.doi }}
+      div(v-if='document.getFirstAuthors(false, 1)')
+        span {{ document.getFirstAuthors(false, 1) }} {{ issuedAt }}
+      .gp
+        span.el.text-uppercase {{ document.getFormattedFiledata() }}
 </template>
 
 <script>

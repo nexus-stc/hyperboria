@@ -31,7 +31,7 @@ class RollHandler(BaseHandler):
         view, buttons = scitech_view.get_view(
             language=request_context.chat.language,
             session_id=session_id,
-            bot_external_name=self.application.config['telegram']['bot_external_name'],
+            bot_name=self.application.config['telegram']['bot_name'],
         )
         actions = [
             self.application.telegram_client.send_message(

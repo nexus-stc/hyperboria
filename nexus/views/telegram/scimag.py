@@ -30,7 +30,7 @@ preprints = {'10.1101', '10.21203'}
 
 class ScimagView(BaseView, AuthorMixin, DoiMixin, FileMixin, IssuedAtMixin):
     icon = '🔬'
-    schema = 'scimag'
+    index_alias = 'scimag'
     multihash_ix = 1
 
     def __init__(self, document_pb: ScimagPb):
@@ -154,7 +154,7 @@ class ScimagView(BaseView, AuthorMixin, DoiMixin, FileMixin, IssuedAtMixin):
         self,
         language: str,
         session_id: str,
-        bot_external_name: str,
+        bot_name: str,
         position: int = 0,
         back_command: Optional[str] = None,
         with_buttons: bool = True,
@@ -175,7 +175,7 @@ class ScimagView(BaseView, AuthorMixin, DoiMixin, FileMixin, IssuedAtMixin):
         if self.downloads_count:
             parts.append(f'**NRank**: {math.log1p(self.downloads_count):.1f}')
 
-        parts.append(f'**Links**: {" - ".join(self.generate_links(bot_external_name))}')
+        parts.append(f'**Links**: {" - ".join(self.generate_links(bot_name))}')
 
         if self.abstract:
             parts.append(

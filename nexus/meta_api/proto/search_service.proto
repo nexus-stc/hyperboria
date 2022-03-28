@@ -10,7 +10,7 @@ message ScoredDocument {
 }
 
 message SearchRequest {
-  repeated string schemas = 1;
+  repeated string index_aliases = 1;
   string query = 2;
   uint32 page = 3;
   uint32 page_size = 4;

@@ -26,6 +26,7 @@ class AioGrpcServer(AioRootThing):
             'address': self.address,
             'mode': 'grpc',
             'port': self.port,
+            'extras': [x.__class__.__name__ for x in self.starts + self.waits]
         })
         await self.server.start()
         await self.server.wait_for_termination()
@@ -80,6 +81,8 @@ def aiogrpc_request_wrapper(log=True):
                 return r
             except aio.AbortError:
                 raise
+            except aio.AioRpcError as e:
+                await context.abort(e.code(), e.details())
             except Exception as e:
                 serialized_request = MessageToDict(request, preserving_proto_field_name=True)
                 error_log(e, request=serialized_request, request_id=metadata.get('request-id'))
@@ -107,8 +110,8 @@ def aiogrpc_streaming_request_wrapper(func):
                 mode=func.__name__,
                 request_id=metadata.get('request-id'),
             )
-        except aio.AbortError:
-            raise
+        except aio.AioRpcError as e:
+            await context.abort(e.code(), e.details())
         except Exception as e:
             serialized_request = MessageToDict(request, preserving_proto_field_name=True)
             error_log(e, request=serialized_request, request_id=metadata.get('request-id'))

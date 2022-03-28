@@ -31,8 +31,7 @@ CREATE TABLE public.sharience (
     updated_at integer DEFAULT date_part('epoch'::text, now()) NOT NULL,
     md5 uuid,
     filesize integer,
-    ipfs_multihashes text[],
-    telegram_file_id text
+    ipfs_multihashes text[]
 );
 
 

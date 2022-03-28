@@ -1,7 +1,7 @@
 import { BaseView } from './base'
 
 export class ScimagView extends BaseView {
-  schema = 'scimag'
+  index = 'scimag'
   icon = '🔬'
 
   getFormattedLocator () {

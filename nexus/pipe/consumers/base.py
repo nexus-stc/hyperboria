@@ -72,9 +72,6 @@ class BaseConsumer(AioRootThing):
                             await processor.process(preprocessed_msg)
                         except (ConflictError, InterruptProcessing) as e:
                             logging.getLogger('statbox').info(e)
-                        except Exception as e:
-                            logging.getLogger('error').error(e)
-                            raise
                 try:
                     await self.consumer.commit()
                 except CommitFailedError as e:
@@ -142,9 +139,6 @@ class BaseBulkConsumer(BaseConsumer):
                     await processor.process_bulk(filtered)
                 except InterruptProcessing as e:
                     logging.getLogger('statbox').info(e)
-                except Exception as e:
-                    logging.getLogger('error').error(e)
-                    raise
             try:
                 await self.consumer.commit()
             except CommitFailedError as e:

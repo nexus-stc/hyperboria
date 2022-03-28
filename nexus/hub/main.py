@@ -19,37 +19,37 @@ class GrpcServer(AioGrpcServer):
         self.pool_holder = None
         if config['database']['enabled']:
             self.pool_holder = AioPostgresPoolHolder(
-                dsn=f'dbname={config["database"]["database"]} '
+                conninfo=f'dbname={config["database"]["database"]} '
                 f'user={config["database"]["username"]} '
                 f'password={config["database"]["password"]} '
                 f'host={config["database"]["host"]}',
-                timeout=30,
-                pool_recycle=60,
-                maxsize=4,
             )
             self.waits.append(self.pool_holder)
 
-        self.telegram_client = BaseTelegramClient(
-            app_id=config['telegram']['app_id'],
-            app_hash=config['telegram']['app_hash'],
-            bot_token=config['telegram']['bot_token'],
-            database=config['telegram'].get('database'),
-            mtproxy=config['telegram'].get('mtproxy'),
-        )
-        self.starts.append(self.telegram_client)
+        self.telegram_clients = {}
+        for telegram_bot in config['telegram']['bots']:
+            telegram_bot_config = config['telegram']['bots'][telegram_bot]
+            telegram_client = BaseTelegramClient(
+                app_id=telegram_bot_config['app_id'],
+                app_hash=telegram_bot_config['app_hash'],
+                bot_token=telegram_bot_config['bot_token'],
+                database=telegram_bot_config.get('database'),
+                mtproxy=telegram_bot_config.get('mtproxy'),
+            )
+            self.telegram_clients[telegram_bot] = telegram_client
+        self.starts.extend(self.telegram_clients.values())
 
         self.delivery_service = DeliveryService(
             server=self.server,
             service_name=config['application']['service_name'],
-            bot_external_name=config['telegram']['bot_external_name'],
             ipfs_config=config['ipfs'],
             is_sharience_enabled=config['application']['is_sharience_enabled'],
             maintenance_picture_url=config['application'].get('maintenance_picture_url', ''),
             pool_holder=self.pool_holder,
             pylon_config=config['pylon'],
             should_store_hashes=config['application']['should_store_hashes'],
-            should_use_telegram_file_id=config['telegram']['should_use_telegram_file_id'],
-            telegram_client=self.telegram_client,
+            telegram_clients=self.telegram_clients,
+            telegram_bot_configs=config['telegram']['bots'],
         )
         self.starts.append(self.delivery_service)
 
@@ -57,11 +57,10 @@ class GrpcServer(AioGrpcServer):
             self.submitter_service = SubmitterService(
                 server=self.server,
                 service_name=config['application']['service_name'],
-                bot_external_name=config['telegram']['bot_external_name'],
                 grobid_config=config['grobid'],
                 ipfs_config=config['ipfs'],
                 meta_api_config=config['meta_api'],
-                telegram_client=self.telegram_client,
+                telegram_clients=self.telegram_clients,
             )
             self.starts.append(self.submitter_service)
 

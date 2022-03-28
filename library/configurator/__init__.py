@@ -86,8 +86,14 @@ class Configurator(RichDict):
         elif isinstance(c, list):
             return [self.walk_and_render(e) for e in c]
         elif isinstance(c, dict):
-            for key in c:
+            for key in list(c.keys()):
                 c[key] = self.walk_and_render(c[key])
+                if key.endswith('_filepath'):
+                    with open(c[key]) as f:
+                        if c[key].endswith('.json'):
+                            c[key.replace('_filepath', '')] = json.loads(f.read())
+                        elif c[key].endswith('.yaml'):
+                            c[key.replace('_filepath', '')] = yaml.safe_load(f.read())
         return c
 
     def update(self, new_config, basename=None, **kwargs):

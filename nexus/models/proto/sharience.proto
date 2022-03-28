@@ -9,5 +9,4 @@ message Sharience {
   string md5 = 5;
   uint32 filesize = 6;
   repeated string ipfs_multihashes = 7;
-  string telegram_file_id = 8;
 }

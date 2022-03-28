@@ -9,6 +9,7 @@ DO NOT EDIT! Replaced on runs of cargo-raze
 exports_files(
     [
         "crates.bzl",
+        "rustfmt.toml",
     ],
     visibility = ["//visibility:public"],
 )

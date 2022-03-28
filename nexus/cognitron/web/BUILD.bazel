@@ -1,51 +1,43 @@
 load("@io_bazel_rules_docker//container:container.bzl", "container_push")
 load("@io_bazel_rules_docker//nodejs:image.bzl", "nodejs_image")
-load("@npm//nuxt:index.bzl", "nuxt")
+load("@npm//nuxt3:index.bzl", "nuxi")
 
-files = ["nuxt.config.js"] + glob([
-    "assets/**",
+files = [
+    "app.vue",
+    "nuxt.config.ts",
+] + glob([
     "components/**/*.vue",
-    "layouts/*.vue",
-    "middleware/*.js",
-    "pages/**/*.vue",
-    "plugins/*.js",
-    "static/*",
-    "store/*.js",
+    "layouts/**/*.vue",
+    "plugins/**/*.js",
 ])
 
 deps = [
-    "@npm//@nuxtjs/axios",
-    "@npm//bootstrap",
-    "@npm//bootstrap-vue",
-    "@npm//core-js",
-    "@npm//dateformat",
-    "@npm//electron",
+    "@npm//axios",
+    "@npm//bootstrap-vue-3",
     "@npm//pug",
     "@npm//pug-plain-loader",
     "@npm//sass",
     "@npm//sass-loader",
     "@npm//vue",
+    "@npm//@types/node",
     "//nexus/meta_api/js/client",
     "//nexus/views/js",
 ]
 
-nuxt(
+nuxi(
     name = "web-dev",
     args = [
-        "-c",
-        "nexus/cognitron/web/nuxt.config.js",
-        "--watch-poll",
+        "dev",
+        "nexus/cognitron/web",
     ],
     data = files + deps,
 )
 
-nuxt(
-    name = ".nuxt",
+nuxi(
+    name = ".output",
     args = [
         "build",
-        "--standalone",
-        "-c",
-        "nexus/cognitron/web/nuxt.config.js",
+        "nexus/cognitron/web",
         "--buildDir=$(@D)",
     ],
     data = files + deps,
@@ -55,19 +47,8 @@ nuxt(
 nodejs_image(
     name = "image",
     base = "//images/production:base-nodejs-image",
-    data = glob(["static/*"]) + [
-        "nuxt.config.js",
-        ":.nuxt",
-        "@npm//@nuxtjs/axios",
-        "@npm//bootstrap-vue",
-        "@npm//nuxt",
-    ],
-    entry_point = "@npm//:node_modules/nuxt/bin/nuxt.js",
-    templated_args = [
-        "start",
-        "-c",
-        "nexus/cognitron/web/nuxt.config.js",
-    ],
+    data = [":.output"],
+    entry_point = ".output/server/index.mjs",
 )
 
 

@@ -17,9 +17,7 @@ message Scitech {
   bool is_deleted = 11;
   repeated string isbns = 12;
   bool has_duplicates = 31;
-  oneof optional_issued_at {
-      int64 issued_at = 25;
-  }
+  optional int64 issued_at = 25;
   string language = 13;
   int64 libgen_id = 14;
   string meta_language = 15;
@@ -28,9 +26,8 @@ message Scitech {
   uint32 pages = 17;
   string series = 18;
   repeated string tags = 19;
-  string telegram_file_id = 20;
   string title = 21;
   int32 updated_at = 22;
   string volume = 24;
-  string year = 29;
+  int32 year = 29;
 }

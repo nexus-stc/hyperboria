@@ -3,7 +3,6 @@ import logging
 import time
 from typing import Iterable
 
-import aiopg
 from aiokafka import AIOKafkaProducer
 from izihawa_utils.exceptions import NeedRetryError
 from library.aiopostgres.pool_holder import AioPostgresPoolHolder
@@ -17,6 +16,7 @@ from nexus.models.proto.scimag_pb2 import Scimag as ScimagPb
 from nexus.models.proto.typed_document_pb2 import \
     TypedDocument as TypedDocumentPb
 from pypika import (
+    Parameter,
     PostgreSQLQuery,
     Table,
 )
@@ -37,14 +37,11 @@ class CrossReferencesProcessor(Processor):
     def __init__(self, brokers, database):
         super().__init__()
         self.pool_holder = AioPostgresPoolHolder(
-            fn=aiopg.create_pool,
-            dsn=f'dbname={database["database"]} '
+            conninfo=f'dbname={database["database"]} '
             f'user={database["username"]} '
             f'password={database["password"]} '
             f'host={database["host"]}',
-            timeout=30,
-            pool_recycle=60,
-            maxsize=4,
+            max_size=2,
         )
         self.brokers = brokers
         self.producer = None
@@ -85,17 +82,16 @@ class CrossReferencesProcessor(Processor):
                     message.SerializeToString(),
                 )
                 continue
-
-            source = canonize_doi(message.source.strip())
-            target = canonize_doi(message.target.strip())
-            target_row = await self.pool_holder.execute(
+            source = canonize_doi(message.source)
+            target = canonize_doi(message.target)
+            target_row = [row async for row in self.pool_holder.iterate(
                 PostgreSQLQuery
                 .from_('scimag')
                 .select('id')
-                .where(self.scimag_table.doi == target)
+                .where(self.scimag_table.doi == Parameter('%s'))
                 .get_sql(),
-                fetch=True,
-            )
+                values=(target,)
+            )]
 
             if not target_row:
                 if message.retry_count == 0:

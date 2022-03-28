@@ -28,19 +28,19 @@ export default class MetaApi {
     }, this.metadata)
   }
 
-  async get (schema, documentId) {
+  async get (indexName, documentId) {
     const request = new documentsProto.TypedDocumentRequest()
-    request.setSchema(schema)
+    request.setIndexName(indexName)
     request.setDocumentId(documentId)
     const response = await this.documentsClient.get(request, this.prepareMetadata())
     return response.toObject()
   }
 
-  async search (schemas, query, page, pageSize = 5) {
+  async search (names, query, page, pageSize = 5) {
     const request = new searchProto.SearchRequest()
     request.setPage(page)
     request.setPageSize(pageSize)
-    schemas.forEach((schema) => request.addSchemas(schema))
+    names.forEach((name) => request.addNames(name))
     request.setQuery(query)
     const response = await this.searchClient.search(request, this.prepareMetadata())
     return response.toObject()

@@ -64,7 +64,7 @@ class SearchWidget:
 
     async def _acquire_documents(self):
         self._search_response = await self.application.meta_api_client.search(
-            schemas=self.application.config['application']['schemas'],
+            index_aliases=self.application.config['application']['index_aliases'],
             query=self.query,
             page=self.page,
             page_size=self.application.config['application']['page_size'],
@@ -87,7 +87,7 @@ class SearchWidget:
             return t('COULD_NOT_FIND_ANYTHING', language=self.chat.language), [close_button(self.session_id)]
 
         serp_elements = []
-        bot_external_name = self.application.config['telegram']['bot_external_name']
+        bot_name = self.application.config['telegram']['bot_name']
 
         for scored_document in self.scored_documents:
             view = parse_typed_document_to_view(scored_document.typed_document)
@@ -98,7 +98,7 @@ class SearchWidget:
                     position=scored_document.position,
                 )
             else:
-                view_command = view.get_deep_link(bot_external_name, text='⬇️')
+                view_command = view.get_deep_link(bot_name, text='⬇️')
             serp_elements.append(
                 view.get_snippet(
                     language=self.chat.language,
@@ -112,18 +112,18 @@ class SearchWidget:
             try:
                 encoded_query = encode_query_to_deep_link(
                     self.query,
-                    bot_external_name,
+                    bot_name,
                 )
                 serp = (
                     f"{serp}\n\n**{t('DOWNLOAD_AND_SEARCH_MORE', language=self.chat.language)}: **"
-                    f'[@{bot_external_name}]'
+                    f'[@{bot_name}]'
                     f'({encoded_query})'
                 )
             except TooLongQueryError:
                 serp = (
                     f"{serp}\n\n**{t('DOWNLOAD_AND_SEARCH_MORE', language=self.chat.language)}: **"
-                    f'[@{bot_external_name}]'
-                    f'(https://t.me/{bot_external_name})'
+                    f'[@{bot_name}]'
+                    f'(https://t.me/{bot_name})'
                 )
 
         if not self.is_group_mode:

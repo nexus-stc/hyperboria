@@ -40,7 +40,10 @@ strip_prefix_by_action = {
     "local": "./",
 }
 
-ScriptsInfo = provider(fields = ["postinst", "postrm", "preinst", "prerm"])
+ScriptsInfo = provider(
+    "Debian build scripts",
+    fields = ["postinst", "postrm", "preinst", "prerm"],
+)
 
 def deploy_command(deb_package, hostname, username = "pasha"):
     """Command for start deployment on `target_hosts` of package.
@@ -349,6 +352,7 @@ def _get_extensions():
     return {"content": content, "overriden_scripts": overriden_scripts, "services": services, "symlinks": symlinks}
 
 def debian_package(
+        name,
         package_name,
         version,
         maintainer = default_maintainer,
@@ -370,6 +374,7 @@ def debian_package(
     """Package creation, publishing and deployment targets
 
     Args:
+        name (str): name
         package_name (str): debian package name. Defaults to default_company_name + '-' + name
         version (str): package version
 

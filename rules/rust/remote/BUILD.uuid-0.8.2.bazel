@@ -10,9 +10,10 @@ load("@bazel_skylib//lib:selects.bzl", "selects")
 
 # buildifier: disable=load
 load(
-    "@rules_rust//rust:rust.bzl",
+    "@rules_rust//rust:defs.bzl",
     "rust_binary",
     "rust_library",
+    "rust_proc_macro",
     "rust_test",
 )
 
@@ -51,7 +52,6 @@ rust_library(
         "v4",
     ],
     crate_root = "src/lib.rs",
-    crate_type = "lib",
     data = [],
     edition = "2018",
     rustc_flags = [
@@ -59,12 +59,13 @@ rust_library(
     ],
     tags = [
         "cargo-raze",
+        "crate-name=uuid",
         "manual",
     ],
     version = "0.8.2",
     # buildifier: leave-alone
     deps = [
-        "@raze__getrandom__0_2_2//:getrandom",
-        "@raze__serde__1_0_125//:serde",
+        "@raze__getrandom__0_2_5//:getrandom",
+        "@raze__serde__1_0_136//:serde",
     ],
 )

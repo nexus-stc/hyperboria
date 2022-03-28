@@ -20,13 +20,13 @@ class TelegramApplication(AioRootThing):
             mtproxy=self.config['telegram'].get('mtproxy'),
         )
 
-        self.hub_client = HubGrpcClient(base_url=self.config['hub']['url'])
+        self.hub_client = HubGrpcClient(endpoint=self.config['hub']['endpoint'])
         self.starts.append(self.hub_client)
         self.idm_client = None
         if self.config['idm']['enabled']:
-            self.idm_client = IdmApiGrpcClient(base_url=self.config['idm']['url'])
+            self.idm_client = IdmApiGrpcClient(endpoint=self.config['idm']['endpoint'])
             self.starts.append(self.idm_client)
-        self.meta_api_client = MetaApiGrpcClient(base_url=self.config['meta_api']['url'])
+        self.meta_api_client = MetaApiGrpcClient(endpoint=self.config['meta_api']['endpoint'])
         self.starts.append(self.meta_api_client)
 
         self.promotioner = Promotioner(promotions=self.config['promotions'])

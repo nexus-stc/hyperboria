@@ -43,7 +43,6 @@ CREATE TABLE public.scitech (
     pages integer,
     series text,
     tags text[],
-    telegram_file_id text,
     title text,
     updated_at integer DEFAULT date_part('epoch'::text, now()) NOT NULL,
     original_id bigint,
@@ -109,13 +108,6 @@ CREATE INDEX scitech_md5_idx ON public.scitech USING btree (md5);
 --
 
 CREATE INDEX scitech_original_id_idx ON public.scitech USING btree (original_id);
-
-
---
--- Name: scitech_telegram_file_id_not_null_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX scitech_telegram_file_id_not_null_idx ON public.scitech USING btree (telegram_file_id) WHERE (telegram_file_id IS NOT NULL);
 
 
 --

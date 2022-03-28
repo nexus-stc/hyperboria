@@ -13,24 +13,24 @@ class DownloadHandler(BaseCallbackQueryHandler):
     is_group_handler = True
 
     def parse_pattern(self, event: events.ChatAction):
-        short_schema = event.pattern_match.group(1).decode()
-        schema = self.short_schema_to_schema(short_schema)
+        short_index_alias = event.pattern_match.group(1).decode()
+        index_alias = self.short_index_alias_to_index_alias(short_index_alias)
         session_id = event.pattern_match.group(2).decode()
         document_id = int(event.pattern_match.group(3))
         position = int(event.pattern_match.group(4).decode())
 
-        return short_schema, schema, session_id, document_id, position
+        return short_index_alias, index_alias, session_id, document_id, position
 
     async def handler(self, event: events.ChatAction, request_context: RequestContext):
-        short_schema, schema, session_id, document_id, position = self.parse_pattern(event)
+        short_index_alias, index_alias, session_id, document_id, position = self.parse_pattern(event)
 
         self.application.user_manager.last_widget[request_context.chat.chat_id] = None
 
         request_context.add_default_fields(mode='download', session_id=session_id)
-        request_context.statbox(action='get', document_id=document_id, position=position, schema=schema)
+        request_context.statbox(action='get', document_id=document_id, position=position, index_alias=index_alias)
 
         typed_document_pb = await self.get_typed_document_pb(
-            schema=schema,
+            index_alias=index_alias,
             document_id=document_id,
             request_context=request_context,
             session_id=session_id,
@@ -41,6 +41,7 @@ class DownloadHandler(BaseCallbackQueryHandler):
             chat=request_context.chat,
             request_id=request_context.request_id,
             session_id=session_id,
+            bot_name=request_context.bot_name,
         )
         if start_delivery_response_pb.status == StartDeliveryResponsePb.Status.ALREADY_DOWNLOADING:
             await event.answer(
