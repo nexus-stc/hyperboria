@@ -31,7 +31,7 @@ from .base import (
 
 class ScitechView(BaseView, AuthorMixin, DoiMixin, FileMixin, IssuedAtMixin):
     icon = '📚'
-    schema = 'scitech'
+    index_alias = 'scitech'
 
     def __init__(self, document_pb: ScitechPb, duplicates: Optional[Iterable[ScitechPb]] = tuple()):
         self.document_pb = document_pb
@@ -160,7 +160,7 @@ class ScitechView(BaseView, AuthorMixin, DoiMixin, FileMixin, IssuedAtMixin):
         self,
         language: str,
         session_id: str,
-        bot_external_name: str,
+        bot_name: str,
         position: int = 0,
         back_command: Optional[str] = None,
         with_buttons: bool = True,
@@ -181,7 +181,7 @@ class ScitechView(BaseView, AuthorMixin, DoiMixin, FileMixin, IssuedAtMixin):
             parts.append(f'**{t("EDITION", language=language)}**: '
                          f'{escape_format(self.edition)}')
 
-        parts.append(f'**Links**: {" - ".join(self.generate_links(bot_external_name))}')
+        parts.append(f'**Links**: {" - ".join(self.generate_links(bot_name))}')
 
         if self.description:
             parts.append(

@@ -1,3 +1,4 @@
+load("@io_bazel_rules_docker//python:image.bzl", "py_layer")
 load("@io_bazel_rules_docker//python3:image.bzl", "py3_image")
 load("@io_bazel_rules_docker//container:container.bzl", "container_push")
 
@@ -7,6 +8,46 @@ alias(
     name = "binary",
     actual = ":image.binary",
     visibility = ["//visibility:public"],
+)
+
+DEPS = [
+    requirement("aiochclient"),
+    requirement("aiohttp"),
+    requirement("cachetools"),
+    requirement("grpcio"),
+    requirement("lightgbm"),
+    requirement("numpy"),
+    requirement("protobuf"),
+    requirement("recordclass"),
+    requirement("uvloop"),
+    "//library/aiogrpctools",
+    "//library/aiopostgres",
+    "//library/configurator",
+    "//library/logging",
+    "//nexus/meta_api/proto:grpc_py",
+    "//nexus/meta_api/query_extensions",
+    "//nexus/models/proto:proto_py",
+    "//nexus/nlptools",
+    "//nexus/views/telegram",
+    "//summa:aiosumma",
+]
+
+py_layer(
+    name = "common_deps",
+    filter = "//pkg/common",
+    deps = DEPS,
+)
+
+py_layer(
+    name = "common_external_deps",
+    filter = "@",
+    deps = [":common_deps"],
+)
+
+py_layer(
+    name = "external_deps",
+    filter = "@",
+    deps = DEPS,
 )
 
 py3_image(
@@ -21,30 +62,15 @@ py3_image(
         "configs/logging.yaml",
         "models/classic.txt",
     ],
+    layers = [
+        ":common_external_deps",
+        ":common_deps",
+        ":external_deps",
+    ],
     main = "main.py",
     srcs_version = "PY3ONLY",
     visibility = ["//visibility:public"],
-    deps = [
-        requirement("aiochclient"),
-        requirement("aiopg"),
-        requirement("cachetools"),
-        requirement("grpcio"),
-        requirement("lightgbm"),
-        requirement("numpy"),
-        requirement("protobuf"),
-        requirement("recordclass"),
-        requirement("uvloop"),
-        "//library/aiogrpctools",
-        "//library/aiopostgres",
-        "//library/configurator",
-        "//library/logging",
-        "//nexus/meta_api/proto:meta-api-grpc-py",
-        "//nexus/meta_api/query_extensionner",
-        "//nexus/models/proto:models_proto_py",
-        "//nexus/nlptools",
-        "//nexus/views/telegram",
-        requirement("aiosumma"),
-    ],
+    deps = DEPS,
 )
 
 py_binary(

@@ -22,7 +22,7 @@ message TopMissedResponse {
 }
 
 message TypedDocumentRequest {
-  string schema = 1;
+  string index_alias = 1;
   uint64 document_id = 2;
   uint32 position = 3;
 }

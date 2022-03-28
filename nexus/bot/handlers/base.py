@@ -13,7 +13,7 @@ from library.logging import error_log
 from library.telegram.base import RequestContext
 from library.telegram.utils import safe_execution
 from nexus.bot.application import TelegramApplication
-from nexus.bot.exceptions import UnknownSchemaError
+from nexus.bot.exceptions import UnknownIndexAliasError
 from nexus.models.proto.typed_document_pb2 import \
     TypedDocument as TypedDocumentPb
 from nexus.translations import t
@@ -24,7 +24,10 @@ from telethon import (
     TelegramClient,
     events,
 )
-from telethon.errors import QueryIdInvalidError
+from telethon.errors import (
+    QueryIdInvalidError,
+    UserNotParticipantError,
+)
 
 
 def get_username(event: events.ChatAction, chat):
@@ -42,10 +45,6 @@ def get_language(event: events.ChatAction, chat):
 
 def is_banned(chat: ChatPb) -> bool:
     return chat.ban_until is not None and datetime.utcnow().timestamp() < chat.ban_until
-
-
-def is_subscribed(chat: ChatPb) -> bool:
-    return chat.is_subscribed or chat.chat_id < 0 or chat.created_at > time.time() - 10 * 60
 
 
 class ReadOnlyModeError(BaseError):
@@ -68,11 +67,11 @@ class BaseHandler(ABC):
 
     def __init__(self, application: TelegramApplication):
         self.application = application
-        self.schema_to_resolver = {
+        self.index_alias_to_resolver = {
             'scimag': self.resolve_scimag,
             'scitech': self.resolve_scitech,
         }
-        self.short_schema_to_schema_dict = {
+        self.short_index_alias_to_index_alias_dict = {
             'a': 'scimag',
             'b': 'scitech',
         }
@@ -80,19 +79,19 @@ class BaseHandler(ABC):
     def generate_session_id(self) -> str:
         return random_string(self.application.config['application']['session_id_length'])
 
-    def short_schema_to_schema(self, short_schema: str) -> str:
-        return self.short_schema_to_schema_dict[short_schema]
+    def short_index_alias_to_index_alias(self, short_index_alias: str) -> str:
+        return self.short_index_alias_to_index_alias_dict[short_index_alias]
 
     async def get_typed_document_pb(
         self,
-        schema: str,
+        index_alias: str,
         document_id: int,
         request_context: RequestContext,
         session_id: str,
         position: int,
     ) -> TypedDocumentPb:
         return await self.application.meta_api_client.get(
-            schema=schema,
+            index_alias=index_alias,
             document_id=document_id,
             session_id=session_id,
             position=position,
@@ -108,7 +107,7 @@ class BaseHandler(ABC):
         session_id: str,
     ) -> ScimagView:
         typed_document_pb = await self.get_typed_document_pb(
-            schema='scimag',
+            index_alias='scimag',
             document_id=document_id,
             position=position,
             request_context=request_context,
@@ -124,14 +123,14 @@ class BaseHandler(ABC):
         session_id: str,
     ) -> ScitechView:
         typed_document_pb = await self.get_typed_document_pb(
-            schema='scitech',
+            index_alias='scitech',
             document_id=document_id,
             position=position,
             request_context=request_context,
             session_id=session_id,
         )
         search_response_duplicates = await self.application.meta_api_client.search(
-            schemas=('scitech',),
+            index_aliases=('scitech',),
             query=f'original_id:{document_id}',
             page_size=16,
             request_id=request_context.request_id,
@@ -149,16 +148,16 @@ class BaseHandler(ABC):
 
     async def resolve_document(
         self,
-        schema: str,
+        index_alias: str,
         document_id: int,
         position: int,
         session_id: str,
         request_context: RequestContext
     ) -> Union[ScimagView, ScitechView]:
-        if schema not in self.schema_to_resolver:
-            raise UnknownSchemaError()
+        if index_alias not in self.index_alias_to_resolver:
+            raise UnknownIndexAliasError(index_alias=index_alias)
 
-        resolver = self.schema_to_resolver[schema]
+        resolver = self.index_alias_to_resolver[index_alias]
         return await resolver(
             document_id=document_id,
             position=position,
@@ -251,11 +250,23 @@ class BaseHandler(ABC):
             )
             raise events.StopPropagation()
 
+    async def is_subscribed(self, chat: ChatPb) -> bool:
+        if chat.chat_id < 0 or chat.created_at > time.time() - 10 * 60:
+            return True
+        try:
+            await self.application.telegram_client.get_permissions(
+                self.application.config['telegram']['related_channel'],
+                chat.chat_id,
+            )
+        except UserNotParticipantError:
+            return False
+        return True
+
     async def _check_subscription(self, event: events.ChatAction, request_context: RequestContext, chat: ChatPb):
         if (
             self.application.config['application']['is_subscription_required']
             and self.is_subscription_required_for_handler
-            and not is_subscribed(chat)
+            and not await self.is_subscribed(chat)
         ):
             async with safe_execution(
                 request_context=request_context,
@@ -284,7 +295,6 @@ class BaseHandler(ABC):
                 language='en',
                 username=username,
                 is_admin=False,
-                is_subscribed=True,
             )
         return chat
 

@@ -1,3 +1,5 @@
+import logging
+
 from grpc import StatusCode
 from idm.api.proto.chat_manager_service_pb2 import Chat as ChatPb
 from idm.api.proto.chat_manager_service_pb2 import Chats as ChatsPb
@@ -5,6 +7,7 @@ from idm.api.proto.chat_manager_service_pb2_grpc import (
     ChatManagerServicer,
     add_ChatManagerServicer_to_server,
 )
+from izihawa_utils.pb_to_json import MessageToDict
 from library.aiogrpctools.base import (
     BaseService,
     aiogrpc_request_wrapper,
@@ -18,18 +21,13 @@ from pypika import (
 class ChatManagerService(ChatManagerServicer, BaseService):
     chats_table = Table('chats')
 
-    def __init__(self, server, service_name, pool_holder, admin_log_reader):
+    def __init__(self, server, service_name, pool_holder):
         super().__init__(service_name=service_name)
         self.server = server
         self.pool_holder = pool_holder
-        self.admin_log_reader = admin_log_reader
 
     async def start(self):
         add_ChatManagerServicer_to_server(self, self.server)
-
-    def enrich_chat(self, chat_pb: ChatPb):
-        chat_pb.is_subscribed = self.admin_log_reader.is_subscribed(chat_pb.chat_id)
-        return chat_pb
 
     @aiogrpc_request_wrapper()
     async def create_chat(self, request, context, metadata):
@@ -75,7 +73,7 @@ class ChatManagerService(ChatManagerServicer, BaseService):
         chat = await result.fetchone()
         if chat is None:
             await context.abort(StatusCode.NOT_FOUND, 'not_found')
-        return self.enrich_chat(ChatPb(**chat))
+        return ChatPb(**chat)
 
     @aiogrpc_request_wrapper()
     async def get_chat(self, request, context, metadata):
@@ -95,7 +93,7 @@ class ChatManagerService(ChatManagerServicer, BaseService):
             results = await session.execute(query)
             chats = await results.fetchall()
             return ChatsPb(
-                chats=list(map(lambda x: self.enrich_chat(ChatPb(**x)), chats))
+                chats=list(map(lambda x: ChatPb(**x), chats))
             )
 
     @aiogrpc_request_wrapper()
@@ -109,4 +107,4 @@ class ChatManagerService(ChatManagerServicer, BaseService):
         async with self.pool_holder.pool.acquire() as session:
             result = await session.execute(query)
             chat = await result.fetchone()
-        return self.enrich_chat(ChatPb(**chat))
+        return ChatPb(**chat)

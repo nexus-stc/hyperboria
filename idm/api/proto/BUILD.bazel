@@ -4,7 +4,7 @@ load("@rules_proto//proto:defs.bzl", "proto_library")
 package(default_visibility = ["//visibility:public"])
 
 proto_library(
-    name = "idm_proto",
+    name = "proto",
     srcs = [
         "chat_manager_service.proto",
     ],
@@ -14,12 +14,12 @@ proto_library(
 )
 
 py_proto_library(
-    name = "idm_proto_py",
-    deps = [":idm_proto"],
+    name = "proto_py",
+    deps = [":proto"],
 )
 
 py_grpc_library(
-    name = "idm_grpc_py",
-    srcs = [":idm_proto"],
-    deps = [":idm_proto_py"],
+    name = "grpc_py",
+    srcs = [":proto"],
+    deps = [":proto_py"],
 )

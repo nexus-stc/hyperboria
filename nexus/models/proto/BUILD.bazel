@@ -3,7 +3,7 @@ load("@rules_proto//proto:defs.bzl", "proto_library")
 load("@rules_proto_grpc//js:defs.bzl", "js_proto_library")
 
 proto_library(
-    name = "models_proto",
+    name = "proto",
     srcs = glob([
         "*.proto",
     ]),
@@ -11,13 +11,13 @@ proto_library(
 )
 
 py_proto_library(
-    name = "models_proto_py",
+    name = "proto_py",
     visibility = ["//visibility:public"],
-    deps = [":models_proto"],
+    deps = [":proto"],
 )
 
 js_proto_library(
-    name = "models_proto_js",
-    protos = [":models_proto"],
+    name = "proto_js",
+    protos = [":proto"],
     visibility = ["//visibility:public"],
 )

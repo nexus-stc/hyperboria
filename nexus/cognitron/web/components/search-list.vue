@@ -1,8 +1,8 @@
 <template lang="pug">
-  ul
-    li(v-for='document in documents')
-      v-scimag-search-item(v-if="document.schema == 'scimag'", :document='document', :key='document.id')
-      v-scitech-search-item(v-if="document.schema == 'scitech'", :document='document', :key='document.id')
+ul
+  li(v-for='document in documents')
+    v-scimag-search-item(v-if="document.index_alias == 'scimag'", :document='document', :key='document.id')
+    v-scitech-search-item(v-if="document.index_alias == 'scitech'", :document='document', :key='document.id')
 </template>
 
 <script>

@@ -17,7 +17,7 @@ from nexus.pylon.sources import (
     LibgenDoiSource,
     LibgenMd5Source,
     LibraryLolSource,
-    SciHubDoSource,
+    SciHubMksaTopSource,
     SciHubSeSource,
 )
 from nexus.pylon.sources.specific import get_specific_sources_for_doi
@@ -38,7 +38,7 @@ class PylonClient(AioThing):
         sources = []
         sources.extend(get_specific_sources_for_doi(doi, proxy=self.proxy, resolve_proxy=self.resolve_proxy))
         sources.extend([
-            SciHubDoSource(doi=doi, md5=md5, proxy=self.proxy, resolve_proxy=self.resolve_proxy),
+            SciHubMksaTopSource(doi=doi, md5=md5, proxy=self.proxy, resolve_proxy=self.resolve_proxy),
             SciHubSeSource(doi=doi, md5=md5, proxy=self.proxy, resolve_proxy=self.resolve_proxy),
             LibgenDoiSource(doi=doi, md5=md5, proxy=self.proxy, resolve_proxy=self.resolve_proxy),
         ])
@@ -68,12 +68,12 @@ class PylonClient(AioThing):
             except DownloadError as e:
                 error_log_func(e)
                 continue
-        raise DownloadError(error='not_found', source=str(source))
+        raise DownloadError(error='not_found', source=source.__class__.__name__)
 
     async def download(self, sources: Iterable[BaseSource], error_log_func: Callable = error_log) -> AsyncIterable[FileResponsePb]:
         for source in sources:
+            await source.start()
             try:
-                await source.start()
                 async for resp in self.download_source(source, error_log_func=error_log_func):
                     yield resp
                 return

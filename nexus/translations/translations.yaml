@@ -21,7 +21,7 @@ en:
     **Donation details**: /donate
 
     **LiberaPay**: {libera_pay_url}
-    **BTC Address:** {btc_donate_address}
+    **BTC Address:** `{btc_donate_address}`
 
     You can directly feedback us by /contact <your message here>
   COPYRIGHT_DESCRIPTION: |
@@ -57,7 +57,7 @@ en:
     **Donation details**
 
     **LiberaPay**: {libera_pay_url}
-    **BTC Address**: {btc_donate_address}
+    **BTC Address**: `{btc_donate_address}`
     **Amazon Gift Card**: [Buy]({amazon_gift_card_url}) any card using `{amazon_gift_card_recipient}` as recipient email
   DOWNLOAD: Download
   DOWNLOADED: downloaded
@@ -134,7 +134,7 @@ en:
   REFERENCED_BY: Referenced by
   REPLY_MESSAGE_HAS_BEEN_DELETED: Search message has been (re-)moved. Do search again.
   REPORT_BROKEN_FILE: ❌ Broken File
-  REPORT_OK_FILE: ✅ What Is Needed
+  REPORT_OK_FILE: ✅ File is OK
   SEARCHING: '`searching...`'
   SEND_YOUR_LOCATION: Send your location (through the left attach button)
   SETTINGS_TEMPLATE: |
@@ -184,7 +184,7 @@ es:
     **Detalles sobre donaciones**: /donate
 
     **LiberaPay**: {libera_pay_url}
-    **Dirección BTC:** {btc_donate_address}
+    **Dirección BTC:** `{btc_donate_address}`
 
     Puedes enviarnos sus comentarios directamente por /contact <tu mensaje aquí>
   COPYRIGHT_DESCRIPTION: |
@@ -220,7 +220,7 @@ es:
     **Detalles sobre donaciones**
 
     **LiberaPay**: {libera_pay_url}
-    **Dirección BTC**: {btc_donate_address}
+    **Dirección BTC**: `{btc_donate_address}`
     **Tarjeta de regalo de Amazon**: [Compre]({amazon_gift_card_url}) cualquier tarjeta que use `{amazon_gift_card_recipient}` como correo electrónico del destinatario
   DOWNLOAD: Descargar
   DOWNLOADED: descargado
@@ -339,7 +339,7 @@ it:
     **Info per donazioni**: /donate
 
     **LiberaPay**: {libera_pay_url}
-    **Indirizzo BTC:** {btc_donate_address}
+    **Indirizzo BTC:** `{btc_donate_address}`
 
     Puoi inviarci un feedback direttamente con /contact <il tuo messaggio qui>
   COPYRIGHT_DESCRIPTION: |
@@ -375,7 +375,7 @@ it:
     **Dettagli per le donazioni**
 
     **LiberaPay**: {libera_pay_url}
-    **Indirizzo BTC**: {btc_donate_address}
+    **Indirizzo BTC**: `{btc_donate_address}`
     **Buono regalo Amazon**: [Acquista]({amazon_gift_card_url}) qualsiasi carta utilizzando `{amazon_gift_card_recipient}` come indirizzo email del destinatario
   DOWNLOAD: Scarica
   DOWNLOADED: scaricato
@@ -475,7 +475,7 @@ pb:
     **Detalhes para doação**: /donate
 
     **LiberaPay**: {libera_pay_url}
-    **Endereço BTC:** {btc_donate_address}
+    **Endereço BTC:** `{btc_donate_address}`
 
     Você pode nos enviar feedback diretamente por /contact <sua mensagem aqui>
   COPYRIGHT_DESCRIPTION: |
@@ -511,7 +511,7 @@ pb:
     **Detalhes de doação**
 
     **LiberaPay**: {libera_pay_url}
-    **Endereço BTC**: {btc_donate_address}
+    **Endereço BTC**: `{btc_donate_address}`
     **Amazon Gift Card**: [Compre]({amazon_gift_card_url}) qualquer cartão usando `{amazon_gift_card_recipient}` como e-mail do destinatário
   DOWNLOAD: Baixar
   DOWNLOADED: Baixado
@@ -629,7 +629,7 @@ ru:
     **Реквизиты для пожертвования**: /donate
 
     **LiberaPay**: {libera_pay_url}
-    **BTC Address:** {btc_donate_address}
+    **BTC Address:** `{btc_donate_address}`
 
     Можете также оставить нам сообщение: /contact <ваше сообщение>
   COULD_NOT_FIND_ANYTHING: Ничего не найдено:(
@@ -654,7 +654,7 @@ ru:
     **Реквизиты для пожертвования**
 
     **LiberaPay**: {libera_pay_url}
-    **BTC Address**: {btc_donate_address}
+    **BTC Address**: `{btc_donate_address}`
     **Amazon Gift Card**: [Купите]({amazon_gift_card_url}) любую карту с `{amazon_gift_card_recipient}` в качестве получателя
   DOWNLOAD: Загрузить
   DOWNLOADED: загружено

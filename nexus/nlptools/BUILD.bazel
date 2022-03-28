@@ -10,11 +10,9 @@ py_library(
     srcs_version = "PY3",
     visibility = ["//visibility:public"],
     deps = [
-        requirement("DAWG"),
         requirement("emoji"),
         requirement("lemminflect"),
         requirement("pycld3"),
-        requirement("pymorphy2"),
         requirement("spacy"),
     ],
 )

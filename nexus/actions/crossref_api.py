@@ -4,6 +4,7 @@ from datetime import date
 from nexus.models.proto.scimag_pb2 import Scimag as ScimagPb
 
 from .base import BaseAction
+from .exceptions import InterruptProcessing
 
 
 def extract_authors(authors):
@@ -17,7 +18,7 @@ def extract_authors(authors):
 
 def extract_dates(date_parts):
     if not date_parts or not date_parts[0]:
-        return '', None
+        return 0, None
     year, month, day = date_parts[0] + [0] * (3 - len(date_parts[0]))
     if year:
         issued_at = int(time.mktime(date(
@@ -25,8 +26,8 @@ def extract_dates(date_parts):
             month=month if month else 1,
             day=day if day else 1,
         ).timetuple()))
-        return str(year), issued_at
-    return '', None
+        return year, issued_at
+    return 0, None
 
 
 def extract_first(arr, default=''):
@@ -74,13 +75,17 @@ def extract_title(title, subtitle):
     return ': '.join(filter(lambda x: bool(x), [title.strip(), subtitle.strip()]))
 
 
-class CrossrefApiToThinScimagPbAction(BaseAction):
+class ToThinScimagPbAction(BaseAction):
     async def do(self, item: dict) -> ScimagPb:
+        if 'DOI' not in item:
+            raise InterruptProcessing(document_id=None, reason='no_doi')
         return ScimagPb(doi=item['DOI'])
 
 
-class CrossrefApiToScimagPbAction(BaseAction):
+class ToScimagPbAction(BaseAction):
     async def do(self, item: dict) -> ScimagPb:
+        if 'DOI' not in item:
+            raise InterruptProcessing(document_id=None, reason='no_doi')
         scimag_pb = ScimagPb(
             abstract=item.get('abstract'),
             container_title=extract_first(item.get('container-title')),

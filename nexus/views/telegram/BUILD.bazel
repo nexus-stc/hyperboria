@@ -11,7 +11,7 @@ py_library(
     visibility = ["//visibility:public"],
     deps = [
         requirement("telethon"),
-        "//nexus/models/proto:models_proto_py",
+        "//nexus/models/proto:proto_py",
         "//nexus/nlptools",
         "//nexus/translations",
         requirement("izihawa_utils"),

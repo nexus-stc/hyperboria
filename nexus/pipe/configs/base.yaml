@@ -37,30 +37,25 @@ pipe:
         - class: nexus.pipe.processors.ActionProcessor
           kwargs:
             actions:
-              - class: nexus.actions.FillDocumentOperationUpdateDocumentScimagPbFromExternalSourceAction
+              - class: nexus.actions.document_operations_pb.update_document_scimag_pb.FillFromExternalSourceAction
                 kwargs:
                   crossref:
                     rps: 50
                     user_agent: 'ScienceLegion/1.0 (Linux x86_64; ) ScienceLegion/1.0.0'
-              - class: nexus.actions.CleanDocumentOperationUpdateDocumentScimagPbAction
-              - class: nexus.actions.SendDocumentOperationUpdateDocumentScimagPbToGoldenPostgresAction
+                    ttl_dns_cache: 120
+              - class: nexus.actions.document_operations_pb.update_document_scimag_pb.CleanAction
+              - class: nexus.actions.document_operations_pb.update_document_scimag_pb.ToPostgresAction
                 kwargs:
                   database:
                     database: nexus
                     host: postgres.example.net
                     password: '{{ DATABASE_PASSWORD }}'
                     username: '{{ DATABASE_USERNAME }}'
-              - class: nexus.actions.SendDocumentOperationUpdateDocumentScimagPbReferencesToKafkaAction
+              - class: nexus.actions.document_operations_pb.update_document_scimag_pb.ReferencesToKafkaAction
                 kwargs:
                   brokers: |
                     kafka-0.example.net
                   topic: cross_references
-              - class: nexus.actions.SendDocumentOperationUpdateDocumentPbToSummaAction
-                kwargs:
-                  summa:
-                    base_url: http://summa.example.net
-                    timeout: 15
-                    ttl_dns_cache: 30
             filter:
               class: nexus.pipe.filters.DocumentOperationFilter
               kwargs:
@@ -69,22 +64,30 @@ pipe:
         - class: nexus.pipe.processors.ActionProcessor
           kwargs:
             actions:
-              - class: nexus.actions.CleanDocumentOperationUpdateDocumentScitechPbAction
-              - class: nexus.actions.SendDocumentOperationUpdateDocumentScitechPbToGoldenPostgresAction
+              - class: nexus.actions.document_operations_pb.update_document_scitech_pb.CleanAction
+              - class: nexus.actions.document_operations_pb.update_document_scitech_pb.ToPostgresAction
                 kwargs:
                   database:
                     database: nexus
                     host: postgres.example.net
                     password: '{{ DATABASE_PASSWORD }}'
                     username: '{{ DATABASE_USERNAME }}'
-              - class: nexus.actions.SendDocumentOperationUpdateDocumentPbToSummaAction
-                kwargs:
-                  summa:
-                    base_url: http://summa.example.net
-                    timeout: 15
-                    ttl_dns_cache: 30
             filter:
               class: nexus.pipe.filters.DocumentOperationFilter
               kwargs:
                 document: scitech
                 operation: update_document
+        - class: nexus.pipe.processors.ActionProcessor
+          kwargs:
+            actions:
+              - class: nexus.actions.document_operations_pb.store_telegram_file_id_pb.ToPostgresAction
+                kwargs:
+                  database:
+                    database: nexus
+                    host: postgres.example.net
+                    password: '{{ DATABASE_PASSWORD }}'
+                    username: '{{ DATABASE_USERNAME }}'
+            filter:
+              class: nexus.pipe.filters.DocumentOperationFilter
+              kwargs:
+                operation: store_telegram_file_id

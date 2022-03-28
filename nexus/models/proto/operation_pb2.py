@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\"nexus/models/proto/operation.proto\x12\x12nexus.models.proto\x1a\'nexus/models/proto/typed_document.proto\"k\n\x17\x43rossReferenceOperation\x12\x0e\n\x06source\x18\x01 \x01(\t\x12\x0e\n\x06target\x18\x02 \x01(\t\x12\x1b\n\x13last_retry_unixtime\x18\x03 \x01(\r\x12\x13\n\x0bretry_count\x18\x04 \x01(\r\"\x89\x01\n\x11\x44ocumentOperation\x12(\n\x04vote\x18\x01 \x01(\x0b\x32\x18.nexus.models.proto.VoteH\x00\x12=\n\x0fupdate_document\x18\x03 \x01(\x0b\x32\".nexus.models.proto.UpdateDocumentH\x00\x42\x0b\n\toperation\"b\n\x04Vote\x12\x10\n\x08voter_id\x18\x01 \x01(\x03\x12\r\n\x05value\x18\x02 \x01(\x05\x12\x39\n\x0etyped_document\x18\x03 \x01(\x0b\x32!.nexus.models.proto.TypedDocument\"\xa6\x01\n\x0eUpdateDocument\x12\x0e\n\x06\x66ields\x18\x01 \x03(\t\x12(\n should_fill_from_external_source\x18\x02 \x01(\x08\x12\x0e\n\x06\x63ommit\x18\x03 \x01(\x08\x12\x0f\n\x07reindex\x18\x04 \x01(\x08\x12\x39\n\x0etyped_document\x18\x05 \x01(\x0b\x32!.nexus.models.proto.TypedDocumentb\x06proto3'
+  serialized_pb=b'\n\"nexus/models/proto/operation.proto\x12\x12nexus.models.proto\x1a\'nexus/models/proto/typed_document.proto\"k\n\x17\x43rossReferenceOperation\x12\x0e\n\x06source\x18\x01 \x01(\t\x12\x0e\n\x06target\x18\x02 \x01(\t\x12\x1b\n\x13last_retry_unixtime\x18\x03 \x01(\r\x12\x13\n\x0bretry_count\x18\x04 \x01(\r\"\xd4\x01\n\x11\x44ocumentOperation\x12(\n\x04vote\x18\x01 \x01(\x0b\x32\x18.nexus.models.proto.VoteH\x00\x12I\n\x16store_telegram_file_id\x18\x02 \x01(\x0b\x32\'.nexus.models.proto.StoreTelegramFileIdH\x00\x12=\n\x0fupdate_document\x18\x03 \x01(\x0b\x32\".nexus.models.proto.UpdateDocumentH\x00\x42\x0b\n\toperation\"<\n\x04Vote\x12\x13\n\x0b\x64ocument_id\x18\x01 \x01(\x03\x12\r\n\x05value\x18\x02 \x01(\x05\x12\x10\n\x08voter_id\x18\x03 \x01(\x03\"\xa6\x01\n\x0eUpdateDocument\x12\x0e\n\x06\x66ields\x18\x01 \x03(\t\x12(\n should_fill_from_external_source\x18\x02 \x01(\x08\x12\x0e\n\x06\x63ommit\x18\x03 \x01(\x08\x12\x0f\n\x07reindex\x18\x04 \x01(\x08\x12\x39\n\x0etyped_document\x18\x05 \x01(\x0b\x32!.nexus.models.proto.TypedDocument\"Q\n\x13StoreTelegramFileId\x12\x10\n\x08\x62ot_name\x18\x01 \x01(\t\x12\x18\n\x10telegram_file_id\x18\x02 \x01(\t\x12\x0e\n\x06\x64oc_id\x18\x03 \x01(\x03\x62\x06proto3'
   ,
   dependencies=[nexus_dot_models_dot_proto_dot_typed__document__pb2.DESCRIPTOR,])
 
@@ -97,7 +97,14 @@ _DOCUMENTOPERATION = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='update_document', full_name='nexus.models.proto.DocumentOperation.update_document', index=1,
+      name='store_telegram_file_id', full_name='nexus.models.proto.DocumentOperation.store_telegram_file_id', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='update_document', full_name='nexus.models.proto.DocumentOperation.update_document', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -121,7 +128,7 @@ _DOCUMENTOPERATION = _descriptor.Descriptor(
     fields=[]),
   ],
   serialized_start=209,
-  serialized_end=346,
+  serialized_end=421,
 )
 
 
@@ -134,7 +141,7 @@ _VOTE = _descriptor.Descriptor(
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='voter_id', full_name='nexus.models.proto.Vote.voter_id', index=0,
+      name='document_id', full_name='nexus.models.proto.Vote.document_id', index=0,
       number=1, type=3, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -148,9 +155,9 @@ _VOTE = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='typed_document', full_name='nexus.models.proto.Vote.typed_document', index=2,
-      number=3, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
+      name='voter_id', full_name='nexus.models.proto.Vote.voter_id', index=2,
+      number=3, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
@@ -166,8 +173,8 @@ _VOTE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=348,
-  serialized_end=446,
+  serialized_start=423,
+  serialized_end=483,
 )
 
 
@@ -226,24 +233,74 @@ _UPDATEDOCUMENT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=449,
-  serialized_end=615,
+  serialized_start=486,
+  serialized_end=652,
+)
+
+
+_STORETELEGRAMFILEID = _descriptor.Descriptor(
+  name='StoreTelegramFileId',
+  full_name='nexus.models.proto.StoreTelegramFileId',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='bot_name', full_name='nexus.models.proto.StoreTelegramFileId.bot_name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='telegram_file_id', full_name='nexus.models.proto.StoreTelegramFileId.telegram_file_id', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='document_id', full_name='nexus.models.proto.StoreTelegramFileId.document_id', index=2,
+      number=3, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=654,
+  serialized_end=735,
 )
 
 _DOCUMENTOPERATION.fields_by_name['vote'].message_type = _VOTE
+_DOCUMENTOPERATION.fields_by_name['store_telegram_file_id'].message_type = _STORETELEGRAMFILEID
 _DOCUMENTOPERATION.fields_by_name['update_document'].message_type = _UPDATEDOCUMENT
 _DOCUMENTOPERATION.oneofs_by_name['operation'].fields.append(
   _DOCUMENTOPERATION.fields_by_name['vote'])
 _DOCUMENTOPERATION.fields_by_name['vote'].containing_oneof = _DOCUMENTOPERATION.oneofs_by_name['operation']
 _DOCUMENTOPERATION.oneofs_by_name['operation'].fields.append(
+  _DOCUMENTOPERATION.fields_by_name['store_telegram_file_id'])
+_DOCUMENTOPERATION.fields_by_name['store_telegram_file_id'].containing_oneof = _DOCUMENTOPERATION.oneofs_by_name['operation']
+_DOCUMENTOPERATION.oneofs_by_name['operation'].fields.append(
   _DOCUMENTOPERATION.fields_by_name['update_document'])
 _DOCUMENTOPERATION.fields_by_name['update_document'].containing_oneof = _DOCUMENTOPERATION.oneofs_by_name['operation']
-_VOTE.fields_by_name['typed_document'].message_type = nexus_dot_models_dot_proto_dot_typed__document__pb2._TYPEDDOCUMENT
 _UPDATEDOCUMENT.fields_by_name['typed_document'].message_type = nexus_dot_models_dot_proto_dot_typed__document__pb2._TYPEDDOCUMENT
 DESCRIPTOR.message_types_by_name['CrossReferenceOperation'] = _CROSSREFERENCEOPERATION
 DESCRIPTOR.message_types_by_name['DocumentOperation'] = _DOCUMENTOPERATION
 DESCRIPTOR.message_types_by_name['Vote'] = _VOTE
 DESCRIPTOR.message_types_by_name['UpdateDocument'] = _UPDATEDOCUMENT
+DESCRIPTOR.message_types_by_name['StoreTelegramFileId'] = _STORETELEGRAMFILEID
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 CrossReferenceOperation = _reflection.GeneratedProtocolMessageType('CrossReferenceOperation', (_message.Message,), {
@@ -273,6 +330,13 @@ UpdateDocument = _reflection.GeneratedProtocolMessageType('UpdateDocument', (_me
   # @@protoc_insertion_point(class_scope:nexus.models.proto.UpdateDocument)
   })
 _sym_db.RegisterMessage(UpdateDocument)
+
+StoreTelegramFileId = _reflection.GeneratedProtocolMessageType('StoreTelegramFileId', (_message.Message,), {
+  'DESCRIPTOR' : _STORETELEGRAMFILEID,
+  '__module__' : 'nexus.models.proto.operation_pb2'
+  # @@protoc_insertion_point(class_scope:nexus.models.proto.StoreTelegramFileId)
+  })
+_sym_db.RegisterMessage(StoreTelegramFileId)
 
 
 # @@protoc_insertion_point(module_scope)

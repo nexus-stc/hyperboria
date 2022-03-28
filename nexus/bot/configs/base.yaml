@@ -12,13 +12,16 @@ application:
   bypass_maintenance: []
   # Debugging mode
   debug: true
+  # Enabled indices (passed to Nexus Meta API)
+  index_aliases:
+    - scitech
   # All users (except `bypass_maintenance` ones) will get UPGRADE_MAINTENANCE message in response
   is_maintenance_mode: false
   # Disable /settings, uploading new articles (can be used while vacuuming backend Postgres)
   # and preventing creation of new users
   is_read_only_mode: false
   # Require subscription to `related_channel` before allowing to use the bot
-  is_subscription_required: false
+  is_subscription_required: true
   # Libera Pay URL in /donate message
   libera_pay_url:
   maintenance_picture_url:
@@ -27,9 +30,6 @@ application:
   page_size: 5
   # Length of generated Request-Id used for tracking requests across all backends
   request_id_length: 12
-  # Enabled schemas (passed to Nexus Meta API)
-  schemas:
-    - scitech
   # Length of generated Session-ID used in commands to clue user sessions
   session_id_length: 8
   too_difficult_picture_url:
@@ -41,13 +41,13 @@ application:
       has_language_buttons: true
       has_system_messaging_button: true
 hub:
-  url:
+  endpoint:
 idm:
-  enabled: false
-  url:
+  enabled: true
+  endpoint:
 log_path: '/var/log/nexus-bot'
 meta_api:
-  url:
+  endpoint:
 metrics:
   enabled: false
 telegram:
@@ -56,9 +56,7 @@ telegram:
   # Telegram App ID from https://my.telegram.org/
   app_id: 00000
   # External bot name shown in messages to users
-  bot_external_name: libgen_scihub_bot
-  # Internal bot name used in logging
-  bot_name: nexus-bot
+  bot_name: libgen_scihub_1_bot
   bot_token:
   # WARNING! Potentially buggy telethon option. Sometimes it goes mad and overload users with tons of messages
   # Collect missed messages at startup time and answer to them

@@ -28,8 +28,8 @@ py3_image(
         "//library/configurator",
         "//library/logging",
         "//nexus/actions",
-        "//nexus/models/proto:models_proto_py",
-        requirement("aiosumma"),
+        "//nexus/models/proto:proto_py",
+        "//summa:aiosumma",
         requirement("izihawa_utils"),
     ],
 )

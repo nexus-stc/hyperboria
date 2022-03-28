@@ -2,6 +2,7 @@ from typing import (
     Any,
     AsyncIterable,
     Iterable,
+    Union,
 )
 
 from aiokit import AioRootThing
@@ -13,7 +14,7 @@ from ..sinks.base import BaseSink
 class BaseJob(AioRootThing):
     name = None
 
-    def __init__(self, actions: Iterable[dict], sinks: Iterable[dict]):
+    def __init__(self, actions: Iterable[dict], sinks: Iterable[Union[dict, BaseSink]]):
         super().__init__()
         real_sinks = []
         for sink in sinks:

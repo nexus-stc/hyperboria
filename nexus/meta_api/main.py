@@ -2,7 +2,6 @@ import asyncio
 import logging
 
 import uvloop
-from aiosumma import SummaHttpClient
 from library.aiogrpctools import AioGrpcServer
 from library.configurator import Configurator
 from library.logging import configure_logging
@@ -11,6 +10,7 @@ from nexus.meta_api.providers.data import DataProvider
 from nexus.meta_api.providers.stat import StatProvider
 from nexus.meta_api.services.documents import DocumentsService
 from nexus.meta_api.services.search import SearchService
+from summa.aiosumma import SummaClient
 
 
 class GrpcServer(AioGrpcServer):
@@ -19,10 +19,9 @@ class GrpcServer(AioGrpcServer):
         super().__init__(address=config['grpc']['host'], port=config['grpc']['port'])
         self.config = config
 
-        self.summa_client = SummaHttpClient(
-            base_url=config['summa']['url'],
-            timeout=config['summa']['timeout'],
-            ttl_dns_cache=config['summa']['ttl_dns_cache'],
+        self.summa_client = SummaClient(
+            endpoint=config['summa']['endpoint'],
+            connection_timeout=config['summa']['connection_timeout'],
         )
         self.data_provider = DataProvider(data_provider_config=self.config['data_provider'])
         self.stat_provider = StatProvider(stat_provider_config=self.config['stat_provider'])

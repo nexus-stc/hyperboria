@@ -1,12 +1,14 @@
+import asyncio
 import datetime
 import logging
+import os.path
 from typing import (
     Optional,
     Union,
 )
 
 from aiokit import AioThing
-from izihawa_utils.random import random_string
+from izihawa_utils.random import generate_request_id
 from library.logging import error_log
 from telethon import (
     TelegramClient,
@@ -16,6 +18,7 @@ from telethon import (
 from tenacity import (  # noqa
     retry,
     retry_if_exception_type,
+    stop_after_attempt,
     wait_fixed,
 )
 
@@ -28,6 +31,8 @@ class BaseTelegramClient(AioThing):
         app_id: Union[int, str],
         app_hash: str,
         database: dict,
+        phone: Optional[str] = None,
+        password: Optional[str] = None,
         bot_token: Optional[str] = None,
         mtproxy: Optional[dict] = None,
         flood_sleep_threshold: int = 60,
@@ -44,6 +49,8 @@ class BaseTelegramClient(AioThing):
             flood_sleep_threshold=flood_sleep_threshold,
             **self._get_proxy(mtproxy=mtproxy),
         )
+        self.phone = phone
+        self.password = password
         self.bot_token = bot_token
 
     def _get_session(self, database):
@@ -71,9 +78,23 @@ class BaseTelegramClient(AioThing):
             }
         return {}
 
-    @retry(retry=retry_if_exception_type(ConnectionError), wait=wait_fixed(5))
+    @retry(retry=retry_if_exception_type(ConnectionError), stop=stop_after_attempt(3), wait=wait_fixed(5))
     async def start(self):
-        await self._telegram_client.start(bot_token=self.bot_token)
+        logging.getLogger('debug').info({'mode': 'telegram', 'action': 'starting'})
+        await self._telegram_client.start(
+            phone=lambda: self.phone,
+            bot_token=self.bot_token,
+            password=self.password,
+            code_callback=self.polling_file,
+        )
+        logging.getLogger('debug').info({'mode': 'telegram', 'action': 'started'})
+
+    async def polling_file(self):
+        fname = '/tmp/telegram_code'
+        while not os.path.exists(fname):
+            await asyncio.sleep(5.0)
+        with open(fname, 'r') as code_file:
+            return code_file.read().strip()
 
     async def stop(self):
         return await self.disconnect()
@@ -119,6 +140,9 @@ class BaseTelegramClient(AioThing):
     def get_input_entity(self, *args, **kwargs):
         return self._telegram_client.get_input_entity(*args, **kwargs)
 
+    def get_permissions(self, *args, **kwargs):
+        return self._telegram_client.get_permissions(*args, **kwargs)
+
     def iter_admin_log(self, *args, **kwargs):
         return self._telegram_client.iter_admin_log(*args, **kwargs)
 
@@ -158,7 +182,7 @@ class RequestContext:
 
     @staticmethod
     def generate_request_id(length):
-        return random_string(length)
+        return generate_request_id(length)
 
     def add_default_fields(self, **fields):
         self.default_fields.update(fields)

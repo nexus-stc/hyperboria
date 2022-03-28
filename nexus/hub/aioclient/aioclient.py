@@ -26,13 +26,15 @@ class HubGrpcClient(BaseGrpcClient):
         self,
         typed_document_pb: TypedDocumentPb,
         chat: ChatPb,
-        request_id: Optional[str],
-        session_id: Optional[str],
+        bot_name: str,
+        request_id: Optional[str] = None,
+        session_id: Optional[str] = None,
     ) -> StartDeliveryResponsePb:
         return await self.stubs['delivery'].start_delivery(
             StartDeliveryRequestPb(
                 typed_document=typed_document_pb,
                 chat=chat,
+                bot_name=bot_name,
             ),
             metadata=(('request-id', request_id), ('session-id', session_id))
         )
@@ -42,6 +44,7 @@ class HubGrpcClient(BaseGrpcClient):
         telegram_document: bytes,
         telegram_file_id: str,
         chat: ChatPb,
+        bot_name: str,
         request_id: Optional[str] = None,
         session_id: Optional[str] = None,
     ) -> SubmitResponsePb:
@@ -50,6 +53,7 @@ class HubGrpcClient(BaseGrpcClient):
                 telegram_document=telegram_document,
                 telegram_file_id=telegram_file_id,
                 chat=chat,
+                bot_name=bot_name,
             ),
             metadata=(('request-id', request_id), ('session-id', session_id))
         )

@@ -11,8 +11,8 @@ py_library(
         requirement("tenacity"),
         requirement("aiogrpcclient"),
         requirement("aiokit"),
-        "//nexus/meta_api/proto:meta-api-grpc-py",
-        "//nexus/meta_api/proto:meta-api-proto-py",
-        "//nexus/models/proto:models_proto_py",
+        "//nexus/meta_api/proto:grpc_py",
+        "//nexus/meta_api/proto:proto_py",
+        "//nexus/models/proto:proto_py",
     ],
 )

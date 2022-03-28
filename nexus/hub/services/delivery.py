@@ -10,10 +10,7 @@ from grpc import (
 from izihawa_utils.common import filter_none
 from izihawa_utils.pb_to_json import MessageToDict
 from library.aiogrpctools.base import aiogrpc_request_wrapper
-from library.telegram.base import (
-    BaseTelegramClient,
-    RequestContext,
-)
+from library.telegram.base import RequestContext
 from library.telegram.utils import safe_execution
 from nexus.hub.fancy_names import get_fancy_name
 from nexus.hub.proto.delivery_service_pb2 import \
@@ -27,6 +24,8 @@ from nexus.hub.proto.delivery_service_pb2_grpc import (
 from nexus.hub.user_manager import UserManager
 from nexus.models.proto.operation_pb2 import \
     DocumentOperation as DocumentOperationPb
+from nexus.models.proto.operation_pb2 import \
+    StoreTelegramFileId as StoreTelegramFileIdPb
 from nexus.models.proto.operation_pb2 import UpdateDocument as UpdateDocumentPb
 from nexus.models.proto.typed_document_pb2 import \
     TypedDocument as TypedDocumentPb
@@ -51,7 +50,7 @@ downloads_gauge = Gauge('downloads_total', documentation='Currently downloading 
 
 
 async def operation_log(document_operation_pb):
-    logging.getLogger('operation').info(msg=MessageToDict(document_operation_pb))
+    logging.getLogger('operation').info(msg=MessageToDict(document_operation_pb, preserving_proto_field_name=True))
 
 
 class DownloadTask:
@@ -72,7 +71,7 @@ class DownloadTask:
         self.task = asyncio.create_task(
             self.download_task(
                 request_context=self.request_context,
-                document_view=self.document_view
+                document_view=self.document_view,
             )
         )
 
@@ -92,7 +91,7 @@ class DownloadTask:
         throttle_secs = 2.0
 
         async def _on_fail():
-            await self.delivery_service.telegram_client.send_message(
+            await self.delivery_service.telegram_clients[request_context.bot_name].send_message(
                 request_context.chat.chat_id,
                 t('MAINTENANCE', language=request_context.chat.language).format(
                     maintenance_picture_url=self.delivery_service.maintenance_picture_url
@@ -104,7 +103,7 @@ class DownloadTask:
             on_fail=_on_fail,
         ):
             progress_bar_download = ProgressBar(
-                telegram_client=self.delivery_service.telegram_client,
+                telegram_client=self.delivery_service.telegram_clients[request_context.bot_name],
                 request_context=request_context,
                 banner=t("LOOKING_AT", language=request_context.chat.language),
                 header=f'⬇️ {document_view.get_filename()}',
@@ -123,7 +122,7 @@ class DownloadTask:
                         action='missed',
                         duration=time.time() - start_time,
                         document_id=document_view.id,
-                        schema=document_view.schema,
+                        index_alias=document_view.index_alias,
                     )
                     is_served_from_sharience = False
                     if self.delivery_service.is_sharience_enabled:
@@ -136,7 +135,7 @@ class DownloadTask:
                             action='not_found',
                             document_id=document_view.id,
                             duration=time.time() - start_time,
-                            schema=document_view.schema,
+                            index_alias=document_view.index_alias,
                         )
                         await self.respond_not_found(
                             request_context=request_context,
@@ -149,11 +148,11 @@ class DownloadTask:
                         duration=time.time() - start_time,
                         document_id=document_view.id,
                         len=len(file),
-                        schema=document_view.schema,
+                        index_alias=document_view.index_alias,
                     )
 
                 progress_bar_upload = ProgressBar(
-                    telegram_client=self.delivery_service.telegram_client,
+                    telegram_client=self.delivery_service.telegram_clients[request_context.bot_name],
                     request_context=request_context,
                     message=progress_bar_download.message,
                     banner=t("LOOKING_AT", language=request_context.chat.language),
@@ -161,7 +160,6 @@ class DownloadTask:
                     tail_text=t('UPLOADED_TO_TELEGRAM', language=request_context.chat.language),
                     throttle_secs=throttle_secs
                 )
-
                 uploaded_message = await self.delivery_service.send_file(
                     document_view=self.document_view,
                     file=file,
@@ -174,10 +172,11 @@ class DownloadTask:
                     action='uploaded',
                     duration=time.time() - start_time,
                     document_id=document_view.id,
-                    schema=document_view.schema,
+                    index_alias=document_view.index_alias,
                 )
                 if self.delivery_service.should_store_hashes:
                     asyncio.create_task(self.store_hashes(
+                        bot_name=request_context.bot_name,
                         document_view=document_view,
                         telegram_file_id=uploaded_message.file.id,
                         file=file,
@@ -189,14 +188,18 @@ class DownloadTask:
                     action='user_canceled',
                     duration=time.time() - start_time,
                     document_id=document_view.id,
-                    schema=document_view.schema,
+                    index_alias=document_view.index_alias,
                 )
             except asyncio.CancelledError:
                 pass
             finally:
                 downloads_gauge.dec()
                 messages = filter_none([progress_bar_download.message])
-                await self.delivery_service.telegram_client.delete_messages(request_context.chat.chat_id, messages)
+                await (
+                    self.delivery_service
+                        .telegram_clients[request_context.bot_name]
+                        .delete_messages(request_context.chat.chat_id, messages)
+                )
 
     async def process_resp(self, resp, progress_bar, collected, filesize):
         progress_bar.set_source(get_fancy_name(resp.source))
@@ -210,7 +213,7 @@ class DownloadTask:
             await progress_bar.callback(len(collected), filesize)
 
     async def respond_not_found(self, request_context: RequestContext, document_view):
-        return await self.delivery_service.telegram_client.send_message(
+        return await self.delivery_service.telegram_clients[request_context.bot_name].send_message(
             request_context.chat.chat_id,
             t("SOURCES_UNAVAILABLE", language=request_context.chat.language).format(
                 document=document_view.get_robust_title()
@@ -220,19 +223,22 @@ class DownloadTask:
 
     async def try_sharience(self, request_context, document_view):
         if document_view.doi:
-            request_context.statbox(action='try_sharience', doi=document_view.doi, schema=document_view.schema)
-            pg_data = await self.delivery_service.pool_holder.execute(
+            request_context.statbox(action='try_sharience', doi=document_view.doi, index_alias=document_view.index_alias)
+            pg_data = self.delivery_service.pool_holder.iterate(
                 '''
-                select sh.id, sh.telegram_file_id as vote_sum
+                select sh.id, t.telegram_file_id as vote_sum
                 from sharience as sh
                 left join votes as v
                 on sh.id = v.document_id
-                group by sh.id
+                left join telegram_files as t
+                on sh.id = t.document_id
+                where t.bot_name = %s
+                group by sh.id, t.telegram_file_id
                 having coalesce(sum(v.value), 0) > -1
                 and sh.parent_id = %s
                 order by coalesce(sum(v.value), 0) desc;
-                ''', (document_view.id,), fetch=True)
-            for document_id, telegram_file_id in pg_data:
+                ''', (self.request_context.bot_name, document_view.id,))
+            async for document_id, telegram_file_id in pg_data:
                 return await self.delivery_service.send_file(
                     document_id=document_id,
                     document_view=self.document_view,
@@ -258,8 +264,8 @@ class DownloadTask:
                         filesize=document_view.filesize,
                     )
                 return bytes(collected)
-            except DownloadError as e:
-                self.request_context.error_log(e)
+            except DownloadError:
+                pass
         if document_view.md5:
             try:
                 async for resp in self.delivery_service.pylon_client.by_md5(
@@ -273,17 +279,17 @@ class DownloadTask:
                         filesize=document_view.filesize,
                     )
                 return bytes(collected)
-            except DownloadError as e:
-                self.request_context.error_log(e)
+            except DownloadError:
+                pass
 
     async def external_cancel(self):
         self.task.cancel()
         self.request_context.statbox(
             action='externally_canceled',
             document_id=self.document_view.id,
-            schema=self.document_view.schema,
+            index=self.document_view.index,
         )
-        await self.delivery_service.telegram_client.send_message(
+        await self.delivery_service.telegram_clients[self.request_context.bot_name].send_message(
             self.request_context.chat.chat_id,
             t("DOWNLOAD_CANCELED", language=self.request_context.chat.language).format(
                 document=self.document_view.get_robust_title()
@@ -291,22 +297,31 @@ class DownloadTask:
             buttons=[close_button()]
         )
 
-    async def store_hashes(self, document_view, telegram_file_id, file):
+    async def store_hashes(self, bot_name, document_view, telegram_file_id, file):
         document_pb = document_view.document_pb
-        document_pb.telegram_file_id = telegram_file_id
         document_pb.filesize = len(file)
         if not document_pb.md5:
             document_pb.md5 = hashlib.md5(file).hexdigest()
         del document_pb.ipfs_multihashes[:]
         document_pb.ipfs_multihashes.extend(await self.delivery_service.get_ipfs_hashes(file=file))
 
-        document_operation_pb = DocumentOperationPb(
+        update_document_operation_pb = DocumentOperationPb(
             update_document=UpdateDocumentPb(
-                fields=['filesize', 'ipfs_multihashes', 'md5', 'telegram_file_id'],
-                typed_document=TypedDocumentPb(**{document_view.schema: document_pb}),
+                fields=['filesize', 'ipfs_multihashes', 'md5'],
+                typed_document=TypedDocumentPb(**{document_view.index_alias: document_pb}),
             ),
         )
-        await operation_log(document_operation_pb)
+        store_telegram_file_id_operation_pb = DocumentOperationPb(
+            store_telegram_file_id=StoreTelegramFileIdPb(
+                document_id=document_pb.id,
+                telegram_file_id=telegram_file_id,
+                bot_name=bot_name,
+            ),
+        )
+        await asyncio.gather(
+            operation_log(update_document_operation_pb),
+            operation_log(store_telegram_file_id_operation_pb),
+        )
 
 
 class DeliveryService(DeliveryServicer, BaseHubService):
@@ -314,23 +329,19 @@ class DeliveryService(DeliveryServicer, BaseHubService):
         self,
         server: Server,
         service_name: str,
-        bot_external_name: str,
         ipfs_config: dict,
         is_sharience_enabled: bool,
         maintenance_picture_url: str,
         pool_holder,
         pylon_config: dict,
         should_store_hashes: bool,
-        should_use_telegram_file_id: bool,
-        telegram_client: BaseTelegramClient,
+        telegram_clients: dict,
+        telegram_bot_configs: dict,
     ):
-        if is_sharience_enabled and not pool_holder:
-            raise ValueError('Sharience can be used only with enabled database')
         super().__init__(
             service_name=service_name,
-            bot_external_name=bot_external_name,
             ipfs_config=ipfs_config,
-            telegram_client=telegram_client,
+            telegram_clients=telegram_clients,
         )
         self.downloadings = set()
         self.is_sharience_enabled = is_sharience_enabled
@@ -342,11 +353,12 @@ class DeliveryService(DeliveryServicer, BaseHubService):
         )
         self.server = server
         self.should_store_hashes = should_store_hashes
-        self.should_use_telegram_file_id = should_use_telegram_file_id
+        self.telegram_bot_configs = telegram_bot_configs
         self.user_manager = UserManager()
         self.waits.extend([self.pylon_client])
 
     async def start(self):
+        await super().start()
         add_DeliveryServicer_to_server(self, self.server)
 
     async def stop(self):
@@ -354,6 +366,13 @@ class DeliveryService(DeliveryServicer, BaseHubService):
             await download.external_cancel()
         await asyncio.gather(*map(lambda x: x.task, self.downloadings))
         await self.ipfs_client.close()
+
+    async def get_telegram_file_id(self, bot_name, document_id):
+        pg_data = self.pool_holder.iterate('''
+            select telegram_file_id from telegram_files where bot_name = %s and document_id = %s
+        ''', (bot_name, document_id))
+        async for telegram_file_id in pg_data:
+            return telegram_file_id
 
     @aiogrpc_request_wrapper(log=False)
     async def start_delivery(
@@ -363,7 +382,7 @@ class DeliveryService(DeliveryServicer, BaseHubService):
         metadata: dict,
     ) -> StartDeliveryResponsePb:
         request_context = RequestContext(
-            bot_name=self.service_name,
+            bot_name=request.bot_name,
             chat=request.chat,
             request_id=metadata.get('request-id'),
         )
@@ -373,20 +392,22 @@ class DeliveryService(DeliveryServicer, BaseHubService):
             **self.get_default_service_fields(),
         )
         document_view = parse_typed_document_to_view(request.typed_document)
-        cache_hit = self.should_use_telegram_file_id and document_view.telegram_file_id
-        if cache_hit:
+        telegram_file_id = None
+        if self.telegram_bot_configs[request_context.bot_name]['should_use_telegram_file_id']:
+            telegram_file_id = await self.get_telegram_file_id(request_context.bot_name, document_view.id)
+        if telegram_file_id:
             try:
                 await self.send_file(
                     document_view=document_view,
-                    file=document_view.telegram_file_id,
+                    file=telegram_file_id,
                     session_id=metadata.get('session-id'),
                     request_context=request_context,
                     voting=not is_group_or_channel(request_context.chat.chat_id),
                 )
-                request_context.statbox(action='cache_hit', document_id=document_view.id, schema=document_view.schema)
+                request_context.statbox(action='cache_hit', document_id=document_view.id, index_alias=document_view.index_alias)
             except ValueError:
-                cache_hit = False
-        if not cache_hit:
+                telegram_file_id = None
+        if not telegram_file_id:
             if self.user_manager.has_task(request.chat.chat_id, document_view.id):
                 return StartDeliveryResponsePb(status=StartDeliveryResponsePb.Status.ALREADY_DOWNLOADING)
             if self.user_manager.hit_limits(request.chat.chat_id):

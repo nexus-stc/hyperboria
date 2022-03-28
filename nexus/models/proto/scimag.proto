@@ -15,9 +15,7 @@ message Scimag {
   bool is_deleted = 7;
   repeated string issns = 25;
   string issue = 10;
-  oneof optional_issued_at {
-      int64 issued_at = 26;
-  }
+  optional int64 issued_at = 26;
   uint32 journal_id = 12;
   string language = 13;
   uint32 last_page = 14;
@@ -29,10 +27,9 @@ message Scimag {
     int32 scimag_bulk_id = 24;
   }
   repeated string tags = 17;
-  string telegram_file_id = 18;
   string title = 19;
   string type = 29;
   int32 updated_at = 20;
   string volume = 21;
-  string year = 30;
+  int32 year = 30;
 }

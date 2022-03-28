@@ -1,8 +1,6 @@
 from typing import Optional
 
 from aiogrpcclient import BaseGrpcClient
-from grpc import StatusCode
-from grpc.experimental.aio import AioRpcError
 from idm.api.proto.chat_manager_service_pb2 import Chat as ChatPb
 from idm.api.proto.chat_manager_service_pb2 import Chats as ChatsPb
 from idm.api.proto.chat_manager_service_pb2 import (
@@ -12,12 +10,6 @@ from idm.api.proto.chat_manager_service_pb2 import (
     UpdateChatRequest,
 )
 from idm.api.proto.chat_manager_service_pb2_grpc import ChatManagerStub
-from tenacity import (
-    retry,
-    retry_if_exception,
-    stop_after_attempt,
-    wait_fixed,
-)
 
 
 class IdmApiGrpcClient(BaseGrpcClient):
@@ -44,14 +36,6 @@ class IdmApiGrpcClient(BaseGrpcClient):
         )
         return response
 
-    @retry(
-        retry=retry_if_exception(
-            lambda e: isinstance(e, AioRpcError) and e.code() == StatusCode.UNAVAILABLE
-        ),
-        reraise=True,
-        stop=stop_after_attempt(10),
-        wait=wait_fixed(5),
-    )
     async def get_chat(
         self,
         chat_id: int,

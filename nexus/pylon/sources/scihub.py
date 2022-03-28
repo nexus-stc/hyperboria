@@ -35,18 +35,19 @@ class SciHubSource(DoiSource):
                     yield PreparedRequest(method='get', url=url, timeout=self.timeout)
                 downloaded_page_bytes = await resp.read()
                 downloaded_page = downloaded_page_bytes.decode('utf-8', 'backslashreplace')
-            match = re.search('(?:https?:)?//.*\\?download=true', downloaded_page, re.IGNORECASE)
+            match = re.search(r'(?:https?:)?\\?/\\?/?.*\.pdf\?download=true', downloaded_page, re.IGNORECASE)
             if match:
                 url = match.group()
-                if url.startswith('//'):
-                    url = 'http:' + url
+                url = url.replace(r'\/', '/')
+                if not url.startswith('http'):
+                    url = self.base_url.rstrip('/') + url
                 yield PreparedRequest(method='get', url=url, timeout=self.timeout)
             else:
                 error_log_func(RegexNotFoundError(url=url))
 
 
-class SciHubDoSource(SciHubSource):
-    base_url = 'https://sci-hub.do'
+class SciHubMksaTopSource(SciHubSource):
+    base_url = 'https://sci-hub.mksa.top'
 
 
 class SciHubSeSource(SciHubSource):

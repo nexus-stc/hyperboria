@@ -1,8 +1,8 @@
 <template lang="pug">
-  tr
-    th {{ label }}
-    td
-      a(v-for="link in links" :href="link.url" download) {{ link.value }}
+tr
+  th {{ label }}
+  td
+    a(v-for="link in links" :href="link.url" download) {{ link.value }}
 </template>
 
 <script>

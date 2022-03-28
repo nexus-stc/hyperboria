@@ -17,34 +17,34 @@ http_archive(
 # ToDo: wait for https://github.com/bazelbuild/rules_docker/pull/1638
 http_archive(
     name = "io_bazel_rules_docker",
-    sha256 = "5aa15ff7a83f8de8ff0346bd8274fb82eec52c947106a066dc190c2624ec1cb4",
-    strip_prefix = "rules_docker-aefbc69e5f758403d50f789eee55b30a3d947418",
+    sha256 = "c2a283bea1ea30a3ceb9e5388a4c8c8eef68a815ac86f1d381f9d35cdee57f1b",
+    strip_prefix = "rules_docker-46d29e34399a992087c857b13d8dcb8ec80dfd85",
     urls = [
-        "https://github.com/the-superpirate/rules_docker/archive/aefbc69e5f758403d50f789eee55b30a3d947418.tar.gz",
+        "https://github.com/the-superpirate/rules_docker/archive/46d29e34399a992087c857b13d8dcb8ec80dfd85.tar.gz",
     ],
 )
 
 http_archive(
     name = "build_bazel_rules_nodejs",
-    sha256 = "a160d9ac88f2aebda2aa995de3fa3171300c076f06ad1d7c2e1385728b8442fa",
-    urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/3.4.1/rules_nodejs-3.4.1.tar.gz"],
+    sha256 = "f7037c8e295fdc921f714962aee7c496110052511e2b14076bd8e2d46bc9819c",
+    urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/4.4.5/rules_nodejs-4.4.5.tar.gz"],
 )
 
 http_archive(
     name = "io_bazel_rules_k8s",
-    sha256 = "c1c5a692ec994e99e9e7e77ae693086074d6dedfe72e6930efbcc66d30264032",
-    strip_prefix = "rules_k8s-f1c6399cdd691b7aca90073398e8f690ec8992c6",
+    sha256 = "a08850199d6900328ef899906717fb1dfcc6cde62701c63725748b2e6ca1d5d9",
+    strip_prefix = "rules_k8s-d05cbea5c56738ef02c667c10951294928a1d64a",
     urls = [
-        "https://github.com/bazelbuild/rules_k8s/archive/f1c6399cdd691b7aca90073398e8f690ec8992c6.tar.gz",
+        "https://github.com/bazelbuild/rules_k8s/archive/d05cbea5c56738ef02c667c10951294928a1d64a.tar.gz",
     ],
 )
 
 http_archive(
     name = "rules_rust",
-    sha256 = "d10dd5581f66ee169071ee06d52c52c8c7ca7467ac6266e301c0820d289b0f0b",
-    strip_prefix = "rules_rust-336e1934b07211fb8736c19749919ef94df4df68",
+    sha256 = "30c1b40d77a262e3f7dba6e4267fe4695b5eb1e68debc6aa06c3e09d429ae19a",
+    strip_prefix = "rules_rust-0.1.0",
     urls = [
-        "https://github.com/bazelbuild/rules_rust/archive/336e1934b07211fb8736c19749919ef94df4df68.tar.gz",
+        "https://github.com/bazelbuild/rules_rust/archive/0.1.0.tar.gz",
     ],
 )
 
@@ -67,40 +67,17 @@ http_archive(
 )
 
 http_archive(
-    name = "rules_proto",
-    sha256 = "aa1ee19226f707d44bee44c720915199c20c84a23318bb0597ed4e5c873ccbd5",
-    strip_prefix = "rules_proto-40298556293ae502c66579620a7ce867d5f57311",
-    urls = [
-        "https://github.com/bazelbuild/rules_proto/archive/40298556293ae502c66579620a7ce867d5f57311.tar.gz",
-    ],
+    name = "rules_proto_grpc",
+    sha256 = "507e38c8d95c7efa4f3b1c0595a8e8f139c885cb41a76cab7e20e4e67ae87731",
+    strip_prefix = "rules_proto_grpc-4.1.1",
+    urls = ["https://github.com/rules-proto-grpc/rules_proto_grpc/archive/4.1.1.tar.gz"],
 )
 
 http_archive(
     name = "rules_python",
-    sha256 = "b228318a786d99b665bc83bd6cdb81512cae5f8eb15e8cd19f9956604b8939f5",
-    strip_prefix = "rules_python-a4a1ccffc666db5376342789ad021a943fb84256",
-    urls = [
-        "https://github.com/bazelbuild/rules_python/archive/a4a1ccffc666db5376342789ad021a943fb84256.tar.gz",
-    ],
-)
-
-http_archive(
-    name = "subpar",
-    sha256 = "481233d60c547e0902d381cd4fb85b63168130379600f330821475ad234d9336",
-    strip_prefix = "subpar-9fae6b63cfeace2e0fb93c9c1ebdc28d3991b16f",
-    urls = [
-        "https://github.com/google/subpar/archive/9fae6b63cfeace2e0fb93c9c1ebdc28d3991b16f.tar.gz",
-    ],
-)
-
-http_archive(
-    name = "cython",
-    build_file = "@com_github_grpc_grpc//third_party:cython.BUILD",
-    sha256 = "e2e38e1f0572ca54d6085df3dec8b607d20e81515fb80215aed19c81e8fe2079",
-    strip_prefix = "cython-0.29.21",
-    urls = [
-        "https://github.com/cython/cython/archive/0.29.21.tar.gz",
-    ],
+    sha256 = "15f84594af9da06750ceb878abbf129241421e3abbd6e36893041188db67f2fb",
+    strip_prefix = "rules_python-0.7.0",
+    urls = ["https://github.com/bazelbuild/rules_python/archive/0.7.0.tar.gz"],
 )
 
 # Images Install
@@ -109,36 +86,37 @@ load("//images:install.bzl", "images_install")
 
 images_install()
 
+# Go
+
+load("//rules/go:setup.bzl", "go_setup")
+
+go_setup()
+
+load("//rules/go:install.bzl", "go_install")
+
+go_install()
+
 # Python
 register_toolchains("//rules/python:py_toolchain")
 
-load("@rules_python//python:pip.bzl", "pip_install")
+load("@rules_python//python:pip.bzl", "pip_parse")
 
-pip_install(
+pip_parse(
     name = "pip_modules",
-    requirements = "//rules/python:requirements.txt",
+    requirements_lock = "//rules/python:requirements-lock.txt",
 )
+
+load("@pip_modules//:requirements.bzl", "install_deps")
+
+install_deps()
 
 # Proto / gRPC
-
-http_archive(
-    name = "rules_proto_grpc",
-    sha256 = "7954abbb6898830cd10ac9714fbcacf092299fda00ed2baf781172f545120419",
-    strip_prefix = "rules_proto_grpc-3.1.1",
-    urls = ["https://github.com/rules-proto-grpc/rules_proto_grpc/archive/3.1.1.tar.gz"],
-)
 
 load("@rules_proto_grpc//:repositories.bzl", "rules_proto_grpc_repos", "rules_proto_grpc_toolchains")
 
 rules_proto_grpc_toolchains()
 
 rules_proto_grpc_repos()
-
-load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies", "rules_proto_toolchains")
-
-rules_proto_dependencies()
-
-rules_proto_toolchains()
 
 load("@rules_proto_grpc//js:repositories.bzl", "js_repos")
 
@@ -160,28 +138,11 @@ maven_fetch_remote_artifacts()
 
 # Rust
 
-load("@rules_rust//rust:repositories.bzl", "rust_repository_set")
+load("@rules_rust//rust:repositories.bzl", "rust_repositories")
 
-rust_version = "1.51.0"
-
-rustfmt_version = "1.4.20"
-
-rust_repository_set(
-    name = "rust_linux_x86_64",
-    edition = "2018",
-    exec_triple = "x86_64-unknown-linux-gnu",
-    extra_target_triples = ["wasm32-unknown-unknown"],
-    rustfmt_version = rustfmt_version,
-    version = rust_version,
-)
-
-rust_repository_set(
-    name = "rust_darwin_x86_64",
-    edition = "2018",
-    exec_triple = "x86_64-apple-darwin",
-    extra_target_triples = ["wasm32-unknown-unknown"],
-    rustfmt_version = rustfmt_version,
-    version = rust_version,
+rust_repositories(
+    edition = "2021",
+    version = "1.59.0",
 )
 
 load("//rules/rust:crates.bzl", "raze_fetch_remote_crates")
@@ -192,17 +153,8 @@ raze_fetch_remote_crates()
 load("@build_bazel_rules_nodejs//:index.bzl", "node_repositories", "yarn_install")
 
 node_repositories(
-    node_repositories = {
-        "15.5.1-darwin_amd64": ("node-v15.5.1-darwin-x64.tar.gz", "node-v15.5.1-darwin-x64", "4507dab0481b0b5374b5758b1eba7d105c8cbcb173548119b04d9ef7d9f1d40f"),
-        "15.5.1-linux_amd64": ("node-v15.5.1-linux-x64.tar.xz", "node-v15.5.1-linux-x64", "dbc41a611d99aedf2cfd3d0acc50759a6b9084c7447862e990f51958d4a7aa41"),
-        "15.5.1-windows_amd64": ("node-v15.5.1-win-x64.zip", "node-v15.5.1-win-x64", "e1f826f9647fc7058b48c669991956a427fe4b6ccefa415a18b41715483f958d"),
-        "15.5.1-linux_s390x": ("node-v15.5.1-linux-s390x.tar.gz", "node-v15.5.1-linux-s390x", "e05f949ea11e2aafc08a7972c0f41a11a3628762e857d44965e0605d3bcd143f"),
-        "15.5.1-linux_arm64": ("node-v15.5.1-linux-arm64.tar.gz", "node-v15.5.1-linux-arm64", "a2d14db86c6f8a070f227940ea44a3409966f6bed14df0ec6f676fe2e2f601c9"),
-    },
-    node_version = "15.5.1",
     package_json = ["//rules/nodejs:package.json"],
     preserve_symlinks = True,
-    yarn_version = "1.22.4",
 )
 
 yarn_install(
@@ -227,17 +179,6 @@ container_repositories()
 
 load("@io_bazel_rules_docker//repositories:deps.bzl", container_deps = "deps")
 
-# ToDo: temorary fix as registry was broken at 24.04.2021
-load("@bazel_gazelle//:deps.bzl", "go_repository")
-
-go_repository(
-    name = "com_github_google_go_containerregistry",
-    importpath = "github.com/google/go-containerregistry",
-    strip_prefix = "google-go-containerregistry-8a28419",
-    type = "tar.gz",
-    urls = ["https://api.github.com/repos/google/go-containerregistry/tarball/8a2841911ffee4f6892ca0083e89752fb46c48dd"],  # v0.1.4
-)
-
 container_deps()
 
 load("@io_bazel_rules_docker//repositories:py_repositories.bzl", "py_deps")
@@ -259,13 +200,18 @@ rust_image_repos()
 
 # K8s
 
-load("@io_bazel_rules_k8s//k8s:k8s.bzl", "k8s_repositories")
+load("@io_bazel_rules_k8s//k8s:k8s.bzl", "k8s_defaults", "k8s_repositories")
 
 k8s_repositories()
 
 load("@io_bazel_rules_k8s//k8s:k8s_go_deps.bzl", k8s_go_deps = "deps")
 
 k8s_go_deps()
+
+k8s_defaults(
+    name = "k8s_deploy",
+    image_chroot = "registry.infra.svc.cluster.local",
+)
 
 # Miscellaneous
 

@@ -21,5 +21,5 @@ class UnknownFileFormatError(BaseError):
     code = 'unknown_file_format_error'
 
 
-class UnknownSchemaError(BaseError):
-    code = 'unknown_schema_error'
+class UnknownIndexAliasError(BaseError):
+    code = 'unknown_index_alias_error'

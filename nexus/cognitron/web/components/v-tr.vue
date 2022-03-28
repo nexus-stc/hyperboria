@@ -1,10 +1,10 @@
 <template lang="pug">
-  tr(v-show="value")
-    th {{ label }}
-    td(:class="valueClasses")
-      | {{ formattedValue }}
-      cite
-        a(href="javascript:void(null);" @click="showMore" v-if="shouldCollapseText")  show more...
+tr(v-show="value")
+  th {{ label }}
+  td(:class="valueClasses")
+    | {{ formattedValue }}
+    cite
+      a(href="javascript:void(null);" @click="showMore" v-if="shouldCollapseText")  show more...
 </template>
 
 <script>

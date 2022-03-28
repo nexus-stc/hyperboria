@@ -14,21 +14,22 @@ py3_image(
     data = [
         "configs/base.yaml",
         "configs/logging.yaml",
+        "//nexus/cognitron/configs:scimag.yaml",
+        "//nexus/cognitron/configs:scitech.yaml",
     ],
     main = "main.py",
     srcs_version = "PY3ONLY",
     visibility = ["//visibility:public"],
     deps = [
         requirement("aiokafka"),
-        requirement("aiopg"),
-        requirement("fire"),
         requirement("aiocrossref"),
         requirement("aiokit"),
         requirement("aiolibgen"),
         "//library/aiopostgres",
         "//library/configurator",
-        "//library/logging",
+        "//library/jobber",
         "//nexus/actions",
+        "//summa:aiosumma",
     ],
 )
 

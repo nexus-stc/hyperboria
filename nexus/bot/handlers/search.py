@@ -27,7 +27,7 @@ from .base import (
 
 class BaseSearchHandler(BaseHandler, ABC):
     def preprocess_query(self, query):
-        return query.replace(f'@{self.application.config["telegram"]["bot_external_name"]}', '').strip()
+        return query.replace(f'@{self.application.config["telegram"]["bot_name"]}', '').strip()
 
     async def do_search(
         self,
@@ -109,7 +109,7 @@ class BaseSearchHandler(BaseHandler, ABC):
             document_view = parse_typed_document_to_view(scored_document.typed_document)
             # Second (re-)fetching is required to retrieve duplicates
             document_view = await self.resolve_document(
-                schema=scored_document.typed_document.WhichOneof('document'),
+                index_alias=scored_document.typed_document.WhichOneof('document'),
                 document_id=document_view.id,
                 position=0,
                 session_id=session_id,
@@ -118,7 +118,7 @@ class BaseSearchHandler(BaseHandler, ABC):
             view, buttons = document_view.get_view(
                 language=request_context.chat.language,
                 session_id=session_id,
-                bot_external_name=self.application.config['telegram']['bot_external_name'],
+                bot_name=self.application.config['telegram']['bot_name'],
                 with_buttons=not is_group_mode,
             )
             return await asyncio.gather(
@@ -254,7 +254,7 @@ class SearchPagingHandler(BaseCallbackQueryHandler):
     should_reset_last_widget = False
 
     def preprocess_query(self, query):
-        return query.replace(f'@{self.application.config["telegram"]["bot_external_name"]}', '').strip()
+        return query.replace(f'@{self.application.config["telegram"]["bot_name"]}', '').strip()
 
     def parse_pattern(self, event: events.ChatAction):
         session_id = event.pattern_match.group(1).decode()

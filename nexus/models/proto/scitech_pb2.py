@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n nexus/models/proto/scitech.proto\x12\x12nexus.models.proto\"\xad\x04\n\x07Scitech\x12\n\n\x02id\x18\x01 \x01(\x03\x12\x0f\n\x07\x61uthors\x18\x02 \x03(\t\x12\n\n\x02\x63u\x18\x03 \x01(\t\x12\x0e\n\x06\x63u_suf\x18\x04 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x05 \x01(\t\x12\x0b\n\x03\x64oi\x18\x06 \x01(\t\x12\x17\n\x0f\x64ownloads_count\x18\x1c \x01(\r\x12\x0f\n\x07\x65\x64ition\x18\x07 \x01(\t\x12\x11\n\textension\x18\x08 \x01(\t\x12\x12\n\nfiction_id\x18\t \x01(\x03\x12\x10\n\x08\x66ilesize\x18\n \x01(\x04\x12\x18\n\x10ipfs_multihashes\x18\x1e \x03(\t\x12\x12\n\nis_deleted\x18\x0b \x01(\x08\x12\r\n\x05isbns\x18\x0c \x03(\t\x12\x16\n\x0ehas_duplicates\x18\x1f \x01(\x08\x12\x13\n\tissued_at\x18\x19 \x01(\x03H\x00\x12\x10\n\x08language\x18\r \x01(\t\x12\x11\n\tlibgen_id\x18\x0e \x01(\x03\x12\x15\n\rmeta_language\x18\x0f \x01(\t\x12\x0b\n\x03md5\x18\x10 \x01(\t\x12\x13\n\x0boriginal_id\x18\x17 \x01(\x03\x12\r\n\x05pages\x18\x11 \x01(\r\x12\x0e\n\x06series\x18\x12 \x01(\t\x12\x0c\n\x04tags\x18\x13 \x03(\t\x12\x18\n\x10telegram_file_id\x18\x14 \x01(\t\x12\r\n\x05title\x18\x15 \x01(\t\x12\x12\n\nupdated_at\x18\x16 \x01(\x05\x12\x0e\n\x06volume\x18\x18 \x01(\t\x12\x0c\n\x04year\x18\x1d \x01(\tB\x14\n\x12optional_issued_atb\x06proto3'
+  serialized_pb=b'\n nexus/models/proto/scitech.proto\x12\x12nexus.models.proto\"\x93\x04\n\x07Scitech\x12\n\n\x02id\x18\x01 \x01(\x03\x12\x0f\n\x07\x61uthors\x18\x02 \x03(\t\x12\n\n\x02\x63u\x18\x03 \x01(\t\x12\x0e\n\x06\x63u_suf\x18\x04 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x05 \x01(\t\x12\x0b\n\x03\x64oi\x18\x06 \x01(\t\x12\x17\n\x0f\x64ownloads_count\x18\x1c \x01(\r\x12\x0f\n\x07\x65\x64ition\x18\x07 \x01(\t\x12\x11\n\textension\x18\x08 \x01(\t\x12\x12\n\nfiction_id\x18\t \x01(\x03\x12\x10\n\x08\x66ilesize\x18\n \x01(\x04\x12\x18\n\x10ipfs_multihashes\x18\x1e \x03(\t\x12\x12\n\nis_deleted\x18\x0b \x01(\x08\x12\r\n\x05isbns\x18\x0c \x03(\t\x12\x16\n\x0ehas_duplicates\x18\x1f \x01(\x08\x12\x13\n\tissued_at\x18\x19 \x01(\x03H\x00\x12\x10\n\x08language\x18\r \x01(\t\x12\x11\n\tlibgen_id\x18\x0e \x01(\x03\x12\x15\n\rmeta_language\x18\x0f \x01(\t\x12\x0b\n\x03md5\x18\x10 \x01(\t\x12\x13\n\x0boriginal_id\x18\x17 \x01(\x03\x12\r\n\x05pages\x18\x11 \x01(\r\x12\x0e\n\x06series\x18\x12 \x01(\t\x12\x0c\n\x04tags\x18\x13 \x03(\t\x12\r\n\x05title\x18\x15 \x01(\t\x12\x12\n\nupdated_at\x18\x16 \x01(\x05\x12\x0e\n\x06volume\x18\x18 \x01(\t\x12\x0c\n\x04year\x18\x1d \x01(\tB\x14\n\x12optional_issued_atb\x06proto3'
 )
 
 
@@ -203,35 +203,28 @@ _SCITECH = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='telegram_file_id', full_name='nexus.models.proto.Scitech.telegram_file_id', index=24,
-      number=20, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='title', full_name='nexus.models.proto.Scitech.title', index=25,
+      name='title', full_name='nexus.models.proto.Scitech.title', index=24,
       number=21, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='updated_at', full_name='nexus.models.proto.Scitech.updated_at', index=26,
+      name='updated_at', full_name='nexus.models.proto.Scitech.updated_at', index=25,
       number=22, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='volume', full_name='nexus.models.proto.Scitech.volume', index=27,
+      name='volume', full_name='nexus.models.proto.Scitech.volume', index=26,
       number=24, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='year', full_name='nexus.models.proto.Scitech.year', index=28,
+      name='year', full_name='nexus.models.proto.Scitech.year', index=27,
       number=29, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -255,7 +248,7 @@ _SCITECH = _descriptor.Descriptor(
     fields=[]),
   ],
   serialized_start=57,
-  serialized_end=614,
+  serialized_end=588,
 )
 
 _SCITECH.oneofs_by_name['optional_issued_at'].fields.append(

@@ -6,11 +6,11 @@ py_library(
     visibility = ["//visibility:public"],
     deps = [
         requirement("grpcio"),
-        "//idm/api/proto:idm_proto_py",
+        "//idm/api/proto:proto_py",
         requirement("aiogrpcclient"),
         requirement("aiokit"),
-        "//nexus/hub/proto:hub_grpc_py",
-        "//nexus/hub/proto:hub_proto_py",
-        "//nexus/models/proto:models_proto_py",
+        "//nexus/hub/proto:grpc_py",
+        "//nexus/hub/proto:proto_py",
+        "//nexus/models/proto:proto_py",
     ],
 )

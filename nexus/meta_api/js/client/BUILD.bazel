@@ -6,6 +6,6 @@ js_library(
     srcs = glob(["*.js"]),
     visibility = ["//visibility:public"],
     deps = [
-        "//nexus/meta_api/proto:meta-api-grpc-web-js",
+        "//nexus/meta_api/proto:grpc_web_js",
     ],
 )

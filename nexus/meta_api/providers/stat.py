@@ -75,7 +75,7 @@ class StatProvider(AioThing):
                 count(distinct chat_id) as c from telegram_statbox_log
                 where action = 'missed' and
                 (mode = 'start_delivery' or mode = 'delivery') and
-                schema = 'scimag'
+                index_alias = 'scimag'
                 group by document_id
                 order by count(distinct chat_id) desc, document_id desc limit 1000
             '''):

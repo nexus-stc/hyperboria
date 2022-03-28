@@ -28,7 +28,7 @@ class CrossrefApiJob(BaseJob):
         super().__init__(actions=actions, sinks=sinks)
         self.crossref_client = CrossrefClient(base_url=base_url, max_retries=max_retries, retry_delay=retry_delay)
         self.from_date = from_date or str(datetime.date(datetime.now()) - timedelta(days=1))
-        self.starts.append(self.crossref_client)
+        self.waits.append(self.crossref_client)
 
     async def iterator(self) -> AsyncIterable[Any]:
         async for chunk in self.crossref_client.works_cursor(

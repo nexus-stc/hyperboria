@@ -1,19 +1,19 @@
 <template lang="pug">
-  div
-    .top
-      h6 {{ document.title }}
-    .top
-      i
-        h6 {{ document.getFormattedLocator() }}
-    table
-      tbody
-        v-tr(label="DOI", :value="document.doi")
-        v-tr(label="Description", :value="document.description", @max-length=300)
-        v-tr(label="Tags", :value="tags")
-        v-tr(label="ISBNS", :value="isbns")
-        v-tr(label="ISSNS", :value="issns")
-        v-tr(label="File", :value="document.getFormattedFiledata()")
-        v-tr-multi-link(label="Links", :links="links")
+div
+  .top
+    h6 {{ document.title }}
+  .top
+    i
+      h6 {{ document.getFormattedLocator() }}
+  table
+    tbody
+      v-tr(label="DOI", :value="document.doi")
+      v-tr(label="Description", :value="document.description", @max-length=300)
+      v-tr(label="Tags", :value="tags")
+      v-tr(label="ISBNS", :value="isbns")
+      v-tr(label="ISSNS", :value="issns")
+      v-tr(label="File", :value="document.getFormattedFiledata()")
+      v-tr-multi-link(label="Links", :links="links")
 </template>
 
 <script>

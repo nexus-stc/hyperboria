@@ -38,6 +38,7 @@ class SubmitHandler(BaseHandler):
                 chat=request_context.chat,
                 request_id=request_context.request_id,
                 session_id=session_id,
+                bot_name=request_context.bot_name,
             ),
             event.delete(),
         )

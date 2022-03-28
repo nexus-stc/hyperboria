@@ -100,12 +100,19 @@ class PreparedRequest:
             aiohttp.client_exceptions.ClientPayloadError,
             aiohttp.client_exceptions.ClientResponseError,
             aiohttp.client_exceptions.TooManyRedirects,
+            asyncio.exceptions.IncompleteReadError,
             asyncio.TimeoutError,
+            ConnectionAbortedError,
+            ConnectionResetError,
             ProxyConnectionError,
             ProxyTimeoutError,
             ProxyError,
         ) as e:
-            raise DownloadError(nested_error=repr(e), nested_error_cls=class_fullname(e))
+            raise DownloadError(
+                nested_error=repr(e),
+                nested_error_cls=class_fullname(e),
+                url=self.url,
+            )
 
 
 class BaseValidator:
@@ -164,13 +171,13 @@ class BaseSource(AioThing):
 
     def get_proxy(self):
         if self.proxy and self.use_proxy is not False:
-            return ProxyConnector.from_url(self.proxy, verify_ssl=self.ssl)
-        return aiohttp.TCPConnector(verify_ssl=self.ssl)
+            return ProxyConnector.from_url(self.proxy, ssl=self.ssl)
+        return aiohttp.TCPConnector(ssl=self.ssl)
 
     def get_resolve_proxy(self):
         if self.resolve_proxy and self.use_proxy is not False:
-            return ProxyConnector.from_url(self.resolve_proxy, verify_ssl=self.ssl)
-        return aiohttp.TCPConnector(verify_ssl=self.ssl)
+            return ProxyConnector.from_url(self.resolve_proxy, ssl=self.ssl)
+        return aiohttp.TCPConnector(ssl=self.ssl)
 
     def get_session(self):
         return aiohttp.ClientSession(request_class=KeepAliveClientRequest, connector=self.get_proxy())

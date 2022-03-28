@@ -13,7 +13,7 @@ from .base import (
 
 
 class LibgenMd5Source(Md5Source):
-    base_url = 'http://libgen.gs'
+    base_url = 'http://libgen.rocks'
     resolve_timeout = 10
 
     async def resolve_lg(self, session, url):
@@ -22,14 +22,14 @@ class LibgenMd5Source(Md5Source):
             url=url,
             timeout=self.resolve_timeout
         ).execute_with(session=session) as resp:
-            downloaded_page_fiction = await resp.text()
+            downloaded_page = await resp.text()
         match = re.search(
-            'https?://.*/get\\.php\\?md5=.*&key=[A-Za-z0-9]+',
-            downloaded_page_fiction,
+            'get\\.php\\?md5=.*&key=[A-Za-z0-9]+',
+            downloaded_page,
             re.IGNORECASE,
         )
         if match:
-            return PreparedRequest(method='get', url=match.group(), timeout=self.timeout)
+            return PreparedRequest(method='get', url=f'{self.base_url}/{match.group()}', timeout=self.timeout)
 
     async def resolve(self, error_log_func: Callable = error_log) -> AsyncIterable[PreparedRequest]:
         async with self.get_resolve_session() as session:

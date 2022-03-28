@@ -3,11 +3,11 @@ from aiokit.utils import sync_fu
 from nexus.meta_api.aioclient import MetaApiGrpcClient
 
 
-async def search(url, schema, query):
-    client = MetaApiGrpcClient(url)
+async def search(endpoint, index_alias, query):
+    client = MetaApiGrpcClient(endpoint)
     try:
         await client.start()
-        print(await client.search(schemas=(schema,), query=query, language='ru'))
+        print(await client.search(index_aliases=(index_alias,), query=query, language='ru'))
     finally:
         await client.stop()
 

@@ -10,13 +10,14 @@ data_provider:
   enabled: false
 grpc:
   host: 0.0.0.0
-  port: 9090
+  port: 82
 log_path: '/var/log/nexus-meta-api'
 metrics:
   enabled: false
 stat_provider:
   enabled: false
 summa:
-  timeout: 15
-  ttl_dns_cache: 30
-  url: http://summa
+  endpoint: summa:82
+  connection_timeout: 5
+  ttl_dns_cache: 10
+  use_dns_cache: true
