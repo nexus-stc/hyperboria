@@ -29,7 +29,7 @@ DEPS = [
     "//nexus/models/proto:proto_py",
     "//nexus/nlptools",
     "//nexus/views/telegram",
-    "//summa:aiosumma",
+    requirement("aiosumma"),
 ]
 
 py_layer(
