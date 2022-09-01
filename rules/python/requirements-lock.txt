@@ -1,9 +1,16 @@
 aiochclient==2.1.0
+aiocrossref==0.2.1
+aiolibgen==0.2.0
+aiobaseclient==0.2.4
+aioipfs-2==1.0.0
+aiogrobid==0.1.2
+aiogrpcclient==1.1.11
 aiodns==3.0.0
 aiofiles==0.8.0
 aiohttp==3.8.1
 aiohttp-socks==0.7.1
 aiokafka==0.7.2
+aiokit==1.1.2
 aiosignal==1.2.0
 asn1crypto==1.5.1
 async-timeout==4.0.2
@@ -39,6 +46,8 @@ grpcio==1.44.0
 idna==3.3
 isort==5.10.1
 itsdangerous==2.1.2
+izihawa-types==0.1.3
+izihawa-utils==1.0.2
 Jinja2==3.1.1
 joblib==1.1.0
 kafka-python==2.0.2

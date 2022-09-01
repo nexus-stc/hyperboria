@@ -1,9 +1,16 @@
 aiochclient
+aiocrossref
+aioipfs-2
+aiogrobid
+aiolibgen
+aiobaseclient
+aiogrpcclient
 aiodns
 aiofiles
 aiohttp
 aiohttp_socks
 aiokafka
+aiokit
 backports_zoneinfo
 base58
 beautifulsoup4
@@ -22,6 +29,8 @@ flask_sqlalchemy
 flask_wtf
 grpcio
 isort
+izihawa-utils
+izihawa-types
 jinja2
 lemminflect
 lightgbm
