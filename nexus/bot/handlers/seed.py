@@ -1,11 +1,11 @@
 import io
 import re
 
+from izihawa_nlptools.utils import cast_string_to_single_string
 from library.telegram.base import RequestContext
 from library.telegram.common import close_button
 from library.telegram.utils import safe_execution
 from nexus.translations import t
-from nlptools.izihawa_nlptools.utils import cast_string_to_single_string
 from telethon import events
 from telethon.tl.types import DocumentAttributeFilename
 

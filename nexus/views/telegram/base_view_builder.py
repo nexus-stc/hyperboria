@@ -5,13 +5,13 @@ from typing import Optional
 from urllib.parse import quote
 
 import numpy as np
-from izihawa_types.datetime import CustomDatetime
-from library.telegram.common import close_button
-from nexus.translations import t
-from nlptools.izihawa_nlptools.utils import (
+from izihawa_nlptools.utils import (
     despace_full,
     escape_format,
 )
+from izihawa_types.datetime import CustomDatetime
+from library.telegram.common import close_button
+from nexus.translations import t
 from telethon import Button
 
 from .common import (

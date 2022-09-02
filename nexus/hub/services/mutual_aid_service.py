@@ -8,9 +8,9 @@ from datetime import (
 )
 
 from aiokit import AioThing
+from izihawa_nlptools.regex import DOI_REGEX
 from library.telegram.utils import safe_execution
 from nexus.views.telegram.scimag import ScimagViewBuilder
-from nlptools.izihawa_nlptools.regex import DOI_REGEX
 
 
 class MutualAidService(AioThing):
