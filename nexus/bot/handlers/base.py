@@ -2,7 +2,6 @@ import logging
 import time
 from abc import ABC
 from datetime import datetime
-from typing import Union
 
 from grpc import StatusCode
 from grpc.experimental.aio import AioRpcError
@@ -11,18 +10,17 @@ from izihawa_utils.exceptions import BaseError
 from izihawa_utils.random import random_string
 from library.logging import error_log
 from library.telegram.base import RequestContext
+from library.telegram.common import close_button
 from library.telegram.utils import safe_execution
 from nexus.bot.application import TelegramApplication
 from nexus.bot.exceptions import UnknownIndexAliasError
 from nexus.models.proto.typed_document_pb2 import \
     TypedDocument as TypedDocumentPb
 from nexus.translations import t
-from nexus.views.telegram.common import close_button
-from nexus.views.telegram.scimag import ScimagView
-from nexus.views.telegram.scitech import ScitechView
 from telethon import (
     TelegramClient,
     events,
+    functions,
 )
 from telethon.errors import (
     QueryIdInvalidError,
@@ -82,10 +80,19 @@ class BaseHandler(ABC):
     def short_index_alias_to_index_alias(self, short_index_alias: str) -> str:
         return self.short_index_alias_to_index_alias_dict[short_index_alias]
 
+    async def get_last_messages_in_chat(self, event: events.ChatAction):
+        messages_holder = await self.application.telegram_client(functions.messages.GetMessagesRequest(
+            id=list(range(event.id + 1, event.id + 10)))
+        )
+        if messages_holder:
+            return messages_holder.messages
+        return []
+
     async def get_typed_document_pb(
         self,
         index_alias: str,
         document_id: int,
+        mode: str,
         request_context: RequestContext,
         session_id: str,
         position: int,
@@ -93,6 +100,7 @@ class BaseHandler(ABC):
         return await self.application.meta_api_client.get(
             index_alias=index_alias,
             document_id=document_id,
+            mode=mode,
             session_id=session_id,
             position=position,
             request_id=request_context.request_id,
@@ -105,15 +113,15 @@ class BaseHandler(ABC):
         position: int,
         request_context: RequestContext,
         session_id: str,
-    ) -> ScimagView:
-        typed_document_pb = await self.get_typed_document_pb(
+    ) -> TypedDocumentPb:
+        return await self.get_typed_document_pb(
             index_alias='scimag',
             document_id=document_id,
+            mode='view',
             position=position,
             request_context=request_context,
             session_id=session_id,
         )
-        return ScimagView(document_pb=typed_document_pb.scimag)
 
     async def resolve_scitech(
         self,
@@ -121,29 +129,14 @@ class BaseHandler(ABC):
         position: int,
         request_context: RequestContext,
         session_id: str,
-    ) -> ScitechView:
-        typed_document_pb = await self.get_typed_document_pb(
+    ) -> TypedDocumentPb:
+        return await self.get_typed_document_pb(
             index_alias='scitech',
             document_id=document_id,
+            mode='view',
             position=position,
             request_context=request_context,
             session_id=session_id,
-        )
-        search_response_duplicates = await self.application.meta_api_client.search(
-            index_aliases=('scitech',),
-            query=f'original_id:{document_id}',
-            page_size=16,
-            request_id=request_context.request_id,
-            session_id=session_id,
-            user_id=str(request_context.chat.chat_id),
-        )
-        duplicates = [
-            scored_document.typed_document.scitech
-            for scored_document in search_response_duplicates.scored_documents
-        ]
-        return ScitechView(
-            document_pb=typed_document_pb.scitech,
-            duplicates=duplicates,
         )
 
     async def resolve_document(
@@ -153,7 +146,7 @@ class BaseHandler(ABC):
         position: int,
         session_id: str,
         request_context: RequestContext
-    ) -> Union[ScimagView, ScitechView]:
+    ) -> TypedDocumentPb:
         if index_alias not in self.index_alias_to_resolver:
             raise UnknownIndexAliasError(index_alias=index_alias)
 
@@ -175,12 +168,12 @@ class BaseHandler(ABC):
     async def _send_fail_response(self, event: events.ChatAction, request_context: RequestContext):
         try:
             await event.reply(
-                t('MAINTENANCE', language=request_context.chat.language).format(
+                t('MAINTENANCE', request_context.chat.language).format(
                     maintenance_picture_url=self.application.config['application']['maintenance_picture_url'],
                 ),
-                buttons=[close_button()]
+                buttons=None if request_context.is_group_mode() else [close_button()]
             )
-        except (ConnectionError, QueryIdInvalidError) as e:
+        except (ConnectionError, QueryIdInvalidError, ValueError) as e:
             request_context.error_log(e)
 
     async def _put_chat(self, event: events.ChatAction, request_id: str):
@@ -218,13 +211,10 @@ class BaseHandler(ABC):
         if is_banned(chat):
             if chat.ban_message is not None:
                 async with safe_execution(
-                    request_context=request_context,
+                    error_log=request_context.error_log,
                     on_fail=lambda: self._send_fail_response(event, request_context),
                 ):
-                    await event.reply(t(
-                        'BANNED',
-                        language=chat.language
-                    ).format(
+                    await event.reply(t('BANNED', chat.language).format(
                         datetime=str(time.ctime(chat.ban_until)),
                         reason=chat.ban_message,
                     ))
@@ -236,17 +226,18 @@ class BaseHandler(ABC):
             and event.chat_id not in self.application.config['application']['bypass_maintenance']
         ):
             await event.reply(
-                t('UPGRADE_MAINTENANCE', language='en').format(
+                t('UPGRADE_MAINTENANCE', 'en').format(
                     upgrade_maintenance_picture_url=self.application.config['application']
                     ['upgrade_maintenance_picture_url']
                 ),
+                buttons=None if (event.is_group or event.is_channel) else [close_button()]
             )
             raise events.StopPropagation()
 
     async def _check_read_only(self, event: events.ChatAction):
         if self.application.config['application']['is_read_only_mode']:
             await event.reply(
-                t("READ_ONLY_MODE", language='en'),
+                t("READ_ONLY_MODE", 'en'),
             )
             raise events.StopPropagation()
 
@@ -269,7 +260,7 @@ class BaseHandler(ABC):
             and not await self.is_subscribed(chat)
         ):
             async with safe_execution(
-                request_context=request_context,
+                error_log=request_context.error_log,
                 on_fail=lambda: self._send_fail_response(event, request_context),
             ):
                 await event.reply(t(
@@ -292,6 +283,7 @@ class BaseHandler(ABC):
                 chat_id=event.chat_id,
                 is_system_messaging_enabled=True,
                 is_discovery_enabled=True,
+                is_connectome_enabled=False,
                 language='en',
                 username=username,
                 is_admin=False,
@@ -326,7 +318,7 @@ class BaseHandler(ABC):
             self.reset_last_widget(request_context.chat.chat_id)
 
         async with safe_execution(
-            request_context=request_context,
+            error_log=request_context.error_log,
             on_fail=lambda: self._send_fail_response(event, request_context),
         ):
             await self.handler(
@@ -343,6 +335,6 @@ class BaseHandler(ABC):
 class BaseCallbackQueryHandler(BaseHandler, ABC):
     async def _send_fail_response(self, event, request_context: RequestContext):
         try:
-            await event.answer(t('MAINTENANCE_WO_PIC', language=request_context.chat.language))
+            await event.answer(t('MAINTENANCE_WO_PIC', request_context.chat.language))
         except (ConnectionError, QueryIdInvalidError) as e:
             request_context.error_log(e)

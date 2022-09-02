@@ -1,6 +1,4 @@
-import time
-from datetime import date
-
+import numpy as np
 from nexus.models.proto.scimag_pb2 import Scimag as ScimagPb
 
 from .base import BaseAction
@@ -20,14 +18,12 @@ def extract_dates(date_parts):
     if not date_parts or not date_parts[0]:
         return 0, None
     year, month, day = date_parts[0] + [0] * (3 - len(date_parts[0]))
-    if year:
-        issued_at = int(time.mktime(date(
-            year=year,
-            month=month if month else 1,
-            day=day if day else 1,
-        ).timetuple()))
-        return year, issued_at
-    return 0, None
+    if not year:
+        return 0, None
+    month = month if month else 1
+    day = day if day else 1
+    issued_at = np.datetime64(f'{year}-{month:02d}-{day:02d}').astype('datetime64[s]').astype(np.int64)
+    return year, issued_at
 
 
 def extract_first(arr, default=''):
@@ -71,15 +67,17 @@ def extract_references(references):
         return dois
 
 
+def clean_issns(issns):
+    if issns:
+        cleaned_issns = []
+        for issn in issns:
+            if issn != '0000-0000':
+                cleaned_issns.append(issn)
+        return cleaned_issns
+
+
 def extract_title(title, subtitle):
     return ': '.join(filter(lambda x: bool(x), [title.strip(), subtitle.strip()]))
-
-
-class ToThinScimagPbAction(BaseAction):
-    async def do(self, item: dict) -> ScimagPb:
-        if 'DOI' not in item:
-            raise InterruptProcessing(document_id=None, reason='no_doi')
-        return ScimagPb(doi=item['DOI'])
 
 
 class ToScimagPbAction(BaseAction):
@@ -91,9 +89,9 @@ class ToScimagPbAction(BaseAction):
             container_title=extract_first(item.get('container-title')),
             doi=item['DOI'],
             issue=item.get('issue'),
-            issns=item.get('ISSN'),
+            issns=clean_issns(item.get('ISSN')),
             language=item.get('language'),
-            ref_by_count=item.get('is-referenced-by-count'),
+            referenced_by_count=item.get('is-referenced-by-count'),
             references=extract_references(item.get('reference')),
             tags=item.get('subject'),
             title=extract_title(extract_first(item.get('title')), extract_first(item.get('subtitle'))),

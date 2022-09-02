@@ -7,9 +7,9 @@ py_library(
     srcs_version = "PY3ONLY",
     visibility = ["//visibility:public"],
     deps = [
-        requirement("orjson"),
-        requirement("prometheus_client"),
         requirement("izihawa_types"),
         requirement("izihawa_utils"),
+        requirement("orjson"),
+        requirement("prometheus_client"),
     ],
 )

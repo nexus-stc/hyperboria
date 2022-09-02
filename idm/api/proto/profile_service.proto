@@ -1,0 +1,37 @@
+syntax = "proto3";
+package idm.api.proto;
+
+import "idm/api/proto/subscription_manager_service.proto";
+
+service Profile {
+    rpc get_profile(GetProfileRequest) returns (GetProfileResponse) {};
+}
+
+message GetProfileRequest {
+    int64 chat_id = 1;
+    int32 starting_from = 2;
+    optional int32 last_n_documents = 3;
+}
+
+message Series {
+    repeated string issns = 1;
+    string name = 2;
+}
+
+message ShortDocumentDescription {
+    int64 id = 1;
+    string title = 2;
+    repeated string tags = 3;
+    repeated string issns = 4;
+}
+
+message GetProfileResponse {
+    int64 downloads_count = 1;
+    int64 uploads_count = 2;
+    repeated string similar_users_logins = 3;
+    repeated string most_popular_tags = 4;
+    repeated Subscription subscriptions = 5;
+    repeated Series most_popular_series = 6;
+    repeated ShortDocumentDescription downloaded_documents = 7;
+    bool is_connectome_enabled = 8;
+}

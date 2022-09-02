@@ -2,11 +2,46 @@
 # yamllint disable rule:line-length
 
 en:
+  ABOUT_US: |
+    **About us**
+    Among the most impactful inventions of humanity such as the wheel, semiconductors or the wing were the invention of writing and advent of mass printing. Uwe of printing press made possible wide spread of ideas and knowledge. This burst increased the number of educated people and in its turn people started the Age of Enlightenment and shaped modern civilization.
+
+    Why printing provoked such dramatic changes in society?
+    Sane beings and knowledge live in a natural symbiosis: knowledge are fruiting and growing while circulated among people and people do the same. We may even note that complexity of human civilization, its achievements and technological progress during all its history have been correlated with the amount of accumulated knowledge and possibility to share and navigate through it.
+
+    Last advances in knowledge management has been brought by modern machines together with AI. It empowered our skills of storing and searching through huge amounts of information to the very high. Today, machines are able to understand all data we've stored in digital form, derive new knowledge, find out inconsistencies in our researches and reveal hidden gems in researches. Today, machines are able to help us to reach the [technological singularity](https://en.wikipedia.org/wiki/Technological_singularity).
+
+    However, there is one remaining issue: knowledge is usurped by large publishers, corporations such as Elsevier, Springer, Wiley, T&F etc. Held by copyright, the knowledge remains out of reach for many researchers and for many enterprises that could launch the new Age of Enlightenment.
+
+    Knowledge is not just usurped, an entire system has been built which is putting in chains researchers, academia and readers:
+    - Large publishers promote and lobby approaches that encourage evaluation of researchers using the number of published articles in journals having high-impact. Everybody knows who owns journals of high "impact"
+    - Publishers make authors to pay for publishing tax-funded researches, then readers to pay for access to published tax-funded researches, while peer-reviewing is done for free by other researchers and this activity is considered as "honorable" in academia
+    - Publishers such as Elsevier repeatedly carried and carry campaigns against open access
+
+    Publishers managed to own knowledge at a time when anything could be owned. Afterwards, they ignored the advent of the Internet that made copying and mass reading free and went on collecting tribute. Since that times, modern publishers like Elsevier, Springer and others did nothing to spread knowledge but have only built paywalls for keeping knowledge away from those who cannot pay.
+
+    The world is obviously lagging behind modern state of the technologies. The copyrights on scientific publications should have been canceled decades ago but publishers' lobbying and mere slowness of political systems made us to live in the world where almost all researchers are using tools to bypass paywalls.
+
+    Why exactly knowledge and information cannot be a subject of property rights? There are three reasons.
+
+    Firstly, unlike material things, knowledge can be spread without costs. Every bit of knowledge increases prosperity of the entire society in a much greater degree than it takes from its author.
+
+    Paywalls built by copyright holders are making access unreasonably expensive and it deals a huge damage to our future:
+    - Doctors can't learn new medicine protocols that may save lives of our children.
+    - Engineers can't learn new approaches to build reliable and safe machines.
+    - Students can't learn how to build fair and modern society.
+    - Your neighbour will remain an ignorant person denying vaccines and supporting wars
+
+    Finally, what is knowledge? The preexistent order of things, it may be discovered by explorers but not changed or owned. Knowledge has no master.
+
+    Our goals, includes but not limited by:
+    - Cancelling any restrictions on spread of knowledge
+    - Making knowledge replicated reliably, available and navigable for every person on our pale blue dot
+    - Bridging AI and accumulated knowledge
+    - Promoting continuous education and building the cult of knowledge
   ABSTRACT: Abstract
   ACCEPTED: Accepted!
-  ALREADY_DOWNLOADING: |
-    I have found this book in the Internet.
-    Please, be patient, I will send as it will be ready.
+  ALREADY_DOWNLOADING: Already downloading
   AUTHORS: Authors
   BANNED: |
     You are banned until **{datetime} UTC**.
@@ -16,14 +51,7 @@ en:
     Reason: **{reason}**
   BAN_MESSAGE_TOO_MANY_REQUESTS: Too many requests
   CLOSE: Close
-  CONTACT: |
-    **Updates and news**: {related_channel}
-    **Donation details**: /donate
-
-    **LiberaPay**: {libera_pay_url}
-    **BTC Address:** `{btc_donate_address}`
-
-    You can directly feedback us by /contact <your message here>
+  CONNECTOME_OPTION: Connectome
   COPYRIGHT_DESCRIPTION: |
     If you wish to make a copyright infringement complaint:
 
@@ -37,28 +65,11 @@ en:
   COPYRIGHT_INFRINGEMENT_ACCEPTED: |
     Your claim for copyright infringement has been accepted.
   COULD_NOT_FIND_ANYTHING: Could not find anything:(
+  DELETION_FORBIDDEN_DUE_TO_AGE: Telegram doesn't allow me to remove messages older than 2 days :(
   DESCRIPTION: Description
   DISABLE_DISCOVERY: If you don't want to get personalized feed, you can disable Nexus Discovery in /settings
-  DISCOVERY_OPTION: Nexus Discovery
+  DISCOVERY_OPTION: Discovery
   DISCOVERY_PROMPT: 🦘 **Look at what I've found for you:** 🦘
-  DONATE: |
-    Thank you for visiting /donate. I appreciate even your intention just to open this message.
-
-    All good teaching must flow from copious sources of knowledge. The shallow fountain cannot emit a vigorous stream.
-    Donating to us, you are donating to all people who have no access to human knowledge due to paywall restrictions or an excessively high price.
-
-    All donations will be spent for:
-    - Development of the Nexus Index and making as much knowledge searchable as possible for everybody.
-    - Maintaining servers. Building and serving the index and using machine learning is a heavy computational task requiring a lot of GPUs, CPUs and disks.
-
-    Every cent will be used for the project.
-    You can /contact us or subscribe at {related_channel}, if you want to know exactly how donations will be spent.
-
-    **Donation details**
-
-    **LiberaPay**: {libera_pay_url}
-    **BTC Address**: `{btc_donate_address}`
-    **Amazon Gift Card**: [Buy]({amazon_gift_card_url}) any card using `{amazon_gift_card_recipient}` as recipient email
   DOWNLOAD: Download
   DOWNLOADED: downloaded
   DOWNLOADING: downloading...
@@ -69,73 +80,209 @@ en:
   EDITION: Edition
   FILE: File
   FILE_TOO_BIG_ERROR: File is too big, contact @nexus_search
+  FOUND_N_ITEMS: '{count} results'
   HELP: |
     Hi! I'm **Nexus** bot!
     I can search books or scientific articles by titles, authors or DOIs.
 
-    **Just type your request in plain words.**
+    Just type your request in plain words.
 
-    Example: `Divine Comedy Dante` or `https://doi.org/10.1159/000477855`
+    **Examples**
+    - `Divine Comedy Dante`
+    - `https://doi.org/10.1159/000477855`
+    - Search in the books only: `📚 JavaScript`
+    - Restrict search by 2019 year: `hemoglobin +year:2019`
+    - Find only starting from 2019 year: `hemoglobin +year:[2019 TO *]`
+    - Search by author: `authors:Jack authors:London`
+    - Exact match: `"Fetal Hemoglobin"`
+    - Filter formats (all except pdf): `+JavaScript +format:epub`
+    - Filter languages: `+JavaScript +🇪🇸`
+    - Order by date: `JavaScript order_by:date`
+    - Order by rank: `hemoglobin order_by:pr`
 
-    Restrict search by 2019 year: `hemoglobin AND year:2019`
-    Find only starting from 2019 year: `hemoglobin AND year:[2019 TO *]
-    Search by author: `authors:Jack authors:London`
-    Exact match: `"Fetal Hemoglobin"`
+    **Extended syntax**
+    `+` sign makes words or filtration by field mandatory:
+    - `+JavaScript lang:en` returns **all** JavaScript books but books in English will be ranked higher
+    - `+JavaScript +lang:en` returns JavaScript books **only** in English
 
-    Also, I can accept new scientific articles from you. Send me PDF and I will process it.
+    `-` sign removes documents with the word
+    - `fetal -hemoglobin` returns all articles about fetal whatever but not hemoglobin
 
+    Possible fields to use in queries: `abstract`, `author`, `content`, `date`, `extension`, `journal`, `lang`, `page`, `page_rank`, `refc`, `refs`, `tags`, `title`, `year`
+
+    Possible fields for ordering: `date`, `page`, `page_rank`, `refc`
+
+    `date` - issuing unixtime
+    `lang` - language, use two-letter code for filter results
+    `refc` - references counter
+    `refs` - references DOIs
+
+    **Navigation**
+    I can help to navigate through references and journals. There are multiple links and buttons
+    on view screen:
+
+    - Tags are clickable. Tap them. Particular versions of Telegram requires to tap appeared button `Start` after the tap on links.
+    - 📰 button opens articles from the same journal
+    - 🔗 button opens articles referring the currently opened one
+
+    **Commands**
+    /aboutus - tell about us
     /copyright - make a copyright infringement claim
-    /donate - tells how to support us
-    /help - shows this help
-    /roll - get random book
+    /help - show this help
+    /howtohelp - learn how to help us
+    /profile - your profile
+    /rank - get importance statistics of articles
+    /roll <query> - get a random book <by the query>
+    /seed - learn how to become a seeder
     /settings - changes language, notification and personalized feed settings
+    /trends - plot trends graph
 
     What are you going to read today?
   HELP_FOR_GROUPS: |
-    Hi! I'm **Nexus** bot for groups!
-    I can search books or science articles by titles, authors or DOIs.
+    Hi! I'm **Nexus** bot!
+    I can search books or scientific articles by titles, authors or DOIs.
 
     Just type your request in plain words prepending **with /search**.
 
-    Example: `/search Divine Comedy Dante` or `/search https://doi.org/10.1159/000477855`
+    **Examples**
+    - `/search Divine Comedy Dante`
+    - `/search https://doi.org/10.1159/000477855`
+    - Search in the books only: `/search 📚 JavaScript`
+    - Restrict search by 2019 year: `/search hemoglobin +year:2019`
+    - Find only starting from 2019 year: `/search hemoglobin +year:[2019 TO *]`
+    - Search by author: `/search authors:Jack authors:London`
+    - Exact match: `/search "Fetal Hemoglobin"`
+    - Filter formats (all except pdf): `/search +JavaScript +format:epub`
+    - Filter languages: `/search +JavaScript +🇪🇸`
+    - Order by date: `/search JavaScript order_by:date`
+    - Order by rank: `/search hemoglobin order_by:pr`
 
-    Restrict search by 2019 year: `/search hemoglobin AND year:2019`
-    Find only starting from 2019 year: `/search hemoglobin AND year:[2019 TO *]
-    Search by author: `/search authors:Jack authors:London`
-    Exact match: `/search "Fetal Hemoglobin"`
+    **Extended syntax**
+    `+` sign makes words or filtration by field mandatory:
+    - `+JavaScript lang:en` returns **all** JavaScript books but books in English will be ranked higher
+    - `+JavaScript +lang:en` returns JavaScript books **only** in English
 
-    /donate - tells how to support us
-    /help - shows this help
-    /roll - get random book
-    /settings - changes language
+    `-` sign removes documents with the word
+    - `fetal -hemoglobin` returns all articles about fetal whatever but not hemoglobin
+
+    Possible fields to use in queries: `abstract`, `author`, `content`, `date`, `extension`, `journal`, `lang`, `page`, `page_rank`, `refc`, `refs`, `tags`, `title`, `year`
+
+    Possible fields for ordering: `date`, `page`, `page_rank`, `refc`
+
+    **Navigation**
+    I can help to navigate through references and journals. There are multiple links and buttons
+    on view screen:
+
+    - Tags are clickable. Tap them. Particular versions of Telegram requires to tap appeared button `Start` after the tap on links.
+    - 📰 button opens articles from the same journal
+    - 🔗 button opens articles referring the currently opened one
+
+    **Commands**
+    /aboutus - tell about us
+    /help - show this help
+    /howtohelp - learn how to help us
+    /profile - show your profile
+    /rank - get importance statistics of articles
+    /roll <query> - get a random book <by the query>
+    /trends - plot trends graph
 
     What are we going to read today?
-  INVALID_QUERY_ERROR: |
-    ```Oops, I do not know what to do with this URL:(
-    Try to send me DOI, MD5 or just the name of what you are looking for!```[‌]({too_difficult_picture_url})
+  HOW_TO_HELP: |
+    What you can do now to make knowledge free?
+
+    **Subscribe**: [Telegram](https://t.me/{related_channel}) - [Twitter](https://twitter.com/the_superpirate)
+
+    **Donate access**
+    Contact @the_superpirate or [Nexus community](https://t.me/joinchat/SKgGpCnrzMdkMRxJ) if you wish to share institutional access to libraries. We are looking for persons who are able to provide:
+
+    - VPS (low-grade, located in UK/US/Singapore) in Oracle / Digital Ocean / GitHub
+    - University VPNs credentials without 2FA
+    - One computer inside your university network for deploying safe v2ray server
+
+    **Become a seeder**
+    Books and articles should not be stored in a single place. For these purposes, databases are replicated by torrents and [IPFS](https://en.wikipedia.org/wiki/InterPlanetary_File_System). You can easily become a participant and use your drive and network to replicate data. Every piece you seed increases overall reliability and makes knowledge available for more people.
+    Just click at /seed to learn how to become a seeder
+
+    **Donate money**
+    Donations will be spent for:
+    - Development of the Nexus and making as much knowledge searchable as possible for everybody.
+    - Maintaining servers. Building and serving the index and using machine learning is a heavy computational task requiring a lot of GPUs, CPUs and disks.
+
+    - BTC: `{btc_donate_address}`
+    - ETH: `{eth_donate_address}`
+    - SOL: `{sol_donate_address}`
+    - XMR: `{xmr_donate_address}`
+    - XRP: `{xrp_donate_address}` **tag/memo:** `{xrp_donate_tag}`
+    - Amazon Gift Card: [Buy]({amazon_gift_card_url}) any card using `{amazon_gift_card_recipient}` as recipient email
   INVALID_SYNTAX_ERROR: |
     ```Oops, something wrong with your query. Probably it is too clever for me.
-    Tip: use brackets, add more AND/OR or remove them all.```[‌]({too_difficult_picture_url})
+    Try to send me DOI, MD5 or just the name of what you are looking for!
+    Tip: use brackets, add +/- before words or remove them all.```[‌]({too_difficult_picture_url})
   JOURNAL: Journal
   LEGACY: We've updated and old widgets stopped working:( Please, do search again.
+  LINKS: Links
   LOOKING_AT: 'looking at {source}...'
   MAINTENANCE: |
     ```Oops! Something goes wrong and we are trying hard to revive.
     Please, try a little bit later.```[‌]({maintenance_picture_url})
   MAINTENANCE_WO_PIC: Oops! Please, try a little bit later.
   NAMELESS: Without name
+  NEXUS_CONNECTOME_DESCRIPTION: |
+    **Nexus Connectome** allows other users to see your profile and find you by your interests and last read articles.
   NEXUS_DISCOVERY_DESCRIPTION: |
-    **Nexus Discovery** is a recommendation service. It also notifies you about newly arrived publications you were looking for before. Your personal digest will be sent at every Sunday.
+    **Nexus Discovery** notifies you about newly arrived publications you were looking for before.
   PROCESSING_PAPER: '`File {filename} is processed...`'
   PROMO: |
     **Nexus Search - Update and News**
-    {related_channel}
+    @{related_channel}
   READ_ONLY_MODE: ⚠️ Reduced service until midnight (UTC). /settings is not working, search in slow mode.
   REFERENCED_BY: Referenced by
   REPLY_MESSAGE_HAS_BEEN_DELETED: Search message has been (re-)moved. Do search again.
   REPORT_BROKEN_FILE: ❌ Broken File
   REPORT_OK_FILE: ✅ File is OK
   SEARCHING: '`searching...`'
+  SEED_GENERATION: '`wait, we are generating file...`'
+  SEED_HELP: |
+    Seeding is downloading and consequent distributing for others. You can seed the entire collection of books or parts of it.
+
+    It requires basic skills in using terminal tools.
+    - Install [IPFS-Desktop](https://docs.ipfs.tech/install/ipfs-desktop/) (optionally) and [IPFS CLI](https://docs.ipfs.tech/install/command-line/) (mandatory)
+    - Install [jq](https://stedolan.github.io/jq/download/) command-line tool
+    - Learn [how to launch and use IPFS](https://docs.ipfs.tech/how-to/command-line-quick-start) in terminal
+
+    Then, request from the bot what you want to seed. It can be done by the following commands
+
+    **Seed**
+    Return books ordered by their update date:
+    ```/seed <offset> <limit>
+    <query>?```
+
+    For example
+    ```/seed 0 500
+    javascript```
+    returns 500 books of JavaScript
+    ```/seed 500 500
+    javascript```
+    returns next 500 books
+
+    **Random Seed**
+    Return random set of books every time
+    ```/rseed <limit>
+    <query>?```
+
+    For example
+    ```/rseed 1000```
+    returns random 1000 books. Had sent it multiple times you'll get different sets of books that could intersects with each other.
+
+    In response to both commands you'll get a file containing `md5`, `ipfs_multihashes` and `doi` for requested books.
+
+    You need to save this file to any directory, i.e. let it be `/home/reader/javascript-0-1000-1000.cid.txt`. Then you can start seeding by the following command in your terminal:
+    `cat /home/reader/javascript-0-1000-1000.cid.txt | jq -c -r ".ipfs_multihashes[0]" | xargs -I{} ipfs pin add {}`
+
+    Pinning can take a lot of time, be patient!
+    Now you have stored files on your PC and made them available for thousands of other people. Thank you!
+
+    Also, the bot now allows you to do a reverse-lookup. You can quest him `ipfs_multihashes:<hash>` and it returns you file metadata. Useful if you need to find out what exact file you pinned.
   SEND_YOUR_LOCATION: Send your location (through the left attach button)
   SETTINGS_TEMPLATE: |
     **Bot Version:** {bot_version}
@@ -143,20 +290,44 @@ en:
     **Language:** {language}
   SETUP_AUTOMATICALLY: Setup automatically
   SETUP_MANUALLY: Setup manually
-  SOURCES_UNAVAILABLE: '`{document}` is unavailable right now. Please, try later.'
-  SUBSCRIBE_TO_CHANNEL: Subscribe to {related_channel} to continue using this bot.
-  SYSTEM_MESSAGING_OPTION: Bot Update Notifications
+  SOMEONE_UPLOADED_FILE: '⚡️ Someone uploaded `{document}` on your request.'
+  SOURCES_UNAVAILABLE: '`{document}` is unavailable right now. I will text you if someone will upload this article.'
+  SUBSCRIBE_TO_CHANNEL: Subscribe to @{related_channel} to continue using this bot.
+  SYSTEM_MESSAGING_OPTION: Bot News Notifications
   TAGS: Tags
   TANKS_BRUH: Tank ya bruuuh!
-  THANK_YOU_FOR_CONTACT: Thank you! If you have a question, it is better to ask at {related_channel} user conference.
   TOO_LONG_QUERY_FOR_SHORTLINK: |
     Your query is too long (limit is about 35-40 characters).
-
-    Try to use NID-encoded query. Find an item you want to share, copy NID from a view page and
-    then create a shortlink for query `NID: <NID>`.
   TOO_MANY_DOWNLOADS: Too many active downloads. Please, wait them to complete.
+  TOO_SHORT_QUERY: Too short query, type more...
   TRANSMITTED_FROM: 'transmitted from {source}'
-  UNAVAILABLE_METADATA_ERROR: 'Cannot acquire metadata for {doi} from CrossRef API. Ensure it is resolvable before uploading.'
+  TRENDS_HELP: |
+    ```/trends <start_date> to <end_date>
+    <query_1>
+    <query_2>
+    ...
+    <query_n>
+    ```
+    **Dates**
+    Passed in free form, I'm clear enough to understand various options
+
+    **Queries**
+    Set as in the search. Remember that all queries by default returns documents that contains at least one word from the query.
+    If you pass `fetal hemoglobin` documents containing only `fetal` or only `hemoglobin` will be accounted too. It might be not what you meant.
+    Restrict query to `+fetal +hemoglobin`. This query returns only documents which contain both words.
+
+    **Examples**
+    Physics of fluids vs. molecular biology
+    ```/trends 2000 to 2020
+    +physics +fluids
+    "molecular biology"
+    ```
+    Communism vs. memes
+    ```/trends 2017 to 2022-08
+    communism
+    memes
+    ```
+  UNAVAILABLE_METADATA_ERROR: 'Cannot acquire metadata for {doi} from CrossRef API. Ensure it is resolvable before uploading. If you are sure, you can write DOI in the same message together with file.'
   UNKNOWN_FILE_FORMAT_ERROR: Only PDF files are supported
   UNPARSABLE_DOCUMENT_ERROR: Cannot parse `{filename}`
   UNPARSABLE_DOI_ERROR: DOI cannot be found in `{filename}`
@@ -165,11 +336,10 @@ en:
   UPLOADED_TO_TELEGRAM: uploaded to Telegram...
   VIEWS_CANNOT_BE_SHARED: Do your own search, commands cannot be shared.
   YEAR: Year
+  ZIP_FILES_ARE_NOT_SUPPORTED_IN_GROUP_MODE: Zip files are not supported in groups. Upload them directly to the bot
 es:
   ABSTRACT: Resumen
-  ALREADY_DOWNLOADING: |
-    Encontré este libro en Internet.
-    Por favor, ten paciencia, te lo enviaré cuando esté listo.
+  ALREADY_DOWNLOADING: Ya descargando
   AUTHORS: Autores
   BANNED: |
     Has sido baneado hasta la(s) **{datetime} UTC**.
@@ -179,14 +349,6 @@ es:
     Razón: **{reason}**
   BAN_MESSAGE_TOO_MANY_REQUESTS: Demasiadas peticiones
   CLOSE: Cerrar
-  CONTACT: |
-    **Actualizaciones y noticias**: {related_channel}
-    **Detalles sobre donaciones**: /donate
-
-    **LiberaPay**: {libera_pay_url}
-    **Dirección BTC:** `{btc_donate_address}`
-
-    Puedes enviarnos sus comentarios directamente por /contact <tu mensaje aquí>
   COPYRIGHT_DESCRIPTION: |
     Si deseas presentar una queja por infracción de derechos de autor:
 
@@ -202,26 +364,7 @@ es:
   COULD_NOT_FIND_ANYTHING: No pude encontrar nada :(
   DESCRIPTION: Descripción
   DISABLE_DISCOVERY: Si no deseas obtener un feed personalizado, puedes deshabilitar Nexus Discovery en /settings
-  DISCOVERY_OPTION: Nexus Discovery
   DISCOVERY_PROMPT: 🦘 **Mira lo que encontré para ti:** 🦘
-  DONATE: |
-    Gracias por visitar /donate. Agradezco incluso tu intención de abrir este mensaje.
-
-    Toda buena enseñanza debe fluir de abundantes fuentes de conocimiento. Las fuentes poco profundas no pueden emitir un resultado fluido y abundante.
-    Al donarnos a nosotros, estás donando a todas las personas que no tienen acceso al conocimiento humano debido a restricciones de pago o un precio excesivamente alto.
-
-    Todas las donaciones se gastarán en:
-    - Desarrollo del Nexus Index y hacer que todo el mundo pueda buscar tanto conocimiento como sea posible.
-    - Mantenimiento de servidores. Crear y entregar el índice y usar el aprendizaje automático es una tarea computacional pesada que requiere una gran cantidad de GPU, CPU y discos.
-
-    Cada centavo se utilizará para el proyecto.
-    Puedes contactarnos con /contact o suscribirte en {related_channel}, si deseas saber exactamente cómo se gastarán las donaciones.
-
-    **Detalles sobre donaciones**
-
-    **LiberaPay**: {libera_pay_url}
-    **Dirección BTC**: `{btc_donate_address}`
-    **Tarjeta de regalo de Amazon**: [Compre]({amazon_gift_card_url}) cualquier tarjeta que use `{amazon_gift_card_recipient}` como correo electrónico del destinatario
   DOWNLOAD: Descargar
   DOWNLOADED: descargado
   DOWNLOADING: descargando...
@@ -231,53 +374,10 @@ es:
     Por favor, intente descargar `{document}` en un minuto.
   EDITION: Edición
   FILE: Archivo
-  HELP: |
-    ¡Hola! ¡Soy el bot **Nexus**!
-    Puedo buscar libros o artículos científicos por títulos, autores o DOI.
-
-    **Simplemente escriba su solicitud en palabras sencillas.**
-
-    Ejemplo: `Cien Años de Soledad` o `https://doi.org/10.1023/A:1026654312961`
-
-    Restringir la búsqueda para el año 2019: `hemoglobina AND year:2019`
-    Encuentre solo a partir del año 2019: `hemoglobina AND year:[2019 TO *]
-    Búsqueda por autor: `authors:Jack authors:London`
-    Coincidencia exacta: `"Hemoglobina Fetal"`
-
-    Además, puedo aceptar nuevos artículos científicos suyos. Envíame PDF y lo procesaré.
-
-    /copyright - hacer un reclamo por infracción de derechos de autor
-    /donate - explica cómo apoyarnos
-    /help - muestra esta ayuda
-    /roll - obtener un libro al azar
-    /settings - cambia la configuración de idioma, notificaciones y feeds personalizados
-
-    ¿Qué vas a leer hoy?
-  HELP_FOR_GROUPS: |
-    ¡Hola! ¡Soy el bot **Nexus** para grupos!
-    Puedo buscar libros o artículos científicos por títulos, autores o DOI.
-
-    Simplemente escribe tu solicitud en palabras sencillas precedido de **/search**.
-
-    Ejemplo: `Cien Años de Soledad` o `https://doi.org/10.1023/A:1026654312961`
-
-    Restringir la búsqueda para el año 2019: `hemoglobina AND year:2019`
-    Encuentre solo a partir del año 2019: `hemoglobina AND year:[2019 TO *]
-    Búsqueda por autor: `authors:Jack authors:London`
-    Coincidencia exacta: `"Hemoglobina Fetal"`
-
-    /donate - explica cómo apoyarnos
-    /help - muestra esta ayuda
-    /roll - obtener un libro al azar
-    /settings - cambia la configuración de idioma, notificaciones y feeds personalizados
-
-    ¿Qué vas a leer hoy?
-  INVALID_QUERY_ERROR: |
-    ```Oops, No sé qué hacer con esta URL :(
-    ¡Intenta enviarme DOI, MD5 o simplemente el nombre de lo que estás buscando!```[‌]({too_difficult_picture_url})
   INVALID_SYNTAX_ERROR: |
     ```Oops, algo anda mal con tu consulta. Probablemente sea demasiado inteligente para mí.
-    Tip: usa corchetes, agrega más AND/OR o quítalos todos.```[‌]({too_difficult_picture_url})
+    ¡Intenta enviarme DOI, MD5 o simplemente el nombre de lo que estás buscando!
+    Tip: usa corchetes, agrega más +/- o quítalos todos.```[‌]({too_difficult_picture_url})
   JOURNAL: Revista
   LEGACY: Hemos actualizado y los widgets antiguos dejaron de funcionar :( Por favor, vuelva a buscar.
   LOOKING_AT: 'buscando en {source}...'
@@ -286,11 +386,13 @@ es:
     Por favor, inténtalo más tarde.```[‌]({maintenance_picture_url})
   MAINTENANCE_WO_PIC: ¡Oops! Por favor, intenta más tarde.
   NAMELESS: Sin nombre
+  NEXUS_CONNECTOME_DESCRIPTION: |
+    **Nexus Connectome** permite que otros usuarios vean tu perfil y te encuentren por tus intereses y últimos artículos leídos.
   NEXUS_DISCOVERY_DESCRIPTION: |
-    **Nexus Discovery** es un servicio de recomendaciones. También te notifica sobre publicaciones recién llegadas que estabas buscando antes. Tu resumen personal se enviará todos los domingos.
+    **Nexus Discovery** también te notifica sobre publicaciones recién llegadas que estabas buscando antes.
   PROMO: |
     **Nexus Search - Actualizaciones y Noticias**
-    {related_channel}
+    @{related_channel}
   READ_ONLY_MODE: ⚠️ Servicio reducido hasta la medianoche (UTC). /settings no funciona, busque en modo lento.
   REFERENCED_BY: Referenciado por
   REPLY_MESSAGE_HAS_BEEN_DELETED: El mensaje de búsqueda ha sido (re)movido. Vuelve a buscar.
@@ -303,16 +405,12 @@ es:
   SETUP_AUTOMATICALLY: Configurar automáticamente
   SETUP_MANUALLY: Configurar manualmente
   SOURCES_UNAVAILABLE: '`{document}` no está disponible en este momento. Por favor intenta más tarde.'
-  SUBSCRIBE_TO_CHANNEL: Suscríbete a {related_channel} para seguir usando este bot.
+  SUBSCRIBE_TO_CHANNEL: Suscríbete a @{related_channel} para seguir usando este bot.
   SYSTEM_MESSAGING_OPTION: Notificaciones de actualización de bot
   TAGS: Tags
   TANKS_BRUH: Tank ya bruuuh!
-  THANK_YOU_FOR_CONTACT: ¡Gracias! Si tienes alguna pregunta, es mejor que la hagas en el grupo de usuarios de {related_channel}.
   TOO_LONG_QUERY_FOR_SHORTLINK: |
     Su consulta es demasiado larga (el límite es de 35 a 40 caracteres).
-
-    Intente utilizar una consulta codificada con NID. Busque un elemento que desee compartir, copie el NID de una página de visualización y
-    luego cree un enlace corto para la consulta `NID: <NID>`.
   TOO_MANY_DOWNLOADS: Demasiadas descargas activas. Por favor, espera a que finalicen.
   TRANSMITTED_FROM: 'transmitido desde {source}'
   UPGRADE_MAINTENANCE: |
@@ -322,9 +420,7 @@ es:
   YEAR: Año
 it:
   ABSTRACT: Sintesi
-  ALREADY_DOWNLOADING: |
-    Ho trovato questo libro su Internet.
-    Sii paziente, lo invierò non appena sarà pronto.
+  ALREADY_DOWNLOADING: Sto già scaricando
   AUTHORS: Autori
   BANNED: |
     Sei bannato fino a **{datetime} UTC**.
@@ -334,14 +430,6 @@ it:
     Motivo: **{reason}**
   BAN_MESSAGE_TOO_MANY_REQUESTS: Troppe richieste
   CLOSE: Chiudi
-  CONTACT: |
-    **Aggiornamenti e novità**: {related_channel}
-    **Info per donazioni**: /donate
-
-    **LiberaPay**: {libera_pay_url}
-    **Indirizzo BTC:** `{btc_donate_address}`
-
-    Puoi inviarci un feedback direttamente con /contact <il tuo messaggio qui>
   COPYRIGHT_DESCRIPTION: |
     Se vuoi fare un reclamo per violazione di copyright:
 
@@ -357,26 +445,7 @@ it:
   COULD_NOT_FIND_ANYTHING: Non ho trovato niente :(
   DESCRIPTION: Descrizione
   DISABLE_DISCOVERY: Se non vuoi ricevere un feed personalizzato, puoi disabilitare Nexus Discovery in /settings
-  DISCOVERY_OPTION: Nexus Discovery
   DISCOVERY_PROMPT: 🦘 **Guarda cosa ho trovato per te:** 🦘
-  DONATE: |
-    Grazie per aver visitato /donate. Mi fa piacere anche solo la tua intenzione di aprire questo messaggio.
-
-    Il buon insegnamento deve provenire da numerosi fonti di conoscenza. Una sorgente poco profonda non può generare un flusso vigoroso.
-    Donando a noi, stai donando a tutte le persone che non hanno accesso alla conoscenza umana a causa di restrizioni per accesso a pagamento o costi troppo alti.
-
-    Tutte le donazioni verranno spese per:
-    - Sviluppare l'Indice Nexus e rendere ricercabile quanta più conoscenza possibile, per tutti.
-    - Mantenere i server. Costruire ed esporre l'indice e sfruttare il machine learning sono compiti molto costosi computazionalmente, che richiedono molta GPU, CPU e memoria.
-
-    Ogni centesimo verrà speso per il progetto.
-    Puoi contattarci (/contact) o iscriverti a {related_channel}, se vuoi sapere esattamente come le donazioni verranno spese.
-
-    **Dettagli per le donazioni**
-
-    **LiberaPay**: {libera_pay_url}
-    **Indirizzo BTC**: `{btc_donate_address}`
-    **Buono regalo Amazon**: [Acquista]({amazon_gift_card_url}) qualsiasi carta utilizzando `{amazon_gift_card_recipient}` come indirizzo email del destinatario
   DOWNLOAD: Scarica
   DOWNLOADED: scaricato
   DOWNLOADING: scaricamento in corso...
@@ -386,34 +455,10 @@ it:
     Per favore, prova a scaricare `{document}` tra un minuto.
   EDITION: Edizione
   FILE: File
-  HELP: |
-    Ciao! Sono il bot **Nexus**!
-    Posso cercare libri o articoli scientifici per titolo, autore o DOI.
-
-    **Scrivi qui la tua richiesta a parole.**
-
-    Esempio: `Divina Commedia Dante` oppure `https://doi.org/10.1159/000477855`
-
-    Restringi la ricerca all'anno 2019: `emoglobina AND year:2019`
-    Find only starting from 2019 year: `emoglobina AND year:[2019 TO *]
-    Ricerca per autore: `authors:Jack authors:London`
-    Risultato esatto: `"Emoglobina fetale"`
-
-    Inoltre, posso accettare nuovi articoli scientifici da te. Inviami PDF e lo elaborerò.
-
-    /copyright - segnala una violazione di copyright
-    /donate - info su come sostenerci
-    /help - mostra questo aiuto
-    /roll - ottieni un libro a caso
-    /settings - modifica la lingua, le impostazioni delle notifiche e il feed personalizzato.
-
-    Cosa vuoi leggere oggi?
-  INVALID_QUERY_ERROR: |
-    ```Oops, non so cosa fare con questo URL:(
-    Prova a mandarmi il DOI, MD5 o semplicemente il nome di quello che cerchi!```[‌]({too_difficult_picture_url})
   INVALID_SYNTAX_ERROR: |
     ```Oops, c'è qualcosa di sbagliato nella tua richiesta. Probabilmente è troppo avanzata per me.
-    Suggerimento: usa le parentesi, aggiungi più AND/OR o toglili.```[‌]({too_difficult_picture_url})
+    Prova a mandarmi il DOI, MD5 o semplicemente il nome di quello che cerchi!
+    Suggerimento: usa le parentesi, aggiungi più +/- o toglili.```[‌]({too_difficult_picture_url})
   JOURNAL: Rivista
   LEGACY: Abbiamo fatto un aggiornamento e i vecchi widget hanno smesso di funzionare :( Per favore, ripeti la ricerca.
   LOOKING_AT: 'cercando {source}...'
@@ -422,11 +467,13 @@ it:
     Per favore, prova un po' più tardi.```[‌]({maintenance_picture_url})
   MAINTENANCE_WO_PIC: Oops! Per favore, prova un po' più tardi.
   NAMELESS: Senza nome
+  NEXUS_CONNECTOME_DESCRIPTION: |
+    **Nexus Connectome** consente ad altri utenti di vedere il tuo profilo e trovarti in base ai tuoi interessi e agli ultimi articoli letti.
   NEXUS_DISCOVERY_DESCRIPTION: |
-    **Nexus Discovery** è un servizio di raccomandazione. Ti segnala anche le pubblicazioni appena arrivate che hai provato a cercare precedentemente. Il tuo digest personalizzato viene inviato ogni Domenica.
+    **Nexus Discovery** è un servizio di raccomandazione. Ti segnala anche le pubblicazioni appena arrivate che hai provato a cercare precedentemente.
   PROMO: |
     **Nexus Search - Aggiornamenti e novità**
-    {related_channel}
+    @{related_channel}
   READ_ONLY_MODE: ⚠️ Il servizio è limitato fino a mezzanotte (UTC). /settings non è disponibile, la ricerca è più lenta.
   REFERENCED_BY: Riferito da
   REPLY_MESSAGE_HAS_BEEN_DELETED: Il messaggio di ricerca è stato (ri-)mosso. Ripeti la ricerca.
@@ -439,16 +486,12 @@ it:
   SETUP_AUTOMATICALLY: Configura automaticamente
   SETUP_MANUALLY: Configura manualmente
   SOURCES_UNAVAILABLE: '`{document}` non è disponibile adesso. Per favore, prova più tardi.'
-  SUBSCRIBE_TO_CHANNEL: Iscriviti a {related_channel} per continuare ad usare questo bot.
+  SUBSCRIBE_TO_CHANNEL: Iscriviti a @{related_channel} per continuare ad usare questo bot.
   SYSTEM_MESSAGING_OPTION: Notifiche Aggiornamento Bot
   TAGS: Tag
   TANKS_BRUH: Grazie bro!
-  THANK_YOU_FOR_CONTACT: Grazie! Se hai una domanda, ti conviene chiedere agli utenti in {related_channel}.
   TOO_LONG_QUERY_FOR_SHORTLINK: |
     La tua richiesta è troppo lunga (il limite è circa 35-40 caratteri).
-
-    Prova a fare una richiesta codificata NID. Trova l'elemento che vuoi condividere, copia il NID da una pagina
-    di visualizzazione e genera un link breve per la richiesta `NID: <NID>`.
   TOO_MANY_DOWNLOADS: Troppi download in corso. Per favore, attendi il completamento.
   TRANSMITTED_FROM: 'inviato da {source}'
   UPGRADE_MAINTENANCE: |
@@ -458,9 +501,7 @@ it:
   YEAR: Anno
 pb:
   ABSTRACT: Resumo
-  ALREADY_DOWNLOADING: |
-    Eu encontrei esse livro na Internet.
-    Por favor, seja paciente, eu enviarei assim que estiver pronto.
+  ALREADY_DOWNLOADING: Já baixando
   AUTHORS: Autores
   BANNED: |
     Você está banido até **{datetime} UTC**.
@@ -470,14 +511,6 @@ pb:
     Motivo: **{reason}**
   BAN_MESSAGE_TOO_MANY_REQUESTS: Muitas solicitações
   CLOSE: Fechar
-  CONTACT: |
-    **Atualizações e notícias**: {related_channel}
-    **Detalhes para doação**: /donate
-
-    **LiberaPay**: {libera_pay_url}
-    **Endereço BTC:** `{btc_donate_address}`
-
-    Você pode nos enviar feedback diretamente por /contact <sua mensagem aqui>
   COPYRIGHT_DESCRIPTION: |
     Se você deseja fazer uma reclamação de violação de direitos autorais:
 
@@ -493,26 +526,7 @@ pb:
   COULD_NOT_FIND_ANYTHING: Não foi possível encontrar nada :(
   DESCRIPTION: Descrição
   DISABLE_DISCOVERY: Se você não deseja obter um feed personalizado, pode desativar o Nexus Discovery em /settings
-  DISCOVERY_OPTION: Nexus Discovery
   DISCOVERY_PROMPT: 🦘 **Veja o que encontrei para você:** 🦘
-  DONATE: |
-    Obrigado por visitar /donate. Agradeço até mesmo sua intenção de apenas abrir esta mensagem.
-
-    Todo bom ensino deve fluir de fontes abundantes de conhecimento. A fonte rasa não pode emitir um fluxo vigoroso.
-    Doando para nós, você está doando para todas as pessoas que não têm acesso ao conhecimento humano devido a restrições de acesso pago ou a um preço excessivamente alto.
-
-    Todas as doações serão gastas em:
-    - Desenvolvimento do Nexus Index e tornando o máximo de conhecimento pesquisável possível para todos.
-    - Manutenção de servidores. Criar e disponibilizar o índice e usar o aprendizado de máquina é uma tarefa computacional pesada que requer muitas GPUs, CPUs e discos.
-
-    Cada centavo será usado para o projeto.
-    Você pode entrar em contato conosco em /contact ou se inscrever em {related_channel} se quiser saber exatamente como as doações serão gastas.
-
-    **Detalhes de doação**
-
-    **LiberaPay**: {libera_pay_url}
-    **Endereço BTC**: `{btc_donate_address}`
-    **Amazon Gift Card**: [Compre]({amazon_gift_card_url}) qualquer cartão usando `{amazon_gift_card_recipient}` como e-mail do destinatário
   DOWNLOAD: Baixar
   DOWNLOADED: Baixado
   DOWNLOADING: baixando...
@@ -522,53 +536,10 @@ pb:
     Por favor, tente baixar o `{document}` em um minuto.
   EDITION: Edição
   FILE: Arquivo
-  HELP: |
-    Olá! Eu sou o bot **Nexus**!
-    Eu posso procurar livros ou artigos científicos por títulos, autores ou DOIs.
-
-    **Basta digitar seu pedido em palavras simples.**
-
-    Exemplo: `Divina Comédia Dante` ou `https://doi.org/10.1159/000477855`
-
-    Restringir a busca pelo ano 2019: `hemoglobina AND year:2019`
-    Encontre apenas a partir do ano 2019: `hemoglobina AND year:[2019 TO *]
-    Buscar pelo autor: `authors:Jack authors:London`
-    Combinação exata: `"Hemoglobina fetal"`
-
-    Além disso, posso aceitar novos artigos científicos seus. Envie-me o PDF e irei processá-lo.
-
-    /copyright - fazer uma reivindicação de violação de direitos autorais
-    /donate - diz como nos apoiar
-    /help - mostra esta ajuda
-    /roll - obtenha um livro aleatório
-    /settings - altera as configurações de idioma, notificação e feed personalizado
-
-    O que você vai ler hoje?
-  HELP_FOR_GROUPS: |
-    Oi! Sou o bot **Nexus** para grupos!
-    Eu posso procurar livros ou artigos científicos por títulos, autores ou DOIs.
-
-    Basta digitar sua solicitação em palavras simples começando **com /search**.
-
-    Exemplo: `/search Divina Comédia Dante` ou `https://doi.org/10.1159/000477855`
-
-    Restringir a busca pelo ano 2019: `/search hemoglobina AND year:2019`
-    Encontre apenas a partir do ano 2019: `/search hemoglobina AND year:[2019 TO *]
-    Buscar pelo autor: `/search authors:Jack authors:London`
-    Combinação exata: `/search "Hemoglobina fetal"`
-
-    /donate - diz como nos apoiar
-    /help - mostra esta ajuda
-    /roll - obtenha um livro aleatório
-    /settings - altera as configurações de idioma, notificação e feed personalizado
-
-    O que você vai ler hoje?
-  INVALID_QUERY_ERROR: |
-    ```Eita, Não sei o que fazer com esta URL :(
-    Tente me enviar DOI, MD5 ou apenas o nome do que você procura!```[‌]({too_difficult_picture_url})
   INVALID_SYNTAX_ERROR: |
     ```Eita, algo errado com sua consulta. Provavelmente é muito inteligente para mim.
-    Dica: use colchetes, adicione mais AND/OR ou remova todos eles.```[‌]({too_difficult_picture_url})
+    Tente me enviar DOI, MD5 ou apenas o nome do que você procura!
+    Dica: use colchetes, adicione mais +/- ou remova todos eles.```[‌]({too_difficult_picture_url})
   JOURNAL: Revista
   LEGACY: Atualizamos e os widgets antigos pararam de funcionar :( Por favor, pesquise novamente.
   LOOKING_AT: 'Buscando em {source}...'
@@ -577,11 +548,13 @@ pb:
     Por favor, tente um pouco mais tarde.```[‌]({maintenance_picture_url})
   MAINTENANCE_WO_PIC: Eita! Por favor, tente um pouco mais tarde.
   NAMELESS: Sem nome
+  NEXUS_CONNECTOME_DESCRIPTION: |
+    O **Nexus Connectome** permite que outros usuários vejam seu perfil e encontrem você de acordo com seus interesses e artigos lidos pela última vez.
   NEXUS_DISCOVERY_DESCRIPTION: |
-    **Nexus Discovery** é um serviço de recomendação. Também o notifica sobre publicações recém-chegadas que você estava procurando. Seu resumo pessoal será enviado todos os domingos.
+    **Nexus Discovery** é um serviço de recomendação. Também o notifica sobre publicações recém-chegadas que você estava procurando.
   PROMO: |
     **Nexus Search - Atualizações e Notícias**
-    {related_channel}
+    @{related_channel}
   READ_ONLY_MODE: ⚠️ Serviço reduzido até meia-noite (UTC). /settings não está funcionando, pesquisa está no modo lento.
   REFERENCED_BY: Referenciado por
   REPLY_MESSAGE_HAS_BEEN_DELETED: A mensagem de pesquisa foi (re)movida. Pesquise novamente.
@@ -594,15 +567,12 @@ pb:
   SETUP_AUTOMATICALLY: Configurar automaticamente
   SETUP_MANUALLY: Configurar manualmente
   SOURCES_UNAVAILABLE: '`{document}` está indisponível nesse momento. Por favor, tente mais tarde.'
-  SUBSCRIBE_TO_CHANNEL: Inscreva-se em {related_channel} para continuar usando este bot.
+  SUBSCRIBE_TO_CHANNEL: Inscreva-se em @{related_channel} para continuar usando este bot.
   SYSTEM_MESSAGING_OPTION: Notificações de Atualização do Bot
   TAGS: Marcadores
   TANKS_BRUH: Valeuzaum manooo!
-  THANK_YOU_FOR_CONTACT: Obrigado! Se você tiver alguma dúvida, é melhor perguntar no grupo de usuários {related_channel}.
   TOO_LONG_QUERY_FOR_SHORTLINK: |
     Sua consulta é muito longa (o limite é de cerca de 35-40 caracteres).
-
-    Tente usar uma consulta codificada por NID. Encontre um item que deseja compartilhar, copie o NID de uma página de visualização e crie um link curto para a consulta `NID: <NID>`.
   TOO_MANY_DOWNLOADS: Muitos downloads ativos. Por favor, espere que eles terminem.
   TRANSMITTED_FROM: 'transmitido de {source}'
   UPGRADE_MAINTENANCE: |
@@ -612,9 +582,7 @@ pb:
   YEAR: Ano
 ru:
   ABSTRACT: Аннотация
-  ALREADY_DOWNLOADING: |
-    Книга уже поставлена ​​на скачивание.
-    Я отправлю ее вам как только она будет готова.
+  ALREADY_DOWNLOADING: Уже качаем!
   AUTHORS: Авторы
   BANNED: |
     Вы заблокированы до **{datetime} UTC**.
@@ -624,38 +592,10 @@ ru:
     Причина: **{reason}**
   BAN_MESSAGE_TOO_MANY_REQUESTS: Слишком частые запросы
   CLOSE: Закрыть
-  CONTACT: |
-    Новости и обновления: {related_channel}
-    **Реквизиты для пожертвования**: /donate
-
-    **LiberaPay**: {libera_pay_url}
-    **BTC Address:** `{btc_donate_address}`
-
-    Можете также оставить нам сообщение: /contact <ваше сообщение>
   COULD_NOT_FIND_ANYTHING: Ничего не найдено:(
   DESCRIPTION: Описание
   DISABLE_DISCOVERY: Если вы не хотите получать персонализированые рекомендации, то вы можете выключить Nexus Discovery в /settings
-  DISCOVERY_OPTION: Nexus Discovery
   DISCOVERY_PROMPT: 🦘 **Посмотрите-ка что я нашел для вас:** 🦘
-  DONATE: |
-    Спасибо, что зашли на /donate. Мне приятно, даже если вы просто прочитаете это сообщение.
-
-    Знания должны быть свободными и доступными для всех. Любые ограничения ведут ко сну разума и рождению чудовищ.
-    Помогая нам, вы помогаете всем тем людям, кто не имеет доступа к знаниям человечества из-за ограничений пейволов и непомерно высокой цены.
-
-    Все пожертвования будут направлены на:
-
-    - Разработку открытой для каждого системы поиска и доступа к книгам и научным статьям.
-    - Покупку оборудования. Построение индекса для поиска и запуск ML-процедур требует ресурсов процессора, а хранение статей и книг - дисков.
-
-    Каждый потраченый вами доллар пойдет на развитие проекта.
-    Вы можете связаться с нами через /contact или подписаться на {related_channel}, если хотите понимать на что именно пойдут деньги.
-
-    **Реквизиты для пожертвования**
-
-    **LiberaPay**: {libera_pay_url}
-    **BTC Address**: `{btc_donate_address}`
-    **Amazon Gift Card**: [Купите]({amazon_gift_card_url}) любую карту с `{amazon_gift_card_recipient}` в качестве получателя
   DOWNLOAD: Загрузить
   DOWNLOADED: загружено
   DOWNLOADING: загружаем...
@@ -666,64 +606,107 @@ ru:
   FILE: Файл
   HELP: |
     Привет! Я бот **Nexus**!
-    Я могу искать книги и научные статьи по их названиям, авторам или DOI.
+    Я могу искать книги и публикации по тексту, авторам или DOI.
 
-    **Просто наберите запрос как в поисковике.**
+    Просто напишите мне что вы хотите найти.
 
-    Например: `Божественная комедия Данте` или `https://doi.org/10.1159/000477855`
+    **Примеры**
+    - `Божественная комедия Данте`
+    - `https://doi.org/10.1159/000477855`
+    - Искать только книги: `📚 JavaScript`
+    - Искать только среди 2019 года: `hemoglobin +year:2019`
+    - Искать только среди 2019 года или позже: `hemoglobin +year:[2019 TO *]`
+    - Искать по автору: `authors:Jack authors:London`
+    - Точное совпадение: `"Fetal Hemoglobin"`
+    - Отфильтровать по формату (кроме pdf): `+JavaScript +format:epub`
+    - Отфильтровать по языку: `+JavaScript +🇪🇸`
+    - Упорядочить по дате: `JavaScript order_by:date`
+    - Упорядочить по рейтингу: `hemoglobin order_by:pr`
 
-    Ограничить поиск 2019 годом: `гемоглобин AND year:2019`
-    Поиск начиная с 2019 года `гемоглобин AND year:[2019 TO *]`
-    Поиск по автору: `authors:Jack authors:London`
-    Точное совпадение: `"Fetal Hemoglobin"`
+    **Экспертный синтаксис**
+    `+` помечаются слова или фильтры, которые обязаны быть в результатах:
+    - `+JavaScript lang:ru` найдет **все** JavaScript книги, но книги на русском будут выше в поиске
+    - `+JavaScript +lang:ru` найдет JavaScript книги **только** на русском
 
-    Также я могу принимать от вас новые научные статьи. Отправьте мне PDF-файл, и я его обработаю.
+    `-` помечаются слова, которых не должно быть в результатах
+    - `fetal -hemoglobin` вернет все статьи со словом fetal, но без hemoglobin
 
+    Поля для поиска: `abstract`, `author`, `content`, `date`, `extension`, `journal`, `lang`, `page`, `page_rank`, `refc`, `refs`, `tags`, `title`, `year`
+
+    Поля для сортировки: `date`, `page`, `page_rank`, `refc`
+
+    `date` - время выпуска статьи (unixtime)
+    `lang` - язык, используйте двухбуквенный код языка
+    `refc` - счетчик ссылок
+    `refs` - ссылки на статью
+
+    **Навигация**
+    На экране просмотра статьи есть несколько кнопок для дальнейшей навигации
+
+    - Все ссылки кликабельны. В некоторых версиях Telegram после клика на ссылку нужно нажать появишуюся кнопку Start.
+    - 📰 открыть статьи из того же журнала
+    - 🔗 открыть статьи, ссылающиеся на открытую
+
+    **Commands**
+    /aboutus - про нас
     /copyright - пожаловаться на нарушение авторских прав
-    /donate - страница поддержки
-    /help - помочь разобраться с ботом
-    /roll - случайная книга
-    /settings - изменить настройки бота
+    /help - показать эту страничку
+    /howtohelp - как помочь нам?
+    /profile - ваш профиль
+    /rank - показать подробную статистику по запросу
+    /roll <запрос> - случайная книга по <запросу>
+    /seed - как раздавать публикации другим?
+    /settings - настройки бота
+    /trends - нарисовать график трендов в науке
 
-    Что хотим почитать сегодня?
-  HELP_FOR_GROUPS: |
-    Привет! Я бот **Nexus** для групп!
-    Я могу искать книги и научные статьи по их названиям, авторам или DOI.
+    Что будем читать сегодня?
+  HOW_TO_HELP: |
+    Как вы можете помочь нам?
 
-    **Просто наберите запрос как в поисковике с добавлением /search в начало.**
+    **Подпишитесь**: [Telegram](https://t.me/{related_channel}) - [Twitter](https://twitter.com/the_superpirate)
 
-    Например: `/search Божественная комедия Данте` или `/search https://doi.org/10.1159/000477855`
+    **Поделитесь доступом к статьям**
+    Напишите @the_superpirate или в [Nexus community](https://t.me/joinchat/SKgGpCnrzMdkMRxJ) если у вас есть возможность и вы хотите поделиться вашим доступом к научным статьям. Нам нужны:
 
-    Ограничить поиск 2019 годом: `/search гемоглобин AND year:2019`
-    Поиск начиная с 2019 года `/search гемоглобин AND year:[2019 TO *]`
-    Поиск по автору: `/search authors:Jack authors:London`
-    Точное совпадение: `/search "Fetal Hemoglobin"`
+    - VPS (небольшие, размещенные в UK/US/Singapore) в Oracle / Digital Ocean / GitHub
+    - Университетские VPNs профили без 2FA
+    - Компьютеры внутри вашей университетской сети, к которым вы имеете доступ для размещения v2ray сервера
 
-    /donate - страница поддержки
-    /help - помочь разобраться с ботом
-    /roll - случайная книга
-    /settings - изменить настройки бота
+    **Станьте сидером**
+    Книги и статьи необходимо хранить распределенно и тогда не будет возможности уничтожить хранилище. Такие технологии как торренты и [IPFS](https://en.wikipedia.org/wiki/InterPlanetary_File_System) позволяют сохранить к себе часть базы данных статей и книг, а затем раздавать их нуждающимся. Все происходит в автоматическом режиме, от вас требуется лишь место на жестком диске и соединение с интернетом.
+    Кликните на /seed, чтобы узнать как стать сидером.
 
-    Что хотим почитать сегодня?
-  INVALID_QUERY_ERROR: |
-    ```Ух, я еще не научился работать с URLами:(
-    Пришли мне DOI, MD5 или просто название того документа, который ты хотел найти!```[‌]({too_difficult_picture_url})
+    **Пожертвуйте криптовалюту**
+    Пожертвования будут потрачены
+    - Разработку поискового индекса и работу сообщества. Все это вы можете увидеть в боте.
+    - Поддержку серверов
+
+    - BTC: `{btc_donate_address}`
+    - ETH: `{eth_donate_address}`
+    - SOL: `{sol_donate_address}`
+    - XMR: `{xmr_donate_address}`
+    - XRP: `{xrp_donate_address}` **tag/memo:** `{xrp_donate_tag}`
+    - Amazon Gift Card: [Купите]({amazon_gift_card_url}) любую карту используя `{amazon_gift_card_recipient}` как адрес получателя
   INVALID_SYNTAX_ERROR: |
     ```Ух, сложноватый запрос для меня, кто-то где-то перемудрил:)
-    Попробуйте поставить скобки или убрать/добавить больше AND/OR.```[‌]({too_difficult_picture_url})
+    Пришли мне DOI, MD5 или просто название того документа, который ты хотел найти!
+    Попробуйте поставить скобки или убрать/добавить больше +/-.```[‌]({too_difficult_picture_url})
   JOURNAL: Журнал
   LEGACY: Мы обновились, старые виджеты теперь не работают:( Пожалуйста, выполните
     поиск заново.
+  LOOKING_AT: 'ищем в {source}...'
   MAINTENANCE: |
     ```Упс! Что-то сломалось, но мы уже в курсе и чиним.
     Загляните к нам чуть позже.```[‌]({maintenance_picture_url})
   MAINTENANCE_WO_PIC: Упс! Загляните к нам чуть позже.
   NAMELESS: Без названия
+  NEXUS_CONNECTOME_DESCRIPTION: |
+    **Nexus Connectome** позволяет другим пользователям просматривать ваш профиль и находить вас по вашим интересам и последним прочитанным статьям.
   NEXUS_DISCOVERY_DESCRIPTION: |
-    **Nexus Discovery** - сервис рекомендаций и уведомлений о новых статьях, которые вы искали ранее. Дайджест будет присылаться каждое воскресение.
+    **Nexus Discovery** - сервис рекомендаций и уведомлений о новых статьях, которые вы искали ранее.
   PROMO: |
     **Nexus Search - Новости и обновления**
-    {related_channel}
+    @{related_channel}
   REFERENCED_BY: Ссылки
   REPLY_MESSAGE_HAS_BEEN_DELETED: Сообщение с запросом было удалено/перемещено, выполните поиск заново.
   SEARCHING: '`ищем...`'
@@ -734,29 +717,24 @@ ru:
     **Язык:** {language}
   SETUP_AUTOMATICALLY: Установить автоматически
   SETUP_MANUALLY: Установить вручную
-  SOURCES_UNAVAILABLE: 'Прямо сейчас `{document}` недоступен. Попробуйте скачать его позже.'
-  SUBSCRIBE_TO_CHANNEL: Подпишитесь на {related_channel}, чтобы использовать этот бот.
+  SOMEONE_UPLOADED_FILE: '⚡️ Кто-то загрузил `{document}` для вас. Попробуйте поискать сейчас.'
+  SOURCES_UNAVAILABLE: 'Прямо сейчас `{document}` недоступен. Если кто-то загрузит статью для вас в бота, я напишу вам об этом.'
+  SUBSCRIBE_TO_CHANNEL: Подпишитесь на @{related_channel}, чтобы использовать этот бот.
   SYSTEM_MESSAGING_OPTION: Сообщения об обновлениях
   TAGS: Теги
   TANKS_BRUH: И тебе того же, братишка!
-  THANK_YOU_FOR_CONTACT: Спасибо! Если у вас вопрос, то его лучше задать в конференции пользователей {related_channel}
   TOO_LONG_QUERY_FOR_SHORTLINK: |
     Слишком длинный запрос для shortlink (допускается 35-40 символов запроса).
-
-    Попробуйте использовать NID для создания запроса.
-    Откройте страницу книги или статьи, которыми вы хотите поделиться, скопируйте оттуда NID
-    и создайте запрос вида `NID: <NID>`. Для этого же запроса вы можете создать shortlink.
   TOO_MANY_DOWNLOADS: Слишком много активных загрузок. Пожалуйста, дождитесь их завершения.
+  TRANSMITTED_FROM: 'передано из {source}'
   UPGRADE_MAINTENANCE: |
     ```Идет большое обновление, загляните к нам на огонек завтра```[‌]({upgrade_maintenance_picture_url})
   UPLOADED_TO_TELEGRAM: загружено в Телеграм...
   VIEWS_CANNOT_BE_SHARED: Выполните поиск сами, команду нельзя передавать другому пользователю.
   YEAR: Год
-ua:
+uk:
   ABSTRACT: Анотація
-  ALREADY_DOWNLOADING: |
-    Книга вже поставлена ​​на завантаження.
-    Я надішлю її вам як тільки вона буде готова.
+  ALREADY_DOWNLOADING: Вже завантажується
   AUTHORS: Автори
   BANNED: |
     Ви заблоковані до **{datetime} UTC**.
@@ -766,38 +744,10 @@ ua:
     Причина: **{reason}**
   BAN_MESSAGE_TOO_MANY_REQUESTS: Занадто часті запити
   CLOSE: Закрити
-  CONTACT: |
-    Новини та оновлення: {related_channel}
-    **Реквізити для пожертвування**: /donate
-
-    **LiberaPay**: {libera_pay_url}
-    **BTC Address:** `{btc_donate_address}`
-
-    Можете також залишити нам повідомлення: /contact <ваше повідомлення>
   COULD_NOT_FIND_ANYTHING: Нічого не знайдено:(
   DESCRIPTION: Опис
   DISABLE_DISCOVERY: Якщо ви не бажаєте отримувати персональні рекомендації, то ви можете вимкнути Nexus Discovery в /settings
-  DISCOVERY_OPTION: Nexus Discovery
   DISCOVERY_PROMPT: 🦘 **Подивіться, що я знайшов для вас:** 🦘
-  DONATE: |
-    Щиро дякую, що зайшли на /donate. Мені приємно, навіть якщо ви просто прочитаєте це повідомлення.
-
-    Знання мають бути безперешкодними та доступними для всіх. Будь-які обмеження ведуть до сну розуму та народження чудовиськ.
-    Допомагаючи нам, ви допомагаєте всьому тому народові, хто не має доступу до знань людства через обмеження пейволів та непомірно високу ціну.
-
-    Усі пожертвування будуть направлені на:
-
-    - Розробку системи пошуку та доступу до книг та наукових статей, яка відкрита для кожного.
-    - Придбання обладнання. Побудова індексу для пошуку та запуску ML-процедур потребують багато ресурсів процесора, а зберігання статей та книг - дисків.
-
-    Кожен витрачений вами долар піде на розвиток цього проекту.
-    Ви можете зв'язатися з нами через /contact або підписатися на {related_channel}, якщо хочете бачити на що саме підуть гроші.
-
-    **Реквізити для пожертвування**
-
-    **LiberaPay**: {libera_pay_url}
-    **BTC Address**: `{btc_donate_address}`
-    **Amazon Gift Card**: [Придбайте]({amazon_gift_card_url}) будь-яку карту з `{amazon_gift_card_recipient}` як одержувач
   DOWNLOAD: завантажити
   DOWNLOADED: завантажено
   DOWNLOADING: завантажуємо...
@@ -806,52 +756,9 @@ ua:
     Будь ласка, повторіть спробу завантаження `{document}` через 1 хвилину.
   EDITION: Редакція
   FILE: Файл
-  HELP: |
-    Вітаю! Я бот **Nexus**!
-    Я можу шукати книги та наукові статті за їхньою назвою, авторам або DOI.
-
-    **Просто наберіть запит як у пошуковій системі.**
-
-    Наприклад: `Божественна комедія Данте` або `https://doi.org/10.1159/000477855`
-
-    Обмежити пошук 2019 роком: `гемоглобін AND year:2019`
-    Пошук починаючи з 2019 року `гемоглобін AND year:[2019 TO *]`
-    Пошук за автором: `authors:Jack authors:London`
-    Точне співпадіння: `"Fetal Hemoglobin"`
-
-    Також я можу приймати нові наукові статті. Відправте мені PDF-файл, і я його оброблю.
-
-    /copyright - поскаржитися на порушення авторських прав
-    /donate - підтримати проект
-    /help - допомогти розібратися з ботом
-    /roll - випадкова книга
-    /settings - змінити налаштування бота
-
-    Що бажаємо почитати сьогодні?
-  HELP_FOR_GROUPS: |
-    Вітаю! Я бот **Nexus** для груп!
-    Я можу шукати книги та наукові статті за їхньою назвою, авторам або DOI.
-
-    **Просто наберіть запит як у пошуковій системі з додаванням /search на початку.**
-
-    Наприклад: `/search Божественна комедія Данте` або `/search https://doi.org/10.1159/000477855`
-
-    Обмежити пошук 2019 роком: `/search гемоглобин AND year:2019`
-    Пошук починаючи з 2019 року `/search гемоглобин AND year:[2019 TO *]`
-    Пошук за автором: `/search authors:Jack authors:London`
-    Точне співпадіння: `/search "Fetal Hemoglobin"`
-
-    /donate - підтримати проект
-    /help - допомогти розібратися з ботом
-    /roll - випадкова книга
-    /settings - змінити налаштування бота
-
-    Що бажаємо почитати сьогодні?
-  INVALID_QUERY_ERROR: |
-    ```Ух, я ще не навчився працювати з URLами:(
-    Надішліть мені DOI, MD5 або просто назву того документа, який ви хотіли знайти!```[‌]({too_difficult_picture_url})
   INVALID_SYNTAX_ERROR: |
     ```Ух, важкуватий запит для мене, хтось десь перемудрив:)
+    Надішліть мені DOI, MD5 або просто назву того документа, який ви хотіли знайти!
     Спробуйте поставити дужки або прибрати/додати більше AND/OR.```[‌]({too_difficult_picture_url})
   JOURNAL: Журнал
   LEGACY: Ми оновилися, старі віджети тепер не працюють:( Будь ласка, виконайте
@@ -861,11 +768,13 @@ ua:
     Загляньте до нас трохи згодом.```[‌]({maintenance_picture_url})
   MAINTENANCE_WO_PIC: Упс! Загляньте до нас трохи згодом.
   NAMELESS: Без назви
+  NEXUS_CONNECTOME_DESCRIPTION: |
+    **Nexus Connectome** дозволяє іншим користувачам бачити ваш профіль і знаходити вас за інтересами та останніми прочитаними статтями.
   NEXUS_DISCOVERY_DESCRIPTION: |
-    **Nexus Discovery** - сервіс рекомендацій та повідомлень про нові статті, які ви шукали раніше. Дайджест надсилатиметься щонеділі.
+    **Nexus Discovery** - сервіс рекомендацій та повідомлень про нові статті, які ви шукали раніше.
   PROMO: |
     **Nexus Search - Новини та оновлення**
-    {related_channel}
+    @{related_channel}
   REFERENCED_BY: Посилання
   REPLY_MESSAGE_HAS_BEEN_DELETED: Повідомлення із запитом було видалено/переміщено, виконайте пошук знову.
   SEARCHING: '`шукаємо...`'
@@ -877,14 +786,12 @@ ua:
   SETUP_AUTOMATICALLY: Встановити автоматично
   SETUP_MANUALLY: Встановити вручну
   SOURCES_UNAVAILABLE: 'Зараз `{document}` недоступний. Спробуйте скачати його пізніше.'
-  SUBSCRIBE_TO_CHANNEL: Підпишіться на {related_channel}, щоб мати можливість використовувати цього бота.
+  SUBSCRIBE_TO_CHANNEL: Підпишіться на @{related_channel}, щоб мати можливість використовувати цього бота.
   SYSTEM_MESSAGING_OPTION: Повідомлення про оновлення
   TAGS: Теги
   TANKS_BRUH: І тобі того ж, серденько!
-  THANK_YOU_FOR_CONTACT: Щиро дякую! Якщо у вас є питання, його краще задати у конференції користувачів {related_channel}
   TOO_LONG_QUERY_FOR_SHORTLINK: |
     Занадто довгий запит для shortlink (допускається 35-40 символів запиту).
-
     Спробуйте використати NID для створення запиту.
     Відкрийте сторінку книги або статті, якими хочете поділитися, скопіюйте звідти NID
     та створіть запит виду `NID: <NID>`. Для цього ж запиту ви можете створити shortlink.
@@ -894,4 +801,3 @@ ua:
   UPLOADED_TO_TELEGRAM: завантажено в Телеграм...
   VIEWS_CANNOT_BE_SHARED: Виконайте пошук власноруч, цю команду не можна передавати іншому користувачеві.
   YEAR: Рік
-

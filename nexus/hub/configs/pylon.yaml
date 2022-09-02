@@ -1,0 +1,618 @@
+---
+pylon:
+  default_driver_proxy_list:
+    - [cambridge]
+    - [edinburg]
+    - [southampton]
+  downloads_directory: /downloads
+  proxies:
+    - address: clash.default.svc.cluster.example.com:7890
+      name: cambridge
+      tags: ['cambridge']
+    - address: clash.default.svc.cluster.example.com:7990
+      name: edinburg
+      tags: ['edinburg']
+    - address: clash.default.svc.cluster.example.com:8090
+      name: southampton
+      tags: ['southampton']
+  sources:
+    # LibGen.rocks
+    - driver:
+        args:
+          proxy_list: ~
+          validator:
+            class: nexus.pylon.validators.Md5Validator
+        class:
+          nexus.pylon.drivers.DirectDriver
+      matcher:
+        md5: ^.*$
+      resolver:
+        args:
+          extractors:
+            - producer:
+                format_string: 'http://libgen.rocks/{matched_group}'
+                group: 0
+              re: 'get\.php\?md5=.*&key=[A-Za-z\d]+'
+              timeout: 25.0
+              type: regex
+          url: https://libgen.rocks/ads.php?md5={md5}
+        class: nexus.pylon.resolvers.RequestResolver
+    # LibGen.rocks
+    - driver:
+        args:
+          proxy_list: ~
+        class:
+          nexus.pylon.drivers.DirectDriver
+      matcher:
+        doi: ^.*$
+      resolver:
+        args:
+          extractors:
+            - producer:
+                format_string: 'http://libgen.rocks/{matched_group}'
+                group: 0
+              re: 'get\.php\?md5=[a-fA-F\d]+&key=[A-Za-z\d]+(&doi=[^\"]*)+'
+              timeout: 25.0
+              type: regex
+          url: 'https://libgen.rocks/ads.php?doi={doi}'
+        class: nexus.pylon.resolvers.RequestResolver
+    # Library.lol
+    - driver:
+        args:
+          proxy_list: ~
+          validator:
+            class: nexus.pylon.validators.Md5Validator
+        class:
+          nexus.pylon.drivers.DirectDriver
+      matcher:
+        md5: ^.*$
+      resolver:
+        args:
+          extractors:
+            - producer:
+                format_string: '{matched_group}'
+                group: 1
+              re: '<a href="([^\"]+)">GET</a>'
+              timeout: 45.0
+              type: regex
+            - producer:
+                format_string: '{matched_group}'
+                group: 0
+              re: 'https://ipfs.io/ipfs/[A-Za-z\d]+'
+              type: regex
+            - producer:
+                format_string: '{matched_group}'
+                group: 0
+              re: 'https://cloudflare-ipfs.com/ipfs/[A-Za-z\d]+'
+              type: regex
+          url: http://library.lol/main/{md5}
+        class: nexus.pylon.resolvers.RequestResolver
+    # library.lol
+    - driver:
+        args:
+          proxy_list: ~
+        class:
+          nexus.pylon.drivers.DirectDriver
+      matcher:
+        doi: ^.*$
+      resolver:
+        args:
+          extractors:
+            - producer:
+                format_string: '{matched_group}'
+                group: 1
+              re: '<a href="([^\"]+)">GET</a>'
+              timeout: 45.0
+              type: regex
+          url: 'http://library.lol/scimag/{doi}'
+        class: nexus.pylon.resolvers.RequestResolver
+    # jamanetwork.com
+    - driver:
+        args:
+          actions:
+            - selector: '#pdf-link .toolbar-link-text-extra, .contents-tab-contents > #pdf-link .toolbar-link-text-extra'
+              timeout: 20
+              type: wait_css_selector
+            - type: click
+        class:
+          nexus.pylon.drivers.BrowserDriver
+      matcher:
+        doi: ^10.1001/.*$
+    # wires.onlinelibrary.wiley.com
+    - matcher:
+        doi: ^10.1002/.*$
+      resolver:
+        args:
+          format_string: 'https://onlinelibrary.wiley.com/doi/pdf/{doi}'
+        class: nexus.pylon.resolvers.TemplateResolver
+    # link.springer.com
+    - matcher:
+        doi: ^10.(1007|14283)/.*$
+      resolver:
+        args:
+          format_string: 'https://link.springer.com/content/pdf/{doi}.pdf'
+        class: nexus.pylon.resolvers.TemplateResolver
+    # www.sciencedirect.com
+    - matcher:
+        doi: ^10.(1016|1053|4103)/.*$
+      resolver:
+        args:
+          format_string: 'https://www.sciencedirect.com/science/article/pii/{selected}/pdfft?isDTMRedir=true&download=true'
+          selector: '(.resource.primary.URL | split("/"))[-1]'
+          timeout: 40.0
+        class: nexus.pylon.resolvers.DoiOrgRequestResolver
+    # www.clinicalkey.com
+    - driver:
+        args:
+          actions:
+            - selector: '.x-pdf'
+              timeout: 30.0
+              type: wait_css_selector
+            - type: click
+        class:
+          nexus.pylon.drivers.BrowserDriver
+      matcher:
+        doi: ^10.1016/.*$
+    # www.cambridge.org
+    - matcher:
+        doi: ^10.1017/.*$
+      resolver:
+        class: nexus.pylon.resolvers.DoiOrgRequestResolver
+    # pubs.acs.org
+    - matcher:
+        doi: ^10.1021/.*$
+      resolver:
+        args:
+          format_string: 'https://pubs.acs.org/doi/pdf/{doi}?download=true'
+        class: nexus.pylon.resolvers.TemplateResolver
+    # www.nature.com
+    - driver:
+        args:
+          actions:
+            - selector: '#entitlement-box-right-column span'
+              timeout: 30
+              type: wait_css_selector
+            - type: click
+        class: nexus.pylon.drivers.BrowserDriver
+      matcher:
+        doi: ^10.1038/.*$
+    # www.nejm.org
+    - matcher:
+        doi: ^10.1056/.*$
+      resolver:
+        args:
+          format_string: 'https://www.nejm.org/doi/pdf/{doi}?download=true'
+        class: nexus.pylon.resolvers.TemplateResolver
+    # ascelibrary.org
+    - matcher:
+        doi: ^10.1061/.*$
+      resolver:
+        args:
+          format_string: 'https://ascelibrary.org/doi/pdf/{doi}?download=true'
+        class: nexus.pylon.resolvers.TemplateResolver
+    # www.pnas.org
+    - matcher:
+        doi: ^10.1073/.*$
+      resolver:
+        args:
+          format_string: 'https://www.pnas.org/doi/pdf/{doi}?download=true'
+        class: nexus.pylon.resolvers.TemplateResolver
+    # www.tandfonline.com
+    - matcher:
+        doi: ^10.1080/.*$
+      resolver:
+        args:
+          format_string: 'https://www.tandfonline.com/doi/pdf/{doi}?download=true'
+        class: nexus.pylon.resolvers.TemplateResolver
+    # iopscience.iop.org
+    - matcher:
+        doi: ^10.1088/.*$
+      resolver:
+        args:
+          format_string: 'https://iopscience.iop.org/article/{doi}/pdf'
+        class: nexus.pylon.resolvers.TemplateResolver
+    # academic.oup.com
+    - driver:
+        args:
+          actions:
+            - selector: '.pdf-link-text'
+              timeout: 30
+              type: wait_css_selector
+            - type: click
+          proxy_list:
+            - [edinburg]
+            - [cambridge]
+            - [southampton]
+        class: nexus.pylon.drivers.BrowserDriver
+      matcher:
+        doi: ^10.1093/.*$
+    # journals.lww.com
+    - driver:
+        args:
+          actions:
+            - selector: '.ejp-article-tools__list-icon-holder > .icon-pdf'
+              timeout: 30.0
+              type: wait_css_selector
+            - type: click
+            - selector: '.ejp-article-tools__dropdown-list-button > .icon-pdf'
+              timeout: 5.0
+              type: wait_css_selector
+            - type: click
+        class: nexus.pylon.drivers.BrowserDriver
+      matcher:
+        doi: ^10.(1097|1213|5435|14309)/.*$
+      resolver:
+        args:
+          timeout: 30.0
+        class: nexus.pylon.resolvers.TemplateResolver
+    # journals.aps.org
+    - matcher:
+        doi: ^10.1103/.*$
+      resolver:
+        args:
+          selector: '[.link[] | select(.URL | ascii_downcase | endswith("fulltext"))][0].URL'
+        class: nexus.pylon.resolvers.DoiOrgRequestResolver
+    # emerald.com
+    - matcher:
+        doi: ^10.1108/.*$
+      resolver:
+        args:
+          format_string: 'https://www.emerald.com/insight/content/doi/{doi}/full/pdf'
+        class: nexus.pylon.resolvers.TemplateResolver
+    # ieeexplore.ieee.org
+    - matcher:
+        doi: ^10.1109/.*$
+      resolver:
+        args:
+          format_string: 'https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber={selected}'
+          selector: '(.resource.primary.URL | split("/"))[-2]'
+        class: nexus.pylon.resolvers.DoiOrgRequestResolver
+    # onlinelibrary.wiley.com
+    - matcher:
+        doi: ^10.1111/.*$
+      resolver:
+        args:
+          format_string: 'https://onlinelibrary.wiley.com/doi/pdfdirect/{doi}?download=true'
+        class: nexus.pylon.resolvers.TemplateResolver
+    # asa.scitation.org
+    - matcher:
+        doi: ^10.1121/.*$
+      resolver:
+        args:
+          format_string: 'https://asa.scitation.org/doi/pdf/{doi}?download=true'
+        class: nexus.pylon.resolvers.TemplateResolver
+    # www.science.org
+    - matcher:
+        doi: ^10.1126/.*$
+      resolver:
+        args:
+          format_string: 'https://www.science.org/doi/pdf/{doi}?download=true'
+        class: nexus.pylon.resolvers.TemplateResolver
+    # ^10.1136/.*$
+    - driver:
+        args:
+          actions:
+            - selector: '.article-pdf-download > img'
+              type: wait_css_selector
+            - type: click
+        class: nexus.pylon.drivers.BrowserDriver
+      matcher:
+        doi: ^10.1136/.*$
+    # ^10.1136/.*$
+    - driver:
+        args:
+          actions:
+            - selector: '.icon'
+              type: wait_css_selector
+            - type: click
+        class: nexus.pylon.drivers.BrowserDriver
+      matcher:
+        doi: ^10.1136/.*$
+      resolver:
+        class: nexus.pylon.resolvers.DoiOrgRequestResolver
+    # dl.acm.org
+    - matcher:
+        doi: ^10.1145/.*$
+      resolver:
+        args:
+          format_string: 'https://dl.acm.org/doi/pdf/{doi}?download=true'
+        class: nexus.pylon.resolvers.TemplateResolver
+    # www.annualreviews.org
+    - matcher:
+        doi: ^10.1146/.*$
+      resolver:
+        args:
+          format_string: 'https://www.annualreviews.org/doi/pdf/{doi}?download=true'
+        class: nexus.pylon.resolvers.TemplateResolver
+    # journals.physiology.org
+    - matcher:
+        doi: ^10.1152/.*$
+      resolver:
+        args:
+          format_string: 'https://journals.physiology.org/doi/pdf/{doi}?download=true'
+        class: nexus.pylon.resolvers.TemplateResolver
+    # ajp.psychiatryonline.org
+    - matcher:
+        doi: ^10.1176/.*$
+      resolver:
+        args:
+          format_string: 'https://ajp.psychiatryonline.org/doi/pdf/{doi}?download=true'
+        class: nexus.pylon.resolvers.TemplateResolver
+    # journals.sagepub.com
+    - matcher:
+        doi: ^10.1177/.*$
+      resolver:
+        args:
+          format_string: 'https://journals.sagepub.com/doi/pdf/{doi}?download=true'
+        class: nexus.pylon.resolvers.TemplateResolver
+    # bmcpsychiatry.biomedcentral.com
+    - matcher:
+        doi: ^10.1186/.*$
+      resolver:
+        args:
+          format_string: 'https://bmcpsychiatry.biomedcentral.com/track/pdf/{doi}.pdf'
+        class: nexus.pylon.resolvers.TemplateResolver
+    # journals.plos.org
+    - driver:
+        args:
+          proxy_list: ~
+        class: nexus.pylon.drivers.direct.DirectDriver
+      matcher:
+        doi: ^10.1371/.*$
+      resolver:
+        args:
+          format_string: 'https://journals.plos.org/plosone/article/file?id={doi}&type=printable'
+        class: nexus.pylon.resolvers.TemplateResolver
+    # bioone.org
+    - driver:
+        args:
+          actions:
+            - selector: 'DOWNLOAD PAPER'
+              type: wait_link_text
+            - type: click
+        class: nexus.pylon.drivers.BrowserDriver
+      matcher:
+        doi: ^10.(1638|1654|1667|2108)/.*$
+    # jasn.asnjournals.org
+    - driver:
+        args:
+          actions:
+            - selector: 'View PDF'
+              type: wait_link_text
+            - type: click
+        class: nexus.pylon.drivers.BrowserDriver
+      matcher:
+        doi: ^10.1681/.*$
+    # papers.ssrn.com
+    - driver:
+        args:
+          actions:
+            - selector: '.abstract-buttons:nth-child(1) .primary > span'
+              type: wait_css_selector
+            - type: click
+        class: nexus.pylon.drivers.BrowserDriver
+      matcher:
+        doi: ^10.2139/.*$
+    # www.afghandata.org
+    - driver:
+        args:
+          proxy_list: ~
+        class:
+          nexus.pylon.drivers.DirectDriver
+      matcher:
+        doi: ^10.(2458|29171)/.*$
+    # www.euppublishing.com
+    - matcher:
+        doi: ^10.3366/.*$
+      resolver:
+        args:
+          format_string: 'https://www.euppublishing.com/doi/pdf/{doi}?download=true'
+        class: nexus.pylon.resolvers.TemplateResolver
+    # www.frontiersin.org
+    - driver:
+        args:
+          actions:
+            - selector: '.paper > .dropdown-toggle'
+              type: wait_css_selector
+            - type: click
+            - selector: '.download-files-pdf'
+              type: wait_css_selector
+            - type: click
+        class:
+          nexus.pylon.drivers.BrowserDriver
+      matcher:
+        doi: ^10.3389/.*$
+      resolver:
+        args:
+          selector: '[.link[] | select(.URL | ascii_downcase | endswith("full"))][0].URL'
+        class: nexus.pylon.resolvers.DoiOrgRequestResolver
+    # bjgp.org
+    - driver:
+        args:
+          actions:
+            - selector: 'PDF'
+              type: wait_link_text
+            - type: click
+        class: nexus.pylon.drivers.BrowserDriver
+      matcher:
+        doi: ^10.3399/.*$
+    # www.wjgnet.com
+    - driver:
+        args:
+          actions:
+            - selector: 'Full Article (PDF)'
+              type: wait_link_text
+            - type: click
+        class: nexus.pylon.drivers.BrowserDriver
+      matcher:
+        doi: ^10.3748/.*$
+      resolver:
+        class: nexus.pylon.resolvers.DoiOrgRequestResolver
+    # journals.vilniustech.lt
+    - driver:
+        args:
+          actions:
+            - selector: '.label'
+              type: wait_css_selector
+            - type: click
+        class: nexus.pylon.drivers.BrowserDriver
+      matcher:
+        doi: ^10.3846/.*$
+      resolver:
+        class: nexus.pylon.resolvers.DoiOrgRequestResolver
+    # isegoria.revistas.csic.es
+    - matcher:
+        doi: ^10.3989/.*$
+      resolver:
+        args:
+          selector: '[.link[] | select(."intended-application" == "similarity-checking")][0].URL'
+        class: nexus.pylon.resolvers.DoiOrgRequestResolver
+    # www.psychiatrist.com
+    - driver:
+        args:
+          actions:
+            - selector: '.article-dwndpdf > img'
+              type: wait_css_selector
+            - type: click
+        class: nexus.pylon.drivers.BrowserDriver
+      matcher:
+        doi: ^10.4088/.*$
+    # www.scirp.org
+    - driver:
+        args:
+          actions:
+            - selector: 'PDF'
+              type: wait_link_text
+            - type: click
+        class: nexus.pylon.drivers.BrowserDriver
+      matcher:
+        doi: ^10.4236/.*$
+    # jsbr.be
+    - driver:
+        args:
+          actions:
+            - selector: 'h4 > .fa-download'
+              type: wait_css_selector
+            - type: click
+            - selector: 'PDF (EN)'
+              type: wait_link_text
+            - type: click
+        class: nexus.pylon.drivers.BrowserDriver
+      matcher:
+        doi: ^10.5334/.*$
+    # hess.copernicus.org
+    - driver:
+        args:
+          proxy_list: ~
+        class: nexus.pylon.drivers.DirectDriver
+      matcher:
+        doi: ^10.5194/.*$
+    # ProQuest
+    - driver:
+        args:
+          actions:
+            - selector: '#searchTerm'
+              type: wait_css_selector
+            - type: click
+            - selector: '#searchTerm'
+              text: '{doi}'
+              type: type
+            - selector: '.uxf-search'
+              type: wait_css_selector
+            - type: click
+            - selector: '.uxf-download'
+              type: wait_css_selector
+            - type: click
+          proxy_list: ~
+        class: nexus.pylon.drivers.BrowserDriver
+      matcher:
+        doi: ^10.5585/.*
+      resolver:
+        args:
+          format_string: 'https://www.proquest.com/'
+        class: nexus.pylon.resolvers.TemplateResolver
+    # jcsm.aasm.org
+    - matcher:
+        doi: ^10.5664/.*$
+      resolver:
+        args:
+          format_string: 'https://jcsm.aasm.org/doi/pdf/{doi}?download=true'
+        class: nexus.pylon.resolvers.TemplateResolver
+    # journal.permsc.ru
+    - driver:
+        args:
+          actions:
+            - selector: '.obj_galley_link'
+              type: wait_css_selector
+            - type: click
+            - selector: '.label'
+              type: wait_css_selector
+            - type: click
+        class: nexus.pylon.drivers.BrowserDriver
+      matcher:
+        doi: ^10.7242/.*$
+    # amjcaserep.com
+    - driver:
+        args:
+          actions:
+            - selector: "//input[@value='Download PDF version']"
+              type: wait_xpath
+            - type: click
+        class: nexus.pylon.drivers.BrowserDriver
+      matcher:
+        doi: ^10.12659/.*$
+    # medcraveonline.com
+    - driver:
+        args:
+          actions:
+            - selector: 'Download PDF'
+              type: wait_link_text
+            - type: click
+        class: nexus.pylon.drivers.BrowserDriver
+      matcher:
+        doi: ^10.15406/.*$
+    # www.researchsquare.com
+    - driver:
+        args:
+          actions:
+            - selector: '.hidden > .text-blue-600 > .antialiased'
+              type: wait_css_selector
+            - type: native_click
+        class: nexus.pylon.drivers.BrowserDriver
+      matcher:
+        doi: ^10.21203/.*$
+    # www.ukm.my/
+    - driver:
+        args:
+          proxy_list: ~
+        class: nexus.pylon.drivers.DirectDriver
+      matcher:
+        doi: ^10.24035/.*$
+    # journals.library.ryerson.ca
+    - driver:
+        args:
+          actions:
+            - selector: '#a11y-1-tab-tab-download'
+              type: wait_css_selector
+            - type: click
+        class: nexus.pylon.drivers.BrowserDriver
+      matcher:
+        doi: ^10.32920/.*$
+    # papers.cumincad.org
+    - driver:
+        args:
+          actions:
+            - selector: 'file.pdf'
+              type: wait_link_text
+            - type: click
+          proxy_list: ~
+        class: nexus.pylon.drivers.BrowserDriver
+      matcher:
+        doi: ^10.52842/.*$
+    # ^.*$
+    - matcher:
+        doi: ^.*$
+      resolver:
+        args:
+          selector: '[(.link | if . == null then [] else . end)[] | select((."content-type" == "application/pdf") or (.URL | ascii_downcase | contains("pdf")))][0].URL'
+        class: nexus.pylon.resolvers.DoiOrgRequestResolver

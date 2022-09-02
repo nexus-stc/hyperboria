@@ -3,32 +3,13 @@ package nexus.meta_api.proto;
 
 import "nexus/models/proto/typed_document.proto";
 
-message RollRequest {
-  string language = 1;
-}
-
-message RollResponse {
-  uint64 document_id = 1;
-}
-
-message TopMissedRequest {
-  uint32 page = 1;
-  uint32 page_size = 2;
-}
-
-message TopMissedResponse {
-  repeated nexus.models.proto.TypedDocument typed_documents = 1;
-  bool has_next = 2;
+service Documents {
+  rpc get (TypedDocumentRequest) returns (nexus.models.proto.TypedDocument) {}
 }
 
 message TypedDocumentRequest {
   string index_alias = 1;
   uint64 document_id = 2;
   uint32 position = 3;
-}
-
-service Documents {
-  rpc get (TypedDocumentRequest) returns (nexus.models.proto.TypedDocument) {}
-  rpc roll (RollRequest) returns (RollResponse) {}
-  rpc top_missed (TopMissedRequest) returns (TopMissedResponse) {}
+  string mode = 4;
 }

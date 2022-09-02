@@ -8,10 +8,10 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     wget https://github.com/bazelbuild/bazelisk/releases/download/v1.11.0/bazelisk-linux-amd64 -O /usr/bin/bazel
     chmod +x /usr/bin/bazel
     apt-get update
-    apt-get -y install llvm make openjdk-17-jdk python3.9 python3.9-venv python3.9-dev python-dev \
+    apt-get -y install llvm make python3.10 python3.10-venv python3.10-dev python-dev \
      libsqlite3-dev nodejs libev-dev libev-perl python3-distutils wireguard yarn
 elif [[ "$OSTYPE" == "darwin"* ]]; then
-    required_packages='bazel coreutils ibazel libev libomp llvm protobuf python3.9 sqlite3'
+    required_packages='bazel coreutils ibazel libev libomp llvm protobuf python3.10 sqlite3'
     brew tap bazelbuild/tap
     for required_package in $required_packages; do
         if brew ls --versions $required_package > /dev/null; then

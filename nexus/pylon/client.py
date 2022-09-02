@@ -1,7 +1,7 @@
 from typing import (
     AsyncIterable,
-    Callable,
-    Iterable,
+    Dict,
+    List,
     Optional,
 )
 
@@ -12,74 +12,44 @@ from nexus.pylon.exceptions import (
     NotFoundError,
 )
 from nexus.pylon.proto.file_pb2 import FileResponse as FileResponsePb
-from nexus.pylon.sources import (
-    BaseSource,
-    LibgenDoiSource,
-    LibgenMd5Source,
-    LibraryLolSource,
-    SciHubMksaTopSource,
-    SciHubSeSource,
-)
-from nexus.pylon.sources.specific import get_specific_sources_for_doi
+from nexus.pylon.proxy_manager import ProxyManager
+from nexus.pylon.source import Source
 
 
 class PylonClient(AioThing):
-    def __init__(self, proxy: Optional[str] = None, resolve_proxy: Optional[str] = None):
+    def __init__(
+        self,
+        source_configs: Optional[List],
+        proxies: Optional[List[str]] = None,
+        downloads_directory: Optional[str] = None,
+        default_driver_proxy_list: [Optional[List]] = None
+    ):
         super().__init__()
-        self.proxy = proxy
-        self.resolve_proxy = resolve_proxy
+        self.proxy_manager = ProxyManager(proxies)
+        self.downloads_directory = downloads_directory
+        self.default_driver_proxy_list = default_driver_proxy_list
+        self.sources = []
+        for source_config in source_configs:
+            source = Source.from_config(
+                proxy_manager=self.proxy_manager,
+                source_config=source_config,
+                downloads_directory=downloads_directory,
+                default_driver_proxy_list=default_driver_proxy_list,
+            )
+            self.sources.append(source)
+            self.starts.append(source)
 
-    async def by_doi(
-        self,
-        doi: str,
-        md5: Optional[str] = None,
-        error_log_func: Callable = error_log,
-    ) -> AsyncIterable[FileResponsePb]:
-        sources = []
-        sources.extend(get_specific_sources_for_doi(doi, proxy=self.proxy, resolve_proxy=self.resolve_proxy))
-        sources.extend([
-            SciHubMksaTopSource(doi=doi, md5=md5, proxy=self.proxy, resolve_proxy=self.resolve_proxy),
-            SciHubSeSource(doi=doi, md5=md5, proxy=self.proxy, resolve_proxy=self.resolve_proxy),
-            LibgenDoiSource(doi=doi, md5=md5, proxy=self.proxy, resolve_proxy=self.resolve_proxy),
-        ])
-        sources = filter(lambda x: x.is_enabled, sources)
-        async for resp in self.download(sources=sources, error_log_func=error_log_func):
-            yield resp
-
-    async def by_md5(
-        self,
-        md5: str,
-        error_log_func: Callable = error_log,
-    ) -> AsyncIterable[FileResponsePb]:
-        sources = filter(lambda x: x.is_enabled, [
-            LibraryLolSource(md5=md5, proxy=self.proxy, resolve_proxy=self.resolve_proxy),
-            LibgenMd5Source(md5=md5, proxy=self.proxy, resolve_proxy=self.resolve_proxy),
-        ])
-        async for resp in self.download(sources=sources, error_log_func=error_log_func):
-            yield resp
-
-    async def download_source(self, source, error_log_func: Callable = error_log) -> AsyncIterable[FileResponsePb]:
-        yield FileResponsePb(status=FileResponsePb.Status.RESOLVING, source=source.base_url)
-        async for prepared_file_request in source.resolve(error_log_func=error_log_func):
+    async def download(self, params: Dict) -> AsyncIterable[FileResponsePb]:
+        for source in self.sources:
+            if not source.is_match(params):
+                continue
             try:
-                async for resp in source.execute_prepared_file_request(prepared_file_request=prepared_file_request):
+                async for resp in source.download(params):
                     yield resp
                 return
-            except DownloadError as e:
-                error_log_func(e)
+            except NotFoundError:
                 continue
-        raise DownloadError(error='not_found', source=source.__class__.__name__)
-
-    async def download(self, sources: Iterable[BaseSource], error_log_func: Callable = error_log) -> AsyncIterable[FileResponsePb]:
-        for source in sources:
-            await source.start()
-            try:
-                async for resp in self.download_source(source, error_log_func=error_log_func):
-                    yield resp
-                return
             except DownloadError as e:
-                error_log_func(e)
+                error_log(e)
                 continue
-            finally:
-                await source.stop()
         raise NotFoundError()

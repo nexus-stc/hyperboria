@@ -3,7 +3,8 @@ from datetime import (
     timedelta,
 )
 
-from aiobaseclient.exceptions import ClientError
+from grpc import StatusCode
+from grpc.aio import AioRpcError
 from library.telegram.base import RequestContext
 from nexus.bot.widgets.banlist_widget import BanlistWidget
 from pytimeparse.timeparse import timeparse
@@ -13,7 +14,7 @@ from .admin import BaseAdminHandler
 
 
 class BanHandler(BaseAdminHandler):
-    filter = events.NewMessage(incoming=True, pattern='^/ban ([0-9]+) ([A-Za-z0-9]+)\\s?(.*)?$')
+    filter = events.NewMessage(incoming=True, pattern='^/ban (-?[0-9]+) ([A-Za-z0-9]+)\\s?(.*)?$')
 
     def parse_pattern(self, event: events.ChatAction):
         chat_id = int(event.pattern_match.group(1))
@@ -39,17 +40,16 @@ class BanHandler(BaseAdminHandler):
                 ban_until=ban_end_date.timestamp(),
                 banned_chat_id=chat_id,
             )
-        except ClientError as e:
-            if e.code == 'nonexistent_entity_error':
-                await event.reply('Chat not found')
-                return
-            raise
-
-        await event.reply('User banned until ' + ban_end_date.strftime("%Y-%m-%d %H:%M") + ' UTC')
+        except AioRpcError as e:
+            if e.code() == StatusCode.NOT_FOUND:
+                return await event.reply('Chat not found')
+            else:
+                raise
+        return await event.reply('User banned until ' + ban_end_date.strftime("%Y-%m-%d %H:%M") + ' UTC')
 
 
 class UnbanHandler(BaseAdminHandler):
-    filter = events.NewMessage(incoming=True, pattern='^/unban(?:_|\\s)([0-9]+)$')
+    filter = events.NewMessage(incoming=True, pattern='^/unban(?:_|\\s)(-?[0-9]+)$')
 
     async def handler(self, event, request_context: RequestContext):
         chat_id = int(event.pattern_match.group(1))
@@ -64,13 +64,13 @@ class UnbanHandler(BaseAdminHandler):
                 action='unbanned',
                 unbanned_chat_id=chat_id,
             )
-        except ClientError as e:
-            if e.code == 'nonexistent_entity_error':
-                await event.reply('Chat not found')
-                return
-            raise
+        except AioRpcError as e:
+            if e.code() == StatusCode.NOT_FOUND:
+                return await event.reply('Chat not found')
+            else:
+                raise
 
-        await event.reply('User unbanned')
+        return await event.reply('User unbanned')
 
 
 class BanlistHandler(BaseAdminHandler):

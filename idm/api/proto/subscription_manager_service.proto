@@ -1,0 +1,60 @@
+syntax = "proto3";
+package idm.api.proto;
+
+service SubscriptionManager {
+    rpc get_single_chat_task(GetSingleChatTaskRequest) returns (GetSingleChatTaskResponse) {};
+    rpc subscribe(SubscribeRequest) returns (SubscribeResponse) {};
+    rpc reschedule_subscriptions(RescheduleSubscriptionsRequest) returns (RescheduleSubscriptionsResponse) {}
+}
+
+message Subscription {
+    enum Type {
+        CUSTOM = 0;
+        DIGEST = 1;
+        DOI = 2;
+    }
+    int64 id = 1;
+    int64 chat_id = 2;
+    string subscription_query = 3;
+    string schedule = 4;
+    bool is_oneshot = 5;
+    bool is_downloadable = 6;
+    optional uint32 valid_until = 7;
+    uint32 next_check_at = 8;
+    Type subscription_type = 9;
+}
+
+message NewSchedule {
+    bool is_persistent = 1;
+    string schedule = 2;
+}
+
+message RescheduleSubscriptionsRequest {
+    oneof subscriptions_ids {
+        int64 subscription_id = 1;
+        string subscription_query = 2;
+    }
+    bool is_fired = 3;
+    optional NewSchedule new_schedule = 4;
+}
+
+message RescheduleSubscriptionsResponse {}
+
+message GetSingleChatTaskRequest {}
+
+message GetSingleChatTaskResponse {
+    repeated Subscription subscriptions = 1;
+    int64 chat_id = 2;
+}
+
+message SubscribeRequest {
+    int64 chat_id = 1;
+    string subscription_query = 2;
+    string schedule = 3;
+    bool is_oneshot = 4;
+    bool is_downloadable = 5;
+    optional uint32 valid_until = 7;
+    Subscription.Type subscription_type = 9;
+}
+
+message SubscribeResponse {}

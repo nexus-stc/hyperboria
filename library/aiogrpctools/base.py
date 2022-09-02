@@ -13,33 +13,50 @@ from library.logging import error_log
 
 
 class AioGrpcServer(AioRootThing):
-    def __init__(self, address, port):
+    def __init__(self, address, port, max_message_length: int = 300 * 1024 * 1024, termination_timeout: float = 1.0):
         super().__init__()
         self.address = address
         self.port = port
-        self.server = aio.server()
+        self.termination_timeout = termination_timeout
+        self.server = aio.server(
+            options=[
+                ('grpc.max_send_message_length', max_message_length),
+                ('grpc.max_receive_message_length', max_message_length),
+            ]
+        )
         self.server.add_insecure_port(f'{address}:{port}')
 
     async def start(self):
-        logging.getLogger('debug').info({
-            'action': 'starting',
+        logging.getLogger('debug').debug({
+            'action': 'start',
             'address': self.address,
             'mode': 'grpc',
             'port': self.port,
-            'extras': [x.__class__.__name__ for x in self.starts + self.waits]
+            'extras': [x.__class__.__name__ for x in self.starts]
         })
-        await self.server.start()
-        await self.server.wait_for_termination()
+        r = await self.server.start()
+        logging.getLogger('debug').debug({
+            'action': 'started',
+            'address': self.address,
+            'mode': 'grpc',
+            'port': self.port,
+        })
+        return r
 
     async def stop(self):
-        logging.getLogger('debug').info({
-            'action': 'stopping',
+        logging.getLogger('debug').debug({
+            'action': 'stop',
             'mode': 'grpc',
         })
-        await self.server.stop(None)
+        r = await self.server.stop(self.termination_timeout)
+        logging.getLogger('debug').debug({
+            'action': 'stopped',
+            'mode': 'grpc',
+        })
+        return r
 
     def log_config(self, config):
-        logging.getLogger('debug').info(
+        logging.getLogger('debug').debug(
             '\n' + yaml.safe_dump(config.get_files()),
         )
 
@@ -47,8 +64,9 @@ class AioGrpcServer(AioRootThing):
 class BaseService(AioThing):
     error_mapping = {}
 
-    def __init__(self, service_name):
+    def __init__(self, application, service_name):
         super().__init__()
+        self.application = application
         self.service_name = service_name
         self.class_name = camel_to_snake(self.__class__.__name__)
 

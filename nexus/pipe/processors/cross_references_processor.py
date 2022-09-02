@@ -34,31 +34,32 @@ class CrossReferencesProcessor(Processor):
     cross_references_table = Table('cross_references')
     topic = 'cross_references'
 
-    def __init__(self, brokers, database):
+    def __init__(self, bootstrap_servers, database):
         super().__init__()
         self.pool_holder = AioPostgresPoolHolder(
             conninfo=f'dbname={database["database"]} '
             f'user={database["username"]} '
             f'password={database["password"]} '
             f'host={database["host"]}',
-            max_size=2,
+            max_size=1,
         )
-        self.brokers = brokers
+        self.bootstrap_servers = bootstrap_servers
         self.producer = None
-        self.waits.append(self.pool_holder)
+        self.starts.append(self.pool_holder)
 
     async def start(self):
         self.producer = self.get_producer()
         await self.producer.start()
 
     async def stop(self):
-        await self.producer.stop()
-        self.producer = None
+        if self.producer:
+            await self.producer.stop()
+            self.producer = None
 
     def get_producer(self):
         return AIOKafkaProducer(
             loop=asyncio.get_event_loop(),
-            bootstrap_servers=self.brokers,
+            bootstrap_servers=self.bootstrap_servers,
         )
 
     @retry(retry=retry_if_exception_type(NeedRetryError), wait=wait_fixed(15))
@@ -74,8 +75,7 @@ class CrossReferencesProcessor(Processor):
                 })
                 continue
 
-            now = time.time()
-            if now - message.last_retry_unixtime < 60:
+            if time.time() - message.last_retry_unixtime < 60:
                 need_delay = True
                 await self.producer.send_and_wait(
                     'cross_references',
@@ -97,15 +97,14 @@ class CrossReferencesProcessor(Processor):
                 if message.retry_count == 0:
                     document_operation = DocumentOperationPb(
                         update_document=UpdateDocumentPb(
-                            commit=True,
-                            reindex=True,
+                            full_text_index=True,
                             should_fill_from_external_source=True,
                             typed_document=TypedDocumentPb(scimag=ScimagPb(doi=target)),
                         ),
                     )
 
                     await self.producer.send_and_wait(
-                        'operations_binary_hp',
+                        'operations_binary',
                         document_operation.SerializeToString(),
                     )
                 new_message = CrossReferenceOperationPb()

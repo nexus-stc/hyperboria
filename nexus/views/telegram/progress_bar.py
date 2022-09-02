@@ -5,9 +5,8 @@ from typing import (
 )
 
 from izihawa_utils.exceptions import BaseError
+from library.telegram.common import close_button
 from telethon.errors import MessageIdInvalidError
-
-from .common import close_button
 
 
 class ProgressBarLostMessageError(BaseError):

@@ -13,9 +13,9 @@ Casual download
 bazel run -c opt cli -- doi 10.1056/NEJMoa2033700 --output article.pdf
 ```
 
-Download with proxy
+Download with proxies
 ```bash 
 bazel run -c opt cli -- md5 278C3A72B7B04717361501B8642857DF \
   --output file.pdf \
-  --proxy socks5://127.0.0.1:9050
+  --proxies socks5://127.0.0.1:9050
 ```

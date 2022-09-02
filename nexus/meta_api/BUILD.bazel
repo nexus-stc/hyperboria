@@ -13,7 +13,9 @@ alias(
 DEPS = [
     requirement("aiochclient"),
     requirement("aiohttp"),
+    requirement("aiosumma"),
     requirement("cachetools"),
+    requirement("en_core_web_sm"),
     requirement("grpcio"),
     requirement("lightgbm"),
     requirement("numpy"),
@@ -21,15 +23,14 @@ DEPS = [
     requirement("recordclass"),
     requirement("uvloop"),
     "//library/aiogrpctools",
+    requirement("aiokit"),
     "//library/aiopostgres",
     "//library/configurator",
     "//library/logging",
     "//nexus/meta_api/proto:grpc_py",
-    "//nexus/meta_api/query_extensions",
     "//nexus/models/proto:proto_py",
-    "//nexus/nlptools",
     "//nexus/views/telegram",
-    requirement("aiosumma"),
+    requirement("izihawa_nlptools"),
 ]
 
 py_layer(

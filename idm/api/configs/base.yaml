@@ -3,7 +3,12 @@ application:
   debug: true
   service_name: idm-api
 database:
-  port: 5432
+  idm:
+    drivername: postgresql
+    port: 5432
+  nexus:
+    drivername: postgresql
+    port: 5432
 grpc:
   address: 0.0.0.0
   port: 82

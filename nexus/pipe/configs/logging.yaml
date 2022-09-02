@@ -8,11 +8,15 @@ logging:
     traceback:
       class: library.logging.formatters.TracebackFormatter
   handlers:
-    debug:
+    console:
       class: logging.StreamHandler
+      level: WARNING
+      stream: 'ext://sys.stderr'
+    debug:
+      class: library.logging.handlers.BaseFileHandler
+      filename: '{{ log_path }}/debug.log'
       formatter: default
       level: DEBUG
-      stream: 'ext://sys.stderr'
     error:
       class: library.logging.handlers.BaseFileHandler
       filename: '{{ log_path }}/error.log'
@@ -48,6 +52,7 @@ logging:
       propagate: false
     error:
       handlers:
+        - console
         - error
         - traceback
         - warning
@@ -58,6 +63,7 @@ logging:
       propagate: false
   root:
     handlers:
+      - console
       - debug
       - error
       - warning

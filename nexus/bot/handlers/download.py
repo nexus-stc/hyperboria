@@ -32,6 +32,7 @@ class DownloadHandler(BaseCallbackQueryHandler):
         typed_document_pb = await self.get_typed_document_pb(
             index_alias=index_alias,
             document_id=document_id,
+            mode='download',
             request_context=request_context,
             session_id=session_id,
             position=position,
@@ -45,12 +46,12 @@ class DownloadHandler(BaseCallbackQueryHandler):
         )
         if start_delivery_response_pb.status == StartDeliveryResponsePb.Status.ALREADY_DOWNLOADING:
             await event.answer(
-                f'{t("ALREADY_DOWNLOADING", language=request_context.chat.language)}',
+                f'{t("ALREADY_DOWNLOADING", request_context.chat.language)}',
             )
             await remove_button(event, '⬇️', and_empty_too=True)
         elif start_delivery_response_pb.status == StartDeliveryResponsePb.Status.TOO_MANY_DOWNLOADS:
             await event.answer(
-                f'{t("TOO_MANY_DOWNLOADS", language=request_context.chat.language)}',
+                f'{t("TOO_MANY_DOWNLOADS", request_context.chat.language)}',
             )
         else:
             await remove_button(event, '⬇️', and_empty_too=True)

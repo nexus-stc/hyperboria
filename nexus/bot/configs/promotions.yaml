@@ -2,12 +2,35 @@
 
 promotions:
   - texts:
-      en: 🎁 Help us at /donate to accelerate knowledge unchaining
-    weight: 3.0
+      en: 💬 The victory of humanity is inevitable
+    weight: 1
   - texts:
-      en: ⤴️ Stay tuned with us at {related_channel}
-      es: ⤴️ Mantente en contacto con nosotros en {related_channel}
-      it: ⤴️ Resta aggiornato con noi su {related_channel}
-      pb: ⤴️ Fique ligado conosco em {related_channel}
-      ru: ⤴️ Оставайся на связи с нами на {related_channel}
-    weight: 1.0
+      en: 💬 Shall build Standard Template Construct
+    weight: 1
+  - texts:
+      en: 💬 Gaining knowledge is the only purpose of life
+    weight: 1
+  - texts:
+      en: 💬 Knowledge cannot belong
+    weight: 1
+  - texts:
+      en: 💬 Obey the path of discovery
+    weight: 1
+  - texts:
+      en: 💬 Research is the only and ultimate goal
+    weight: 1
+  - texts:
+      en: ✋ Have a subscription to paid articles? [Help researchers!](https://t.me/nexus_aaron)
+      ru: ✋ Есть доступ к платным статьям? [Помоги ученым!](https://t.me/nexus_aaron)
+    weight: 25
+  - texts:
+      en: ✋ Help us, become a seeder of books. Learn how in /seed
+      ru: ✋ Сохрани наследие, раздавай книги нуждающимся. Узнай как в /seed
+    weight: 25
+  - texts:
+      en: ⤴️ Stay tuned with us at @{related_channel} and [Twitter]({twitter_contact_url})
+      es: ⤴️ Mantente en contacto con nosotros en @{related_channel} y [Twitter]({twitter_contact_url})
+      it: ⤴️ Resta aggiornato con noi su @{related_channel} e [Twitter]({twitter_contact_url})
+      pb: ⤴️ Fique ligado conosco em @{related_channel} e [Twitter]({twitter_contact_url})
+      ru: ⤴️ Оставайся на связи с нами на @{related_channel} и в [Twitter]({twitter_contact_url})
+    weight: 25

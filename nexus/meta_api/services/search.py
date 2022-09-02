@@ -1,40 +1,44 @@
 import asyncio
-import json
+import dataclasses
 import logging
+import sys
 from contextlib import suppress
+from datetime import timedelta
 from timeit import default_timer
+from typing import (
+    Dict,
+    List,
+    Optional,
+    Union,
+)
 
-from aiokit import AioThing
+import orjson as json
+from aiosumma.eval_scorer_builder import EvalScorerBuilder
+from aiosumma.parser.errors import ParseError
+from aiosumma.processor import ProcessedQuery
 from cachetools import TTLCache
 from grpc import StatusCode
 from izihawa_utils.exceptions import NeedRetryError
 from izihawa_utils.pb_to_json import MessageToDict
-from izihawa_utils.text import camel_to_snake
-from library.aiogrpctools.base import (
-    BaseService,
-    aiogrpc_request_wrapper,
+from library.aiogrpctools.base import aiogrpc_request_wrapper
+from nexus.meta_api.mergers import (
+    AggregationMerger,
+    CountMerger,
+    ReservoirSamplingMerger,
+    TopDocsMerger,
 )
-from nexus.meta_api.proto.search_service_pb2 import \
-    ScoredDocument as ScoredDocumentPb
-from nexus.meta_api.proto.search_service_pb2 import \
-    SearchResponse as SearchResponsePb
+from nexus.meta_api.proto import search_service_pb2 as meta_search_service_pb2
 from nexus.meta_api.proto.search_service_pb2_grpc import (
     SearchServicer,
     add_SearchServicer_to_server,
 )
-from nexus.meta_api.query_extensions import (
-    ClassicQueryProcessor,
-    QueryClass,
+from nexus.meta_api.services.base import BaseService
+from nexus.models.proto import (
+    operation_pb2,
+    scimag_pb2,
+    typed_document_pb2,
 )
-from nexus.meta_api.rescorers import ClassicRescorer
-from nexus.models.proto.operation_pb2 import \
-    DocumentOperation as DocumentOperationPb
-from nexus.models.proto.operation_pb2 import UpdateDocument as UpdateDocumentPb
-from nexus.models.proto.scimag_pb2 import Scimag as ScimagPb
-from nexus.models.proto.typed_document_pb2 import \
-    TypedDocument as TypedDocumentPb
-from nexus.nlptools.utils import despace_full
-from nexus.views.telegram.registry import pb_registry
+from summa.proto import search_service_pb2
 from tenacity import (
     AsyncRetrying,
     RetryError,
@@ -44,194 +48,303 @@ from tenacity import (
 )
 
 
-class ClassicSearcher(BaseService):
-    page_sizes = {
-        'scimag': 100,
-        'scitech': 100,
+def to_bool(b: Union[str, None, bool, int]):
+    if isinstance(b, str):
+        return b == '1'
+    if b is None:
+        return False
+    return bool(b)
+
+
+@dataclasses.dataclass
+class SearchRequest:
+    index_alias: str
+    query: ProcessedQuery
+    collectors: List[Dict]
+
+    def cache_key(self):
+        return (
+            self.index_alias,
+            str(self.query),
+            json.dumps(
+                [MessageToDict(collector, preserving_proto_field_name=True) for collector in self.collectors],
+                option=json.OPT_SORT_KEYS,
+            ),
+        )
+
+
+class SearchService(SearchServicer, BaseService):
+    snippets = {
+        'scimag': {
+            'title': 1024,
+            'abstract': 100,
+        },
+        'scitech': {
+            'title': 1024,
+            'description': 100,
+        }
     }
 
-    def __init__(self, summa_client, query_processor, rescorer, stat_provider):
-        super().__init__(service_name='meta_api')
-        self.summa_client = summa_client
-
-        self.operation_logger = logging.getLogger('operation')
-        self.class_name = camel_to_snake(self.__class__.__name__)
-
+    def __init__(self, application, stat_provider, summa_client, query_preprocessor, query_transformers, learn_logger=None):
+        super().__init__(
+            application=application,
+            stat_provider=stat_provider,
+            summa_client=summa_client,
+        )
         self.query_cache = TTLCache(maxsize=1024 * 4, ttl=300)
-        self.query_processor = query_processor
-        self.rescorer = rescorer
-        self.stat_provider = stat_provider
+        self.query_preprocessor = query_preprocessor
+        self.query_transformers = query_transformers
+        self.learn_logger = learn_logger
 
-    async def processed_query_hook(self, processed_query, context):
-        if processed_query['class'] == QueryClass.URL:
-            await context.abort(StatusCode.INVALID_ARGUMENT, 'url_query_error')
-        return processed_query
+    async def start(self):
+        add_SearchServicer_to_server(self, self.application.server)
 
-    def merge_search_responses(self, search_responses):
-        if not search_responses:
-            return
-        elif len(search_responses) == 1:
-            return search_responses[0]
-        return SearchResponsePb(
-            scored_documents=[
-                scored_document
-                for search_response in search_responses
-                for scored_document in search_response.scored_documents
-            ],
-            has_next=any([search_response.has_next for search_response in search_responses]),
-        )
+    def merge_search_responses(self, search_responses, collector_descriptors: List[str]):
+        collector_outputs = []
+        for i, collector_descriptor in enumerate(collector_descriptors):
+            match collector_descriptor:
+                case 'aggregation':
+                    merger = AggregationMerger([
+                        search_response.collector_outputs[i].aggregation
+                        for search_response in search_responses if search_response.collector_outputs
+                    ])
+                case 'count':
+                    merger = CountMerger([
+                        search_response.collector_outputs[i].count
+                        for search_response in search_responses if search_response.collector_outputs
+                    ])
+                case 'top_docs':
+                    merger = TopDocsMerger([
+                        search_response.collector_outputs[i].top_docs
+                        for search_response in search_responses if search_response.collector_outputs
+                    ])
+                case 'reservoir_sampling':
+                    merger = ReservoirSamplingMerger([
+                        search_response.collector_outputs[i].reservoir_sampling
+                        for search_response in search_responses if search_response.collector_outputs
+                    ])
+                case _:
+                    raise RuntimeError("Unsupported collector")
+            collector_outputs.append(merger.merge())
+        return meta_search_service_pb2.MetaSearchResponse(collector_outputs=collector_outputs)
 
-    def cast_search_response(self, name, search_response):
-        scored_documents_pb = []
-        for scored_document in search_response['scored_documents']:
-            document = json.loads(scored_document['document'])
-            for field in document:
-                if field in {'authors', 'ipfs_multihashes', 'isbns', 'issns', 'references', 'tags'}:
-                    continue
-                document[field] = document[field][0]
+    async def check_if_need_new_documents_by_dois(self, requested_dois, scored_documents, should_request):
+        if requested_dois:
+            found_dois = set([
+                getattr(
+                    scored_document.typed_document,
+                    scored_document.typed_document.WhichOneof('document')
+                ).doi
+                for scored_document in scored_documents
+            ])
+            if len(found_dois) < len(requested_dois):
+                if should_request:
+                    for doi in requested_dois:
+                        if doi not in found_dois:
+                            await self.request_doi_delivery(doi=doi)
+                raise NeedRetryError()
 
-            original_id = (
-                document.get('original_id')
-                or document['id']
+    def resolve_index_aliases(self, request_index_aliases, processed_query):
+        """
+        Derives requested indices through request and query
+        """
+        index_aliases = set([index_alias for index_alias in request_index_aliases])
+        index_aliases_from_query = processed_query.context.index_aliases or index_aliases
+        return tuple(sorted([index_alias for index_alias in index_aliases_from_query if index_alias in index_aliases]))
+
+    def scorer(self, processed_query, index_alias):
+        if processed_query.context.order_by:
+            return search_service_pb2.Scorer(order_by=processed_query.context.order_by[0])
+
+        if processed_query.is_empty():
+            return None
+
+        eval_scorer_builder = EvalScorerBuilder()
+        if index_alias == 'scimag':
+            eval_scorer_builder.add_exp_decay(
+                field_name='issued_at',
+                origin=(
+                        processed_query.context.query_point_of_time
+                        - processed_query.context.query_point_of_time % 86400
+                ),
+                scale=timedelta(days=365.25 * 14),
+                offset=timedelta(days=30),
+                decay=0.85,
             )
-            download_stats = self.stat_provider.get_download_stats(original_id)
-            if download_stats and download_stats.downloads_count:
-                document['downloads_count'] = download_stats.downloads_count
+            eval_scorer_builder.add_fastsigm('page_rank + 1', 0.45)
+        elif index_alias == 'scitech':
+            eval_scorer_builder.ops.append('0.7235')
+        return eval_scorer_builder.build()
 
-            scored_documents_pb.append(ScoredDocumentPb(
-                position=scored_document['position'],
-                score=scored_document['score'],
-                typed_document=TypedDocumentPb(
-                    **{name: pb_registry[name](**document)},
-                )
-            ))
-        return SearchResponsePb(
-            scored_documents=scored_documents_pb,
-            has_next=search_response['has_next'],
-        )
+    async def process_query(self, query, languages, context):
+        try:
+            return self.query_preprocessor.process(query, languages)
+        except ParseError:
+            return await context.abort(StatusCode.INVALID_ARGUMENT, 'parse_error')
 
-    @aiogrpc_request_wrapper()
-    async def search(self, request, context, metadata):
+    async def base_search(
+        self,
+        search_requests: List[SearchRequest],
+        collector_descriptors: List[str],
+        request_id: str,
+        session_id: str,
+        user_id: Optional[str] = None,
+        skip_cache_loading: Optional[Union[bool, str]] = None,
+        skip_cache_saving: Optional[Union[bool, str]] = None,
+        original_query: Optional[str] = None,
+        query_tags: Optional[List[str]] = None,
+    ):
         start = default_timer()
-        processed_query = None
-        cache_hit = True
-        page_size = request.page_size or 5
-        index_aliases = tuple(sorted([index_alias for index_alias in request.index_aliases]))
-        user_id = metadata['user-id']
 
-        if (
-            (user_id, request.language, index_aliases, request.query) not in self.query_cache
-            or len(self.query_cache[(user_id, request.language, index_aliases, request.query)].scored_documents) == 0
-        ):
-            cache_hit = False
-            query = despace_full(request.query)
-            processed_query = self.query_processor.process(query, request.language)
-            processed_query = await self.processed_query_hook(processed_query, context)
+        skip_cache_saving = to_bool(skip_cache_saving)
+        skip_cache_loading = to_bool(skip_cache_loading)
 
-            with suppress(RetryError):
-                async for attempt in AsyncRetrying(
-                    retry=retry_if_exception_type(NeedRetryError),
-                    wait=wait_fixed(15),
-                    stop=stop_after_attempt(2)
-                ):
-                    with attempt:
-                        requests = []
-                        for index_alias in index_aliases:
-                            requests.append(
-                                self.summa_client.search(
-                                    index_alias=index_alias,
-                                    query=processed_query['query'],
-                                    offset=0,
-                                    limit=self.page_sizes[index_alias],
-                                    request_id=metadata['request-id'],
-                                )
-                            )
-                        search_responses = [
-                            MessageToDict(
-                                search_response,
-                                preserving_proto_field_name=True,
-                                including_default_value_fields=True,
-                            ) for search_response in await asyncio.gather(*requests)
-                        ]
-                        search_responses_pb = [
-                            self.cast_search_response(name, search_response)
-                            for (name, search_response) in zip(index_aliases, search_responses)
-                        ]
-                        search_response_pb = self.merge_search_responses(search_responses_pb)
+        cache_key = tuple(search_request.cache_key() for search_request in search_requests)
+        meta_search_response = self.query_cache.get(cache_key)
+        cache_hit = bool(meta_search_response)
 
-                        if len(search_response_pb.scored_documents) == 0 and processed_query['class'] == QueryClass.DOI:
-                            if attempt.retry_state.attempt_number == 1:
-                                await self.request_doi_delivery(doi=processed_query['doi'])
-                            raise NeedRetryError()
-
-            rescored_documents = await self.rescorer.rescore(
-                scored_documents=search_response_pb.scored_documents,
-                query=query,
-                session_id=metadata['session-id'],
-                language=request.language,
-            )
-            search_response_pb = SearchResponsePb(
-                scored_documents=rescored_documents,
-                has_next=search_response_pb.has_next,
-            )
-            self.query_cache[(user_id, request.language, index_aliases, request.query)] = search_response_pb
+        if not cache_hit or skip_cache_loading:
+            requests = []
+            for search_request in search_requests:
+                requests.append(
+                    self.summa_client.search(
+                        index_alias=search_request.index_alias,
+                        query=search_request.query,
+                        collectors=search_request.collectors,
+                        request_id=request_id,
+                        session_id=session_id,
+                        ignore_not_found=True,
+                    )
+                )
+            search_responses = await asyncio.gather(*requests)
+            meta_search_response = self.merge_search_responses(search_responses, collector_descriptors)
+            if not skip_cache_saving:
+                self.query_cache[cache_key] = meta_search_response
 
         logging.getLogger('query').info({
             'action': 'request',
             'cache_hit': cache_hit,
             'duration': default_timer() - start,
-            'index_aliases': index_aliases,
             'mode': 'search',
-            'page': request.page,
-            'page_size': page_size,
-            'processed_query': processed_query['query'] if processed_query else None,
-            'query': request.query,
-            'query_class': processed_query['class'].value if processed_query else None,
-            'request_id': metadata['request-id'],
-            'session_id': metadata['session-id'],
+            'query': original_query,
+            'request_id': request_id,
+            'session_id': session_id,
+            'query_tags': query_tags,
             'user_id': user_id,
         })
 
-        scored_documents = self.query_cache[(user_id, request.language, index_aliases, request.query)].scored_documents
+        return meta_search_response
+
+    @aiogrpc_request_wrapper(log=False)
+    async def meta_search(self, request, context, metadata):
+        processed_query = await self.process_query(
+            query=request.query,
+            languages=dict(request.languages),
+            context=context,
+        )
+        index_aliases = self.resolve_index_aliases(
+            request_index_aliases=request.index_aliases,
+            processed_query=processed_query,
+        )
+        search_requests = [
+            SearchRequest(
+                index_alias=index_alias,
+                query=self.query_transformers[index_alias].apply_tree_transformers(processed_query).to_summa_query(),
+                collectors=request.collectors,
+            ) for index_alias in index_aliases
+        ]
+        collector_descriptors = [collector.WhichOneof('collector') for collector in request.collectors]
+
+        return await self.base_search(
+            search_requests=search_requests,
+            collector_descriptors=collector_descriptors,
+            request_id=metadata['request-id'],
+            session_id=metadata['session-id'],
+            user_id=metadata.get('user-id'),
+            skip_cache_loading=metadata.get('skip-cache-loading'),
+            skip_cache_saving=metadata.get('skip-cache-saving'),
+            original_query=request.query,
+            query_tags=[tag for tag in request.query_tags],
+        )
+
+    @aiogrpc_request_wrapper(log=False)
+    async def search(self, request, context, metadata):
+        preprocessed_query = await self.process_query(query=request.query, languages=request.language, context=context)
+        index_aliases = self.resolve_index_aliases(
+            request_index_aliases=request.index_aliases,
+            processed_query=preprocessed_query,
+        )
+
+        page_size = request.page_size or 5
         left_offset = request.page * page_size
         right_offset = left_offset + page_size
-        has_next = len(scored_documents) > right_offset
 
-        search_response_pb = SearchResponsePb(
-            scored_documents=scored_documents[left_offset:right_offset],
+        search_requests = []
+        for index_alias in index_aliases:
+            processed_query = self.query_transformers[index_alias].apply_tree_transformers(preprocessed_query)
+            search_requests.append(
+                SearchRequest(
+                    index_alias=index_alias,
+                    query=processed_query.to_summa_query(),
+                    collectors=[
+                        search_service_pb2.Collector(
+                            top_docs=search_service_pb2.TopDocsCollector(
+                                limit=50,
+                                scorer=self.scorer(processed_query, index_alias),
+                                snippets=self.snippets[index_alias],
+                                explain=processed_query.context.explain,
+                            )
+                        ),
+                        search_service_pb2.Collector(count=search_service_pb2.CountCollector())
+                    ],
+                )
+            )
+
+        with suppress(RetryError):
+            async for attempt in AsyncRetrying(
+                retry=retry_if_exception_type(NeedRetryError),
+                wait=wait_fixed(5),
+                stop=stop_after_attempt(6)
+            ):
+                with attempt:
+                    meta_search_response = await self.base_search(
+                        search_requests=search_requests,
+                        collector_descriptors=['top_docs', 'count'],
+                        request_id=metadata['request-id'],
+                        session_id=metadata['session-id'],
+                        user_id=metadata.get('user-id'),
+                        skip_cache_loading=attempt.retry_state.attempt_number > 1 or metadata.get('skip-cache-loading'),
+                        skip_cache_saving=metadata.get('skip-cache-saving'),
+                        original_query=request.query,
+                        query_tags=[tag for tag in request.query_tags],
+                    )
+                    new_scored_documents = self.cast_top_docs_collector(
+                        meta_search_response.collector_outputs[0].top_docs.scored_documents,
+                    )
+                    has_next = len(new_scored_documents) > right_offset
+                    if 'scimag' in index_aliases:
+                        await self.check_if_need_new_documents_by_dois(
+                            requested_dois=processed_query.context.dois,
+                            scored_documents=new_scored_documents,
+                            should_request=attempt.retry_state.attempt_number == 1
+                        )
+
+        search_response_pb = meta_search_service_pb2.SearchResponse(
+            scored_documents=new_scored_documents[left_offset:right_offset],
             has_next=has_next,
+            count=meta_search_response.collector_outputs[1].count.count,
+            query_language=processed_query.context.query_language,
         )
 
         return search_response_pb
 
     async def request_doi_delivery(self, doi):
-        document_operation = DocumentOperationPb(
-            update_document=UpdateDocumentPb(
-                commit=True,
-                reindex=True,
+        document_operation = operation_pb2.DocumentOperation(
+            update_document=operation_pb2.UpdateDocument(
                 should_fill_from_external_source=True,
-                typed_document=TypedDocumentPb(scimag=ScimagPb(doi=doi)),
+                full_text_index=True,
+                full_text_index_commit=True,
+                typed_document=typed_document_pb2.TypedDocument(scimag=scimag_pb2.Scimag(doi=doi)),
             ),
         )
         self.operation_logger.info(MessageToDict(document_operation, preserving_proto_field_name=True))
-
-
-class SearchService(SearchServicer, AioThing):
-    def __init__(self, server, summa_client, stat_provider, learn_logger=None):
-        super().__init__()
-        self.server = server
-        self.searcher = ClassicSearcher(
-            summa_client=summa_client,
-            query_processor=ClassicQueryProcessor(),
-            rescorer=ClassicRescorer(
-                learn_logger=learn_logger,
-            ),
-            stat_provider=stat_provider,
-        )
-        self.starts.append(self.searcher)
-
-    async def start(self):
-        add_SearchServicer_to_server(self, self.server)
-
-    async def search(self, request, context):
-        return await self.searcher.search(request, context)

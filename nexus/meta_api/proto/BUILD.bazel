@@ -1,6 +1,5 @@
 load("@com_github_grpc_grpc//bazel:python_rules.bzl", "py_grpc_library", "py_proto_library")
 load("@rules_proto//proto:defs.bzl", "proto_library")
-load("@rules_proto_grpc//js:defs.bzl", "js_grpc_web_library")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -12,6 +11,7 @@ proto_library(
     deps = [
         "//nexus/models/proto",
         "@com_google_protobuf//:wrappers_proto",
+        "@org_izihawa_summa//summa/proto",
     ],
 )
 
@@ -24,14 +24,4 @@ py_grpc_library(
     name = "grpc_py",
     srcs = [":proto"],
     deps = [":proto_py"],
-)
-
-js_grpc_web_library(
-    name = "grpc_web_js",
-    protos = [
-        ":proto",
-        "//nexus/models/proto",
-    ],
-    visibility = ["//visibility:public"],
-    deps = ["//nexus/models/proto:proto_js"],
 )

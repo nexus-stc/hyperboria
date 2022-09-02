@@ -1,241 +1,81 @@
-from typing import (
-    Iterable,
-    List,
-    Optional,
-    Tuple,
-)
-from urllib.parse import quote
+from typing import Optional
 
-from izihawa_utils.common import (
-    filter_none,
-    is_essential,
-)
-from nexus.models.proto.scitech_pb2 import Scitech as ScitechPb
-from nexus.nlptools.utils import (
-    cast_string_to_single_string,
-    despace,
-    escape_format,
-)
-from nexus.translations import t
-from nexus.views.telegram.common import close_button
-from telethon import Button
-
-from .base import (
-    AuthorMixin,
-    BaseView,
-    DoiMixin,
-    FileMixin,
-    IssuedAtMixin,
+from .base_view_builder import (
+    BaseButtonsBuilder,
+    BaseViewBuilder,
+    highlight_markdown,
 )
 
 
-class ScitechView(BaseView, AuthorMixin, DoiMixin, FileMixin, IssuedAtMixin):
+class ScitechButtonsBuilder(BaseButtonsBuilder):
+    def add_default_layout(self, bot_name, session_id, position: int = 0):
+        return (
+            self.add_download_button(session_id, position)
+                .add_close_button(session_id)
+        )
+
+
+class ScitechViewBuilder(BaseViewBuilder):
     icon = '📚'
-    index_alias = 'scitech'
 
-    def __init__(self, document_pb: ScitechPb, duplicates: Optional[Iterable[ScitechPb]] = tuple()):
-        self.document_pb = document_pb
-        self.duplicates = [ScitechView(
-            document_pb=document_pb,
-        ) for document_pb in duplicates]
+    def add_edition(self, with_brackets=True, bold=False):
+        edition = self.document_holder.edition
+        if edition:
+            if edition.isdigit():
+                if edition[-1] == '1':
+                    edition += 'st edition'
+                elif edition[-1] == '2':
+                    edition += 'nd edition'
+                elif edition[-1] == '3':
+                    edition += 'rd edition'
+                else:
+                    edition += 'th edition'
+        return self.add(edition, with_brackets=with_brackets, bold=bold)
 
-    def generate_body(self, language: str, limit: Optional[int] = None) -> str:
-        head = self.icon
-        title = self.get_robust_title()
-        if title:
-            head += f' **{title}**'
+    def add_pages(self):
+        if self.document_holder.pages:
+            self.add(f'pp. {self.document_holder.pages}')
+        return self
 
-        doi = None
-        if self.doi:
-            doi = f'**DOI:** {self.get_doi_link()}'
-
-        locator = self.get_formatted_locator()
-
-        caption = '\n'.join(filter_none([head, doi, locator], predicate=is_essential))
-        if limit and len(caption) > limit:
-            shorten_title = title[:limit]
-            shorten_title = shorten_title[:max(32, shorten_title.rfind(' '))]
-            caption = f'{self.icon} **{shorten_title}**'
-
-        return caption
-
-    def get_cover_url(self):
-        if self.cu:
-            return self.cu
-        if self.libgen_id or self.fiction_id:
-            if self.libgen_id:
-                bulk_id = (self.libgen_id - (self.libgen_id % 1000))
-                r = f'covers/{bulk_id}/{self.md5}'
-            elif self.fiction_id:
-                bulk_id = (self.fiction_id - (self.fiction_id % 1000))
-                r = f'fictioncovers/{bulk_id}/{self.md5}'
-            else:
-                return None
-            if self.cu_suf:
-                r += f'-{self.cu_suf}'
-            return f'http://gen.lib.rus.ec/{r}.jpg'
-
-    def get_download_command(self, session_id: str, position: int = 0) -> str:
-        return f'/dlb_{session_id}_{self.id}_{position}'
-
-    def get_extension(self):
-        return self.extension
-
-    def get_filename(self) -> str:
-        limit = 55
-
-        processed_author = cast_string_to_single_string(self.get_first_authors(et_al=False).lower())
-        processed_title = cast_string_to_single_string(self.get_robust_title().lower())
-
-        parts = []
-        if processed_author:
-            parts.append(processed_author)
-        if processed_title:
-            parts.append(processed_title)
-        filename = '-'.join(parts)
-
-        chars = []
-        size = 0
-        hit_limit = False
-
-        for c in filename:
-            current_size = size + len(c.encode())
-            if current_size > limit:
-                hit_limit = True
-                break
-            chars.append(c)
-            size = current_size
-
-        filename = ''.join(chars)
-        if hit_limit:
-            glyph = filename.rfind('-')
-            if glyph != -1:
-                filename = filename[:glyph]
-
-        if not filename:
-            if self.doi:
-                filename = quote(self.doi, safe='')
-            else:
-                filename = self.md5
-
-        dt = self.get_issued_datetime()
-        if dt:
-            filename = f'{filename}-{dt.year}'
-
-        return f'{filename}.{self.get_extension()}'
-
-    def get_formatted_locator(self) -> str:
-        parts = []
-        if self.authors:
-            parts.append(self.get_first_authors(first_n_authors=3))
-        dt = self.get_issued_datetime()
-        if dt:
-            parts.append(f'({dt.year})')
-        if self.pages:
-            parts.append(f'pp. {self.pages}')
-
-        return escape_format(' '.join(parts)) or ''
-
-    def get_robust_title(self):
-        title = self.title or ''
-        if self.volume:
+    def add_title(self, bold=True):
+        title = self.document_holder.title or ''
+        if self.document_holder.periodical:
             if title:
-                title += f' ({self.volume})'
+                title += f' ({self.document_holder.periodical})'
             else:
-                title += self.volume
-        return escape_format(title)
-
-    def get_snippet(
-        self,
-        language: str,
-        view_command: Optional[str] = None,
-        limit: Optional[int] = None,
-    ) -> str:
-        snippet = self.generate_body(language=language, limit=limit)
-        if view_command:
-            snippet += f'\n{view_command} | {self.get_formatted_filedata(show_format=not self.has_duplicates)}'
-        return snippet
-
-    def get_view(
-        self,
-        language: str,
-        session_id: str,
-        bot_name: str,
-        position: int = 0,
-        back_command: Optional[str] = None,
-        with_buttons: bool = True,
-    ) -> Tuple[str, Optional[List[List[Button]]]]:
-        parts = [f'**{self.get_robust_title()}**\n']
-        cover_url = self.get_cover_url()
-        if cover_url:
-            # There is an invisible character inside []!
-            parts[-1] = f'[​]({cover_url})' + parts[-1]
-
-        if self.authors:
-            parts.append(f'**{t("AUTHORS", language=language)}**: '
-                         f'{escape_format(self.get_first_authors(first_n_authors=3))}')
-        dt = self.get_issued_datetime()
-        if dt:
-            parts.append(f'**{t("YEAR", language=language)}**: {dt.year}')
-        if self.edition:
-            parts.append(f'**{t("EDITION", language=language)}**: '
-                         f'{escape_format(self.edition)}')
-
-        parts.append(f'**Links**: {" - ".join(self.generate_links(bot_name))}')
-
-        if self.description:
-            parts.append(
-                f'\n**{t("DESCRIPTION", language=language)}**:\n'
-                f'{escape_format(despace(self.description))}',
-            )
-
-        if self.tags:
-            parts.append(f'\n__{escape_format(", ".join(self.tags))}__')
-
-        buttons = None
-        if with_buttons:
-            buttons = [[]]
-            # Plain layout
-            if not self.duplicates:
-                if back_command:
-                    buttons[-1].append(Button.inline(
-                        text='⬅️',
-                        data=back_command
-                    ))
-                buttons[-1].extend([
-                    Button.inline(
-                        text=f'⬇️ {self.get_formatted_filedata(show_language=False)}',
-                        data=self.get_download_command(session_id=session_id, position=position),
-                    ),
-                    close_button(session_id),
-                ])
+                title += self.document_holder.periodical
+        elif self.document_holder.volume:
+            if title:
+                title += f' ({self.document_holder.volume})'
             else:
-                buttons = [[]]
-                for view in [self] + self.duplicates:
-                    filedata = view.get_formatted_filedata(show_language=False, show_filesize=True)
-                    if len(buttons[-1]) >= 2:
-                        buttons.append([])
-                    # ⬇️ is a mark, Find+F over sources before replacing
-                    buttons[-1].append(
-                        Button.inline(
-                            text=f'⬇️ {filedata}',
-                            data=view.get_download_command(session_id=session_id, position=position),
-                        )
-                    )
-                if len(buttons[-1]) == 1:
-                    buttons[-1].append(Button.inline(
-                        text=' ',
-                        data='/noop',
-                    ))
-                buttons.append([])
-                if back_command:
-                    buttons[-1].append(Button.inline(
-                        text='⬅️',
-                        data=back_command,
-                    ))
-                buttons[-1].append(close_button(session_id))
+                title += self.document_holder.volume
+        self.add(title, bold=bold)
+        self.add_edition(with_brackets=True, bold=bold)
+        return self
 
-        return '\n'.join(parts).strip()[:4096], buttons
+    def add_snippet(self, on_newline=True):
+        snippet = self.document_holder.snippets.get('description')
+        if snippet and snippet.highlights:
+            if on_newline:
+                self.add_new_line()
+            self.add(highlight_markdown(snippet), escaped=True)
+        return self
 
-    def get_view_command(self, session_id: str, message_id: int, position: int = 0) -> str:
-        return f'/vb_{session_id}_{message_id}_{self.id}_{position}'
+    def add_locator(self, first_n_authors=1, markup=True):
+        return (
+            self.add_authors(first_n_authors=first_n_authors, on_newline=True)
+                .add_formatted_datetime()
+        )
+
+    def add_filedata(self, with_leading_pipe=False):
+        filedata = self.document_holder.get_formatted_filedata()
+        if filedata:
+            if with_leading_pipe:
+                self.add('|')
+            self.add(filedata)
+        return self
+
+    def add_description(self, limit: Optional[int] = None):
+        if self.document_holder.description:
+            self.add(self.document_holder.description)
+        return self

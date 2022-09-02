@@ -20,7 +20,7 @@ class ToPostgresAction(BaseAction):
             f'password={database["password"]} '
             f'host={database["host"]}',
         )
-        self.waits.append(self.pool_holder)
+        self.starts.append(self.pool_holder)
 
     async def do(self, document_operation_pb: DocumentOperationPb) -> DocumentOperationPb:
         store_telegram_file_id_pb = document_operation_pb.store_telegram_file_id

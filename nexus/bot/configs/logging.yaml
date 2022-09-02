@@ -10,10 +10,14 @@ logging:
     traceback:
       class: library.logging.formatters.TracebackFormatter
   handlers:
+    console:
+      class: logging.StreamHandler
+      level: WARNING
+      stream: 'ext://sys.stderr'
     debug:
       class: library.logging.handlers.BaseFileHandler
-      formatter: default
       filename: '{{ log_path }}/debug.log'
+      formatter: default
       level: DEBUG
     error:
       class: library.logging.handlers.BaseFileHandler
@@ -29,7 +33,7 @@ logging:
       class: library.logging.handlers.BaseFileHandler
       filename: '{{ log_path }}/statbox.log'
       formatter: default
-      level: DEBUG
+      level: INFO
     traceback:
       class: library.logging.handlers.BaseFileHandler
       filename: '{{ log_path }}/traceback.log'
@@ -56,13 +60,10 @@ logging:
       propagate: false
     error:
       handlers:
+        - console
         - error
         - traceback
         - warning
-      propagate: false
-    metrics:
-      handlers:
-        - error
       propagate: false
     operation:
       handlers:
@@ -74,10 +75,12 @@ logging:
       propagate: false
     telethon:
       handlers:
-        - debug
+        - error
+        - warning
       propagate: false
   root:
     handlers:
+      - console
       - debug
     level: DEBUG
   version: 1

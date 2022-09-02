@@ -32,6 +32,9 @@ py3_image(
         "configs/logging.yaml",
     ],
     layers = [
+        requirement("aiochclient"),
+        requirement("aiohttp"),
+        requirement("croniter"),
         requirement("grpcio"),
         requirement("pypika"),
         requirement("uvloop"),
@@ -42,7 +45,7 @@ py3_image(
         "//library/aiopostgres",
         "//library/configurator",
         "//library/telegram",
-        requirement("izihawa-utils"),
+        requirement("izihawa_utils"),
     ],
     main = "main.py",
     srcs_version = "PY3ONLY",

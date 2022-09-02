@@ -1,17 +1,17 @@
 ---
 
 application:
-  # Amazon Recipient Email in /donate message
+  # Amazon Recipient Email in /howtohelp message
   amazon_gift_card_recipient: pirate@ship.space
-  # Amazon URL for buying card in /donate message
+  # Amazon URL for buying card in /howtohelp message
   amazon_gift_card_url: https://www.amazon.com/dp/B07TMNGSN4
-  bot_version: 1.6.0
-  # Bitcoin Donation address in /donate message
-  btc_donate_address: 3QbF3zRQVjn3qMJBSbmLC1gb6VUc555xkw
+  bot_version: 2.0.0
+  btc_donate_address: '3CLEdvAXtNqCNix6SQmyT5RscR6pzxGvg8'
   # List of chat IDs that is allowed to bypass maintenance mode
   bypass_maintenance: []
   # Debugging mode
   debug: true
+  eth_donate_address: '0x930B94dafE8f2dEf8C6b536d9F70A12604Af10C3'
   # Enabled indices (passed to Nexus Meta API)
   index_aliases:
     - scitech
@@ -21,25 +21,27 @@ application:
   # and preventing creation of new users
   is_read_only_mode: false
   # Require subscription to `related_channel` before allowing to use the bot
-  is_subscription_required: true
-  # Libera Pay URL in /donate message
-  libera_pay_url:
+  is_subscription_required: false
   maintenance_picture_url:
-  nexus_version: InterCom
+  nexus_version: Jabbah
   # Default page size for SERP
   page_size: 5
-  # Length of generated Request-Id used for tracking requests across all backends
+  # Length of generated Request-ID used for tracking requests across all backends
   request_id_length: 12
   # Length of generated Session-ID used in commands to clue user sessions
   session_id_length: 8
+  sol_donate_address: 'FcJG17cEyG8LnNkdJg8HCAQQZKxqpwTupD9fc3GXMqxD'
   too_difficult_picture_url:
   upgrade_maintenance_picture_url:
   # Configuring behaviour of the bot in some cases
   views:
     settings:
+      has_connectome_button: true
       has_discovery_button: true
       has_language_buttons: true
-      has_system_messaging_button: true
+  xmr_donate_address: '42HZx5Cg1uQ2CtCrq7QabP23BN7gBrGu6U6QumkMmR4bKS61gcoP8xyNzP5cJCbjac9yaWFhLsDmM3adMWyBKBXn1d9WiUb'
+  xrp_donate_address: 'rw2ciyaNshpHe7bCHo4bRWq6pqqynnWKQg'
+  xrp_donate_tag: '1968122674'
 hub:
   endpoint:
 idm:
@@ -48,15 +50,13 @@ idm:
 log_path: '/var/log/nexus-bot'
 meta_api:
   endpoint:
-metrics:
-  enabled: false
 telegram:
   # Telegram App Hash from https://my.telegram.org/
   app_hash: '{{ APP_HASH }}'
   # Telegram App ID from https://my.telegram.org/
   app_id: 00000
   # External bot name shown in messages to users
-  bot_name: libgen_scihub_1_bot
+  bot_name: libgen_scihub_2_bot
   bot_token:
   # WARNING! Potentially buggy telethon option. Sometimes it goes mad and overload users with tons of messages
   # Collect missed messages at startup time and answer to them
@@ -72,26 +72,35 @@ telegram:
     - nexus.bot.handlers.ban.BanHandler
     - nexus.bot.handlers.ban.BanlistHandler
     - nexus.bot.handlers.ban.UnbanHandler
-    - nexus.bot.handlers.contact.ContactHandler
+    - nexus.bot.handlers.aboutus.AboutusHandler
     - nexus.bot.handlers.copyright.CopyrightHandler
     - nexus.bot.handlers.close.CloseHandler
-    - nexus.bot.handlers.donate.DonateHandler
     - nexus.bot.handlers.download.DownloadHandler
-    - nexus.bot.handlers.emoji.EmojiHandler
+    - nexus.bot.handlers.howtohelp.HowToHelpHandler
     - nexus.bot.handlers.help.HelpHandler
+    - nexus.bot.handlers.profile.ProfileHandler
+    - nexus.bot.handlers.profile.DigestHandler
+    - nexus.bot.handlers.rank.RankHandler
     - nexus.bot.handlers.roll.RollHandler
+    - nexus.bot.handlers.seed.SeedHandler
     - nexus.bot.handlers.settings.SettingsButtonsHandler
     - nexus.bot.handlers.settings.SettingsHandler
     - nexus.bot.handlers.shortlink.ShortlinkHandler
     - nexus.bot.handlers.submit.SubmitHandler
+    - nexus.bot.handlers.submit.EditSubmitHandler
     - nexus.bot.handlers.start.StartHandler
     - nexus.bot.handlers.stop.StopHandler
-    - nexus.bot.handlers.top_missed.TopMissedHandler
+    - nexus.bot.handlers.trends.TrendsHelpHandler
+    - nexus.bot.handlers.trends.TrendsHandler
+    - nexus.bot.handlers.trends.TrendsEditHandler
     - nexus.bot.handlers.view.ViewHandler
     - nexus.bot.handlers.vote.VoteHandler
     - nexus.bot.handlers.noop.NoopHandler
     - nexus.bot.handlers.search.SearchHandler
     - nexus.bot.handlers.search.SearchEditHandler
     - nexus.bot.handlers.search.SearchPagingHandler
-  # Channel that will be shown in /help, /donate, /contact and in promotions
-  related_channel: '@nexus_search'
+    - nexus.bot.handlers.search.InlineSearchHandler
+  # Channel that will be shown in /help, /howtohelp and in promotions
+  related_channel: 'nexus_search'
+twitter:
+  contact_url: https://twitter.com/the_superpirate

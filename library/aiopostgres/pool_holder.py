@@ -1,27 +1,87 @@
+import asyncio
+import logging
 from typing import Optional
 
+import psycopg
 from aiokit import AioThing
+from izihawa_utils.exceptions import BaseError
 from psycopg.rows import tuple_row
 from psycopg_pool import AsyncConnectionPool
 
 
+class OperationalError(BaseError):
+    level = logging.WARNING
+    code = 'operational_error'
+
+
 class AioPostgresPoolHolder(AioThing):
-    def __init__(self, conninfo, timeout=30, min_size=1, max_size=4):
+    def __init__(self, conninfo, timeout=30, min_size=1, max_size=1, is_recycling=True):
         super().__init__()
         self.pool = None
         self.fn = lambda: AsyncConnectionPool(
             conninfo=conninfo,
             timeout=timeout,
             min_size=min_size,
-            max_size=max_size,
+            max_size=max_size + int(is_recycling),
         )
+        self.is_recycling = is_recycling
+        self.recycling_task = None
+        self.timeout = timeout
+
+    async def _get_connection(self):
+        ev = asyncio.Event()
+        conn = await self.pool.getconn()
+        asyncio.get_running_loop().add_reader(conn.fileno(), ev.set)
+        return ev, conn
+
+    async def recycling(self):
+        logging.getLogger('debug').debug({
+            'action': 'start_recycling',
+            'mode': 'pool',
+            'stats': self.pool.get_stats(),
+        })
+        ev, conn = await self._get_connection()
+        try:
+            while True:
+                try:
+                    await asyncio.wait_for(ev.wait(), self.timeout)
+                except asyncio.TimeoutError:
+                    continue
+                try:
+                    await conn.execute("SELECT 1")
+                except psycopg.OperationalError:
+                    asyncio.get_running_loop().remove_reader(conn.fileno())
+                    await self.pool.putconn(conn)
+                    await self.pool.check()
+                    ev, conn = await self._get_connection()
+        except asyncio.CancelledError:
+            pass
+        finally:
+            await self.pool.putconn(conn)
+            logging.getLogger('debug').debug({
+                'action': 'stopped_recycling',
+                'mode': 'pool',
+                'stats': self.pool.get_stats(),
+            })
 
     async def start(self):
         if not self.pool:
             self.pool = self.fn()
+            await self.pool.wait()
+            if self.is_recycling:
+                self.recycling_task = asyncio.create_task(self.recycling())
 
     async def stop(self):
         if self.pool:
+            if self.recycling_task:
+                self.recycling_task.cancel()
+                await self.recycling_task
+                self.recycling_task = None
+            logging.getLogger('debug').debug({
+                'action': 'close',
+                'mode': 'pool',
+                'stats': self.pool.get_stats(),
+            })
             await self.pool.close()
             self.pool = None
 

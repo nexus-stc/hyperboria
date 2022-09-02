@@ -30,14 +30,26 @@ class StartHandler(BaseSearchHandler):
             request_context.statbox(action='query', mode='start', query=query)
             request_message = await self.application.telegram_client.send_message(event.chat, query)
             prefetch_message = await request_message.reply(
-                t("SEARCHING", language=request_context.chat.language),
+                t("SEARCHING", request_context.chat.language),
             )
             self.application.user_manager.last_widget[request_context.chat.chat_id] = prefetch_message.id
+            text, buttons = await self.setup_widget(
+                request_context=request_context,
+                prefetch_message=prefetch_message,
+                query=query,
+                is_shortpath_enabled=True,
+            )
+            edit_action = self.application.telegram_client.edit_message(
+                request_context.chat.chat_id,
+                prefetch_message.id,
+                text,
+                buttons=buttons,
+                link_preview=False,
+            )
             await asyncio.gather(
                 event.delete(),
-                self.do_search(event, request_context, prefetch_message, query=query,
-                               is_shortpath_enabled=True),
+                edit_action,
             )
         else:
             request_context.statbox(action='show', mode='start')
-            await event.reply(t('HELP', language=request_context.chat.language))
+            await event.reply(t('HELP', request_context.chat.language))

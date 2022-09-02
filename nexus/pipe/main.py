@@ -1,5 +1,4 @@
 import logging
-import ssl
 from functools import partial
 
 from aiokit import MultiprocessAsyncExecutor
@@ -17,21 +16,13 @@ def create_aiothing(consumer_cls, topic_names, group_id, processors, shard):
     return consumer_cls(
         topic_names=topic_names,
         processors=processors,
-        bootstrap_servers=config['pipe']['brokers'],
+        bootstrap_servers=config['pipe']['bootstrap_servers'],
         group_id=group_id,
     )
 
 
-# OpenSSL issue: https://github.com/psf/requests/issues/4775
-def set_ssl_hack():
-    ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-    ssl_context.set_ciphers('HIGH:!DH:!aNULL')
-    ssl_context.set_ciphers('DEFAULT@SECLEVEL=1')
-
-
 def main():
     configure_logging(config)
-    set_ssl_hack()
 
     logger = logging.getLogger('statbox')
     logger.info({

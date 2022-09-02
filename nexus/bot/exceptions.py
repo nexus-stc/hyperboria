@@ -11,11 +11,6 @@ class BannedUserError(BaseError):
         self.ban_timeout = ban_timeout
 
 
-class MessageHasBeenDeletedError(BaseError):
-    level = logging.WARNING
-    code = 'message_has_been_deleted_error'
-
-
 class UnknownFileFormatError(BaseError):
     level = logging.WARNING
     code = 'unknown_file_format_error'
@@ -23,3 +18,12 @@ class UnknownFileFormatError(BaseError):
 
 class UnknownIndexAliasError(BaseError):
     code = 'unknown_index_alias_error'
+
+
+class WidgetError(BaseError):
+    level = logging.WARNING
+    code = 'widget_error'
+
+    def __init__(self, text, buttons):
+        self.text = text
+        self.buttons = buttons

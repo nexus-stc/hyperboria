@@ -8,26 +8,13 @@ from telethon import Button
 
 
 class TooLongQueryError(BaseError):
-    code = 'too_long_query_error'
     level = logging.WARNING
+    code = 'too_long_query_error'
 
 
 class DecodeDeepQueryError(BaseError):
-    code = 'decode_deep_query_error'
     level = logging.WARNING
-
-
-def close_button(session_id: str = None):
-    if session_id:
-        return Button.inline(
-            text='✖️',
-            data=f'/close_{session_id}',
-        )
-    else:
-        return Button.inline(
-            text='✖️',
-            data='/close',
-        )
+    code = 'decode_deep_query_error'
 
 
 def vote_button(language: str, session_id: str, index_alias: str, document_id: int, case: str):
@@ -35,7 +22,7 @@ def vote_button(language: str, session_id: str, index_alias: str, document_id: i
     case = {'broken': 'b', 'ok': 'o'}[case]
     short_index_alias = {'scimag': 'a', 'scitech': 'b'}[index_alias]
     return Button.inline(
-        text=t(label, language=language),
+        text=t(label, language),
         data=f'/vote{short_index_alias}_{session_id}_{document_id}_{case}',
     )
 

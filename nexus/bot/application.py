@@ -19,7 +19,6 @@ class TelegramApplication(AioRootThing):
             database=self.config['telegram'].get('database'),
             mtproxy=self.config['telegram'].get('mtproxy'),
         )
-
         self.hub_client = HubGrpcClient(endpoint=self.config['hub']['endpoint'])
         self.starts.append(self.hub_client)
         self.idm_client = None
@@ -39,8 +38,7 @@ class TelegramApplication(AioRootThing):
 
     async def start(self):
         self.set_handlers(self.telegram_client)
-        await self.telegram_client.start_and_wait()
-        await self.telegram_client.run_until_disconnected()
+        await self.telegram_client.start()
 
     async def stop(self):
         self.telegram_client.remove_event_handlers()
