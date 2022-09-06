@@ -13,30 +13,37 @@ jobs:
     class: nexus.ingest.jobs.CrossrefApiJob
     kwargs:
       actions:
-        - class: nexus.actions.crossref_api.CrossrefApiToThinScimagPbAction
-        - class: nexus.actions.scimag.ScimagPbToDocumentOperationBytesAction
+        - class: nexus.actions.postgres.ToScimagPbAction
+        - class: nexus.actions.scimag_pb.ToDocumentOperationBytesAction
+          kwargs:
+            full_text_index: true
+            should_fill_from_external_source: true
       base_url: https://api.crossref.org/
       max_retries: 60
       retry_delay: 10
       sinks:
         - class: nexus.ingest.sinks.KafkaSink
           kwargs:
-            kafka_hosts:
-              - kafka-0.example.net
-            topic_name: operations_binary
+            kafka:
+              bootstrap_servers:
+                - kafka-0.example.net
+              topic_name: operations_binary
   libgen-api:
     class: nexus.ingest.jobs.LibgenApiJob
     kwargs:
       actions:
-        - class: nexus.actions.libgen_api.LibgenApiToScitechPbAction
-        - class: nexus.actions.scitech.ScitechPbToDocumentOperationBytesAction
+        - class: nexus.actions.libgen_api.ToScitechPbAction
+        - class: nexus.actions.scitech_pb.ToDocumentOperationBytesAction
+          kwargs:
+            full_text_index: true
+            should_fill_from_external_source: false
       base_url: libgen.example.net
       max_retries: 60
       retry_delay: 10
       sinks:
         - class: nexus.ingest.sinks.KafkaSink
           kwargs:
-            kafka_hosts:
+            bootstrap_servers:
               - kafka-0.example.net
             topic_name: operations_binary
 log_path: '/var/log/nexus-ingest/{{ ENV_TYPE }}'

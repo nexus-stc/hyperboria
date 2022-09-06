@@ -4,6 +4,21 @@ package nexus.hub.proto;
 import "nexus/models/proto/typed_document.proto";
 import "idm/api/proto/chat_manager_service.proto";
 
+service Delivery {
+  rpc get_availability_data(GetAvailabilityDataRequest) returns (GetAvailabilityDataResponse) {}
+  rpc start_delivery(StartDeliveryRequest) returns (StartDeliveryResponse) {};
+}
+
+message GetAvailabilityDataRequest {
+  uint64 document_id = 1;
+  optional string bot_name = 2;
+}
+
+message GetAvailabilityDataResponse {
+  map<string, string> bot_files = 1;
+  repeated string ipfs_hashes = 2;
+}
+
 message StartDeliveryRequest {
   nexus.models.proto.TypedDocument typed_document = 1;
   idm.api.proto.Chat chat = 2;
@@ -17,8 +32,4 @@ message StartDeliveryResponse {
     ALREADY_DOWNLOADING = 2;
   }
   Status status = 1;
-}
-
-service Delivery {
-    rpc start_delivery(StartDeliveryRequest) returns (StartDeliveryResponse) {};
 }

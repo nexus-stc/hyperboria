@@ -15,7 +15,7 @@ class LegacyHandler(BaseHandler):
 
     async def handler(self, event: events.ChatAction, request_context: RequestContext):
         request_context.statbox(action='show', mode='legacy')
-        await event.reply(t('LEGACY', language=request_context.chat.language))
+        await event.reply(t('LEGACY', request_context.chat.language))
 
 
 class LegacyCallbackHandler(BaseCallbackQueryHandler):
@@ -25,4 +25,4 @@ class LegacyCallbackHandler(BaseCallbackQueryHandler):
 
     async def handler(self, event: events.ChatAction, request_context: RequestContext):
         request_context.statbox(action='show', mode='legacy')
-        return await event.answer(t('LEGACY', language=request_context.chat.language))
+        return await event.answer(t('LEGACY', request_context.chat.language))

@@ -6,6 +6,7 @@ from typing import (
 
 from library.aiopostgres.pool_holder import AioPostgresPoolHolder
 from nexus.ingest.jobs.base import BaseJob
+from psycopg.rows import dict_row
 
 
 class SelfFeedJob(BaseJob):
@@ -26,8 +27,8 @@ class SelfFeedJob(BaseJob):
             f'password={database["password"]} '
             f'host={database["host"]}',
         )
-        self.waits.append(self.pool_holder)
+        self.starts.append(self.pool_holder)
 
     async def iterator(self) -> AsyncIterable[Any]:
-        async for row in self.pool_holder.iterate(self.sql):
+        async for row in self.pool_holder.iterate(self.sql, row_factory=dict_row):
             yield row

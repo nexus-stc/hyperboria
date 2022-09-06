@@ -11,8 +11,8 @@ def images_install():
 
     container_pull(
         name = "ubuntu",
-        digest = "sha256:d0b4808a158b42b6efb3ae93abb567b1cb6ee097221813c0315390de0fa320b9",
+        digest = "sha256:c27987afd3fd8234bcf7a81e46cf86c2c4c10ef06e80f0869c22c6ff22b29f9d",
         registry = "index.docker.io",
         repository = "library/ubuntu",
-        tag = "21.10",
+        tag = "22.04",
     )

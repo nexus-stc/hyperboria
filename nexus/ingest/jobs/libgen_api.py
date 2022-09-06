@@ -26,9 +26,14 @@ class LibgenApiJob(BaseJob):
         from_date: Optional[str] = None,
     ):
         super().__init__(sinks=sinks, actions=actions)
-        self.libgen_client = LibgenClient(base_url=base_url, max_retries=max_retries, retry_delay=retry_delay)
+        self.libgen_client = LibgenClient(
+            base_url=base_url,
+            max_retries=max_retries,
+            retry_delay=retry_delay,
+            proxy_url='socks5://127.0.0.1:9050',
+        )
         self.from_date = from_date or str(datetime.date(datetime.now()) - timedelta(days=1))
-        self.waits.append(self.libgen_client)
+        self.starts.append(self.libgen_client)
 
     async def iterator(self) -> AsyncIterable[Any]:
         async for item in self.libgen_client.newer(timenewer=f'{self.from_date} 00:00:00'):

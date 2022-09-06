@@ -22,6 +22,7 @@ py3_image(
     visibility = ["//visibility:public"],
     deps = [
         requirement("aiokafka"),
+        requirement("aiosumma"),
         requirement("aiocrossref"),
         requirement("aiokit"),
         requirement("aiolibgen"),
@@ -29,7 +30,6 @@ py3_image(
         "//library/configurator",
         "//library/jobber",
         "//nexus/actions",
-        "//summa:aiosumma",
     ],
 )
 

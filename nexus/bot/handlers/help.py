@@ -15,6 +15,6 @@ class HelpHandler(BaseHandler):
     async def handler(self, event: events.ChatAction, request_context: RequestContext):
         request_context.statbox(action='show', mode='help')
         if event.is_group or event.is_channel:
-            await event.reply(t('HELP_FOR_GROUPS', language=request_context.chat.language), buttons=Button.clear())
+            await event.reply(t('HELP_FOR_GROUPS', request_context.chat.language), buttons=Button.clear())
         else:
-            await event.reply(t('HELP', language=request_context.chat.language), buttons=Button.clear())
+            await event.reply(t('HELP', request_context.chat.language), buttons=Button.clear())

@@ -29,8 +29,8 @@ class ActionProcessor(Processor):
         super().__init__()
         self.actions = [instantiate_object(action) for action in actions]
         self.filter_object = instantiate_object(filter)
-        self.waits.append(self.filter_object)
-        self.waits.extend(self.actions)
+        self.starts.append(self.filter_object)
+        self.starts.extend(self.actions)
 
     def filter(self, message) -> bool:
         return self.filter_object.filter(message)

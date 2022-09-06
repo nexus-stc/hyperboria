@@ -50,12 +50,21 @@ class SettingsWidget:
             'sl': self._switch_language,
             'ssm': self._switch_system_messaging,
             'sd': self._switch_discovery,
+            'sc': self._switch_connectome,
         }
 
     async def _switch_language(self, target_language: str):
         self.chat = await self.application.idm_client.update_chat(
             chat_id=self.chat.chat_id,
             language=target_language,
+            request_id=self.request_id,
+        )
+        return self.chat
+
+    async def _switch_connectome(self, is_connectome_enabled: str):
+        self.chat = await self.application.idm_client.update_chat(
+            chat_id=self.chat.chat_id,
+            is_connectome_enabled=bool(int(is_connectome_enabled)),
             request_id=self.request_id,
         )
         return self.chat
@@ -82,13 +91,15 @@ class SettingsWidget:
         return old_chat != self.chat
 
     async def render(self):
-        text = t('SETTINGS_TEMPLATE', language=self.chat.language).format(
+        text = t('SETTINGS_TEMPLATE', self.chat.language).format(
             bot_version=self.application.config['application']['bot_version'],
             nexus_version=self.application.config['application']['nexus_version'],
             language=top_languages.get(self.chat.language, self.chat.language),
         )
         if not self.is_group_mode and self.application.config['application']['views']['settings']['has_discovery_button']:
-            text = f"{text}\n\n{t('NEXUS_DISCOVERY_DESCRIPTION', language=self.chat.language)}"
+            text = f"{text}\n\n{t('NEXUS_DISCOVERY_DESCRIPTION', self.chat.language)}"
+        if not self.is_group_mode and self.application.config['application']['views']['settings']['has_connectome_button']:
+            text = f"{text}\n\n{t('NEXUS_CONNECTOME_DESCRIPTION', self.chat.language)}"
         buttons = []
         if self.has_language_buttons:
             buttons.append([])
@@ -105,24 +116,23 @@ class SettingsWidget:
         if self.is_group_mode:
             return text, buttons
 
-        if self.application.config['application']['views']['settings']['has_system_messaging_button']:
-            buttons.append([
-                Button.inline(
-                    text=(
-                        f'{t("SYSTEM_MESSAGING_OPTION", language=self.chat.language)}: '
-                        f'{boolean_emoji[self.chat.is_system_messaging_enabled]}'
-                    ),
-                    data=f'/settings_ssm_{1 - int(self.chat.is_system_messaging_enabled)}'
-                )
-            ])
+        last_line = []
         if self.application.config['application']['views']['settings']['has_discovery_button']:
-            buttons.append([
-                Button.inline(
-                    text=(
-                        f'{t("DISCOVERY_OPTION", language=self.chat.language)}: '
-                        f'{boolean_emoji[self.chat.is_discovery_enabled]}'
-                    ),
-                    data=f'/settings_sd_{1 - int(self.chat.is_discovery_enabled)}'
-                )
-            ])
+            last_line.append(Button.inline(
+                text=(
+                    f'{t("DISCOVERY_OPTION", self.chat.language)}: '
+                    f'{boolean_emoji[self.chat.is_discovery_enabled]}'
+                ),
+                data=f'/settings_sd_{1 - int(self.chat.is_discovery_enabled)}'
+            ))
+        if self.application.config['application']['views']['settings']['has_connectome_button']:
+            last_line.append(Button.inline(
+                text=(
+                    f'{t("CONNECTOME_OPTION", self.chat.language)}: '
+                    f'{boolean_emoji[self.chat.is_connectome_enabled]}'
+                ),
+                data=f'/settings_sc_{1 - int(self.chat.is_connectome_enabled)}'
+            ))
+        if last_line:
+            buttons.append(last_line)
         return text, buttons

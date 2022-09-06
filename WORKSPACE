@@ -1,7 +1,4 @@
-workspace(
-    name = "hyperboria",
-    managed_directories = {"@npm": ["rules/nodejs/node_modules"]},
-)
+workspace(name = "hyperboria")
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
@@ -9,9 +6,14 @@ http_archive(
     name = "bazel_skylib",
     sha256 = "ebdf850bfef28d923a2cc67ddca86355a449b5e4f38b0a70e584dc24e5984aa6",
     strip_prefix = "bazel-skylib-f80bc733d4b9f83d427ce3442be2e07427b2cc8d",
-    urls = [
-        "https://github.com/bazelbuild/bazel-skylib/archive/f80bc733d4b9f83d427ce3442be2e07427b2cc8d.tar.gz",
-    ],
+    urls = ["https://github.com/bazelbuild/bazel-skylib/archive/f80bc733d4b9f83d427ce3442be2e07427b2cc8d.tar.gz"],
+)
+
+http_archive(
+    name = "com_github_grpc_grpc",
+    sha256 = "291db3c4e030164421b89833ee761a2e6ca06b1d1f8e67953df762665d89439d",
+    strip_prefix = "grpc-1.46.1",
+    urls = ["https://github.com/grpc/grpc/archive/v1.46.1.tar.gz"],
 )
 
 # ToDo: wait for https://github.com/bazelbuild/rules_docker/pull/1638
@@ -25,45 +27,17 @@ http_archive(
 )
 
 http_archive(
-    name = "build_bazel_rules_nodejs",
-    sha256 = "f7037c8e295fdc921f714962aee7c496110052511e2b14076bd8e2d46bc9819c",
-    urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/4.4.5/rules_nodejs-4.4.5.tar.gz"],
-)
-
-http_archive(
     name = "io_bazel_rules_k8s",
     sha256 = "a08850199d6900328ef899906717fb1dfcc6cde62701c63725748b2e6ca1d5d9",
     strip_prefix = "rules_k8s-d05cbea5c56738ef02c667c10951294928a1d64a",
-    urls = [
-        "https://github.com/bazelbuild/rules_k8s/archive/d05cbea5c56738ef02c667c10951294928a1d64a.tar.gz",
-    ],
-)
-
-http_archive(
-    name = "rules_rust",
-    sha256 = "30c1b40d77a262e3f7dba6e4267fe4695b5eb1e68debc6aa06c3e09d429ae19a",
-    strip_prefix = "rules_rust-0.1.0",
-    urls = [
-        "https://github.com/bazelbuild/rules_rust/archive/0.1.0.tar.gz",
-    ],
-)
-
-http_archive(
-    name = "rules_jvm_external",
-    sha256 = "2a547d8d5e99703de8de54b6188ff0ed470b3bfc88e346972d1c8865e2688391",
-    strip_prefix = "rules_jvm_external-3.3",
-    urls = [
-        "https://github.com/bazelbuild/rules_jvm_external/archive/3.3.tar.gz",
-    ],
+    urls = ["https://github.com/bazelbuild/rules_k8s/archive/d05cbea5c56738ef02c667c10951294928a1d64a.tar.gz"],
 )
 
 http_archive(
     name = "rules_pkg",
     sha256 = "b9a5bdfe4f8ce0dedf9387eadd9f4844c383118b3f4cc27b586626b7998141c3",
     strip_prefix = "rules_pkg-4b0b9f4679484f107f750a60190ff5ec6b164a5f/pkg",
-    urls = [
-        "https://github.com/bazelbuild/rules_pkg/archive/4b0b9f4679484f107f750a60190ff5ec6b164a5f.tar.gz",
-    ],
+    urls = ["https://github.com/bazelbuild/rules_pkg/archive/4b0b9f4679484f107f750a60190ff5ec6b164a5f.tar.gz"],
 )
 
 http_archive(
@@ -75,9 +49,24 @@ http_archive(
 
 http_archive(
     name = "rules_python",
-    sha256 = "15f84594af9da06750ceb878abbf129241421e3abbd6e36893041188db67f2fb",
-    strip_prefix = "rules_python-0.7.0",
-    urls = ["https://github.com/bazelbuild/rules_python/archive/0.7.0.tar.gz"],
+    sha256 = "95525d542c925bc2f4a7ac9b68449fc96ca52cfba15aa883f7193cdf745c38ff",
+    strip_prefix = "rules_python-cccbfb920c8b100744c53c0c03900f1be4040fe8",
+    url = "https://github.com/ppodolsky/rules_python/archive/cccbfb920c8b100744c53c0c03900f1be4040fe8.tar.gz",
+)
+
+http_archive(
+    name = "org_chromium_chromium",
+    build_file_content = """exports_files(["chromedriver"])""",
+    strip_prefix = "ungoogled-chromium_103.0.5060.134_1.vaapi_linux",
+    urls = [
+        "https://github.com/macchrome/linchrome/releases/download/v103.0.5060.134-r1002911-portable-ungoogled-Lin64/ungoogled-chromium_103.0.5060.134_1.vaapi_linux.tar.xz",
+    ],
+)
+
+http_archive(
+    name = "org_izihawa_summa",
+    strip_prefix = "summa-ab7ea3eba9846094d1792077d578ddb585d8e070",
+    url = "https://github.com/izihawa/summa/archive/ab7ea3eba9846094d1792077d578ddb585d8e070.tar.gz",
 )
 
 # Images Install
@@ -97,12 +86,19 @@ load("//rules/go:install.bzl", "go_install")
 go_install()
 
 # Python
-register_toolchains("//rules/python:py_toolchain")
+load("@rules_python//python:repositories.bzl", "python_register_toolchains")
 
+python_register_toolchains(
+    name = "python3_10",
+    python_version = "3.10",
+)
+
+load("@python3_10//:defs.bzl", "interpreter")
 load("@rules_python//python:pip.bzl", "pip_parse")
 
 pip_parse(
     name = "pip_modules",
+    python_interpreter_target = interpreter,
     requirements_lock = "//rules/python:requirements-lock.txt",
 )
 
@@ -126,43 +122,13 @@ load("@com_github_grpc_grpc//bazel:grpc_deps.bzl", "grpc_deps")
 
 grpc_deps()
 
-load("@com_github_grpc_grpc//bazel:grpc_extra_deps.bzl", "grpc_extra_deps")
+load("@com_google_googleapis//:repository_rules.bzl", "switched_rules_by_language")
 
-grpc_extra_deps()
-
-# Java
-
-load("//rules/java:artifacts.bzl", "maven_fetch_remote_artifacts")
-
-maven_fetch_remote_artifacts()
-
-# Rust
-
-load("@rules_rust//rust:repositories.bzl", "rust_repositories")
-
-rust_repositories(
-    edition = "2021",
-    version = "1.59.0",
-)
-
-load("//rules/rust:crates.bzl", "raze_fetch_remote_crates")
-
-raze_fetch_remote_crates()
-
-# NodeJS
-load("@build_bazel_rules_nodejs//:index.bzl", "node_repositories", "yarn_install")
-
-node_repositories(
-    package_json = ["//rules/nodejs:package.json"],
-    preserve_symlinks = True,
-)
-
-yarn_install(
-    name = "npm",
-    package_json = "//rules/nodejs:package.json",
-    symlink_node_modules = True,
-    use_global_yarn_cache = True,
-    yarn_lock = "//rules/nodejs:yarn.lock",
+switched_rules_by_language(
+    name = "com_google_googleapis_imports",
+    cc = True,
+    grpc = True,
+    python = True,
 )
 
 # Packaging
@@ -185,18 +151,12 @@ load("@io_bazel_rules_docker//repositories:py_repositories.bzl", "py_deps")
 
 py_deps()
 
-load("@io_bazel_rules_docker//java:image.bzl", java_image_repos = "repositories")
 load("@io_bazel_rules_docker//python3:image.bzl", py3_image_repos = "repositories")
 load("@io_bazel_rules_docker//nodejs:image.bzl", nodejs_image_repos = "repositories")
-load("@io_bazel_rules_docker//rust:image.bzl", rust_image_repos = "repositories")
-
-java_image_repos()
 
 nodejs_image_repos()
 
 py3_image_repos()
-
-rust_image_repos()
 
 # K8s
 

@@ -1,5 +1,4 @@
 import asyncio
-from typing import Iterable
 
 from aiokafka import AIOKafkaProducer
 
@@ -7,13 +6,15 @@ from .base import BaseSink
 
 
 class KafkaSink(BaseSink):
-    def __init__(self, kafka_hosts: Iterable[str], topic_name: str):
+    def __init__(self, kafka, topic_name):
         super().__init__()
+        self.kafka = kafka
+        self.topic_name = topic_name
         self.producer = AIOKafkaProducer(
             loop=asyncio.get_event_loop(),
-            bootstrap_servers=kafka_hosts,
+            bootstrap_servers=kafka['bootstrap_servers'],
+            max_request_size=kafka['max_request_size'],
         )
-        self.topic_name = topic_name
         self.starts.append(self.producer)
 
     async def send(self, data: bytes):

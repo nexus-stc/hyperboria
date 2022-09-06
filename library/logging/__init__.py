@@ -33,7 +33,7 @@ def error_log(e, level=logging.ERROR, **fields):
     elif fields:
         e = {'error': repr(e), **fields}
     logging.getLogger('error').log(
-        msg=e,
+        msg=str(e),
         level=level
     )
 

@@ -19,9 +19,9 @@ class ToPostgresAction(BaseAction):
             f'user={database["username"]} '
             f'password={database["password"]} '
             f'host={database["host"]}',
-            max_size=2,
+            max_size=1,
         )
-        self.waits.append(self.pool_holder)
+        self.starts.append(self.pool_holder)
 
     def generate_insert_sql(self, document_id: int, value: int, voter_id: int):
         query = PostgreSQLQuery.into(self.votes_table).columns(

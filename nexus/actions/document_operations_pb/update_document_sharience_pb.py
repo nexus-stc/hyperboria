@@ -28,6 +28,8 @@ class ToPostgresAction(BaseAction):
         'filesize',
         'md5',
         'updated_at',
+        'abstract',
+        'content',
     }
     db_fields = db_single_fields | db_multi_fields
 
@@ -39,7 +41,7 @@ class ToPostgresAction(BaseAction):
             f'password={database["password"]} '
             f'host={database["host"]}',
         )
-        self.waits.append(self.pool_holder)
+        self.starts.append(self.pool_holder)
 
     def cast_field_value(self, field_name: str, field_value):
         if field_name in self.db_multi_fields:

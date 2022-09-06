@@ -30,4 +30,5 @@ message Scitech {
   int32 updated_at = 22;
   string volume = 24;
   int32 year = 29;
+  string periodical = 32;
 }

@@ -1,4 +1,4 @@
-import logging
+import sys
 
 from grpc import StatusCode
 from idm.api.proto.chat_manager_service_pb2 import Chat as ChatPb
@@ -7,11 +7,11 @@ from idm.api.proto.chat_manager_service_pb2_grpc import (
     ChatManagerServicer,
     add_ChatManagerServicer_to_server,
 )
-from izihawa_utils.pb_to_json import MessageToDict
 from library.aiogrpctools.base import (
     BaseService,
     aiogrpc_request_wrapper,
 )
+from psycopg.rows import dict_row
 from pypika import (
     PostgreSQLQuery,
     Table,
@@ -21,13 +21,8 @@ from pypika import (
 class ChatManagerService(ChatManagerServicer, BaseService):
     chats_table = Table('chats')
 
-    def __init__(self, server, service_name, pool_holder):
-        super().__init__(service_name=service_name)
-        self.server = server
-        self.pool_holder = pool_holder
-
     async def start(self):
-        add_ChatManagerServicer_to_server(self, self.server)
+        add_ChatManagerServicer_to_server(self, self.application.server)
 
     @aiogrpc_request_wrapper()
     async def create_chat(self, request, context, metadata):
@@ -37,6 +32,7 @@ class ChatManagerService(ChatManagerServicer, BaseService):
             username=request.username,
             is_system_messaging_enabled=True,
             is_discovery_enabled=True,
+            is_connectome_enabled=False,
         )
         query = (
             PostgreSQLQuery
@@ -47,6 +43,7 @@ class ChatManagerService(ChatManagerServicer, BaseService):
                 self.chats_table.username,
                 self.chats_table.is_system_messaging_enabled,
                 self.chats_table.is_discovery_enabled,
+                self.chats_table.is_connectome_enabled,
             )
             .insert(
                 chat.chat_id,
@@ -54,57 +51,89 @@ class ChatManagerService(ChatManagerServicer, BaseService):
                 chat.username,
                 chat.is_system_messaging_enabled,
                 chat.is_discovery_enabled,
+                chat.is_connectome_enabled,
             )
             .on_conflict('chat_id')
             .do_nothing()
         ).get_sql()
-        async with self.pool_holder.pool.acquire() as session:
-            await session.execute(query)
-            return await self._get_chat(session=session, chat_id=request.chat_id, context=context)
+        await self.application.pool_holder['idm'].execute(query)
+        return await self._get_chat(chat_id=request.chat_id, context=context)
 
-    async def _get_chat(self, session, chat_id, context):
-        query = (
+    async def _get_chat(self, chat_id, context):
+        sql = (
             PostgreSQLQuery
             .from_(self.chats_table)
-            .select('*')
+            .select(
+                self.chats_table.chat_id,
+                self.chats_table.username,
+                self.chats_table.language,
+                self.chats_table.is_system_messaging_enabled,
+                self.chats_table.is_discovery_enabled,
+                self.chats_table.is_connectome_enabled,
+                self.chats_table.ban_until,
+                self.chats_table.ban_message,
+                self.chats_table.is_admin,
+                self.chats_table.created_at,
+                self.chats_table.updated_at,
+            )
             .where(self.chats_table.chat_id == chat_id)
         ).get_sql()
-        result = await session.execute(query)
-        chat = await result.fetchone()
-        if chat is None:
+
+        chats = [ChatPb(**row) async for row in self.application.pool_holder['idm'].iterate(sql, row_factory=dict_row)]
+        if not chats:
             await context.abort(StatusCode.NOT_FOUND, 'not_found')
-        return ChatPb(**chat)
+        return chats[0]
 
-    @aiogrpc_request_wrapper()
+    @aiogrpc_request_wrapper(log=False)
     async def get_chat(self, request, context, metadata):
-        async with self.pool_holder.pool.acquire() as session:
-            return await self._get_chat(session=session, chat_id=request.chat_id, context=context)
+        return await self._get_chat(chat_id=request.chat_id, context=context)
 
-    @aiogrpc_request_wrapper()
+    @aiogrpc_request_wrapper(log=False)
     async def list_chats(self, request, context, metadata):
-        query = (
+        sql = (
             PostgreSQLQuery
             .from_(self.chats_table)
-            .select('*')
+            .select(
+                self.chats_table.chat_id,
+                self.chats_table.username,
+                self.chats_table.language,
+                self.chats_table.is_system_messaging_enabled,
+                self.chats_table.is_discovery_enabled,
+                self.chats_table.is_connectome_enabled,
+                self.chats_table.ban_until,
+                self.chats_table.ban_message,
+                self.chats_table.is_admin,
+                self.chats_table.created_at,
+                self.chats_table.updated_at,
+            )
             .where(self.chats_table.ban_until > request.banned_at_moment)
             .limit(10)
         ).get_sql()
-        async with self.pool_holder.pool.acquire() as session:
-            results = await session.execute(query)
-            chats = await results.fetchall()
-            return ChatsPb(
-                chats=list(map(lambda x: ChatPb(**x), chats))
-            )
+        return ChatsPb(chats=[ChatPb(**row) async for row in self.application.pool_holder['idm'].iterate(sql, row_factory=dict_row)])
 
     @aiogrpc_request_wrapper()
     async def update_chat(self, request, context, metadata):
-        query = PostgreSQLQuery.update(self.chats_table)
+        sql = PostgreSQLQuery.update(self.chats_table)
         for field in request.DESCRIPTOR.fields:
             if field.containing_oneof and request.HasField(field.name):
                 field_value = getattr(request, field.name)
-                query = query.set(field.name, field_value)
-        query = query.where(self.chats_table.chat_id == request.chat_id).returning('*').get_sql()
-        async with self.pool_holder.pool.acquire() as session:
-            result = await session.execute(query)
-            chat = await result.fetchone()
-        return ChatPb(**chat)
+                sql = sql.set(field.name, field_value)
+        sql = sql.where(self.chats_table.chat_id == request.chat_id).returning(
+            self.chats_table.chat_id,
+            self.chats_table.username,
+            self.chats_table.language,
+            self.chats_table.is_system_messaging_enabled,
+            self.chats_table.is_discovery_enabled,
+            self.chats_table.is_connectome_enabled,
+            self.chats_table.ban_until,
+            self.chats_table.ban_message,
+            self.chats_table.is_admin,
+            self.chats_table.created_at,
+            self.chats_table.updated_at,
+        ).get_sql()
+        rows = []
+        async for row in self.application.pool_holder['idm'].iterate(sql, row_factory=dict_row):
+            rows.append(row)
+        if not rows:
+            return await context.abort(StatusCode.NOT_FOUND, 'not_found')
+        return ChatPb(**rows[0])

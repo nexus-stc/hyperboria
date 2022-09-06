@@ -3,13 +3,31 @@ package nexus.hub.proto;
 
 import "idm/api/proto/chat_manager_service.proto";
 
+message PlainFile {
+    bytes data = 1;
+    string filename = 2;
+}
+
+message TelegramFile {
+    bytes document = 1;
+    string file_id = 2;
+    int64 message_id = 3;
+}
+
 message SubmitRequest {
-    bytes telegram_document = 1;
-    string telegram_file_id = 2;
+    oneof file {
+        TelegramFile telegram = 1;
+        PlainFile plain = 2;
+    }
     idm.api.proto.Chat chat = 3;
     string bot_name = 4;
+    optional int64 reply_to = 5;
+    optional string doi_hint = 6;
+    bool skip_analysis = 7;
+    int64 uploader_id = 8;
 }
 message SubmitResponse { }
+
 
 service Submitter {
     rpc submit(SubmitRequest) returns (SubmitResponse) {};

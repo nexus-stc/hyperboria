@@ -1,9 +1,16 @@
 import asyncio
+import time
 
 from library.telegram.base import RequestContext
+from library.telegram.utils import safe_execution
+from nexus.translations import t
 from telethon import events
 
 from .base import BaseCallbackQueryHandler
+
+
+def is_earlier_than_2_days(message):
+    return time.time() - time.mktime(message.date.timetuple()) < 48 * 60 * 60 - 10
 
 
 class CloseHandler(BaseCallbackQueryHandler):
@@ -15,17 +22,21 @@ class CloseHandler(BaseCallbackQueryHandler):
             session_id = session_id.decode()
         request_context.add_default_fields(mode='close')
 
-        target_events = [event.answer()]
+        target_events = []
         message = await event.get_message()
 
-        if message:
+        if message and is_earlier_than_2_days(message):
+            target_events.append(event.answer())
             request_context.statbox(
                 action='close',
                 message_id=message.id,
                 session_id=session_id,
             )
             reply_message = await message.get_reply_message()
-            if reply_message:
+            if reply_message and is_earlier_than_2_days(reply_message):
                 target_events.append(reply_message.delete())
             target_events.append(message.delete())
+        else:
+            async with safe_execution(is_logging_enabled=False):
+                await event.answer(t('DELETION_FORBIDDEN_DUE_TO_AGE'))
         await asyncio.gather(*target_events)

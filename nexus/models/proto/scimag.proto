@@ -5,6 +5,7 @@ message Scimag {
   int64 id = 1;
   string abstract = 2;
   repeated string authors = 3;
+  string content = 32;
   string container_title = 11;
   string doi = 4;
   uint32 downloads_count = 27;
@@ -14,6 +15,7 @@ message Scimag {
   repeated string ipfs_multihashes = 31;
   bool is_deleted = 7;
   repeated string issns = 25;
+  repeated string isbns = 33;
   string issue = 10;
   optional int64 issued_at = 26;
   uint32 journal_id = 12;
@@ -21,15 +23,14 @@ message Scimag {
   uint32 last_page = 14;
   string meta_language = 15;
   string md5 = 16;
-  int32 ref_by_count = 23;
+  int32 referenced_by_count = 23;
   repeated string references = 28;
-  oneof optional_scimag_bulk_id {
-    int32 scimag_bulk_id = 24;
-  }
+  optional int32 scimag_bulk_id = 24;
   repeated string tags = 17;
   string title = 19;
   string type = 29;
   int32 updated_at = 20;
   string volume = 21;
   int32 year = 30;
+  float page_rank = 34;
 }

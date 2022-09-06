@@ -1,3 +1,4 @@
+import logging
 from datetime import (
     datetime,
     timedelta,
@@ -28,13 +29,25 @@ class CrossrefApiJob(BaseJob):
         super().__init__(actions=actions, sinks=sinks)
         self.crossref_client = CrossrefClient(base_url=base_url, max_retries=max_retries, retry_delay=retry_delay)
         self.from_date = from_date or str(datetime.date(datetime.now()) - timedelta(days=1))
-        self.waits.append(self.crossref_client)
+        self.starts.append(self.crossref_client)
 
     async def iterator(self) -> AsyncIterable[Any]:
+        logging.getLogger('statbox').info({
+            'action': 'start',
+            'mode': 'ingest',
+            'target_date': self.from_date,
+        })
+        count = 0
         async for chunk in self.crossref_client.works_cursor(
             filter=f'from-index-date:{self.from_date}',
-            rows=1000,
-            select='DOI',
+            rows=500,
         ):
             for item in chunk['items']:
                 yield item
+                count += 1
+        logging.getLogger('statbox').info({
+            'action': 'done',
+            'mode': 'ingest',
+            'items': count,
+            'target_date': self.from_date,
+        })

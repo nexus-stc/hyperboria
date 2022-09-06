@@ -85,6 +85,25 @@ def create_cu(libgen_id, coverurl, md5):
 
 
 class ToScitechPbAction(BaseAction):
+    def process_tag(self, raw_tag) -> list:
+        tags = []
+        for tag in raw_tag.split(';'):
+            tag = tag.strip().lower()
+            if not bool(tag):
+                continue
+            for dash_tag in tag.split('--'):
+                tags.append(dash_tag.strip())
+        return list(sorted(set(tags)))
+
+    def process_isbns(self, identifier):
+        return list(filter(
+            lambda x: bool(x),
+            map(
+                lambda x: x.replace('-', '').strip(),
+                identifier.replace(';', ',').split(',')
+            ),
+        ))
+
     async def do(self, item: dict) -> ScitechPb:
         scitech_pb = ScitechPb(
             authors=(item.get('author') or '').split('; '),
@@ -94,25 +113,15 @@ class ToScitechPbAction(BaseAction):
             extension=item.get('extension'),
             filesize=safe_int(item['filesize']) or 0,
             is_deleted=item.get('visible', '') != '',
-            isbns=list(filter(
-                lambda x: bool(x),
-                map(
-                    lambda x: x.replace('-', '').strip(),
-                    item['identifier'].replace(';', ',').split(',')
-                ),
-            )),
+            isbns=self.process_isbns(item['identifier']),
             language=LANGUAGE_TRANSLATION.get(item['language']),
             libgen_id=int(item['id']),
             md5=item['md5'].lower(),
             pages=safe_int(item['pages']),
             series=item.get('series'),
-            tags=list(filter(
-                lambda x: bool(x),
-                map(
-                    lambda x: x.strip(),
-                    item['tags'].split(';')
-                ),
-            )),
+            volume=item.get('volumeinfo'),
+            periodical=item.get('periodical'),
+            tags=self.process_tag(item['tags']),
             title=item['title'].replace('\0', '').strip(),
         )
 
@@ -124,6 +133,6 @@ class ToScitechPbAction(BaseAction):
         year = safe_int(item['year'])
         if year and year < 9999:
             scitech_pb.year = year
-            # Subtract 1970
+            # Subtract 1970 because `np.datetime64(year, 'Y')` is not returning unixtime
             scitech_pb.issued_at = np.datetime64(year, 'Y').astype('datetime64[s]').astype(np.int64) - 62167132800
         return scitech_pb

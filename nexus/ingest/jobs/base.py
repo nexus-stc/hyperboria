@@ -29,8 +29,8 @@ class BaseJob(AioRootThing):
             real_actions.append(import_object(action['class'])(**action.get('kwargs', {})))
         self.actions = real_actions
 
-        self.waits.extend(self.sinks)
-        self.waits.extend(self.actions)
+        self.starts.extend(self.sinks)
+        self.starts.extend(self.actions)
 
     async def iterator(self) -> AsyncIterable[Any]:
         raise NotImplementedError()

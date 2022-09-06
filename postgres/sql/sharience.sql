@@ -28,6 +28,7 @@ CREATE TABLE public.sharience (
     id bigint DEFAULT nextval('public.documents_id_seq'::regclass) NOT NULL,
     parent_id bigint NOT NULL,
     uploader_id bigint NOT NULL,
+    created_at integer DEFAULT date_part('epoch'::text, now()) NOT NULL,
     updated_at integer DEFAULT date_part('epoch'::text, now()) NOT NULL,
     md5 uuid,
     filesize integer,

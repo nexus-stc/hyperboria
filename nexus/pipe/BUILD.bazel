@@ -20,6 +20,7 @@ py3_image(
     visibility = ["//visibility:public"],
     deps = [
         requirement("aiokafka"),
+        requirement("aiosumma"),
         requirement("orjson"),
         requirement("pypika"),
         requirement("aiocrossref"),
@@ -29,7 +30,6 @@ py3_image(
         "//library/logging",
         "//nexus/actions",
         "//nexus/models/proto:proto_py",
-        "//summa:aiosumma",
         requirement("izihawa_utils"),
     ],
 )

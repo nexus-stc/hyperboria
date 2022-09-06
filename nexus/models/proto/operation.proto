@@ -28,8 +28,8 @@ message Vote {
 message UpdateDocument {
   repeated string fields = 1;
   bool should_fill_from_external_source = 2;
-  bool commit = 3;
-  bool reindex = 4;
+  bool full_text_index_commit = 3;
+  bool full_text_index = 4;
   TypedDocument typed_document = 5;
 }
 

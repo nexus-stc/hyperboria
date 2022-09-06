@@ -2,11 +2,30 @@ syntax = "proto3";
 package nexus.meta_api.proto;
 
 import "nexus/models/proto/typed_document.proto";
+import "summa/proto/search_service.proto";
+
+service Search {
+  rpc search (SearchRequest) returns (SearchResponse) {}
+  rpc meta_search (MetaSearchRequest) returns (MetaSearchResponse) {}
+}
 
 message ScoredDocument {
   nexus.models.proto.TypedDocument typed_document = 1;
-  float score = 2;
+  double score = 2;
   uint32 position = 3;
+  map<string, summa.proto.Snippet> snippets = 4;
+}
+
+message MetaSearchRequest {
+  repeated string index_aliases = 1;
+  string query = 2;
+  map<string, float> languages = 3;
+  repeated summa.proto.Collector collectors = 4;
+  repeated string query_tags = 5;
+}
+
+message MetaSearchResponse {
+  repeated summa.proto.CollectorOutput collector_outputs = 1;
 }
 
 message SearchRequest {
@@ -15,13 +34,12 @@ message SearchRequest {
   uint32 page = 3;
   uint32 page_size = 4;
   string language = 5;
+  repeated string query_tags = 6;
 }
 
 message SearchResponse {
   repeated ScoredDocument scored_documents = 1;
   bool has_next = 2;
-}
-
-service Search {
-  rpc search (SearchRequest) returns (SearchResponse) {}
+  uint32 count = 3;
+  string query_language = 4;
 }

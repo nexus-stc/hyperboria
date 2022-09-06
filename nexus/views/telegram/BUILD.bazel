@@ -12,8 +12,8 @@ py_library(
     deps = [
         requirement("telethon"),
         "//nexus/models/proto:proto_py",
-        "//nexus/nlptools",
         "//nexus/translations",
+        requirement("izihawa_nlptools"),
         requirement("izihawa_utils"),
     ],
 )

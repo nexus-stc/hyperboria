@@ -2,11 +2,11 @@
 
 log_path: '/var/log/nexus-pipe/{{ ENV_TYPE }}'
 pipe:
-  brokers: |
+  bootstrap_servers: |
     kafka-0.example.net
   schema:
     - consumers:
-        - class: nexus.pipe.consumers.CrossReferencesBulkConsumer
+        - class: nexus.pipe.consumers.CrossReferencesConsumer
           topics:
             - name: cross_references
               workers: 4
@@ -14,7 +14,7 @@ pipe:
       processors:
         - class: nexus.pipe.processors.CrossReferencesProcessor
           kwargs:
-            brokers: |
+            bootstrap_servers: |
               kafka-0.example.net
             database:
               database: nexus
@@ -40,9 +40,8 @@ pipe:
               - class: nexus.actions.document_operations_pb.update_document_scimag_pb.FillFromExternalSourceAction
                 kwargs:
                   crossref:
-                    rps: 50
-                    user_agent: 'ScienceLegion/1.0 (Linux x86_64; ) ScienceLegion/1.0.0'
                     ttl_dns_cache: 120
+                    user_agent: 'ScienceLegion/1.0 (Linux x86_64; ) ScienceLegion/1.0.0'
               - class: nexus.actions.document_operations_pb.update_document_scimag_pb.CleanAction
               - class: nexus.actions.document_operations_pb.update_document_scimag_pb.ToPostgresAction
                 kwargs:
@@ -53,9 +52,11 @@ pipe:
                     username: '{{ DATABASE_USERNAME }}'
               - class: nexus.actions.document_operations_pb.update_document_scimag_pb.ReferencesToKafkaAction
                 kwargs:
-                  brokers: |
-                    kafka-0.example.net
-                  topic: cross_references
+                  kafka:
+                    bootstrap_servers: |
+                      kafka-0.example.net
+                    max_request_size: 1048576
+                    topic: cross_references
             filter:
               class: nexus.pipe.filters.DocumentOperationFilter
               kwargs:

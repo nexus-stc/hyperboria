@@ -1,8 +1,6 @@
 ---
 # yamllint disable rule:key-ordering
 default_fields: ["authors", "description", "tags", "title"]
-key_field: "id"
-multi_fields: ["authors", "ipfs_multihashes", "isbns", "tags"]
 schema:
   - name: id
     type: i64
@@ -68,8 +66,10 @@ schema:
   - name: ipfs_multihashes
     type: text
     options:
-      fieldnorms: false
-      indexed: false
+      indexing:
+        fieldnorms: false
+        record: basic
+        tokenizer: raw
       stored: true
   - name: isbns
     type: text
@@ -115,12 +115,16 @@ schema:
   - name: pages
     type: i64
     options:
-      indexed: false
+      fieldnorms: false
+      indexed: true
       stored: true
   - name: extension
     type: text
     options:
-      indexing: null
+      indexing:
+        fieldnorms: false
+        record: basic
+        tokenizer: raw
       stored: true
   - name: md5
     type: text
@@ -169,3 +173,36 @@ schema:
       fieldnorms: true
       indexed: true
       stored: true
+  - name: periodical
+    type: text
+    options:
+      indexing: null
+      stored: true
+multi_fields: ["authors", "ipfs_multihashes", "isbns", "tags"]
+primary_key: "id"
+stop_words: ['a', 'an', 'and', 'are', 'as', 'at', 'be', 'by', 'for', 'from', 'if', 'in', 'is', 'it', 'of', 'on', 'or',
+             's', 'that', 'the', 'their', 'these', 'this', 'to', 'was', 'were', 'with', 'aber', 'alle', 'allem',
+             'allen', 'aller', 'alles', 'als', 'also', 'am', 'an',
+             'ander', 'andere', 'anderem', 'anderen', 'anderer', 'anderes', 'anderm', 'andern', 'anderr', 'anders',
+             'auch', 'auf', 'aus', 'bei', 'bin', 'bis', 'bist', 'da', 'dann', 'der', 'den', 'des', 'dem', 'das', 'dass',
+             'daß', 'derselbe', 'derselben', 'denselben', 'desselben', 'demselben', 'dieselbe', 'dieselben', 'dasselbe',
+             'dazu', 'dein', 'deine', 'deinem', 'deinen', 'deiner', 'deines', 'denn', 'derer', 'dessen', 'dich', 'dir',
+             'du', 'dies', 'diese', 'diesem', 'diesen', 'dieser', 'dieses', 'doch', 'dort', 'durch', 'ein', 'eine',
+             'einem', 'einen', 'einer', 'eines', 'einig', 'einige', 'einigem', 'einigen', 'einiger', 'einiges',
+             'einmal', 'er', 'ihn', 'ihm', 'es', 'etwas', 'euer', 'eure', 'eurem', 'euren', 'eurer', 'eures', 'für',
+             'gegen', 'gewesen', 'hab', 'habe', 'haben', 'hat', 'hatte', 'hatten', 'hier', 'hin', 'hinter', 'ich',
+             'mich', 'mir', 'ihr', 'ihre', 'ihrem', 'ihren', 'ihrer', 'ihres', 'euch', 'im', 'in', 'indem', 'ins',
+             'ist', 'jede', 'jedem', 'jeden', 'jeder', 'jedes', 'jene', 'jenem', 'jenen', 'jener', 'jenes', 'jetzt',
+             'kann', 'kein', 'keine', 'keinem', 'keinen', 'keiner', 'keines', 'können', 'könnte', 'machen', 'man',
+             'manche', 'manchem', 'manchen', 'mancher', 'manches', 'mein', 'meine', 'meinem', 'meinen', 'meiner',
+             'meines', 'mit', 'muss', 'musste', 'nach', 'nicht', 'nichts', 'noch', 'nun', 'nur', 'ob', 'oder', 'ohne',
+             'sehr', 'sein', 'seine', 'seinem', 'seinen', 'seiner', 'seines', 'selbst', 'sich', 'sie', 'ihnen', 'sind',
+             'so', 'solche', 'solchem', 'solchen', 'solcher', 'solches', 'soll', 'sollte', 'sondern', 'sonst', 'um',
+             'und', 'uns', 'unsere', 'unserem', 'unseren', 'unser', 'unseres', 'unter', 'viel', 'vom', 'von', 'vor',
+             'während', 'waren', 'warst', 'weg', 'weil', 'weiter', 'welche', 'welchem', 'welchen', 'welcher', 'welches',
+             'wenn', 'werde', 'werden', 'wie', 'wieder', 'wir', 'wird', 'wirst', 'wo', 'wollen', 'wollte', 'würde',
+             'würden', 'zu', 'zum', 'zur', 'zwar', 'zwischen', 'и', 'в', 'во', 'не', 'что', 'он', 'на', 'я', 'с', 'со',
+             'как', 'а', 'то', 'все', 'она', 'так', 'его', 'но', 'да', 'ты', 'к', 'у', 'же', 'вы', 'за', 'бы', 'по',
+             'ее', 'мне', 'было', 'вот', 'от', 'о', 'из', 'ему', 'ей', 'им', 'de', 'la', 'que', 'el', 'en', 'y', 'a',
+             'los', 'del', 'se', 'las', 'por', 'un', 'para', 'con', 'una', 'su', 'al', 'lo', 'como', 'más', 'pero',
+             'sus', 'le', 'ya', 'o', 'este', 'sí']

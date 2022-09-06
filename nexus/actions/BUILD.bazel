@@ -20,6 +20,6 @@ py_library(
         "//library/aiopostgres",
         requirement("izihawa_types"),
         "//nexus/models/proto:proto_py",
-        "//nexus/nlptools",
+        requirement("izihawa_nlptools"),
     ],
 )

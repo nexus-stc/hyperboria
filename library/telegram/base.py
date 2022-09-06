@@ -9,10 +9,12 @@ from typing import (
 
 from aiokit import AioThing
 from izihawa_utils.random import generate_request_id
+from izihawa_utils.text import mask
 from library.logging import error_log
 from telethon import (
     TelegramClient,
     connection,
+    hints,
     sessions,
 )
 from tenacity import (  # noqa
@@ -22,6 +24,7 @@ from tenacity import (  # noqa
     wait_fixed,
 )
 
+from .common import close_button
 from .session_backend import AlchemySessionContainer
 
 
@@ -36,22 +39,28 @@ class BaseTelegramClient(AioThing):
         bot_token: Optional[str] = None,
         mtproxy: Optional[dict] = None,
         flood_sleep_threshold: int = 60,
+        catch_up: bool = False,
     ):
         super().__init__()
         if not app_id or not app_hash:
             raise ValueError(
                 'Your API ID or Hash cannot be empty or None. Set up telegram.app_id and/or telegram.app_hash'
             )
+        self.app_id = app_id
         self._telegram_client = TelegramClient(
             self._get_session(database),
             app_id,
             app_hash,
+            catch_up=catch_up,
             flood_sleep_threshold=flood_sleep_threshold,
             **self._get_proxy(mtproxy=mtproxy),
         )
         self.phone = phone
         self.password = password
         self.bot_token = bot_token
+
+    def __str__(self):
+        return f'BaseTelegramClient(app_id={self.app_id}, phone={mask(self.phone)}, bot_token={mask(self.bot_token)})'
 
     def _get_session(self, database):
         if database.get('drivername') == 'postgresql':
@@ -80,21 +89,22 @@ class BaseTelegramClient(AioThing):
 
     @retry(retry=retry_if_exception_type(ConnectionError), stop=stop_after_attempt(3), wait=wait_fixed(5))
     async def start(self):
-        logging.getLogger('debug').info({'mode': 'telegram', 'action': 'starting'})
+        logging.getLogger('debug').debug({'mode': 'telegram', 'action': 'start'})
         await self._telegram_client.start(
             phone=lambda: self.phone,
             bot_token=self.bot_token,
-            password=self.password,
-            code_callback=self.polling_file,
+            password=self.polling_file('/tmp/telegram_password'),
+            code_callback=self.polling_file('/tmp/telegram_code'),
         )
-        logging.getLogger('debug').info({'mode': 'telegram', 'action': 'started'})
+        logging.getLogger('debug').debug({'mode': 'telegram', 'action': 'started'})
 
-    async def polling_file(self):
-        fname = '/tmp/telegram_code'
-        while not os.path.exists(fname):
-            await asyncio.sleep(5.0)
-        with open(fname, 'r') as code_file:
-            return code_file.read().strip()
+    def polling_file(self, fname):
+        async def f():
+            while not os.path.exists(fname):
+                await asyncio.sleep(5.0)
+            with open(fname, 'r') as code_file:
+                return code_file.read().strip()
+        return f
 
     async def stop(self):
         return await self.disconnect()
@@ -123,6 +133,12 @@ class BaseTelegramClient(AioThing):
             progress_callback=None,
             msg_data=None,
             **kwargs,
+        )
+
+    def upload_file(self, file: hints.FileLike, file_name: str):
+        return self._telegram_client.upload_file(
+            file=file,
+            file_name=file_name,
         )
 
     def edit_message(self, *args, **kwargs):
@@ -188,13 +204,21 @@ class RequestContext:
         self.default_fields.update(fields)
 
     def statbox(self, **kwargs):
-        logging.getLogger('statbox').info(
-            msg=dict(
-                **self.default_fields,
-                **kwargs,
-            ),
-        )
+        logging.getLogger('statbox').info(msg=self.default_fields | kwargs)
+
+    def debug_log(self, **kwargs):
+        logging.getLogger('debug').debug(msg=self.default_fields | kwargs)
 
     def error_log(self, e, level=logging.ERROR, **fields):
-        all_fields = {**self.default_fields, **fields}
+        all_fields = self.default_fields | fields
         error_log(e, level=level, **all_fields)
+
+    def is_group_mode(self):
+        return self.chat.chat_id < 0
+
+    def is_personal_mode(self):
+        return self.chat.chat_id > 0
+
+    def personal_buttons(self):
+        if self.is_personal_mode():
+            return [close_button()]
