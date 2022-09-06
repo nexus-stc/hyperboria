@@ -4,11 +4,23 @@ application:
   service_name: idm-api
 database:
   idm:
+    database: nexus
+    host:
+    password:
+    username:
     drivername: postgresql
     port: 5432
   nexus:
+    database: nexus
+    host:
+    password:
+    username:
     drivername: postgresql
     port: 5432
+clickhouse:
+  host:
+  password:
+  username:
 grpc:
   address: 0.0.0.0
   port: 82

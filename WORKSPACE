@@ -65,6 +65,7 @@ http_archive(
 
 http_archive(
     name = "org_izihawa_summa",
+    sha256 = "f0cf66c9cb691adea3a1bf1fcd62d315042d606e901adaa61ec28061499426ff",
     strip_prefix = "summa-ab7ea3eba9846094d1792077d578ddb585d8e070",
     url = "https://github.com/izihawa/summa/archive/ab7ea3eba9846094d1792077d578ddb585d8e070.tar.gz",
 )
