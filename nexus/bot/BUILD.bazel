@@ -16,7 +16,6 @@ py3_image(
     data = [
         "configs/base.yaml",
         "configs/logging.yaml",
-        "configs/promotions.yaml",
     ],
     main = "main.py",
     srcs_version = "PY3ONLY",
