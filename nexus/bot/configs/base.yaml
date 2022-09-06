@@ -100,7 +100,8 @@ telegram:
     - nexus.bot.handlers.search.SearchEditHandler
     - nexus.bot.handlers.search.SearchPagingHandler
     - nexus.bot.handlers.search.InlineSearchHandler
+  mutual_aid_group: nexus_aaron
   # Channel that will be shown in /help, /howtohelp and in promotions
-  related_channel: 'nexus_search'
+  related_channel: nexus_search
 twitter:
   contact_url: https://twitter.com/the_superpirate

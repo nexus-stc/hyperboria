@@ -33,8 +33,9 @@ class TelegramApplication(AioRootThing):
         self.promotioner = Promotioner(
             promotions=get_promotions(),
             promotion_vars=dict(
-                related_channel=self.config['telegram']['related_channel'],
+                mutual_aid_group=self.config['telegram']['mutual_aid_group'],
                 twitter_contact_url=self.config['twitter']['contact_url'],
+                related_channel=self.config['telegram']['related_channel'],
             )
         )
         self.user_manager = UserManager()
