@@ -61,7 +61,7 @@ class ProfileHandler(BaseHandler):
             target_events.append(profile_reply_message.reply(rendered_widget, buttons=buttons, link_preview=False))
         else:
             target_events.append(event.reply(rendered_widget, buttons=buttons, link_preview=False))
-        return asyncio.gather(*target_events)
+        return await asyncio.gather(*target_events)
 
 
 class DigestHandler(BaseHandler):
@@ -114,6 +114,7 @@ class DigestHandler(BaseHandler):
             document_holders=document_holders,
             bot_name=bot_name,
             header='✨ Nexus Discovery ✨',
+            promotioner=self.application.promotioner,
         )
 
         view, buttons = await document_list_widget.render()

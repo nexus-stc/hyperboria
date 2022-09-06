@@ -4,6 +4,7 @@ pylon:
     - [cambridge]
     - [edinburg]
     - [southampton]
+  default_resolver_proxy_list: ~
   downloads_directory: /downloads
   proxies:
     - address: clash.default.svc.cluster.example.com:7890
@@ -15,6 +16,9 @@ pylon:
     - address: clash.default.svc.cluster.example.com:8090
       name: southampton
       tags: ['southampton']
+    - address: socks5://clash.default.svc.cluster.example.com:7991
+      name: socks5
+      tags: ['socks5']
   sources:
     # LibGen.rocks
     - driver:
@@ -330,6 +334,13 @@ pylon:
       resolver:
         args:
           format_string: 'https://journals.physiology.org/doi/pdf/{doi}?download=true'
+        class: nexus.pylon.resolvers.TemplateResolver
+    # www.ahajournals.org
+    - matcher:
+        doi: ^10.1161/.*$
+      resolver:
+        args:
+          format_string: 'https://www.ahajournals.org/doi/pdf/{doi}?download=true'
         class: nexus.pylon.resolvers.TemplateResolver
     # ajp.psychiatryonline.org
     - matcher:

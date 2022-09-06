@@ -76,6 +76,11 @@ def clean_issns(issns):
         return cleaned_issns
 
 
+def clean_isbns(isbns):
+    if isbns:
+        return isbns
+
+
 def extract_title(title, subtitle):
     return ': '.join(filter(lambda x: bool(x), [title.strip(), subtitle.strip()]))
 
@@ -90,6 +95,7 @@ class ToScimagPbAction(BaseAction):
             doi=item['DOI'],
             issue=item.get('issue'),
             issns=clean_issns(item.get('ISSN')),
+            isbns=clean_isbns(item.get('ISBN')),
             language=item.get('language'),
             referenced_by_count=item.get('is-referenced-by-count'),
             references=extract_references(item.get('reference')),

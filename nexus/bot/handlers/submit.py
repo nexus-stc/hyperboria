@@ -47,13 +47,13 @@ class SubmitHandler(BaseHandler):
             reply_to = reply_message.id
 
         doi_hint = self.get_doi_hint(message=message, reply_message=reply_message)
-        doi_hint_priority = '⚡' in message.raw_text
+        skip_analysis = '⚡️' in message.raw_text
         user_id = message.sender_id
         request_context.statbox(
             action='analyzed',
             mode='submit',
             doi_hint=doi_hint,
-            doi_hint_priority=doi_hint_priority,
+            skip_analysis=skip_analysis,
             reply_to=reply_to,
         )
 
@@ -71,12 +71,12 @@ class SubmitHandler(BaseHandler):
                     request_id=request_context.request_id,
                     session_id=session_id,
                     doi_hint=doi_hint,
-                    doi_hint_priority=doi_hint_priority,
+                    skip_analysis=skip_analysis,
                     uploader_id=user_id,
                 )
             case 'application/zip':
-                try:
-                    if request_context.is_personal_mode():
+                if request_context.is_personal_mode():
+                    try:
                         file_data = await self.application.telegram_client.download_document(
                             document=event.document,
                             file=bytes,
@@ -105,10 +105,8 @@ class SubmitHandler(BaseHandler):
                                     session_id=session_id,
                                     uploader_id=user_id,
                                 )
-                    else:
-                        await event.reply(t('ZIP_FILES_ARE_NOT_SUPPORTED_IN_GROUP_MODE', request_context.chat.language))
-                finally:
-                    return await event.delete()
+                    finally:
+                        return await event.delete()
             case _:
                 request_context.statbox(action='unknown_file_format')
                 request_context.error_log(UnknownFileFormatError(format=event.document.mime_type))

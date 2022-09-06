@@ -11,6 +11,11 @@ import jq
 from nexus.pylon.prepared_request import PreparedRequest
 from nexus.pylon.proxy_manager import ProxyManager
 from nexus.pylon.resolvers.base import BaseResolver
+from tenacity import (
+    retry,
+    stop_after_attempt,
+    wait_random,
+)
 
 
 class DoiOrgRequestResolver(BaseResolver):
@@ -24,6 +29,7 @@ class DoiOrgRequestResolver(BaseResolver):
         proxy_manager: Optional[ProxyManager] = None,
     ):
         super().__init__(proxy_list=proxy_list, proxy_manager=proxy_manager)
+        self.text_selector = selector
         self.selector = jq.compile(selector)
         self.format_string = format_string
         self.timeout = timeout
@@ -32,6 +38,11 @@ class DoiOrgRequestResolver(BaseResolver):
     def __str__(self):
         return f'{self.__class__.__name__}(selector = {self.selector}, format_string = {self.format_string})'
 
+    @retry(
+        reraise=True,
+        wait=wait_random(min=1, max=3),
+        stop=stop_after_attempt(4),
+    )
     async def resolve_through_doi_org(self, params):
         async with self.get_session() as session:
             doi_url = f'https://doi.org/{params["doi"]}'
@@ -51,6 +62,7 @@ class DoiOrgRequestResolver(BaseResolver):
             logging.getLogger('error').error({
                 'action': 'error',
                 'mode': 'pylon',
+                'params': params,
                 'error': str(e)
             })
             return
@@ -60,3 +72,11 @@ class DoiOrgRequestResolver(BaseResolver):
                 url=self.format_string.format(selected=selected),
                 timeout=self.timeout,
             )
+        else:
+            logging.getLogger('debug').error({
+                'action': 'missed_selector',
+                'mode': 'pylon',
+                'params': params,
+                'selector': self.text_selector,
+                'format_string': self.format_string,
+            })

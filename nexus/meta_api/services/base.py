@@ -31,7 +31,6 @@ class BaseService(LibraryBaseService):
         new_scored_documents = []
         for scored_document in scored_documents:
             document = json.loads(scored_document.document)
-            document = self.enrich_document_with_stat_provider(document)
             new_scored_documents.append(nexus_meta_api_search_service_pb.ScoredDocument(
                 typed_document=typed_document_pb2.TypedDocument(
                     **{scored_document.index_alias: self.pb_registry[scored_document.index_alias](**document)},
@@ -46,7 +45,6 @@ class BaseService(LibraryBaseService):
         new_scored_documents = []
         for position, document in enumerate(documents):
             document = json.loads(document)
-            document = self.enrich_document_with_stat_provider(document)
             new_scored_documents.append(nexus_meta_api_search_service_pb.ScoredDocument(
                 typed_document=TypedDocumentPb(
                     **{index_alias: self.pb_registry[index_alias](**document)},
@@ -55,14 +53,3 @@ class BaseService(LibraryBaseService):
                 score=1.0,
             ))
         return new_scored_documents
-
-    def enrich_document_with_stat_provider(self, document):
-        if self.stat_provider:
-            original_id = (
-                document.get('original_id')
-                or document['id']
-            )
-            download_stats = self.stat_provider.get_download_stats(original_id)
-            if download_stats and download_stats.downloads_count:
-                document['downloads_count'] = download_stats.downloads_count
-        return document

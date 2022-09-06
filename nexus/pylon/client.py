@@ -22,12 +22,14 @@ class PylonClient(AioThing):
         source_configs: Optional[List],
         proxies: Optional[List[str]] = None,
         downloads_directory: Optional[str] = None,
-        default_driver_proxy_list: [Optional[List]] = None
+        default_driver_proxy_list: [Optional[List]] = None,
+        default_resolver_proxy_list: [Optional[List]] = None,
     ):
         super().__init__()
         self.proxy_manager = ProxyManager(proxies)
         self.downloads_directory = downloads_directory
         self.default_driver_proxy_list = default_driver_proxy_list
+        self.default_resolver_proxy_list = default_resolver_proxy_list
         self.sources = []
         for source_config in source_configs:
             source = Source.from_config(
@@ -35,6 +37,7 @@ class PylonClient(AioThing):
                 source_config=source_config,
                 downloads_directory=downloads_directory,
                 default_driver_proxy_list=default_driver_proxy_list,
+                default_resolver_proxy_list=default_resolver_proxy_list,
             )
             self.sources.append(source)
             self.starts.append(source)

@@ -100,9 +100,9 @@ class ProgressBar:
     async def show_banner(self):
         return await self.send_message(await self.render_banner(), ignore_last_call=True)
 
-    async def callback(self, done, total):
+    async def callback(self, done, total, ignore_last_call=False):
         self._set_progress(done, total)
-        return await self.send_message(await self.render_progress())
+        return await self.send_message(await self.render_progress(), ignore_last_call=ignore_last_call)
 
 
 class ThrottlerWrapper:

@@ -85,10 +85,7 @@ class ViewHandler(BaseHandler):
             holder = BaseHolder.create(typed_document_pb=typed_document_pb)
             back_command = await self.compose_back_command(session_id=session_id, message_id=message_id, page=page)
 
-            promo = self.application.promotioner.choose_promotion(language).format(
-                related_channel=self.application.config['telegram']['related_channel'],
-                twitter_contact_url=self.application.config['twitter']['contact_url'],
-            )
+            promo = self.application.promotioner.choose_promotion(language)
             view_builder = holder.view_builder(language).add_view(
                 bot_name=self.application.config['telegram']['bot_name']
             ).add_new_line(2).add(promo, escaped=True)

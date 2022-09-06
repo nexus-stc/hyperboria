@@ -66,9 +66,10 @@ class BaseConsumer(AioRootThing):
                         except (ConflictError, InterruptProcessing) as e:
                             logging.getLogger('statbox').info(e)
         except (asyncio.CancelledError, ConsumerStoppedError):
-            pass
+            return
         finally:
             await consumer.stop()
+        asyncio.create_task(self.stop())
 
     async def start(self):
         logging.getLogger('statbox').info({
@@ -87,8 +88,10 @@ class BaseConsumer(AioRootThing):
 
     async def stop(self):
         if self.consumer_task:
-            self.consumer_task.cancel()
-            await self.consumer_task
+            consumer_task = self.consumer_task
+            self.consumer_task = None
+            consumer_task.cancel()
+            await consumer_task
 
 
 class BasePbConsumer(BaseConsumer):
@@ -108,52 +111,3 @@ class BaseJsonConsumer(BaseConsumer):
         message = json.loads(msg.value)
         ParseDict(message, pb, ignore_unknown_fields=True)
         return pb
-
-
-class BaseBulkConsumer(BaseConsumer):
-    auto_commit = False
-    bulk_size = 20
-    timeout = 1
-
-    async def consume(self, consumer):
-        try:
-            while self.started:
-                try:
-                    result = await consumer.getmany(timeout_ms=self.timeout * 1000, max_records=self.bulk_size)
-                except (ConsumerStoppedError, asyncio.CancelledError):
-                    break
-                collector = []
-                for tp, messages in result.items():
-                    if messages:
-                        for message in messages:
-                            preprocessed_msg = self.preprocess(message)
-                            if preprocessed_msg:
-                                collector.append(preprocessed_msg)
-                for processor in self.processors:
-                    filtered = filter(processor.filter, collector)
-                    try:
-                        await processor.process_bulk(filtered)
-                    except InterruptProcessing as e:
-                        logging.getLogger('statbox').info(e)
-                try:
-                    await consumer.commit()
-                except CommitFailedError as e:
-                    error_log(e)
-                    continue
-        finally:
-            await consumer.stop()
-
-    async def start(self):
-        logging.getLogger('statbox').info({
-            'action': 'start',
-            'group_id': self.group_id,
-            'topic_names': self.topic_names,
-        })
-        consumer = self.create_consumer()
-        await consumer.start()
-        logging.getLogger('statbox').info({
-            'action': 'started',
-            'group_id': self.group_id,
-            'topic_names': self.topic_names,
-        })
-        self.consumer_task = asyncio.create_task(self.consume(consumer))

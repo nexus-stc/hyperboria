@@ -34,7 +34,10 @@ from nexus.views.telegram.base_holder import ScimagHolder
 from telethon.errors import ChatAdminRequiredError
 from telethon.extensions import BinaryReader
 
-from .base import BaseHubService
+from .base import (
+    BaseHubService,
+    ProcessedDocument,
+)
 
 
 async def operation_log(document_operation_pb):
@@ -87,21 +90,47 @@ class PlainFile:
 
 
 def fuzzy_compare(a, b):
-    if a is None or b is None:
-        return False
     a = re.sub(r'[^a-z\d]', '', a.lower())
     b = re.sub(r'[^a-z\d]', '', b.lower())
     return SequenceMatcher(None, a, b).ratio() > 0.9
 
 
-async def delayed_task(task, seconds):
-    await asyncio.sleep(seconds)
-    await task
-
-
 class SubmitterService(submitter_service_pb2_grpc.SubmitterServicer, BaseHubService):
     async def start(self):
         submitter_service_pb2_grpc.add_SubmitterServicer_to_server(self, self.application.server)
+
+    def wrap_request_file(self, request, request_context):
+        match str(request.WhichOneof('file')):
+            case 'plain':
+                return PlainFile(request.plain)
+            case 'telegram':
+                return TelegramFile(self.application.telegram_clients[request_context.bot_name], request.telegram)
+            case _:
+                raise RuntimeError(f"Unknown file type {request.WhichOneof('file')}")
+
+    async def retrieve_metadata(self, doi, title, session_id, request_context):
+        if doi:
+            meta_search_response = await self.application.meta_api_client.meta_search(
+                index_aliases=['scimag', ],
+                query=doi,
+                collectors=[{'top_docs': {'limit': 1}}],
+                session_id=session_id,
+                request_id=request_context.request_id,
+                user_id=str(request_context.chat.chat_id),
+                query_tags=['submitter'],
+            )
+            scored_documents = meta_search_response.collector_outputs[0].top_docs.scored_documents
+            if len(scored_documents) == 1:
+                scimag_pb = scimag_pb2.Scimag(**json.loads(scored_documents[0].document))
+                if title is not None and not fuzzy_compare(scimag_pb.title, title):
+                    request_context.statbox(
+                        action='mismatched_title',
+                        doi=doi,
+                        processed_title=title,
+                        title=scimag_pb.title,
+                    )
+                    return None
+                return scimag_pb
 
     @aiogrpc_request_wrapper(log=False)
     async def submit(
@@ -125,17 +154,10 @@ class SubmitterService(submitter_service_pb2_grpc.SubmitterServicer, BaseHubServ
         )
 
         buttons = None if request_context.is_group_mode() else [close_button()]
+        wrapped_file = self.wrap_request_file(request, request_context)
 
-        match str(request.WhichOneof('file')):
-            case 'plain':
-                file = PlainFile(request.plain)
-            case 'telegram':
-                file = TelegramFile(self.application.telegram_clients[request_context.bot_name], request.telegram)
-            case _:
-                raise RuntimeError(f"Unknown file type {request.WhichOneof('file')}")
-
-        if file.size > 30 * 1024 * 1024:
-            request_context.error_log(FileTooBigError(size=file.size))
+        if wrapped_file.size > 300 * 1024 * 1024:
+            request_context.error_log(FileTooBigError(size=wrapped_file.size))
             request_context.statbox(action='file_too_big')
             async with safe_execution(error_log=request_context.error_log):
                 await self.application.telegram_clients[request_context.bot_name].send_message(
@@ -149,109 +171,59 @@ class SubmitterService(submitter_service_pb2_grpc.SubmitterServicer, BaseHubServ
         try:
             processing_message = await self.application.telegram_clients[request_context.bot_name].send_message(
                 request_context.chat.chat_id,
-                t("PROCESSING_PAPER", request_context.chat.language).format(filename=file.filename),
+                t("PROCESSING_PAPER", request_context.chat.language).format(filename=wrapped_file.filename),
                 reply_to=request.reply_to,
             )
         except ChatAdminRequiredError:
             return submitter_service_pb2.SubmitResponse()
 
         try:
-            file_data = await file.read()
-            processed_document = None
-            pdf_doi = None
-            pdf_title = None
-            try:
-                processed_document = await self.application.grobid_client.process_fulltext_document(pdf_file=file_data)
-                pdf_doi = processed_document.get('doi')
-                pdf_title = processed_document.get('title')
-                request_context.add_default_fields(pdf_doi=pdf_doi)
-            except BadRequestError as e:
-                request_context.statbox(action='unparsable_document')
-                request_context.error_log(e)
-                if not request.doi_hint:
-                    await self.application.telegram_clients[request_context.bot_name].send_message(
-                        request_context.chat.chat_id,
-                        t('UNPARSABLE_DOCUMENT_ERROR', request_context.chat.language).format(
-                            filename=file.filename,
-                        ),
-                        buttons=buttons,
-                        reply_to=request.reply_to,
-                    )
-                    return submitter_service_pb2.SubmitResponse()
+            file_data = await wrapped_file.read()
+            if not request.skip_analysis:
+                processed_document = await ProcessedDocument.setup(
+                    file_data,
+                    grobid_client=self.application.grobid_client,
+                    request_context=request_context,
+                )
+            else:
+                processed_document = ProcessedDocument({})
 
-            if request.doi_hint and pdf_doi != request.doi_hint:
-                request_context.statbox(action='mismatched_doi', doi_hint_priority=request.doi_hint_priority)
-                if request.doi_hint_priority:
-                    pdf_doi = request.doi_hint
-
-            if not pdf_doi and not request.doi_hint:
+            if not processed_document.doi and not request.doi_hint:
                 request_context.statbox(action='unparsable_doi')
                 request_context.error_log(UnparsableDoiError())
                 await self.application.telegram_clients[request_context.bot_name].send_message(
                     request_context.chat.chat_id,
                     t('UNPARSABLE_DOI_ERROR', request_context.chat.language).format(
-                        filename=file.filename,
+                        filename=wrapped_file.filename,
                     ),
                     buttons=buttons,
                     reply_to=request.reply_to,
                 )
                 return submitter_service_pb2.SubmitResponse()
 
-            scimag_pb = None
-
-            if pdf_doi:
-                meta_search_response = await self.application.meta_api_client.meta_search(
-                    index_aliases=['scimag',],
-                    query=pdf_doi,
-                    collectors=[{'top_docs': {'limit': 1}}],
-                    session_id=session_id,
-                    request_id=request_context.request_id,
-                    user_id=str(request_context.chat.chat_id),
-                    query_tags=['submitter'],
-                )
-                scored_documents = meta_search_response.collector_outputs[0].top_docs.scored_documents
-                if len(scored_documents) == 1:
-                    scimag_pb = scimag_pb2.Scimag(**json.loads(scored_documents[0].document))
-                    if not fuzzy_compare(scimag_pb.title, pdf_title):
-                        request_context.statbox(
-                            action='mismatched_title',
-                            doi=pdf_doi,
-                            pdf_title=pdf_title,
-                            title=scimag_pb.title,
-                        )
-                        scimag_pb = None
-
+            scimag_pb = await self.retrieve_metadata(
+                processed_document.doi,
+                processed_document.title,
+                session_id=session_id,
+                request_context=request_context,
+            )
             if not scimag_pb and request.doi_hint:
-                meta_search_response = await self.application.meta_api_client.meta_search(
-                    index_aliases=['scimag', ],
-                    query=request.doi_hint,
-                    collectors=[{'top_docs': {'limit': 1}}],
+                scimag_pb = await self.retrieve_metadata(
+                    request.doi_hint,
+                    processed_document.title,
                     session_id=session_id,
-                    request_id=request_context.request_id,
-                    user_id=str(request_context.chat.chat_id),
-                    query_tags=['submitter'],
+                    request_context=request_context,
                 )
-                scored_documents = meta_search_response.collector_outputs[0].top_docs.scored_documents
-                if len(scored_documents) == 1:
-                    scimag_pb = scimag_pb2.Scimag(**json.loads(scored_documents[0].document))
-                    if not fuzzy_compare(scimag_pb.title, pdf_title):
-                        request_context.statbox(
-                            action='mismatched_title',
-                            doi=request.doi_hint,
-                            pdf_title=pdf_title,
-                            title=scimag_pb.title,
-                        )
-                        # ToDo: add trust mechanics
 
             if not scimag_pb:
                 request_context.statbox(action='unavailable_metadata')
-                request_context.error_log(UnavailableMetadataError(doi=pdf_doi))
+                request_context.error_log(UnavailableMetadataError(doi=processed_document.doi))
                 await self.application.telegram_clients[request_context.bot_name].send_message(
                     request_context.chat.chat_id,
                     t(
                         'UNAVAILABLE_METADATA_ERROR',
                         language=request_context.chat.language
-                    ).format(doi=pdf_doi or request.doi_hint),
+                    ).format(doi=processed_document.doi or request.doi_hint),
                     buttons=buttons,
                     reply_to=request.reply_to,
                 )
@@ -260,10 +232,7 @@ class SubmitterService(submitter_service_pb2_grpc.SubmitterServicer, BaseHubServ
             request_context.add_default_fields(doi=scimag_pb.doi, document_id=scimag_pb.id)
             try:
                 file_data = clean_metadata(file_data, doi=scimag_pb.doi)
-                request_context.statbox(
-                    action='cleaned',
-                    len=len(file_data),
-                )
+                request_context.statbox(action='cleaned', len=len(file_data))
             except ValueError as e:
                 request_context.error_log(e)
             uploaded_message = await self.send_file(
@@ -276,13 +245,13 @@ class SubmitterService(submitter_service_pb2_grpc.SubmitterServicer, BaseHubServ
 
             if processed_document:
                 sharience_pb = sharience_pb2.Sharience(
-                    abstract=processed_document.get('abstract', ''),
-                    content=processed_document.get('body', ''),
+                    abstract=processed_document.abstract or '',
+                    content=processed_document.body or '',
                     parent_id=scimag_pb.id,
                     uploader_id=request.uploader_id or request_context.chat.chat_id,
                     updated_at=int(time.time()),
                     md5=hashlib.md5(file_data).hexdigest(),
-                    filesize=file.size,
+                    filesize=wrapped_file.size,
                     ipfs_multihashes=await self.get_ipfs_hashes(file=file_data),
                 )
                 update_sharience_pb = operation_pb2.DocumentOperation(
@@ -313,13 +282,13 @@ class SubmitterService(submitter_service_pb2_grpc.SubmitterServicer, BaseHubServ
             await operation_log(store_telegram_file_id_operation_pb)
             request_context.statbox(action='successfully_stored')
 
-            if file.message_id:
+            if wrapped_file.message_id:
                 async with safe_execution(error_log=request_context.error_log, level=logging.DEBUG):
                     await self.application.telegram_clients[request_context.bot_name].delete_messages(
                         request_context.chat.chat_id,
-                        file.message_id,
+                        wrapped_file.message_id,
                     )
-            await self.item_found(bot_name=request_context.bot_name, doi=scimag_pb.doi)
+            await self.found_item(bot_name=request_context.bot_name, doi=scimag_pb.doi)
         finally:
             await processing_message.delete()
         return submitter_service_pb2.SubmitResponse()

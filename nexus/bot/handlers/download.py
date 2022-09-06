@@ -1,4 +1,5 @@
 from library.telegram.base import RequestContext
+from library.telegram.utils import safe_execution
 from nexus.hub.proto.delivery_service_pb2 import \
     StartDeliveryResponse as StartDeliveryResponsePb
 from nexus.translations import t
@@ -45,14 +46,16 @@ class DownloadHandler(BaseCallbackQueryHandler):
             bot_name=request_context.bot_name,
         )
         if start_delivery_response_pb.status == StartDeliveryResponsePb.Status.ALREADY_DOWNLOADING:
-            await event.answer(
-                f'{t("ALREADY_DOWNLOADING", request_context.chat.language)}',
-            )
+            async with safe_execution(is_logging_enabled=False):
+                await event.answer(
+                    f'{t("ALREADY_DOWNLOADING", request_context.chat.language)}',
+                )
             await remove_button(event, '⬇️', and_empty_too=True)
         elif start_delivery_response_pb.status == StartDeliveryResponsePb.Status.TOO_MANY_DOWNLOADS:
-            await event.answer(
-                f'{t("TOO_MANY_DOWNLOADS", request_context.chat.language)}',
-            )
+            async with safe_execution(is_logging_enabled=False):
+                await event.answer(
+                    f'{t("TOO_MANY_DOWNLOADS", request_context.chat.language)}',
+                )
         else:
             await remove_button(event, '⬇️', and_empty_too=True)
             self.application.user_manager.last_widget[request_context.chat.chat_id] = None

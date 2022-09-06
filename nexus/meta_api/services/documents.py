@@ -57,19 +57,6 @@ class DocumentsService(DocumentsServicer, BaseService):
 
         document_pb = getattr(typed_document_pb, typed_document_pb.WhichOneof('document'))
 
-        if hasattr(document_pb, 'original_id') and document_pb.original_id:
-            original_document_pb = await self.get_document(
-                index_alias=request.index_alias,
-                document_id=document_pb.original_id,
-                context=context,
-                request_id=metadata['request-id'],
-                session_id=metadata['session-id'],
-            )
-            for to_remove in ('doi', 'fiction_id', 'filesize', 'libgen_id',):
-                original_document_pb.ClearField(to_remove)
-            original_document_pb.MergeFrom(document_pb)
-            document_pb = original_document_pb
-
         logging.getLogger('query').info({
             'action': 'get',
             'cache_hit': False,

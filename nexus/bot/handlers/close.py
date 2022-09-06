@@ -2,6 +2,7 @@ import asyncio
 import time
 
 from library.telegram.base import RequestContext
+from library.telegram.utils import safe_execution
 from nexus.translations import t
 from telethon import events
 
@@ -36,5 +37,6 @@ class CloseHandler(BaseCallbackQueryHandler):
                 target_events.append(reply_message.delete())
             target_events.append(message.delete())
         else:
-            target_events.append(event.answer(t('DELETION_FORBIDDEN_DUE_TO_AGE')))
+            async with safe_execution(is_logging_enabled=False):
+                await event.answer(t('DELETION_FORBIDDEN_DUE_TO_AGE'))
         await asyncio.gather(*target_events)

@@ -210,6 +210,7 @@ class SearchEditHandler(BaseSearchHandler):
 
         if request_context.is_group_mode() and not search_prefix:
             return
+
         if request_context.is_personal_mode() and search_prefix:
             query = event.raw_text
 
@@ -288,7 +289,7 @@ class SearchPagingHandler(BaseCallbackQueryHandler):
         )
 
         serp, buttons = await search_widget.render(message_id=message_id)
-        return await asyncio.gather(
-            event.answer(),
-            message.edit(serp, buttons=buttons, link_preview=False)
-        )
+
+        await message.edit(serp, buttons=buttons, link_preview=False)
+        async with safe_execution(is_logging_enabled=False):
+            await event.answer()

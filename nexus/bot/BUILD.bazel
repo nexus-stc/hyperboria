@@ -42,6 +42,8 @@ py3_image(
         "//nexus/hub/aioclient",
         "//nexus/meta_api/aioclient",
         "//nexus/models/proto:proto_py",
+        "//nexus/promotions",
+        "//nexus/translations",
         "//nexus/views/telegram",
         requirement("izihawa_nlptools"),
         requirement("izihawa_utils"),

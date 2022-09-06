@@ -6,7 +6,7 @@ pipe:
     kafka-0.example.net
   schema:
     - consumers:
-        - class: nexus.pipe.consumers.CrossReferencesBulkConsumer
+        - class: nexus.pipe.consumers.CrossReferencesConsumer
           topics:
             - name: cross_references
               workers: 4

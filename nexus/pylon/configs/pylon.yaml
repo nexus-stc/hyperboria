@@ -138,6 +138,7 @@ pylon:
       resolver:
         args:
           format_string: 'https://www.sciencedirect.com/science/article/pii/{selected}/pdfft?isDTMRedir=true&download=true'
+          resolve_timeout: 25.0
           selector: '(.resource.primary.URL | split("/"))[-1]'
           timeout: 40.0
         class: nexus.pylon.resolvers.DoiOrgRequestResolver

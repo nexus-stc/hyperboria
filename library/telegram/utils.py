@@ -19,6 +19,7 @@ async def safe_execution(
     error_log=error_log,
     on_fail: Optional[Callable[[], Awaitable]] = None,
     level=logging.WARNING,
+    is_logging_enabled: bool = True
 ):
     try:
         try:
@@ -34,13 +35,17 @@ async def safe_execution(
             errors.MessageIdInvalidError,
             errors.ChatAdminRequiredError,
         ) as e:
-            error_log(e, level=level)
+            if is_logging_enabled:
+                error_log(e, level=level)
+                traceback.print_exc()
         except Exception as e:
-            error_log(e, level=level)
-            traceback.print_exc()
+            if is_logging_enabled:
+                error_log(e, level=level)
+                traceback.print_exc()
             if on_fail:
                 await on_fail()
     except events.StopPropagation:
         raise
     except Exception as e:
-        error_log(e, level=level)
+        if is_logging_enabled:
+            error_log(e, level=level)

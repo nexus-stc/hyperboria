@@ -23,7 +23,7 @@ message SubmitRequest {
     string bot_name = 4;
     optional int64 reply_to = 5;
     optional string doi_hint = 6;
-    bool doi_hint_priority = 7;
+    bool skip_analysis = 7;
     int64 uploader_id = 8;
 }
 message SubmitResponse { }

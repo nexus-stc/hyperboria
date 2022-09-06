@@ -1,5 +1,6 @@
 import asyncio
 
+from aiobaseclient.exceptions import BadRequestError
 from library.aiogrpctools.base import BaseService
 from library.telegram.common import close_button
 from nexus.views.telegram.common import vote_button
@@ -16,8 +17,39 @@ def is_group_or_channel(chat_id: int):
     return chat_id < 0
 
 
+class ProcessedDocument:
+    def __init__(self, processed_document):
+        self.processed_document = processed_document
+
+    @staticmethod
+    async def setup(file_data, grobid_client, request_context):
+        try:
+            processed_document = await grobid_client.process_fulltext_document(pdf_file=file_data)
+        except BadRequestError as e:
+            request_context.statbox(action='unparsable_document')
+            request_context.error_log(e)
+            processed_document = {}
+        return ProcessedDocument(processed_document)
+
+    @property
+    def doi(self):
+        return self.processed_document.get('doi')
+
+    @property
+    def title(self):
+        return self.processed_document.get('title')
+
+    @property
+    def abstract(self):
+        return self.processed_document.get('abstract')
+
+    @property
+    def body(self):
+        return self.processed_document.get('body')
+
+
 class BaseHubService(BaseService):
-    async def item_found(self, bot_name, doi):
+    async def found_item(self, bot_name, doi):
         if mutual_aid_service := self.application.mutual_aid_services.get(bot_name):
             await mutual_aid_service.delete_request(doi)
         await self.application.idm_client.reschedule_subscriptions(
@@ -36,13 +68,13 @@ class BaseHubService(BaseService):
             )
         ))
 
-    def set_fields_from_processed(self, document_pb, processed_document):
+    def set_fields_from_processed(self, document_pb, processed_document: ProcessedDocument):
         new_fields = []
-        if processed_document.get('abstract') and not document_pb.abstract:
-            document_pb.abstract = processed_document['abstract']
+        if processed_document.abstract and not document_pb.abstract:
+            document_pb.abstract = processed_document.abstract
             new_fields.append('abstract')
-        if processed_document.get('body') and not document_pb.content:
-            document_pb.content = processed_document['body']
+        if processed_document.body and not document_pb.content:
+            document_pb.content = processed_document.body
             new_fields.append('content')
         return new_fields
 

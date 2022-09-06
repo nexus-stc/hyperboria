@@ -26,7 +26,7 @@ class BaseDriver(NetworkAgent):
             validator_cls = validator['class']
         validator_cls = import_object(validator_cls)
 
-        self.validator = validator_cls or BaseValidator
+        self.validator = validator_cls
         self.downloads_directory = downloads_directory
 
     def __str__(self):

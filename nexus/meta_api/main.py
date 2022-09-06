@@ -45,7 +45,7 @@ from nexus.meta_api.word_transformers import (
 )
 
 
-def create_query_transformer(valid_fields, invalid_fields):
+def create_query_transformer(valid_fields, invalid_fields, order_by_valid_fields):
     return QueryProcessor(
         tree_transformers=[
             OrderByTreeTransformer(
@@ -55,14 +55,7 @@ def create_query_transformer(valid_fields, invalid_fields):
                     'pr': 'page_rank',
                     'refc': 'referenced_by_count',
                 },
-                valid_fields=frozenset([
-                    'id',
-                    'referenced_by_count',
-                    'issued_at',
-                    'page_rank',
-                    'pages',
-                    'updated_at'
-                ])
+                valid_fields=frozenset(order_by_valid_fields)
             ),
             FieldTreeTransformer(
                 field_aliases={
@@ -135,20 +128,35 @@ class GrpcServer(AioGrpcServer):
             'doi', 'ipfs_multihashes', 'issns', 'isbns', 'issued_at', 'language', 'original_id',
             'page_rank', 'referenced_by_count', 'references', 'tags', 'title', 'year',
         }
+        order_by_scimag_fields = {
+            'id',
+            'referenced_by_count',
+            'issued_at',
+            'page_rank',
+            'updated_at'
+        }
         scitech_fields = {
             'id', 'authors', 'doi', 'description', 'extension',
             'ipfs_multihashes', 'isbns', 'issued_at', 'language', 'original_id', 'pages',
             'tags', 'title', 'updated_at', 'year',
+        }
+        order_by_scitech_fields = {
+            'id',
+            'issued_at',
+            'pages',
+            'updated_at'
         }
 
         self.query_transformers = {
             'scimag': create_query_transformer(
                 valid_fields=scimag_fields,
                 invalid_fields=scitech_fields.difference(scimag_fields),
+                order_by_valid_fields=order_by_scimag_fields,
             ),
             'scitech': create_query_transformer(
                 valid_fields=scitech_fields,
                 invalid_fields=scimag_fields.difference(scitech_fields),
+                order_by_valid_fields=order_by_scitech_fields,
             )
         }
         self.summa_client = SummaClient(

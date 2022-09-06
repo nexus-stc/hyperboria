@@ -270,6 +270,10 @@ class SearchService(SearchServicer, BaseService):
     @aiogrpc_request_wrapper(log=False)
     async def search(self, request, context, metadata):
         preprocessed_query = await self.process_query(query=request.query, languages=request.language, context=context)
+        logging.getLogger('debug').info({
+            'action': 'preprocess_query',
+            'preprocessed_query': str(preprocessed_query),
+        })
         index_aliases = self.resolve_index_aliases(
             request_index_aliases=request.index_aliases,
             processed_query=preprocessed_query,
@@ -280,19 +284,27 @@ class SearchService(SearchServicer, BaseService):
         right_offset = left_offset + page_size
 
         search_requests = []
+        processed_queries = {}
         for index_alias in index_aliases:
-            processed_query = self.query_transformers[index_alias].apply_tree_transformers(preprocessed_query)
+            processed_queries[index_alias] = self.query_transformers[index_alias].apply_tree_transformers(preprocessed_query)
+            logging.getLogger('debug').info({
+                'action': 'process_query',
+                'index_alias': index_alias,
+                'processed_query': str(processed_queries[index_alias]),
+                'order_by': processed_queries[index_alias].context.order_by,
+                'has_invalid_fields': processed_queries[index_alias].context.has_invalid_fields,
+            })
             search_requests.append(
                 SearchRequest(
                     index_alias=index_alias,
-                    query=processed_query.to_summa_query(),
+                    query=processed_queries[index_alias].to_summa_query(),
                     collectors=[
                         search_service_pb2.Collector(
                             top_docs=search_service_pb2.TopDocsCollector(
                                 limit=50,
-                                scorer=self.scorer(processed_query, index_alias),
+                                scorer=self.scorer(processed_queries[index_alias], index_alias),
                                 snippets=self.snippets[index_alias],
-                                explain=processed_query.context.explain,
+                                explain=processed_queries[index_alias].context.explain,
                             )
                         ),
                         search_service_pb2.Collector(count=search_service_pb2.CountCollector())
@@ -322,9 +334,9 @@ class SearchService(SearchServicer, BaseService):
                         meta_search_response.collector_outputs[0].top_docs.scored_documents,
                     )
                     has_next = len(new_scored_documents) > right_offset
-                    if 'scimag' in index_aliases:
+                    if 'scimag' in processed_queries:
                         await self.check_if_need_new_documents_by_dois(
-                            requested_dois=processed_query.context.dois,
+                            requested_dois=processed_queries['scimag'].context.dois,
                             scored_documents=new_scored_documents,
                             should_request=attempt.retry_state.attempt_number == 1
                         )
@@ -333,7 +345,7 @@ class SearchService(SearchServicer, BaseService):
             scored_documents=new_scored_documents[left_offset:right_offset],
             has_next=has_next,
             count=meta_search_response.collector_outputs[1].count.count,
-            query_language=processed_query.context.query_language,
+            query_language=preprocessed_query.context.query_language,
         )
 
         return search_response_pb

@@ -39,10 +39,7 @@ class RollHandler(BaseHandler):
 
         if random_documents:
             holder = BaseHolder.create_from_document(random_documents[0])
-            promo = self.application.promotioner.choose_promotion(language).format(
-                related_channel=self.application.config['telegram']['related_channel'],
-                twitter_contact_url=self.application.config['twitter']['contact_url'],
-            )
+            promo = self.application.promotioner.choose_promotion(language)
             view = holder.view_builder(language).add_view(bot_name=bot_name).add_new_line(2).add(promo, escaped=True).build()
             buttons_builder = holder.buttons_builder(language)
 
@@ -54,5 +51,5 @@ class RollHandler(BaseHandler):
 
             request_context.statbox(action='show', duration=time.time() - start_time)
             await event.respond(view, buttons=buttons_builder.build())
-        async with safe_execution(error_log=request_context.error_log, level=logging.DEBUG):
+        async with safe_execution(is_logging_enabled=False):
             await event.delete()

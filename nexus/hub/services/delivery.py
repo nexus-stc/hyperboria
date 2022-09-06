@@ -46,6 +46,7 @@ from pypika import (
 
 from .base import (
     BaseHubService,
+    ProcessedDocument,
     is_group_or_channel,
 )
 
@@ -76,6 +77,7 @@ class DeliveryService(delivery_service_pb2_grpc.DeliveryServicer, BaseHubService
             proxies=pylon_config['proxies'],
             source_configs=pylon_config['sources'],
             default_driver_proxy_list=pylon_config['default_driver_proxy_list'],
+            default_resolver_proxy_list=pylon_config['default_resolver_proxy_list'],
             downloads_directory=pylon_config['downloads_directory'],
         )
         self.should_parse_with_grobid = should_parse_with_grobid
@@ -216,11 +218,12 @@ class DownloadTask:
             error_log=request_context.error_log,
             on_fail=_on_fail,
         ):
+            filename = document_holder.get_filename()
             progress_bar_download = ProgressBar(
                 telegram_client=self.application.telegram_clients[request_context.bot_name],
                 request_context=request_context,
                 banner=t("LOOKING_AT", request_context.chat.language),
-                header=f'⬇️ {document_holder.get_filename()}',
+                header=f'⬇️ {filename}',
                 tail_text=t('TRANSMITTED_FROM', request_context.chat.language),
                 throttle_secs=throttle_secs,
             )
@@ -239,6 +242,10 @@ class DownloadTask:
                     )
                     if not document_holder.md5 and document_holder.get_extension() == 'pdf':
                         try:
+                            await progress_bar_download.send_message(
+                                t("PROCESSING_PAPER", request_context.chat.language).format(filename=filename),
+                                ignore_last_call=True
+                            )
                             file = clean_metadata(file, doi=document_holder.doi)
                             request_context.statbox(
                                 action='cleaned',
@@ -251,7 +258,7 @@ class DownloadTask:
                         request_context=request_context,
                         message=progress_bar_download.message,
                         banner=t("LOOKING_AT", request_context.chat.language),
-                        header=f'⬇️ {document_holder.get_filename()}',
+                        header=f'⬇️ {filename}',
                         tail_text=t('UPLOADED_TO_TELEGRAM', request_context.chat.language),
                         throttle_secs=throttle_secs
                     )
@@ -264,7 +271,7 @@ class DownloadTask:
                         voting=not is_group_or_channel(self.request_context.chat.chat_id),
                     )
                     if self.document_holder.doi:
-                        await self.delivery_service.item_found(
+                        await self.delivery_service.found_item(
                             bot_name=request_context.bot_name,
                             doi=self.document_holder.doi,
                         )
@@ -277,6 +284,7 @@ class DownloadTask:
                         document_holder=document_holder,
                         telegram_file_id=uploaded_message.file.id,
                         file=file,
+                        request_context=request_context,
                     ))
                 else:
                     request_context.statbox(
@@ -425,7 +433,7 @@ class DownloadTask:
         self.task.cancel()
         await self.task
 
-    async def store_new_data(self, bot_name, document_holder, telegram_file_id, file):
+    async def store_new_data(self, bot_name, document_holder, telegram_file_id, file, request_context):
         document_pb = document_holder.document_pb
         new_fields = []
         if self.delivery_service.should_store_hashes:
@@ -448,7 +456,11 @@ class DownloadTask:
             and document_holder.index_alias == 'scimag'
         ):
             try:
-                processed_document = await self.application.grobid_client.process_fulltext_document(pdf_file=file)
+                processed_document = await ProcessedDocument.setup(
+                    file,
+                    grobid_client=self.application.grobid_client,
+                    request_context=request_context,
+                )
                 new_fields += self.delivery_service.set_fields_from_processed(document_pb, processed_document)
             except BadRequestError as e:
                 self.request_context.statbox(action='unparsable_document')

@@ -39,6 +39,7 @@ class BaseTelegramClient(AioThing):
         bot_token: Optional[str] = None,
         mtproxy: Optional[dict] = None,
         flood_sleep_threshold: int = 60,
+        catch_up: bool = False,
     ):
         super().__init__()
         if not app_id or not app_hash:
@@ -50,6 +51,7 @@ class BaseTelegramClient(AioThing):
             self._get_session(database),
             app_id,
             app_hash,
+            catch_up=catch_up,
             flood_sleep_threshold=flood_sleep_threshold,
             **self._get_proxy(mtproxy=mtproxy),
         )

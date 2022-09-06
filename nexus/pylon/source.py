@@ -33,13 +33,17 @@ class Source(AioThing):
         source_config,
         downloads_directory: str,
         default_driver_proxy_list: List,
+        default_resolver_proxy_list: List,
     ) -> 'Source':
         matcher = Matcher(source_config['matcher'])
 
         resolver_cls = import_object(
             source_config.get('resolver', {}).get('class', 'nexus.pylon.resolvers.TemplateResolver')
         )
-        resolver_args = dict(proxy_manager=proxy_manager)
+        resolver_args = dict(
+            proxy_manager=proxy_manager,
+            proxy_list=default_resolver_proxy_list,
+        )
         resolver_args.update(**source_config.get('resolver', {}).get('args', {}))
         resolver = resolver_cls(**resolver_args)
 

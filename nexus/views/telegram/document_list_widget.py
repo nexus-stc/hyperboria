@@ -17,6 +17,7 @@ class DocumentListWidget:
         document_holders: List[BaseHolder],
         bot_name,
         header: Optional[str] = None,
+        promotioner=None,
         has_next: bool = False,
         session_id: Optional[str] = None,
         message_id: Optional[int] = None,
@@ -29,6 +30,7 @@ class DocumentListWidget:
         self.document_holders = document_holders
         self.bot_name = bot_name
         self.header = header
+        self.promotioner = promotioner
         self.cmd = cmd
         self.has_next = has_next
         self.session_id = session_id
@@ -56,6 +58,10 @@ class DocumentListWidget:
 
         if self.header:
             serp = f'**{self.header}**\n\n{serp}'
+
+        promotion_language = self.chat.language
+        promo = self.promotioner.choose_promotion(promotion_language)
+        serp = f'{serp}\n\n{promo}\n'
 
         buttons = []
         if self.cmd and self.message_id and self.session_id and (self.has_next or self.page > 0):

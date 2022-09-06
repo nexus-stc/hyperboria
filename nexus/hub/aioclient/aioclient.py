@@ -58,7 +58,7 @@ class HubGrpcClient(BaseGrpcClient):
         bot_name: str,
         reply_to: Optional[int] = None,
         doi_hint: Optional[str] = None,
-        doi_hint_priority: bool = False,
+        skip_analysis: bool = False,
         request_id: Optional[str] = None,
         session_id: Optional[str] = None,
         uploader_id: Optional[int] = None
@@ -68,7 +68,7 @@ class HubGrpcClient(BaseGrpcClient):
             bot_name=bot_name,
             reply_to=reply_to,
             doi_hint=doi_hint,
-            doi_hint_priority=doi_hint_priority,
+            skip_analysis=skip_analysis,
             uploader_id=uploader_id,
         )
         if isinstance(file, submitter_service_pb2.PlainFile):

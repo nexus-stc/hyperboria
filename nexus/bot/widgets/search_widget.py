@@ -154,10 +154,7 @@ class SearchWidget(BaseSearchWidget):
                 )
 
         promotion_language = self.query_language or self.chat.language
-        promo = self.application.promotioner.choose_promotion(promotion_language).format(
-            related_channel=self.application.config['telegram']['related_channel'],
-            twitter_contact_url=self.application.config['twitter']['contact_url'],
-        )
+        promo = self.application.promotioner.choose_promotion(promotion_language)
         serp = f'{serp}\n\n{promo}\n'
 
         buttons = None
