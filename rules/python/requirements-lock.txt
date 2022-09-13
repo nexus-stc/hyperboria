@@ -55,6 +55,7 @@ h11==0.13.0
 idna==3.3
 iniconfig==1.1.1
 isort==5.10.1
+izihawa-configurator==1.0.0
 izihawa-nlptools==1.1.9
 izihawa-types==0.1.3
 izihawa-utils==1.0.7
