@@ -7,9 +7,9 @@ from idm.api.configs import get_config
 from idm.api.services.chat_manager import ChatManagerService
 from idm.api.services.profile import ProfileService
 from idm.api.services.subscription_manager import SubscriptionManagerService
+from izihawa_configurator import Configurator
 from library.aiogrpctools import AioGrpcServer
 from library.aiopostgres.pool_holder import AioPostgresPoolHolder
-from library.configurator import Configurator
 from library.logging import configure_logging
 
 

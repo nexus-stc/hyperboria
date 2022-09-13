@@ -33,4 +33,5 @@ message Scimag {
   string volume = 21;
   int32 year = 30;
   float page_rank = 34;
+  float series_page_rank = 35;
 }

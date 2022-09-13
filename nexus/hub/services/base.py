@@ -65,6 +65,7 @@ class BaseHubService(BaseService):
             await asyncio.gather(
                 self.application.ipfs_client.add_bytes(file, cid_version=1, hash='blake2b-256', only_hash=True),
                 self.application.ipfs_client.add_bytes(file, cid_version=0, hash='sha2-256', only_hash=True),
+                self.application.ipfs_client.add_bytes(file, cid_version=1, hash='blake3', only_hash=True),
             )
         ))
 

@@ -1,5 +1,4 @@
-from izihawa_utils import env
-from library.configurator import Configurator
+from izihawa_configurator import Configurator
 
 
 def get_config():

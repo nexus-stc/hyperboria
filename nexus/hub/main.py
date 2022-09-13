@@ -5,9 +5,9 @@ import uvloop
 from aiogrobid import GrobidClient
 from aioipfs import AsyncIPFS as AsyncIPFS
 from idm.api.aioclient import IdmApiGrpcClient
+from izihawa_configurator import Configurator
 from library.aiogrpctools import AioGrpcServer
 from library.aiopostgres import AioPostgresPoolHolder
-from library.configurator import Configurator
 from library.logging import configure_logging
 from library.telegram.base import BaseTelegramClient
 from nexus.hub.configs import get_config
@@ -16,6 +16,7 @@ from nexus.hub.services.mutual_aid_service import MutualAidService
 from nexus.hub.services.submitter import SubmitterService
 from nexus.hub.user_manager import UserManager
 from nexus.meta_api.aioclient import MetaApiGrpcClient
+from nexus.pylon.configs import get_config as get_default_pylon_config
 
 
 class GrpcServer(AioGrpcServer):
@@ -79,7 +80,7 @@ class GrpcServer(AioGrpcServer):
             should_parse_with_grobid=config['application']['should_parse_with_grobid'],
             should_store_hashes=config['application']['should_store_hashes'],
             telegram_bot_configs=config['telegram']['bots'],
-            pylon_config=config['pylon'],
+            pylon_config=config.get('pylon') or get_default_pylon_config()['pylon'],
         )
         self.submitter_service = SubmitterService(
             application=self,

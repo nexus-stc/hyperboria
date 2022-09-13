@@ -104,7 +104,7 @@ class ViewHandler(BaseHandler):
                 ),
                 event.delete(),
             ]
-            if not has_found_old_widget:
+            if not has_found_old_widget and is_earlier_than_2_days(old_message):
                 async with safe_execution(error_log=request_context.error_log):
                     await self.application.telegram_client.delete_messages(request_context.chat.chat_id, [old_message_id])
             return await asyncio.gather(*actions)

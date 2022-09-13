@@ -7,6 +7,7 @@ from nexus.pylon.validators.base import BaseValidator
 
 class Md5Validator(BaseValidator):
     def __init__(self, params: Dict):
+        super().__init__(params)
         self.md5 = params['md5']
         self.v = hashlib.md5()
 

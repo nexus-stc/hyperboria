@@ -1,12 +1,16 @@
-load("@rules_python//python:defs.bzl", "py_binary", "py_library")
+load("@rules_python//python:defs.bzl", "py_library")
+load("@rules_python//python:packaging.bzl", "py_wheel")
 load("@pip_modules//:requirements.bzl", "requirement")
+
+filegroup(
+    name = "data",
+    srcs = ["configs/pylon.yaml"],
+)
 
 py_library(
     name = "pylon",
     srcs = glob(["**/*.py"]),
-    data = [
-        "configs/pylon.yaml",
-    ],
+    data = [":data"],
     visibility = ["//visibility:public"],
     deps = [
         requirement("aiodns"),
@@ -16,6 +20,7 @@ py_library(
         requirement("brotli"),
         requirement("cchardet"),
         requirement("certifi"),
+        requirement("fire"),
         requirement("jq"),
         requirement("orjson"),
         requirement("pypdf2"),
@@ -23,20 +28,38 @@ py_library(
         requirement("selenium"),
         requirement("tenacity"),
         requirement("aiokit"),
-        "//library/configurator",
+        requirement("izihawa_configurator"),
         "//library/logging",
         "//nexus/pylon/proto:pylon_proto_py",
     ],
 )
 
-py_binary(
-    name = "cli",
-    srcs = ["cli.py"],
-    main = "cli.py",
-    srcs_version = "PY3",
-    visibility = ["//visibility:public"],
+py_wheel(
+    name = "nexus-pylon-wheel",
+    author = "The Superpirate",
+    author_email = "fist.of.the.first.pirates@gmail.com",
+    classifiers = [
+        "Programming Language :: Python :: 3.10",
+    ],
+    description_file = ":README.md",
+    distribution = "nexus-pylon",
+    entry_points = {"console_scripts": ["pylon = nexus.pylon.cli:main"]},
+    homepage = "https://github.com/nexus-stc/hyperboria/tree/master/nexus/pylon",
+    license = "MIT License",
+    python_requires = ">=3.10",
+    python_tag = "py3",
+    requires = [
+        "aiokit >= 1.0.0",
+        "izihawa_configurator >= 1.0.0",
+        "selenium >= 4.3.0",
+    ],
+    strip_path_prefixes = [
+        "nexus/pylon/proto/pylon_proto_py_pb",
+    ],
+    version = "1.0.0",
     deps = [
-        requirement("fire"),
+        ":data",
         ":pylon",
+        "//nexus/pylon/proto:pylon_proto_py",
     ],
 )

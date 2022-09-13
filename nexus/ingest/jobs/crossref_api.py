@@ -39,8 +39,8 @@ class CrossrefApiJob(BaseJob):
         })
         count = 0
         async for chunk in self.crossref_client.works_cursor(
-            filter=f'from-index-date:{self.from_date}',
-            rows=500,
+                filter=f'from-index-date:{self.from_date}',
+                rows=500,
         ):
             for item in chunk['items']:
                 yield item

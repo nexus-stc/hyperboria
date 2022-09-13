@@ -54,6 +54,8 @@ class Proxy:
 
 class ProxyManager:
     def __init__(self, proxies=None):
+        if proxies is None:
+            proxies = []
         self.proxies = [Proxy(proxy) for proxy in proxies]
 
     def get_proxy(self, tags: Optional[Union[AllOf, AnyOf, Set]] = None) -> Proxy:

@@ -34,6 +34,7 @@ class PostgresJob(BaseJob):
             f'user={database["username"]} '
             f'password={database["password"]} '
             f'host={database["host"]}',
+            timeout=3600 * 2,
         )
         self.summa_client = SummaClient(endpoint=summa['endpoint'])
         self.summa_config = summa
@@ -84,6 +85,7 @@ class PostgresJob(BaseJob):
                     # Mandatory for server side cursor
                     cursor_name='nexus_ingest_cursor',
                     itersize=50_000,
+                    statement_timeout=3600 * 2,
                 ):
                     loaded = True
                     yield row
@@ -95,8 +97,12 @@ class PostgresJob(BaseJob):
                 # Mandatory for server side cursor
                 cursor_name='nexus_ingest_cursor',
                 itersize=50_000,
+                statement_timeout=3600 * 2,
             ):
                 yield row
 
-        await self.summa_client.commit_index(self.summa_config['name'], session_id=session_id)
+        await self.summa_client.commit_index(
+            self.summa_config['name'],
+            session_id=session_id,
+        )
         await self.summa_client.set_index_alias(self.summa_config['index_alias'], self.summa_config['name'], session_id=session_id)

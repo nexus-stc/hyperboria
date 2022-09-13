@@ -20,6 +20,9 @@ promotions:
       en: 💬 Research is the only and ultimate goal
     weight: 1
   - texts:
+      en: 💬 Intellectual property is not a valid form of property
+    weight: 1
+  - texts:
       en: ✋ Have a subscription to paid articles? [Help researchers!](https://t.me/{mutual_aid_group})
       ru: ✋ Есть доступ к платным статьям? [Помоги ученым!](https://t.me/{mutual_aid_group})
     weight: 25

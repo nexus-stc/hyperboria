@@ -228,7 +228,7 @@ class BasePdfProcessor:
             try:
                 page = self.process_page(page, pdf_reader)
             except (PdfStreamError, binascii.Error) as e:
-                logging.getLogger('warning').warning({
+                logging.getLogger('nexus_pylon').warning({
                     'action': 'pdf_stream_error',
                     'mode': 'pylon',
                     'error': str(e),
@@ -259,7 +259,7 @@ class WatermarkEraser1(BaseWatermarkEraser):
                         if self.is_watermark_predicate(text.encode()):
                             xobj_death_note.append(operands[0])
                             operations_death_note.append(op_i)
-                            logging.getLogger('debug').debug({
+                            logging.getLogger('nexus_pylon').debug({
                                 'action': 'watermark_removal',
                                 'mode': 'pylon',
                                 'text': text,
@@ -289,7 +289,7 @@ class WatermarkEraser2(BaseWatermarkEraser):
             if operation == b"Tj":
                 if isinstance(operands[0], bytes) and self.is_watermark_predicate(operands[0]):
                     operations_death_note.append(op_i)
-                    logging.getLogger('debug').debug({
+                    logging.getLogger('nexus_pylon').debug({
                         'action': 'watermark_removal',
                         'mode': 'pylon',
                         'text': operands[0].decode(),
@@ -319,7 +319,7 @@ class WatermarkEraser3(BaseWatermarkEraser):
                         text += operand
                 if self.is_watermark_predicate(text):
                     operations_death_note.append(op_i)
-                    logging.getLogger('debug').debug({
+                    logging.getLogger('nexus_pylon').debug({
                         'action': 'watermark_removal',
                         'mode': 'pylon',
                         'text': text.decode(),
@@ -402,7 +402,7 @@ class WatermarkEraser4(BaseWatermarkEraser):
                 text, matched = tc.match(self.regexp)
                 if matched:
                     operations_death_note.extend(matched)
-                    logging.getLogger('debug').debug({
+                    logging.getLogger('nexus_pylon').debug({
                         'action': 'watermark_removal',
                         'mode': 'pylon',
                         'matched': text,

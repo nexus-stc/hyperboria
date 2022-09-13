@@ -13,7 +13,7 @@ py_library(
         requirement("grpcio"),
         requirement("pyyaml"),
         requirement("aiokit"),
-        "//library/configurator",
+        requirement("izihawa_configurator"),
         "//library/logging",
         requirement("izihawa_utils"),
     ],

@@ -105,20 +105,24 @@ class ProfileService(profile_service_pb2_grpc.ProfileServicer, BaseService):
             for tag in download_document.tags:
                 tags_counter[tag] += 1
 
-        most_popular_issns = sorted(issns_counter, key=issns_counter.get, reverse=True)[:7]
+        most_popular_issns = sorted(issns_counter, key=issns_counter.get, reverse=True)[:14]
         most_popular_tags = sorted(tags_counter, key=tags_counter.get, reverse=True)[:7]
 
         most_popular_series = []
-        async for row in self.application.pool_holder['nexus'].iterate(
-            f"select name, issns from series where issns && array[{most_popular_issns}]::text[]".format(
-                most_popular_issns=','.join(map(lambda x: "'" + x + "'", most_popular_issns)),
-            ),
-            row_factory=dict_row,
-        ):
-            most_popular_series.append(profile_service_pb2.Series(
-                name=row['name'],
-                issns=row['issns'],
-            ))
+        if most_popular_issns:
+            async for row in self.application.pool_holder['nexus'].iterate(
+                "select name, array_agg(issn) as issns from series "
+                "where issn in ({most_popular_issns}) "
+                "group by name order by name "
+                "limit 7".format(
+                    most_popular_issns=','.join(map(lambda x: "'" + x + "'", most_popular_issns)),
+                ),
+                row_factory=dict_row,
+            ):
+                most_popular_series.append(profile_service_pb2.Series(
+                    name=row['name'],
+                    issns=row['issns'],
+                ))
 
         return most_popular_series, most_popular_tags
 

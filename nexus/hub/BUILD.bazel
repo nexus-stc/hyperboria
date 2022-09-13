@@ -43,7 +43,7 @@ py3_image(
         requirement("aioipfs-2"),
         requirement("aiokit"),
         "//library/aiopostgres",
-        "//library/configurator",
+        requirement("izihawa_configurator"),
         "//library/telegram",
         "//nexus/hub/proto:grpc_py",
         "//nexus/hub/proto:proto_py",

@@ -33,7 +33,10 @@ class ProgressBar:
         tail_text,
         message=None,
         source=None,
-        throttle_secs: float = 0,
+        throttle_secs: float = 0.0,
+        hard_throttle_secs: float = 10.0,
+        last_call: float = 0.0,
+        done_threshold_size: int = 10 * 1024 * 1024,
     ):
         self.telegram_client = telegram_client
         self.request_context = request_context
@@ -45,9 +48,12 @@ class ProgressBar:
         self.done = 0
         self.total = 1
         self.throttle_secs = throttle_secs
+        self.hard_throttle_secs = hard_throttle_secs
+        self.done_threshold_size = done_threshold_size
 
+        self.previous_done = 0
         self.last_text = None
-        self.last_call = 0
+        self.last_call = last_call
 
     def share(self):
         if self.total > 0:
@@ -56,6 +62,7 @@ class ProgressBar:
             return f'{float(self.done / (1024 * 1024)):.1f}Mb'
 
     def _set_progress(self, done, total):
+        self.previous_done = self.done
         self.done = done
         self.total = total
 
@@ -74,11 +81,20 @@ class ProgressBar:
             progress_bar = '|' + filled * bars['filled'] + (total_bars - filled) * bars['empty'] + '| '
 
         tail_text = self.tail_text.format(source=self.source)
-        return f'`{self.header}\n{progress_bar}{self.share()} {tail_text}`'
+        return f'`{self.header}\n{progress_bar}{self.share().ljust(8)} {tail_text}`'
+
+    def should_send(self, now, ignore_last_call):
+        if ignore_last_call:
+            return True
+        if abs(now - self.last_call) > self.hard_throttle_secs:
+            return True
+        if abs(now - self.last_call) > self.throttle_secs and (self.done - self.previous_done) < self.done_threshold_size:
+            return True
+        return False
 
     async def send_message(self, text, ignore_last_call=False):
         now = time.time()
-        if not ignore_last_call and abs(now - self.last_call) < self.throttle_secs:
+        if not self.should_send(now, ignore_last_call):
             return
         try:
             if not self.message:
@@ -103,17 +119,3 @@ class ProgressBar:
     async def callback(self, done, total, ignore_last_call=False):
         self._set_progress(done, total)
         return await self.send_message(await self.render_progress(), ignore_last_call=ignore_last_call)
-
-
-class ThrottlerWrapper:
-    def __init__(self, callback: Callable, throttle_secs: Union[int, float]):
-        self.callback = callback
-        self.last_call = 0
-        self.throttle_secs = throttle_secs
-
-    async def __call__(self, *args, **kwargs):
-        now = time.time()
-        if abs(now - self.last_call) < self.throttle_secs:
-            return
-        self.last_call = now
-        return await self.callback(*args, **kwargs)
