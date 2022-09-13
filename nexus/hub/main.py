@@ -5,9 +5,9 @@ import uvloop
 from aiogrobid import GrobidClient
 from aioipfs import AsyncIPFS as AsyncIPFS
 from idm.api.aioclient import IdmApiGrpcClient
+from izihawa_configurator import Configurator
 from library.aiogrpctools import AioGrpcServer
 from library.aiopostgres import AioPostgresPoolHolder
-from library.configurator import Configurator
 from library.logging import configure_logging
 from library.telegram.base import BaseTelegramClient
 from nexus.hub.configs import get_config

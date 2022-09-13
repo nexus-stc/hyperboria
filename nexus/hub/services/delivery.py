@@ -73,13 +73,7 @@ class DeliveryService(delivery_service_pb2_grpc.DeliveryServicer, BaseHubService
         self.downloadings = set()
         self.is_sharience_enabled = is_sharience_enabled
         self.maintenance_picture_url = maintenance_picture_url
-        self.pylon_client = PylonClient(
-            proxies=pylon_config['proxies'],
-            source_configs=pylon_config['sources'],
-            default_driver_proxy_list=pylon_config['default_driver_proxy_list'],
-            default_resolver_proxy_list=pylon_config['default_resolver_proxy_list'],
-            downloads_directory=pylon_config['downloads_directory'],
-        )
+        self.pylon_client = PylonClient(config=pylon_config)
         self.should_parse_with_grobid = should_parse_with_grobid
         self.should_store_hashes = should_store_hashes
         self.telegram_bot_configs = telegram_bot_configs
@@ -170,6 +164,15 @@ class DeliveryService(delivery_service_pb2_grpc.DeliveryServicer, BaseHubService
         return delivery_service_pb2.StartDeliveryResponse(status=delivery_service_pb2.StartDeliveryResponse.Status.OK)
 
 
+async def delayed_task(create_task, t):
+    try:
+        await asyncio.sleep(t)
+        task = create_task()
+        await task
+    except asyncio.CancelledError:
+        pass
+
+
 class DownloadTask:
     def __init__(
         self,
@@ -204,7 +207,7 @@ class DownloadTask:
         )
 
     async def download_task(self, request_context: RequestContext, document_holder):
-        throttle_secs = 2.0
+        throttle_secs = 3.0
 
         async def _on_fail():
             await self.application.telegram_clients[request_context.bot_name].send_message(
@@ -218,6 +221,7 @@ class DownloadTask:
             error_log=request_context.error_log,
             on_fail=_on_fail,
         ):
+            start_time = time.time()
             filename = document_holder.get_filename()
             progress_bar_download = ProgressBar(
                 telegram_client=self.application.telegram_clients[request_context.bot_name],
@@ -226,9 +230,9 @@ class DownloadTask:
                 header=f'⬇️ {filename}',
                 tail_text=t('TRANSMITTED_FROM', request_context.chat.language),
                 throttle_secs=throttle_secs,
+                last_call=start_time,
             )
             downloads_gauge.inc()
-            start_time = time.time()
             try:
                 file = await self.download(
                     document_holder=document_holder,
@@ -242,11 +246,21 @@ class DownloadTask:
                     )
                     if not document_holder.md5 and document_holder.get_extension() == 'pdf':
                         try:
-                            await progress_bar_download.send_message(
-                                t("PROCESSING_PAPER", request_context.chat.language).format(filename=filename),
-                                ignore_last_call=True
+                            processing_message_task = asyncio.create_task(delayed_task(
+                                create_task=lambda: progress_bar_download.send_message(
+                                    t("PROCESSING_PAPER", request_context.chat.language).format(filename=filename),
+                                    ignore_last_call=True
+                                ),
+                                t=5.0
+                            ))
+                            file = await asyncio.get_running_loop().run_in_executor(
+                                None,
+                                lambda: clean_metadata(file, doi=document_holder.doi)
                             )
-                            file = clean_metadata(file, doi=document_holder.doi)
+
+                            processing_message_task.cancel()
+                            await processing_message_task
+
                             request_context.statbox(
                                 action='cleaned',
                                 len=len(file),
@@ -260,7 +274,8 @@ class DownloadTask:
                         banner=t("LOOKING_AT", request_context.chat.language),
                         header=f'⬇️ {filename}',
                         tail_text=t('UPLOADED_TO_TELEGRAM', request_context.chat.language),
-                        throttle_secs=throttle_secs
+                        throttle_secs=throttle_secs,
+                        last_call=progress_bar_download.last_call,
                     )
                     uploaded_message = await self.delivery_service.send_file(
                         document_holder=self.document_holder,
@@ -393,11 +408,15 @@ class DownloadTask:
 
     async def download(self, document_holder, progress_bar):
         collected = bytearray()
-        if document_holder.doi:
-            try:
-                params = {'doi': document_holder.doi}
-                if document_holder.md5:
-                    params['md5'] = document_holder.md5
+        params = {}
+        try:
+            if document_holder.doi:
+                params['doi'] = document_holder.doi
+            if document_holder.md5:
+                params['md5'] = document_holder.md5
+            if document_holder.ipfs_multihashes:
+                params['ipfs_multihashes'] = [ipfs_multihash for ipfs_multihash in document_holder.ipfs_multihashes]
+            if params:
                 async for resp in self.delivery_service.pylon_client.download(params):
                     await self.process_resp(
                         resp=resp,
@@ -406,20 +425,8 @@ class DownloadTask:
                         filesize=document_holder.filesize,
                     )
                 return bytes(collected)
-            except DownloadError:
-                pass
-        if document_holder.md5:
-            try:
-                async for resp in self.delivery_service.pylon_client.download({'md5': document_holder.md5}):
-                    await self.process_resp(
-                        resp=resp,
-                        progress_bar=progress_bar,
-                        collected=collected,
-                        filesize=document_holder.filesize,
-                    )
-                return bytes(collected)
-            except DownloadError:
-                pass
+        except DownloadError:
+            pass
 
     async def external_cancel(self):
         self.request_context.statbox(action='externally_canceled')

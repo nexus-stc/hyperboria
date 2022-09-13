@@ -92,6 +92,7 @@ class AioPostgresPoolHolder(AioThing):
         row_factory=tuple_row,
         cursor_name: Optional[str] = None,
         itersize: Optional[int] = None,
+        statement_timeout: Optional[int] = None,
     ):
         if not self.pool:
             raise RuntimeError('AioPostgresPoolHolder has not been started')
@@ -99,7 +100,9 @@ class AioPostgresPoolHolder(AioThing):
             async with conn.cursor(name=cursor_name, row_factory=row_factory) as cur:
                 if itersize is not None:
                     cur.itersize = itersize
-                await cur.execute(stmt, values)
+                await cur.execute(stmt + ';' if statement_timeout else '', values)
+                if statement_timeout:
+                    await cur.execute(f'SET statement_timeout = {statement_timeout};')
                 async for row in cur:
                     yield row
 

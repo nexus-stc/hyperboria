@@ -43,7 +43,7 @@ py3_image(
         "//library/aiogrpctools",
         requirement("aiokit"),
         "//library/aiopostgres",
-        "//library/configurator",
+        requirement("izihawa_configurator"),
         "//library/telegram",
         requirement("izihawa_utils"),
     ],

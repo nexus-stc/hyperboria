@@ -1,5 +1,8 @@
 import re
-import sys
+from typing import (
+    List,
+    Tuple,
+)
 
 
 class Matcher:
@@ -10,8 +13,11 @@ class Matcher:
 
     def is_match(self, params) -> bool:
         for param in params:
-            if params[param]:
-                if param_regex := self.param_regexes.get(param):
-                    if re.match(param_regex, params[param]):
-                        return True
-        return False
+            param_value = params[param]
+            param_regex = self.param_regexes.get(param)
+            if param_value and param_regex:
+                if not isinstance(param_value, (List, Tuple)):
+                    param_value = [param_value]
+                for el in param_value:
+                    if re.match(param_regex, el):
+                        return el

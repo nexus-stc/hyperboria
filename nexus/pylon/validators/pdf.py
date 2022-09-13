@@ -12,7 +12,7 @@ from PyPDF2.errors import PdfReadError
 
 class PdfValidator(BaseValidator):
     def __init__(self, params: Dict):
-        self.params = params
+        super().__init__(params)
         self.md5 = params.get('md5')
         self.file = bytes()
         self.v = hashlib.md5()
@@ -24,7 +24,7 @@ class PdfValidator(BaseValidator):
 
     def validate(self):
         if self.md5 and self.md5.lower() == self.v.hexdigest().lower():
-            logging.getLogger('debug').debug({
+            logging.getLogger('nexus_pylon').debug({
                 'action': 'validation',
                 'mode': 'pylon',
                 'result': 'md5_ok',
@@ -32,7 +32,7 @@ class PdfValidator(BaseValidator):
             })
             return
         elif not is_pdf(f=self.file):
-            logging.getLogger('debug').debug({
+            logging.getLogger('nexus_pylon').debug({
                 'action': 'validation',
                 'mode': 'pylon',
                 'result': 'not_pdf',
@@ -41,28 +41,18 @@ class PdfValidator(BaseValidator):
             raise BadResponseError(file=str(self.file[:100]))
 
         try:
-            logging.getLogger('debug').debug({
-                'action': 'open_pdf',
-                'mode': 'pylon',
-                'file_len': len(self.file),
-                'params': self.params,
-            })
             PyPDF2.PdfReader(BytesIO(self.file))
-            logging.getLogger('debug').debug({
-                'action': 'opened_pdf',
-                'mode': 'pylon',
-                'file_len': len(self.file),
-                'params': self.params,
-            })
         except PdfReadError:
-            logging.getLogger('debug').debug({
+            logging.getLogger('nexus_pylon').debug({
                 'action': 'validation',
                 'mode': 'pylon',
                 'result': 'not_opened_as_pdf',
+                'params': self.params,
             })
             raise BadResponseError(file=str(self.file[:100]))
-        logging.getLogger('debug').debug({
+        logging.getLogger('nexus_pylon').debug({
             'action': 'validation',
             'mode': 'pylon',
             'result': 'ok',
+            'params': self.params,
         })

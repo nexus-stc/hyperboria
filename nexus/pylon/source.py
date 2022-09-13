@@ -2,12 +2,12 @@ import logging
 from typing import (
     AsyncIterable,
     Dict,
-    List,
+    Optional,
 )
 
 from aiohttp.client_exceptions import ClientPayloadError
-from library.aiokit.aiokit import AioThing
-from library.logging import error_log
+from aiokit import AioThing
+from izihawa_utils.importlib import import_object
 from nexus.pylon.drivers.base import BaseDriver
 from nexus.pylon.exceptions import (
     DownloadError,
@@ -16,7 +16,6 @@ from nexus.pylon.exceptions import (
 from nexus.pylon.matcher import Matcher
 from nexus.pylon.proto.file_pb2 import FileResponse as FileResponsePb
 from nexus.pylon.resolvers.base import BaseResolver
-from utils.izihawa_utils.importlib import import_object
 
 
 class Source(AioThing):
@@ -29,12 +28,15 @@ class Source(AioThing):
     @classmethod
     def from_config(
         cls,
-        proxy_manager,
+        config,
         source_config,
-        downloads_directory: str,
-        default_driver_proxy_list: List,
-        default_resolver_proxy_list: List,
-    ) -> 'Source':
+        proxy_manager,
+    ) -> Optional['Source']:
+        driver_cls_name = source_config.get('driver', {}).get('class', 'nexus.pylon.drivers.BrowserDriver')
+
+        if driver_cls_name.endswith('BrowserDriver') and config.get('webdriver_hub') is None:
+            return None
+
         matcher = Matcher(source_config['matcher'])
 
         resolver_cls = import_object(
@@ -42,16 +44,16 @@ class Source(AioThing):
         )
         resolver_args = dict(
             proxy_manager=proxy_manager,
-            proxy_list=default_resolver_proxy_list,
+            proxy_list=config['default_resolver_proxy_list'],
         )
         resolver_args.update(**source_config.get('resolver', {}).get('args', {}))
         resolver = resolver_cls(**resolver_args)
 
-        driver_cls = import_object(source_config.get('driver', {}).get('class', 'nexus.pylon.drivers.BrowserDriver'))
+        driver_cls = import_object(driver_cls_name)
         driver_args = dict(
             proxy_manager=proxy_manager,
-            downloads_directory=downloads_directory,
-            proxy_list=default_driver_proxy_list,
+            proxy_list=config['default_driver_proxy_list'],
+            config=config,
         )
         driver_args.update(**source_config.get('driver', {}).get('args', {}))
         driver = driver_cls(**driver_args)
@@ -67,13 +69,6 @@ class Source(AioThing):
     async def download(self, params: Dict) -> AsyncIterable[FileResponsePb]:
         yield FileResponsePb(status=FileResponsePb.Status.RESOLVING)
         async for prepared_file_request in self.resolver.resolve(params):
-            logging.debug({
-                'action': 'download',
-                'mode': 'pylon',
-                'params': params,
-                'source': str(self),
-                'url': prepared_file_request.url,
-            })
             try:
                 async for resp in self.driver.execute_prepared_file_request(
                     prepared_file_request=prepared_file_request,
@@ -82,11 +77,11 @@ class Source(AioThing):
                     yield resp
                 return
             except ClientPayloadError as e:
-                error_log(e, level=logging.WARNING)
+                logging.getLogger('nexus_pylon').warning(e)
                 continue
             except NotFoundError:
                 continue
             except DownloadError as e:
-                error_log(e)
+                logging.getLogger('nexus_pylon').warning(e)
                 continue
         raise NotFoundError(params=params, resolver=str(self.resolver), driver=str(self.driver))

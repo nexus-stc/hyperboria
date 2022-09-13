@@ -10,7 +10,7 @@ import aiohttp
 from aiohttp import ClientSession
 from aiohttp.client_reqrep import ClientRequest
 from aiohttp_socks import ProxyConnector
-from library.aiokit.aiokit import AioThing
+from aiokit import AioThing
 from nexus.pylon.proxy_manager import (
     AllOf,
     AnyOf,

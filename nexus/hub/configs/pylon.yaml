@@ -1,26 +1,8 @@
 ---
 pylon:
-  default_driver_proxy_list:
-    - [cambridge]
-    - [edinburg]
-    - [southampton]
   default_resolver_proxy_list: ~
-  downloads_directory: /downloads
-  proxies:
-    - address: clash.default.svc.cluster.example.com:7890
-      name: cambridge
-      tags: ['cambridge']
-    - address: clash.default.svc.cluster.example.com:7990
-      name: edinburg
-      tags: ['edinburg']
-    - address: clash.default.svc.cluster.example.com:8090
-      name: southampton
-      tags: ['southampton']
-    - address: socks5://clash.default.svc.cluster.example.com:7991
-      name: socks5
-      tags: ['socks5']
   sources:
-    # LibGen.rocks
+    # IPFS
     - driver:
         args:
           proxy_list: ~
@@ -29,37 +11,13 @@ pylon:
         class:
           nexus.pylon.drivers.DirectDriver
       matcher:
-        md5: ^.*$
+        ipfs_multihashes: ^.*$
       resolver:
         args:
-          extractors:
-            - producer:
-                format_string: 'http://libgen.rocks/{matched_group}'
-                group: 0
-              re: 'get\.php\?md5=.*&key=[A-Za-z\d]+'
-              timeout: 25.0
-              type: regex
-          url: https://libgen.rocks/ads.php?md5={md5}
-        class: nexus.pylon.resolvers.RequestResolver
-    # LibGen.rocks
-    - driver:
-        args:
-          proxy_list: ~
-        class:
-          nexus.pylon.drivers.DirectDriver
-      matcher:
-        doi: ^.*$
-      resolver:
-        args:
-          extractors:
-            - producer:
-                format_string: 'http://libgen.rocks/{matched_group}'
-                group: 0
-              re: 'get\.php\?md5=[a-fA-F\d]+&key=[A-Za-z\d]+(&doi=[^\"]*)+'
-              timeout: 25.0
-              type: regex
-          url: 'https://libgen.rocks/ads.php?doi={doi}'
-        class: nexus.pylon.resolvers.RequestResolver
+          format_string: 'http://nexus-ipfs-headless.default.svc.cluster.example.com:5001/api/v0/cat?arg={ipfs_multihashes[0]}'
+          headers_override: true
+          method: 'POST'
+        class: nexus.pylon.resolvers.TemplateResolver
     # Library.lol
     - driver:
         args:
@@ -74,20 +32,17 @@ pylon:
         args:
           extractors:
             - producer:
-                format_string: '{matched_group}'
-                group: 1
-              re: '<a href="([^\"]+)">GET</a>'
-              timeout: 45.0
+                format_string: '{href}'
+                timeout: 45.0
+              re: '<a href="(?P<href>[^\"]+)">GET</a>'
               type: regex
             - producer:
-                format_string: '{matched_group}'
-                group: 0
-              re: 'https://ipfs.io/ipfs/[A-Za-z\d]+'
+                format_string: '{url}'
+              re: '(?P<url>https://ipfs.io/ipfs/[A-Za-z\d]+)'
               type: regex
             - producer:
-                format_string: '{matched_group}'
-                group: 0
-              re: 'https://cloudflare-ipfs.com/ipfs/[A-Za-z\d]+'
+                format_string: '{url}'
+              re: '(?P<url>https://cloudflare-ipfs.com/ipfs/[A-Za-z\d]+)'
               type: regex
           url: http://library.lol/main/{md5}
         class: nexus.pylon.resolvers.RequestResolver
@@ -103,12 +58,50 @@ pylon:
         args:
           extractors:
             - producer:
-                format_string: '{matched_group}'
-                group: 1
-              re: '<a href="([^\"]+)">GET</a>'
-              timeout: 45.0
+                format_string: '{href}'
+                timeout: 45.0
+              re: '<a href="(?P<href>[^\"]+)">GET</a>'
               type: regex
           url: 'http://library.lol/scimag/{doi}'
+        class: nexus.pylon.resolvers.RequestResolver
+    # LibGen.rocks
+    - driver:
+        args:
+          proxy_list: ~
+          validator:
+            class: nexus.pylon.validators.Md5Validator
+        class:
+          nexus.pylon.drivers.DirectDriver
+      matcher:
+        md5: ^.*$
+      resolver:
+        args:
+          extractors:
+            - producer:
+                format_string: 'http://libgen.rocks/{key}'
+                timeout: 25.0
+              re: '(?P<key>get\.php\?md5=.*&key=[A-Za-z\d]+)'
+              type: regex
+          resolve_timeout: 25.0
+          url: https://libgen.rocks/ads.php?md5={md5}
+        class: nexus.pylon.resolvers.RequestResolver
+    # LibGen.rocks
+    - driver:
+        args:
+          proxy_list: ~
+        class:
+          nexus.pylon.drivers.DirectDriver
+      matcher:
+        doi: ^.*$
+      resolver:
+        args:
+          extractors:
+            - producer:
+                format_string: 'http://libgen.rocks/{key}'
+                timeout: 25.0
+              re: '(?P<key>get\.php\?md5=[a-fA-F\d]+&key=[A-Za-z\d]+(&doi=[^\"]*)+)'
+              type: regex
+          url: 'https://libgen.rocks/ads.php?doi={doi}'
         class: nexus.pylon.resolvers.RequestResolver
     # jamanetwork.com
     - driver:
@@ -142,6 +135,7 @@ pylon:
       resolver:
         args:
           format_string: 'https://www.sciencedirect.com/science/article/pii/{selected}/pdfft?isDTMRedir=true&download=true'
+          resolve_timeout: 25.0
           selector: '(.resource.primary.URL | split("/"))[-1]'
           timeout: 40.0
         class: nexus.pylon.resolvers.DoiOrgRequestResolver
@@ -215,6 +209,13 @@ pylon:
         args:
           format_string: 'https://iopscience.iop.org/article/{doi}/pdf'
         class: nexus.pylon.resolvers.TemplateResolver
+    # iopscience.iop.org
+    - matcher:
+        doi: ^10.1088/.*$
+      resolver:
+        args:
+          format_string: 'https://iopscience.iop.org/article/{doi}/pdf'
+        class: nexus.pylon.resolvers.TemplateResolver
     # academic.oup.com
     - driver:
         args:
@@ -248,6 +249,13 @@ pylon:
       resolver:
         args:
           timeout: 30.0
+        class: nexus.pylon.resolvers.TemplateResolver
+    # biorxiv.org
+    - matcher:
+        doi: ^10.1101/.*$
+      resolver:
+        args:
+          format_string: 'https://www.biorxiv.org/content/{doi}.full.pdf'
         class: nexus.pylon.resolvers.TemplateResolver
     # journals.aps.org
     - matcher:
@@ -373,6 +381,13 @@ pylon:
       resolver:
         args:
           format_string: 'https://journals.plos.org/plosone/article/file?id={doi}&type=printable'
+        class: nexus.pylon.resolvers.TemplateResolver
+    # guilfordjournals.com
+    - matcher:
+        doi: ^10.1521/.*$
+      resolver:
+        args:
+          format_string: 'https://guilfordjournals.com/doi/pdf/{doi}?download=true'
         class: nexus.pylon.resolvers.TemplateResolver
     # bioone.org
     - driver:
@@ -549,6 +564,24 @@ pylon:
         args:
           format_string: 'https://jcsm.aasm.org/doi/pdf/{doi}?download=true'
         class: nexus.pylon.resolvers.TemplateResolver
+    # www.medwave.cl
+    - driver:
+        args:
+          proxy_list: ~
+        class:
+          nexus.pylon.drivers.DirectDriver
+      matcher:
+        doi: ^10.5867/.*$
+      resolver:
+        args:
+          extractors:
+            - producer:
+                format_string: 'https://www.medwave.cl/{path}'
+                timeout: 25.0
+              re: 'href=\"/(?P<path>[\w/.\-_]+\.pdf)\">PDF</a>'
+              type: regex
+          url: https://doi.org/{doi}
+        class: nexus.pylon.resolvers.RequestResolver
     # journal.permsc.ru
     - driver:
         args:
@@ -609,6 +642,24 @@ pylon:
         class: nexus.pylon.drivers.BrowserDriver
       matcher:
         doi: ^10.32920/.*$
+    # PKP Project
+    - driver:
+        args:
+          proxy_list: ~
+        class:
+          nexus.pylon.drivers.DirectDriver
+      matcher:
+        doi: ^10.(5399|24905|31004|32729|37934)/.*$
+      resolver:
+        args:
+          extractors:
+            - producer:
+                format_string: 'https://{host}/{prefix}/{journal}/article/download/{key}'
+                timeout: 25.0
+              re: 'href=\"(?:https?://[\w.]+)/(?P<prefix>[\w./]+)/(?P<journal>[\w.]+)/article/view/(?P<key>\w+/\w+)\"[^>]*>[Pp][Dd][Ff]\s*</a>'
+              type: regex
+          url: https://doi.org/{doi}
+        class: nexus.pylon.resolvers.RequestResolver
     # papers.cumincad.org
     - driver:
         args:
@@ -625,5 +676,15 @@ pylon:
         doi: ^.*$
       resolver:
         args:
+          selector: '.resource.primary.URL | select (. | ascii_downcase | contains("pdf"))'
+        class: nexus.pylon.resolvers.DoiOrgRequestResolver
+    - matcher:
+        doi: ^.*$
+      resolver:
+        args:
           selector: '[(.link | if . == null then [] else . end)[] | select((."content-type" == "application/pdf") or (.URL | ascii_downcase | contains("pdf")))][0].URL'
         class: nexus.pylon.resolvers.DoiOrgRequestResolver
+  webdriver_hub:
+    downloads_directory: /downloads
+    endpoint: http://127.0.0.1:4444/wd/hub
+    host_downloads_directory: /downloads

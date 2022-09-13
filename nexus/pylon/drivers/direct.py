@@ -1,3 +1,4 @@
+import logging
 from typing import Dict
 
 import aiohttp.client_exceptions
@@ -25,12 +26,27 @@ class DirectDriver(BaseDriver):
     @retry(
         reraise=True,
         wait=wait_random(min=1, max=2),
-        stop=stop_after_attempt(7),
+        stop=stop_after_attempt(3),
         retry=retry_if_exception_type((ProxyError, aiohttp.client_exceptions.ClientPayloadError, ProxyTimeoutError)),
     )
     async def execute_prepared_file_request(self, prepared_file_request: PreparedRequest, params: Dict):
+        logging.debug({
+            'action': 'download',
+            'mode': 'pylon',
+            'params': params,
+            'source': str(self),
+            'url': prepared_file_request.url,
+        })
         async with self.get_session() as session:
             async with prepared_file_request.execute_with(session=session) as resp:
+                logging.debug({
+                    'action': 'response',
+                    'mode': 'pylon',
+                    'params': params,
+                    'source': str(self),
+                    'url': prepared_file_request.url,
+                    'status': resp.status,
+                })
                 if resp.status == 404:
                     raise NotFoundError(url=prepared_file_request.url)
                 elif (

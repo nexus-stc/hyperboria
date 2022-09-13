@@ -189,6 +189,13 @@ schema:
         record: basic
         tokenizer: raw
       stored: true
+  - name: series_page_rank
+    type: f64
+    options:
+      fast: single
+      fieldnorms: false
+      indexed: true
+      stored: true
 multi_fields: ["authors", "ipfs_multihashes", "isbns", "issns", "references", "tags"]
 primary_key: "id"
 stop_words: ['a', 'an', 'and', 'are', 'as', 'at', 'be', 'by', 'for', 'from', 'if', 'in', 'is', 'it', 'of', 'on', 'or',

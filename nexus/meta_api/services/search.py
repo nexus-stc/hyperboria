@@ -315,7 +315,7 @@ class SearchService(SearchServicer, BaseService):
         with suppress(RetryError):
             async for attempt in AsyncRetrying(
                 retry=retry_if_exception_type(NeedRetryError),
-                wait=wait_fixed(5),
+                wait=wait_fixed(10),
                 stop=stop_after_attempt(6)
             ):
                 with attempt:

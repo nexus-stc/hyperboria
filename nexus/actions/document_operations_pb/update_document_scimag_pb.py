@@ -159,7 +159,6 @@ class ToSummaAction(BaseAction):
         'journal',
         'journal-issue',
         'journal-volume',
-        'other',
         'peer-review',
         'proceedings',
         'report-series',

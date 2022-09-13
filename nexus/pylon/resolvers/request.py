@@ -15,10 +15,12 @@ class RequestResolver(BaseResolver):
         self,
         url: str,
         extractors: List,
+        resolve_timeout: float = 10.0,
         proxy_list: Optional[List] = None,
         proxy_manager: Optional[ProxyManager] = None,
     ):
         super().__init__(proxy_list=proxy_list, proxy_manager=proxy_manager)
+        self.resolve_timeout = resolve_timeout
         self.url = url
         self.extractors = extractors
 
@@ -31,9 +33,9 @@ class RequestResolver(BaseResolver):
             async with PreparedRequest(
                 method='get',
                 url=url,
-                timeout=10.0,
+                timeout=self.resolve_timeout,
             ).execute_with(session=session) as resp:
-                # Sometimes sci-hub returns file
+                # Sometimes hosts return file URL
                 if resp.headers.get('Content-Type') == 'application/pdf':
                     yield PreparedRequest(method='get', url=url, timeout=10.0)
                 downloaded_page_bytes = await resp.read()
@@ -42,9 +44,11 @@ class RequestResolver(BaseResolver):
             for extractor in self.extractors:
                 match = re.search(extractor['re'], downloaded_page, re.IGNORECASE)
                 if match:
-                    matched_group = match.group(extractor['producer']['group'])
                     yield PreparedRequest(
                         method='get',
-                        url=extractor['producer']['format_string'].format(matched_group=matched_group),
+                        url=extractor['producer']['format_string'].format(
+                            host=resp.real_url.host,
+                            **match.groupdict()
+                        ),
                         timeout=extractor['producer'].get('timeout', 10.0),
                     )

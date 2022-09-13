@@ -32,21 +32,20 @@ from selenium.webdriver.support.ui import WebDriverWait
 class BrowserDriver(BaseDriver):
     def __init__(
         self,
+        config,
         validator=None,
         proxy_list: Optional[List] = None,
         proxy_manager: Optional[ProxyManager] = None,
         actions: Optional[List] = None,
-        downloads_directory='/downloads',
-        window_size: Tuple[int, int] = (1279, 833),
-        erase_webdrive_property: bool = True,
-        webdrive_hub_endpoint: str = "http://127.0.0.1:4444/wd/hub",
     ):
-        super().__init__(validator=validator, proxy_list=proxy_list, proxy_manager=proxy_manager)
+        super().__init__(config=config, validator=validator, proxy_list=proxy_list, proxy_manager=proxy_manager)
         self.actions = actions
-        self.downloads_directory = Path(downloads_directory)
-        self.window_size = window_size
-        self.erase_webdrive_property = erase_webdrive_property
-        self.webdrive_hub_endpoint = webdrive_hub_endpoint
+        self.downloads_directory = Path(config['webdriver_hub']['downloads_directory'])
+        self.host_downloads_directory = Path(config['webdriver_hub']['host_downloads_directory'])
+        self.window_size = tuple(config['webdriver_hub'].get('window_size', [1279, 833]))
+        self.erase_webdriver_property = config['webdriver_hub'].get('erase_webdriver_property', True)
+        self.webdriver_hub_endpoint = config['webdriver_hub']['endpoint']
+        self.file_poll_timeout = 2.0
 
     async def get_chrome_sessions(self):
         proxies = list(
@@ -55,15 +54,14 @@ class BrowserDriver(BaseDriver):
             else [None]
         )
         for proxy in proxies:
-            downloads_folder = self.downloads_directory / random_string(16)
-            os.mkdir(downloads_folder)
-            os.chmod(downloads_folder, 0o777)
-            chrome = await asyncio.get_running_loop().run_in_executor(None, lambda: self.setup_chrome(proxy, downloads_folder))
-            try:
-                yield chrome, downloads_folder
-            finally:
-                shutil.rmtree(downloads_folder)
-                chrome.quit()
+            subdirectory = random_string(16)
+            downloads_directory = self.downloads_directory / subdirectory
+            host_downloads_directory = self.host_downloads_directory / subdirectory
+            os.mkdir(host_downloads_directory)
+            os.chmod(host_downloads_directory, 0o777)
+            chrome = await asyncio.get_running_loop().run_in_executor(None, lambda: self.setup_chrome(proxy, downloads_directory))
+            yield chrome, host_downloads_directory
+
 
     def setup_chrome(self, proxy, downloads_folder):
         options = webdriver.ChromeOptions()
@@ -85,13 +83,13 @@ class BrowserDriver(BaseDriver):
         options.add_argument('--disable-dev-shm-usage')
         options.add_argument("--disable-popup-blocking")
         chrome = webdriver.Remote(
-            self.webdrive_hub_endpoint,
+            self.webdriver_hub_endpoint,
             DesiredCapabilities.CHROME,
             options=options,
         )
         chrome.set_window_size(self.window_size[0], self.window_size[1])
 
-        if self.erase_webdrive_property:
+        if self.erase_webdriver_property:
             resource = "/session/%s/chromium/send_command_and_get_result" % chrome.session_id
             url = chrome.command_executor._url + resource
             body = json.dumps({'cmd': "Page.addScriptToEvaluateOnNewDocument", 'params': {
@@ -103,7 +101,7 @@ class BrowserDriver(BaseDriver):
             }})
             chrome.command_executor._request('POST', url, body)
 
-        logging.getLogger('debug').debug({
+        logging.getLogger('nexus_pylon').debug({
             'action': 'start_chrome',
             'mode': 'pylon',
             'proxy': str(proxy) if proxy is not None else None,
@@ -148,32 +146,19 @@ class BrowserDriver(BaseDriver):
                     and downloaded_offset == current_offset
                     and current_offset > 0
                 ):
-                    logging.getLogger('debug').debug({
-                        'action': 'sent',
-                        'mode': 'pylon',
-                        'filename': filename,
-                    })
                     return
-
-                logging.getLogger('debug').debug({
-                    'action': 'send_part',
-                    'mode': 'pylon',
-                    'current_offset': current_offset,
-                    'downloaded_offset': downloaded_offset,
-                    'filename': filename,
-                })
                 await file.seek(current_offset)
                 yield await file.read(downloaded_offset - current_offset)
                 current_offset = downloaded_offset
 
-                await asyncio.sleep(0.5)
+                await asyncio.sleep(self.file_poll_timeout)
             raise NotFoundError()
         finally:
             await file.close()
 
     def get(self, chrome, url, params):
-        logging.getLogger('debug').debug({
-            'action': 'get',
+        logging.getLogger('nexus_pylon').debug({
+            'action': 'download',
             'mode': 'pylon',
             'url': url,
         })
@@ -190,11 +175,6 @@ class BrowserDriver(BaseDriver):
                         if not last_element:
                             raise RuntimeError('Nothing to click')
                         chrome.execute_script("arguments[0].click();", last_element)
-                        logging.getLogger('debug').debug({
-                            'action': 'clicked',
-                            'mode': 'pylon',
-                            'element': str(last_element),
-                        })
                     case 'close_window':
                         current_window = previous_window
                         previous_window = None
@@ -204,11 +184,6 @@ class BrowserDriver(BaseDriver):
                         if not last_element:
                             raise RuntimeError('Nothing to click')
                         last_element.click()
-                        logging.getLogger('debug').debug({
-                            'action': 'native_clicked',
-                            'mode': 'pylon',
-                            'element': str(last_element),
-                        })
                     case 'switch_to_new_window':
                         previous_window = current_window
                         current_window = chrome.window_handles[-1]
@@ -227,12 +202,6 @@ class BrowserDriver(BaseDriver):
                                 action['selector'],
                             ))
                         )
-                        logging.getLogger('debug').debug({
-                            'action': 'waited_css_selector',
-                            'mode': 'pylon',
-                            'element': str(last_element),
-                            'step': action
-                        })
                     case 'wait_link_text':
                         last_element = WebDriverWait(chrome, action.get('timeout', 15.0)).until(
                             EC.presence_of_element_located((
@@ -240,12 +209,6 @@ class BrowserDriver(BaseDriver):
                                 action['selector'],
                             ))
                         )
-                        logging.getLogger('debug').debug({
-                            'action': 'waited_link_text',
-                            'mode': 'pylon',
-                            'element': str(last_element),
-                            'step': action
-                        })
                     case 'wait_xpath':
                         last_element = WebDriverWait(chrome, action.get('timeout', 15.0)).until(
                             EC.presence_of_element_located((
@@ -253,16 +216,10 @@ class BrowserDriver(BaseDriver):
                                 action['selector'],
                             ))
                         )
-                        logging.getLogger('debug').debug({
-                            'action': 'waited_xpath',
-                            'mode': 'pylon',
-                            'element': str(last_element),
-                            'step': action
-                        })
                     case _:
                         raise NotImplementedError('Not implemented action type')
         except WebDriverException as e:
-            logging.getLogger('debug').debug({
+            logging.getLogger('nexus_pylon').debug({
                 'action': 'error',
                 'mode': 'pylon',
                 'error': str(e),
@@ -294,15 +251,17 @@ class BrowserDriver(BaseDriver):
                         source=chrome.current_url,
                     )
                 file_validator.validate()
-                logging.getLogger('debug').debug({
-                    'action': 'validated',
-                    'mode': 'pylon',
-                    'url': prepared_file_request.url,
-                })
                 return
             except NotFoundError:
-                logging.getLogger('debug').debug({
+                logging.getLogger('nexus_pylon').debug({
                     'action': 'no_response',
                     'mode': 'pylon',
                 })
+            finally:
+                logging.getLogger('nexus_pylon').debug({
+                    'action': 'quit_chrome',
+                    'mode': 'pylon',
+                })
+                chrome.quit()
+                shutil.rmtree(downloads_folder)
         raise NotFoundError(params=params, url=prepared_file_request.url, driver=str(self))

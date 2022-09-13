@@ -27,7 +27,7 @@ py3_image(
         requirement("aiokit"),
         requirement("aiolibgen"),
         "//library/aiopostgres",
-        "//library/configurator",
+        requirement("izihawa_configurator"),
         "//library/jobber",
         "//nexus/actions",
     ],

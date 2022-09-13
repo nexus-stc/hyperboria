@@ -1,5 +1,6 @@
 import json
 import logging
+import sys
 from typing import (
     AsyncIterable,
     Dict,
@@ -50,20 +51,25 @@ class DoiOrgRequestResolver(BaseResolver):
                 method='get',
                 url=doi_url,
                 timeout=self.resolve_timeout,
-                headers={'Accept': 'application/json'}
+                headers={
+                    'Accept': 'application/json',
+                }
             ).execute_with(session=session) as resp:
                 return await resp.json()
 
     async def resolve(self, params: Dict) -> AsyncIterable[PreparedRequest]:
         body = await self.resolve_through_doi_org(params)
+        selected = None
         try:
-            selected = json.loads(self.selector.input(body).text())
+            if text := self.selector.input(body).text():
+                selected = json.loads(text)
         except ValueError as e:
-            logging.getLogger('error').error({
+            logging.getLogger('nexus_pylon').error({
                 'action': 'error',
                 'mode': 'pylon',
                 'params': params,
-                'error': str(e)
+                'error': str(e),
+                'selector': str(self.selector),
             })
             return
         if selected:
@@ -73,7 +79,7 @@ class DoiOrgRequestResolver(BaseResolver):
                 timeout=self.timeout,
             )
         else:
-            logging.getLogger('debug').error({
+            logging.getLogger('nexus_pylon').debug({
                 'action': 'missed_selector',
                 'mode': 'pylon',
                 'params': params,

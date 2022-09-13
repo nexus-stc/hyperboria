@@ -25,7 +25,7 @@ DEPS = [
     "//library/aiogrpctools",
     requirement("aiokit"),
     "//library/aiopostgres",
-    "//library/configurator",
+    requirement("izihawa_configurator"),
     "//library/logging",
     "//nexus/meta_api/proto:grpc_py",
     "//nexus/models/proto:proto_py",

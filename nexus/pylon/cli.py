@@ -1,15 +1,17 @@
 import logging
 import os
 import sys
+from typing import Optional
 
 import fire
 from aiokit.utils import sync_fu
-from nexus.pylon.client import (
+from izihawa_configurator import Configurator
+
+from .client import (
     DownloadError,
     PylonClient,
 )
-from nexus.pylon.configs import get_config
-from nexus.pylon.proto.file_pb2 import FileResponse as FileResponsePb
+from .proto.file_pb2 import FileResponse as FileResponsePb
 
 
 def resolve_path(filepath):
@@ -27,22 +29,20 @@ async def fetch(
     collected = bytes()
     try:
         last_len = 0
-        last_source = ''
         async for resp in iter:
             if resp.HasField('status'):
                 if resp.status == FileResponsePb.Status.BEGIN_TRANSMISSION:
-                    print(f'Started transmission from {resp.source}...', end='\r', file=sys.stderr)
+                    print(f'Started transmission...', file=sys.stderr)
                     last_len = 0
-                    last_source = resp.source
                     collected = bytes()
             elif resp.HasField('chunk'):
                 if len(collected) - last_len > 1024 * 100:
-                    print(f'Loaded {len(collected)} bytes from {resp.source}', end='\r', file=sys.stderr)
+                    print(f'Loaded {len(collected)} bytes', end='\r', file=sys.stderr)
                     last_len = len(collected)
-                    last_source = resp.source
                 collected += resp.chunk.content
         with open(resolve_path(output), 'wb') as f:
-            print(f'Completed! Loaded {len(collected)} bytes from {last_source}', file=sys.stderr)
+            print()
+            print(f'Completed! Loaded {len(collected)} bytes', file=sys.stderr)
             f.write(collected)
     except DownloadError:
         print('File not found')
@@ -50,25 +50,53 @@ async def fetch(
 
 async def download(
     output: str,
+    config: Optional[str] = None,
     debug: bool = False,
+    wd_endpoint: Optional[str] = None,
+    wd_directory: Optional[str] = None,
+    wd_host_directory: Optional[str] = None,
     **params,
 ):
+    """
+    Download scientific publications from various sources
+    Large portion of fresh articles could be retrieved only though publisher libraries through `BrowserDriver`, it
+    requires Selenium webdriver:
+    `docker run -e SE_START_XVFB=false -v $(pwd)/downloads:/downloads -p 4444:4444 selenium/standalone-chrome:latest`
+    Args:
+        output: name of the output file
+        config: pylon config
+        debug: enable debug logging
+        wd_endpoint: web-driver
+        wd_directory: mounted directory inside Docker image
+        wd_host_directory: directory for downloads on host that should be mounter as `wd_directory` inside Docker image
+    """
     if debug:
         logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
-    c = get_config()['pylon']
-    p = PylonClient(
-        proxies=c['proxies'],
-        source_configs=c['sources'],
-        default_driver_proxy_list=c['default_driver_proxy_list'],
-        downloads_directory=c['downloads_directory'],
-    )
-    return await fetch(iter=p.download(params=params), output=output)
+
+    default_config_path = os.path.join(os.path.dirname(__file__), 'configs/pylon.yaml')
+    config = Configurator([config if config else default_config_path], env_prefix='NEXUS_PYLON')
+    config = config['pylon']
+    if wd_endpoint:
+        config.setdefault('webdriver_hub', {})
+        config['webdriver_hub']['endpoint'] = wd_endpoint
+        if not wd_directory:
+            raise ValueError('Should pass --wd-directory with --wd-endpoint')
+        config['webdriver_hub']['downloads_directory'] = wd_directory
+        if not wd_host_directory:
+            raise ValueError('Should pass --wd-host-directory with --wd-endpoint')
+        config['webdriver_hub']['host_downloads_directory'] = wd_host_directory
+
+    pylon_client = PylonClient(config=config)
+    return await fetch(iter=pylon_client.download(params=params), output=output)
 
 
 def main():
-    fire.Fire({
-        'download': sync_fu(download),
-    })
+    try:
+        fire.Fire({
+            'download': sync_fu(download),
+        })
+    except KeyboardInterrupt:
+        sys.exit(1)
 
 
 if __name__ == '__main__':

@@ -63,7 +63,6 @@ class ScimagViewBuilder(BaseViewBuilder):
         'chapter': '🔖',
         'book-chapter': '🔖',
     }
-    multihash_ix = 0
 
     def is_preprint(self):
         return self.document_holder.doi.split('/')[0] in preprints

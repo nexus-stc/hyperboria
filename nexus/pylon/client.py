@@ -1,12 +1,10 @@
+import logging
 from typing import (
     AsyncIterable,
     Dict,
-    List,
-    Optional,
 )
 
 from aiokit import AioThing
-from library.logging import error_log
 from nexus.pylon.exceptions import (
     DownloadError,
     NotFoundError,
@@ -17,30 +15,25 @@ from nexus.pylon.source import Source
 
 
 class PylonClient(AioThing):
-    def __init__(
-        self,
-        source_configs: Optional[List],
-        proxies: Optional[List[str]] = None,
-        downloads_directory: Optional[str] = None,
-        default_driver_proxy_list: [Optional[List]] = None,
-        default_resolver_proxy_list: [Optional[List]] = None,
-    ):
+    def __init__(self, config):
         super().__init__()
-        self.proxy_manager = ProxyManager(proxies)
-        self.downloads_directory = downloads_directory
-        self.default_driver_proxy_list = default_driver_proxy_list
-        self.default_resolver_proxy_list = default_resolver_proxy_list
+        self.config = config
+        self.proxy_manager = ProxyManager(config.get('proxies'))
         self.sources = []
-        for source_config in source_configs:
+        if config.get('webdriver_hub') is None:
+            logging.getLogger('nexus_pylon').warning({
+                'action': 'missed_webdriver',
+                'mode': 'pylon',
+            })
+        for source_config in config['sources']:
             source = Source.from_config(
                 proxy_manager=self.proxy_manager,
+                config=self.config,
                 source_config=source_config,
-                downloads_directory=downloads_directory,
-                default_driver_proxy_list=default_driver_proxy_list,
-                default_resolver_proxy_list=default_resolver_proxy_list,
             )
-            self.sources.append(source)
-            self.starts.append(source)
+            if source:
+                self.sources.append(source)
+                self.starts.append(source)
 
     async def download(self, params: Dict) -> AsyncIterable[FileResponsePb]:
         for source in self.sources:
@@ -50,9 +43,10 @@ class PylonClient(AioThing):
                 async for resp in source.download(params):
                     yield resp
                 return
-            except NotFoundError:
+            except NotFoundError as e:
+                logging.getLogger('nexus_pylon').debug(e)
                 continue
             except DownloadError as e:
-                error_log(e)
+                logging.getLogger('nexus_pylon').warning(e)
                 continue
-        raise NotFoundError()
+        raise NotFoundError(params=params)

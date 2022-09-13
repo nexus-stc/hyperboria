@@ -1,4 +1,5 @@
 import asyncio
+import logging
 from contextlib import asynccontextmanager
 from typing import Optional
 
@@ -23,6 +24,7 @@ class PreparedRequest:
         cookies: Optional[dict] = None,
         ssl: bool = True,
         timeout: Optional[float] = None,
+        headers_override: bool = False
     ):
         self.method = method
         self.url = url
@@ -32,6 +34,8 @@ class PreparedRequest:
         }
         if headers:
             self.headers.update(headers)
+        if headers_override:
+            self.headers = headers or {}
         self.params = params
         self.cookies = cookies
         self.ssl = ssl
@@ -49,6 +53,13 @@ class PreparedRequest:
     @asynccontextmanager
     async def execute_with(self, session):
         try:
+            logging.getLogger('nexus_pylon').debug({
+                'action': 'request',
+                'mode': 'pylon',
+                'url': self.url,
+                'method': self.method,
+                'headers': self.headers,
+            })
             async with session.request(
                 method=self.method,
                 url=self.url,
