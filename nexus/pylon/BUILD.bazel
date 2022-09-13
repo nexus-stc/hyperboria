@@ -42,7 +42,7 @@ py_wheel(
         "Programming Language :: Python :: 3.10",
     ],
     description_file = ":README.md",
-    distribution = "nexus-pylon-wheel",
+    distribution = "nexus-pylon",
     entry_points = {"console_scripts": ["pylon = nexus.pylon.cli:main"]},
     homepage = "https://github.com/nexus-stc/hyperboria/tree/master/nexus/pylon",
     license = "MIT License",
