@@ -31,8 +31,10 @@ fire
 flake8
 grpcio
 isort
-izihawa-utils
+izihawa-configurator
+izihawa-nlptools
 izihawa-types
+izihawa-utils
 jinja2
 lemminflect
 lightgbm

@@ -72,10 +72,10 @@ class PostgresJob(BaseJob):
 
     async def iterator(self) -> AsyncIterable[Any]:
         session_id = generate_request_id()
-        await self.init_tables(session_id)
+        # await self.init_tables(session_id)
         if self.batch_size:
             loaded = True
-            current = 0
+            current = 168_000_000
             while loaded:
                 loaded = False
                 sql = self.sql.format(left=current, right=current + self.batch_size)
@@ -85,7 +85,6 @@ class PostgresJob(BaseJob):
                     # Mandatory for server side cursor
                     cursor_name='nexus_ingest_cursor',
                     itersize=50_000,
-                    statement_timeout=3600 * 2,
                 ):
                     loaded = True
                     yield row
